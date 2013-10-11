@@ -4,22 +4,17 @@ using System.Collections;
 
 public class MainLogin: MonoBehaviour{
 	
-	//GUI
+	private string playerName;
 	private Rect fullScreenRect;
+	
 	public Texture2D background;
-	
 	public Rect layoutRect;
-	public int spaceBig;	
-	public int spaceSmall;	
-	
 	public GUIStyle bigLabelStyle;
 	public GUIStyle smallLabelStyle;
 	public GUIStyle inputTextFieldStyle;
-	public GUIStyle buttonStyle;
-	
-	//Logic
-	private string playerName;
-
+	public GUIStyle bigButtonStyle;	
+	public int spaceBig;	
+	public int spaceSmall;	
 
 	void Awake(){
 		playerName = "";
@@ -31,9 +26,11 @@ public class MainLogin: MonoBehaviour{
 	void OnGUI(){
         
 		GUI.DrawTexture(fullScreenRect, background, ScaleMode.StretchToFill);
-		
+
 		GUILayout.BeginArea(layoutRect);
-	        GUILayout.Label("Welcome to Dragongarden BITCH !!!", bigLabelStyle);
+			GUILayout.Space(spaceBig);
+			GUILayout.Space(spaceBig);				
+	        GUILayout.Label("Welcome to Dragon Garden", bigLabelStyle);
 			GUILayout.Space(spaceBig);
 			GUILayout.BeginVertical();
 				GUILayout.BeginHorizontal();
@@ -44,7 +41,7 @@ public class MainLogin: MonoBehaviour{
 			            PlayerPrefs.SetString("playerName", playerName);
 				GUILayout.EndHorizontal();
 				GUILayout.Space(spaceBig);
-		        if (GUILayout.Button("Login", buttonStyle) && playerName.Trim().Length != 0)
+		        if (GUILayout.Button("Login", bigButtonStyle) && playerName.Trim().Length != 0)
 					Application.LoadLevel ("Lobby"); 			
 	        GUILayout.EndVertical();   					
 		GUILayout.EndArea();
