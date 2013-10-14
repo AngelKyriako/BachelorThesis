@@ -39,8 +39,8 @@ public class RoomProperties : MonoBehaviour {
 		maxDragonSkills = 4;
 	}
 	
-	public void SetName(String n){ name = n; }
-	public String GetName(){ return name; }
+	public void SetName(string n){ name = n; }
+	public string GetName(){ return name; }
 	
 	public void SetGameType(GameType t){
 		type = t;
