@@ -27,10 +27,6 @@ public class MyGUIHolder {
         return selectedField;
     }
 
-    public string RoomPropertyText() {
-        return "";
-    }
-
     public void RoomPropertySkillSet() {
     }
 }

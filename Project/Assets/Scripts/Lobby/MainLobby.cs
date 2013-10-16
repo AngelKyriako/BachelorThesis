@@ -67,6 +67,7 @@ public class MainLobby: MonoBehaviour {
         GUILayout.BeginArea(north);
         GUILayout.Space(space);
         GUILayout.Label("Dragonborn Lobby", titleStyle);
+        GUILayout.Space(space);
         GUILayout.Label("Welcome " + PhotonNetwork.playerName, welcomeLabelStyle);
         GUILayout.EndArea();
     }
@@ -77,21 +78,12 @@ public class MainLobby: MonoBehaviour {
     }
 
     private void CreateRoomGUI() {
-        if(GUILayout.Button("Create", westButtonStyle))
+        if(GUILayout.Button("Create", westButtonStyle, GUILayout.Width(130)))
             buttonPressedLast = Action.Create;
     }
 
-    private void JoinRoomGUI() {
-        GUILayout.BeginVertical();
-        joinRoomName = GUILayout.TextField(joinRoomName, GUILayout.MaxWidth(180));
-        GUILayout.Space(space / 2);
-        if(GUILayout.Button("Join", westButtonStyle))
-            buttonPressedLast = Action.Join;
-        GUILayout.EndVertical();
-    }
-
     private void MatchMakingGUI() {
-        if(GUILayout.Button("Matchmaking", westButtonStyle))
+        if(GUILayout.Button("Matchmaking", westButtonStyle, GUILayout.Width(250)))
             buttonPressedLast = Action.MatchMaking;
     }
 
@@ -108,15 +100,23 @@ public class MainLobby: MonoBehaviour {
         }
     }
 
+    private void JoinRoomGUI() {
+        GUILayout.BeginVertical();
+        joinRoomName = GUILayout.TextField(joinRoomName, GUILayout.MaxWidth(180));
+        GUILayout.Space(space / 2);
+        if(GUILayout.Button("Join", westButtonStyle, GUILayout.Width(90)))
+            buttonPressedLast = Action.Join;
+        GUILayout.EndVertical();
+    }
+
     private void WestGUI() {
         GUILayout.BeginArea(west);
-        GUILayout.Space(space);
         CreateRoomGUI();
-        GUILayout.Space(space);
+        GUILayout.Space(3 * space);
         MatchMakingGUI();
-        GUILayout.Space(2 * space);
+        GUILayout.Space(3 * space);
         RoomsGUI();
-        GUILayout.Space(space);
+        GUILayout.Space(3 * space);
         JoinRoomGUI();
         GUILayout.EndArea();
     }
@@ -173,6 +173,7 @@ public class MainLobby: MonoBehaviour {
         if(GUILayout.Button("Go", goButtonStyle)) {
             //paikse mpalitsa me ta properties
             PhotonNetwork.CreateRoom(createRoomName, true, true, RoomProperties.Instance.GetMaxPlayers());
+            Application.LoadLevel("Room");
         }
         GUILayout.EndHorizontal();
     }
