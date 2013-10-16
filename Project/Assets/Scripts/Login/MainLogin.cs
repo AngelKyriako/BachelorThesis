@@ -9,9 +9,8 @@ public class MainLogin: MonoBehaviour{
 	
 	public Texture2D background;
 	public Rect layoutRect;
-	public GUIStyle bigLabelStyle, smallLabelStyle, inputTextFieldStyle, bigButtonStyle;	
-	public int bigSpace;	
-	public int smallSpace;	
+	public GUIStyle bigLabelStyle, smallLabelStyle, bigButtonStyle;	
+	public int space;
 
 	void Awake(){
 		playerName = "";
@@ -24,18 +23,18 @@ public class MainLogin: MonoBehaviour{
 		GUI.DrawTexture(fullscreen, background, ScaleMode.StretchToFill);
 
 		GUILayout.BeginArea(layoutRect);
-		GUILayout.Space(bigSpace*2);				
+		GUILayout.Space(3*space);				
         GUILayout.Label("Welcome to Dragonborn", bigLabelStyle);
-		GUILayout.Space(bigSpace);
+		GUILayout.Space(2*space);
 		GUILayout.BeginVertical();
 		GUILayout.BeginHorizontal();
         GUILayout.Label("Enter name:", smallLabelStyle);
-		GUILayout.Space(smallSpace);
-        playerName = GUILayout.TextField(playerName, inputTextFieldStyle);
+		GUILayout.Space(space);
+        playerName = GUILayout.TextField(playerName);
         if (GUI.changed)
             PlayerPrefs.SetString("name", playerName);
 		GUILayout.EndHorizontal();
-		GUILayout.Space(bigSpace);
+		GUILayout.Space(2*space);
         if (GUILayout.Button("Login", bigButtonStyle) && playerName.Trim().Length != 0)
 			Application.LoadLevel ("Lobby"); 			
         GUILayout.EndVertical();   					

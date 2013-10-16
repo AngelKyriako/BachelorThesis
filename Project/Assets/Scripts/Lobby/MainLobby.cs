@@ -13,15 +13,14 @@ public class MainLobby: MonoBehaviour{
     private string createRoomName, joinRoomName;
     private Vector2 scrollPos = Vector2.zero;
 	private Rect fullscreen, north, south, west, east;
-	
+	private RoomProperties createRoomProperties;
 	
 	public int northHeight;
 	public int westWidth;	
 	public Texture2D background;
 	public GUIStyle titleStyle, welcomeLabelStyle, roomStyle;
-	public GUIStyle westButtonStyle, goButtonStyle, inputTextFieldStyle;
-	public int bigSpace;
-	public int smallSpace;
+	public GUIStyle westButtonStyle, propertyLabel, propertyValue, goButtonStyle;
+	public int space;
 	
     void Awake(){
         if (!PhotonNetwork.connected)
@@ -32,14 +31,15 @@ public class MainLobby: MonoBehaviour{
 		south = new Rect(Screen.width, Screen.height, 0, 0);
 		west = new Rect(0, north.y + north.height,
  		  	   westWidth, Screen.height - (north.y + north.height));
-		east = new Rect(west.x + west.width, north.y + north.height,
-		  	   Screen.width - (west.x + west.width), Screen.height - (south.y - (north.y + north.height)));
+		east = new Rect(west.x + west.width+50, north.y + north.height+50,
+		  	   Screen.width - (west.x + west.width + 50), south.y - (north.y + north.height));
 
         PhotonNetwork.playerName = PlayerPrefs.GetString("name");
 		joinRoomName = "";
 		createRoomName = PhotonNetwork.playerName.EndsWith("s")?PhotonNetwork.playerName+"' room"
 														 	   :PhotonNetwork.playerName+"'s room";
 		buttonPressedLast = ButtonState.none;
+		createRoomProperties = new RoomProperties(createRoomName, PhotonNetwork.playerName);
     }
 	
     private void ConnectingGUI(){
@@ -50,7 +50,7 @@ public class MainLobby: MonoBehaviour{
 	
 	private void NorthGUI(){
 		GUILayout.BeginArea(north);
-		GUILayout.Space(bigSpace);	
+		GUILayout.Space(space);	
 		GUILayout.Label("Dragonborn Lobby", titleStyle);
 		GUILayout.Label("Welcome " + PhotonNetwork.playerName, welcomeLabelStyle);
 		GUILayout.EndArea();
@@ -64,13 +64,12 @@ public class MainLobby: MonoBehaviour{
 	private void CreateRoomGUI(){
         if (GUILayout.Button("Create", westButtonStyle))
 			buttonPressedLast = ButtonState.create;
-            //PhotonNetwork.CreateRoom(createRoomName, true, true, 10);
 	}
 	
 	private void JoinRoomGUI(){
 		GUILayout.BeginVertical();
-        joinRoomName = GUILayout.TextField(joinRoomName, inputTextFieldStyle);
-		GUILayout.Space(bigSpace);	
+        joinRoomName = GUILayout.TextField(joinRoomName, GUILayout.MaxWidth(180));
+		GUILayout.Space(space/2);	
         if (GUILayout.Button("Join", westButtonStyle))
 			buttonPressedLast = ButtonState.join;
             //PhotonNetwork.JoinRoom(joinRoomName);
@@ -98,18 +97,64 @@ public class MainLobby: MonoBehaviour{
 	
 	private void WestGUI(){
 		GUILayout.BeginArea(west);
+		GUILayout.Space(space);
 		CreateRoomGUI();
-		GUILayout.Space(bigSpace);	
+		GUILayout.Space(space);
 		EnterQueueGUI();
-		GUILayout.Space(3*bigSpace);	
+		GUILayout.Space(2*space);	
 		RoomsGUI();
-		GUILayout.Space(bigSpace);	
+		GUILayout.Space(space);	
 		JoinRoomGUI();		
 		GUILayout.EndArea();
-	}		
+	}
 	
 	private void CreatePropertiesGUI(){
-		GUILayout.Label("Create properties", goButtonStyle);
+		createRoomProperties.GetTitle(); // 1
+		createRoomProperties.GetMode(); // 1
+		createRoomProperties.GetMaxKills(); // 1
+		createRoomProperties.GetMaxPlayers(); // 1
+		createRoomProperties.GetTimer(); // 1
+		createRoomProperties.GetUsedSkills();
+		createRoomProperties.GetBannedSkills();
+		
+		GUILayout.BeginVertical();		
+		
+		GUILayout.BeginHorizontal();
+		GUILayout.Label("Title:", propertyLabel);
+		createRoomProperties.SetTitle(GUILayout.TextField(createRoomProperties.GetTitle(), GUILayout.MaxWidth(180)));
+		GUILayout.EndHorizontal();		
+
+		GUILayout.BeginHorizontal();
+		GUILayout.Label("Mode:", propertyLabel);
+		string[] str1 = {"Battle Royal", "Conquerors", "Capture the flag"};
+		GUILayout.SelectionGrid(3, str1, str1.Length, propertyValue);
+		GUILayout.EndHorizontal();		
+		
+		
+		if (createRoomProperties.IsBattleRoyal()){
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Max kills:", propertyLabel);
+			string[] str2 = {"10", "20", "50", "75", "100", "200", "500"};
+			GUILayout.SelectionGrid(3, str2, str2.Length, propertyValue);
+			GUILayout.EndHorizontal();
+		}
+		
+		GUILayout.BeginHorizontal();
+		GUILayout.Label("Max players:", propertyLabel);
+		GUILayout.EndHorizontal();
+		
+		GUILayout.BeginHorizontal();
+		GUILayout.Label("Timer:", propertyLabel);
+		GUILayout.EndHorizontal();
+		
+		GUILayout.BeginHorizontal();
+		if (GUILayout.Button("Go", goButtonStyle))
+			PhotonNetwork.CreateRoom(createRoomName, true, true, createRoomProperties.GetMaxPlayers());				
+		GUILayout.EndHorizontal();
+		
+		GUILayout.EndVertical();
+		
+		
 	}
 	private void JoinPropertiesGUI(){
 		GUILayout.Label("Join properties", goButtonStyle);
