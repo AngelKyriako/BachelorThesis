@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
 public class MainLogin: MonoBehaviour {
 
     private string playerName;
@@ -32,7 +31,7 @@ public class MainLogin: MonoBehaviour {
         GUILayout.BeginHorizontal();
         GUILayout.Label("Enter name:", smallLabelStyle);
         GUILayout.Space(space);
-        playerName = GUILayout.TextField(playerName);
+        playerName = GUILayout.TextField(playerName, GUILayout.Width(170));
         if(GUI.changed) {
             playerName = playerName.TrimStart();
             PlayerPrefs.SetString("name", playerName);
