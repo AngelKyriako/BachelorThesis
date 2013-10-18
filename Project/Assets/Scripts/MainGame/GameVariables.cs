@@ -12,7 +12,7 @@ public enum Difficulty {
     Hard
 };
 
-public class RoomProperties {
+public class GameVariables {
 
     private string title;
     private string host;
@@ -56,8 +56,8 @@ public class RoomProperties {
         {3600, "60'"}, {5400, "90'"}, {7200, "120'"}, {10800, "180'"}
     };
 
-    private static RoomProperties instance = new RoomProperties();
-    private RoomProperties() {
+    private static GameVariables instance = new GameVariables();
+    private GameVariables() {
         title = "";
         host = "";
         mode = GameMode.BattleRoyal;
@@ -67,7 +67,7 @@ public class RoomProperties {
         timer = -1;
     }
 
-    public static RoomProperties Instance {
+    public static GameVariables Instance {
         get { return instance; }
     }
 
@@ -103,21 +103,21 @@ public class RoomProperties {
 
     public void BanSkill(string key) {
         Utilities.Instance.Assert(usedSkills.ContainsKey(key) && !bannedSkills.ContainsKey(key),
-                                                            "Error pre, class:RoomProperties, method: BanSkill");
+                                                            "Error pre, class:GameVariables, method: BanSkill");
         bannedSkills.Add(key, usedSkills[key]);
         usedSkills.Remove(key);
 
         Utilities.Instance.Assert(!usedSkills.ContainsKey(key) && bannedSkills.ContainsKey(key),
-                                                            "Error post, class:RoomProperties, method: BanSkill");
+                                                            "Error post, class:GameVariables, method: BanSkill");
     }
     public void UnbanSkill(string key) {
         Utilities.Instance.Assert(!usedSkills.ContainsKey(key) && bannedSkills.ContainsKey(key),
-                                                            "Error pre, class:RoomProperties, method: UnbanSkill");
+                                                            "Error pre, class:GameVariables, method: UnbanSkill");
         usedSkills.Add(key, bannedSkills[key]);
         bannedSkills.Remove(key);
 
         Utilities.Instance.Assert(usedSkills.ContainsKey(key) && !bannedSkills.ContainsKey(key),
-                                                            "Error post, class:RoomProperties, method: UnbanSkill");
+                                                            "Error post, class:GameVariables, method: UnbanSkill");
     }
     public Dictionary<string, BaseSkill> GetUsedSkills() { return usedSkills; }
     public Dictionary<string, BaseSkill> GetBannedSkills() { return bannedSkills; }

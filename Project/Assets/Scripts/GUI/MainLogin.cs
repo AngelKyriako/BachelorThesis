@@ -11,7 +11,7 @@ public class MainLogin: MonoBehaviour {
     public GUIStyle bigLabelStyle, smallLabelStyle, bigButtonStyle, errorMessageStyle;
     public int space;
 
-    void Awake() {
+    private void Awake() {
         playerName = "Guest" + Random.Range(1, 9999).ToString();
         PlayerPrefs.SetString("name", playerName);
         fullscreen = new Rect(0, 0, Screen.width, Screen.height);
@@ -19,7 +19,7 @@ public class MainLogin: MonoBehaviour {
                                layoutRect.width, layoutRect.height);
     }
 
-    void OnGUI() {
+    private void OnGUI() {
         GUI.DrawTexture(fullscreen, background, ScaleMode.StretchToFill);
 
         GUILayout.BeginArea(layoutRect);

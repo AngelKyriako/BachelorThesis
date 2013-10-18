@@ -34,7 +34,7 @@ public class MainLobby: MonoBehaviour {
     public GUIStyle westButtonStyle, propertyLabel, propertyValue, goButtonStyle;
     public int space;
 
-    void Awake() {
+    private void Awake() {
         if(!PhotonNetwork.connected)
             PhotonNetwork.ConnectUsingSettings("v0.1");
 
@@ -50,8 +50,8 @@ public class MainLobby: MonoBehaviour {
         joinRoomName = "";
         createRoomName = PhotonNetwork.playerName.EndsWith("s") ? PhotonNetwork.playerName + "' room"
                                                                 : PhotonNetwork.playerName + "'s room";
-        RoomProperties.Instance.SetTitle(createRoomName);
-        RoomProperties.Instance.SetHost(PhotonNetwork.playerName);
+        GameVariables.Instance.SetTitle(createRoomName);
+        GameVariables.Instance.SetHost(PhotonNetwork.playerName);
 
         buttonPressedLast = Action.None;
         editingField = EditProperty.None;
@@ -128,55 +128,55 @@ public class MainLobby: MonoBehaviour {
     private void CreatePropertiesGUI() {
         GUILayout.BeginHorizontal();
         GUILayout.Label("Title:", propertyLabel);
-        RoomProperties.Instance.SetTitle(GUILayout.TextField(RoomProperties.Instance.GetTitle(), GUILayout.MaxWidth(250)));
+        GameVariables.Instance.SetTitle(GUILayout.TextField(GameVariables.Instance.GetTitle(), GUILayout.MaxWidth(250)));
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Mode:", propertyLabel);
-        RoomProperties.Instance.SetMode(
+        GameVariables.Instance.SetMode(
             MyGUIHolder.Instance.RoomPropertyOptions<GameMode>(ref editingField, EditProperty.Mode,
-                                                               RoomProperties.Instance.GetMode(),
-                                                               RoomProperties.Instance.GetAvailableModes(), 110)
+                                                               GameVariables.Instance.GetMode(),
+                                                               GameVariables.Instance.GetAvailableModes(), 110)
         );
         GUILayout.EndHorizontal();
-        if(RoomProperties.Instance.GetMode() == GameMode.BattleRoyal) {
+        if(GameVariables.Instance.GetMode() == GameMode.BattleRoyal) {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Max kills:", propertyLabel);
-            RoomProperties.Instance.SetMaxKills(
+            GameVariables.Instance.SetMaxKills(
                 MyGUIHolder.Instance.RoomPropertyOptions<int>(ref editingField, EditProperty.MaxKills,
-                                                              RoomProperties.Instance.GetMaxKills(),
-                                                              RoomProperties.Instance.GetAvailableMaxKills(), 40)
+                                                              GameVariables.Instance.GetMaxKills(),
+                                                              GameVariables.Instance.GetAvailableMaxKills(), 40)
             );
             GUILayout.EndHorizontal();
         }
         GUILayout.BeginHorizontal();
         GUILayout.Label("Max players:", propertyLabel);
-        RoomProperties.Instance.SetMaxPlayers(
+        GameVariables.Instance.SetMaxPlayers(
             MyGUIHolder.Instance.RoomPropertyOptions<int>(ref editingField, EditProperty.MaxPlayers,
-                                                          RoomProperties.Instance.GetMaxPlayers(),
-                                                          RoomProperties.Instance.GetAvailableMaxPlayers(), 28)
+                                                          GameVariables.Instance.GetMaxPlayers(),
+                                                          GameVariables.Instance.GetAvailableMaxPlayers(), 28)
         );
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         GUILayout.Label("Difficulty:", propertyLabel);
-        RoomProperties.Instance.SetDifficulty(
+        GameVariables.Instance.SetDifficulty(
             MyGUIHolder.Instance.RoomPropertyOptions<Difficulty>(ref editingField, EditProperty.Difficulty,
-                                                                 RoomProperties.Instance.GetDifficulty(),
-                                                                 RoomProperties.Instance.GetAvailableDifficulties(), 60)
+                                                                 GameVariables.Instance.GetDifficulty(),
+                                                                 GameVariables.Instance.GetAvailableDifficulties(), 60)
         );
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         GUILayout.Label("Timer:", propertyLabel);
-        RoomProperties.Instance.SetTimer(
+        GameVariables.Instance.SetTimer(
             MyGUIHolder.Instance.RoomPropertyOptions<double>(ref editingField, EditProperty.Timer,
-                                                             RoomProperties.Instance.GetTimer(),
-                                                             RoomProperties.Instance.GetAvailableTimers(), 39)
+                                                             GameVariables.Instance.GetTimer(),
+                                                             GameVariables.Instance.GetAvailableTimers(), 39)
         );
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         if(GUILayout.Button("Go", goButtonStyle)) {
             //@TODO: Add properties on server map
-            PhotonNetwork.CreateRoom(createRoomName, true, true, RoomProperties.Instance.GetMaxPlayers());
+            PhotonNetwork.CreateRoom(createRoomName, true, true, GameVariables.Instance.GetMaxPlayers());
             PhotonNetwork.LoadLevel("MeetingPoint");
         }
         GUILayout.EndHorizontal();
@@ -213,7 +213,7 @@ public class MainLobby: MonoBehaviour {
         GUILayout.EndArea();
     }
 
-    void OnGUI() {
+    private void OnGUI() {
         if(!PhotonNetwork.connected) {
             GUI.DrawTexture(fullscreen, background, ScaleMode.StretchToFill);
             ConnectingGUI();
