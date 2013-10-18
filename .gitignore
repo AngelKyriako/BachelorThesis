@@ -7,6 +7,7 @@ Project/[Oo]bj/
 Project/Assets/StandardAssets/
 Project/Assets/Store/
 Project/Assets/Prefabs/
+Project/Assets/Resources/
 Project/Assets/Models/
 Project/Assets/Animations/
 Project/Assets/Textures/
@@ -19,3 +20,6 @@ Project/Assets/Fonts/
 *.unityproj
 *.sln
 *.pidb
+*.suo
+*.v11
+*.v11.suo
