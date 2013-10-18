@@ -14,8 +14,8 @@ public enum EditProperty {
 
 public enum Action {
     None,
-    Create,
-    Join,
+    CreateRoom,
+    ViewRoom,
     MatchMaking
 };
 
@@ -79,7 +79,7 @@ public class MainLobby: MonoBehaviour {
 
     private void CreateRoomGUI() {
         if(GUILayout.Button("Create", westButtonStyle, GUILayout.Width(130)))
-            buttonPressedLast = Action.Create;
+            buttonPressedLast = Action.CreateRoom;
     }
 
     private void MatchMakingGUI() {
@@ -93,8 +93,10 @@ public class MainLobby: MonoBehaviour {
         else {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
             foreach(RoomInfo room in PhotonNetwork.GetRoomList()) {
-                if(GUILayout.Button(room.name + " (" + room.playerCount + "/" + room.maxPlayers + ")", roomStyle))
+                if (GUILayout.Button(room.name + " (" + room.playerCount + "/" + room.maxPlayers + ")", roomStyle)) {
+                    buttonPressedLast = Action.ViewRoom;
                     joinRoomName = room.name;
+                }
             }
             GUILayout.EndScrollView();
         }
@@ -104,8 +106,10 @@ public class MainLobby: MonoBehaviour {
         GUILayout.BeginVertical();
         joinRoomName = GUILayout.TextField(joinRoomName, GUILayout.MaxWidth(180));
         GUILayout.Space(space / 2);
-        if(GUILayout.Button("Join", westButtonStyle, GUILayout.Width(90)))
-            buttonPressedLast = Action.Join;
+        if (GUILayout.Button("Join", westButtonStyle, GUILayout.Width(90))) {
+            PhotonNetwork.JoinRoom(joinRoomName);
+            PhotonNetwork.LoadLevel("MeetingPoint");
+        }
         GUILayout.EndVertical();
     }
 
@@ -171,35 +175,41 @@ public class MainLobby: MonoBehaviour {
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         if(GUILayout.Button("Go", goButtonStyle)) {
-            //paikse mpalitsa me ta properties
+            //@TODO: Add properties on server map
             PhotonNetwork.CreateRoom(createRoomName, true, true, RoomProperties.Instance.GetMaxPlayers());
-            Application.LoadLevel("Room");
+            PhotonNetwork.LoadLevel("MeetingPoint");
         }
         GUILayout.EndHorizontal();
     }
 
     private void JoinPropertiesGUI() {
         GUILayout.BeginHorizontal();
-        if(GUILayout.Button("Go", goButtonStyle))
+        //@TODO: Game properties here
+        if (GUILayout.Button("Go", goButtonStyle)) {
             PhotonNetwork.JoinRoom(joinRoomName);
+            PhotonNetwork.LoadLevel("MeetingPoint");
+        }
         GUILayout.EndHorizontal();
     }
 
-    private void QueuePropertiesGUI() {
+    private void MatchmakingPropertiesGUI() {
+        //@TODO: Game properties here
         GUILayout.BeginHorizontal();
-        if(GUILayout.Button("Go", goButtonStyle))
+        if (GUILayout.Button("Go", goButtonStyle)) {
             PhotonNetwork.JoinRandomRoom();
+            PhotonNetwork.LoadLevel("MeetingPoint");
+        }
         GUILayout.EndHorizontal();
     }
 
     private void EastGUI() {
         GUILayout.BeginArea(east);
-        if(buttonPressedLast == Action.Join)
+        if(buttonPressedLast == Action.ViewRoom)
             JoinPropertiesGUI();
-        else if(buttonPressedLast == Action.Create)
+        else if (buttonPressedLast == Action.CreateRoom)
             CreatePropertiesGUI();
         else if(buttonPressedLast == Action.MatchMaking)
-            QueuePropertiesGUI();
+            MatchmakingPropertiesGUI();
         GUILayout.EndArea();
     }
 
