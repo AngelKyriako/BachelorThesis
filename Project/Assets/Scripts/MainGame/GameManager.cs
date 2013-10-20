@@ -3,11 +3,11 @@ using System.Collections;
 
 public class GameManager: Photon.MonoBehaviour {
 
-    private void Start() {
+    void Start() {
 
     }
 
-    private void OnJoinedRoom() {
+    void OnJoinedRoom() {
         Vector3 spawnPoint;
         if (!PhotonNetwork.isMasterClient)
             spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
@@ -16,7 +16,7 @@ public class GameManager: Photon.MonoBehaviour {
         GameObject babyDragon = PhotonNetwork.Instantiate("Characters/BabyDragon", spawnPoint, Quaternion.identity, 0);
     }
 
-    private void Update() {
+    void Update() {
 
     }
 }
