@@ -5,7 +5,7 @@ public class CameraController: MonoBehaviour {
 
     private float lockOnTargetOffset = 50f;
 
-    public Collider target;
+    public Transform target;
     public bool lockedOnTarget = true;
     public int scrollOffset = 150;
     public float movementSpeed = 35,
@@ -17,19 +17,14 @@ public class CameraController: MonoBehaviour {
 
 
     private void Update() {
-        if (lockedOnTarget)
-            ApplyMovementOnTarget();
-        else
-            ApplyRTSMovement(ReceiveMovementInput());
+        ApplyRTSMovement(ReceiveMovementInput());
         ApplyRotation(ReceiveRotationInput());
     }
 
     ////////////////////////////////// Lock on character Movement  //////////////////////////////////
 
     private void ApplyMovementOnTarget() {
-        Camera.main.transform.position.Set(target.transform.position.x,
-                                            Camera.main.transform.position.y,
-                                            target.transform.position.z - lockOnTargetOffset);
+
     }
 
     ////////////////////////////////// RTS Movement  //////////////////////////////////

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GameManager: Photon.MonoBehaviour {
 
+    public string pathToPrefab;
+
     void Start() {
 
     }
@@ -13,7 +15,10 @@ public class GameManager: Photon.MonoBehaviour {
             spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
         else
             spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
-        GameObject babyDragon = PhotonNetwork.Instantiate("Characters/BabyDragon", spawnPoint, Quaternion.identity, 0);
+        PhotonNetwork.Instantiate("Characters/BabyDragon", spawnPoint, Quaternion.identity, 0);
+    }
+
+    void OnLeaveRoom() {
     }
 
     void Update() {
