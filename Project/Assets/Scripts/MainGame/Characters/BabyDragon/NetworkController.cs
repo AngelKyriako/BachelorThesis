@@ -31,7 +31,9 @@ public class NetworkController: Photon.MonoBehaviour {
 
     void Update() {
         if (!photonView.isMine) {
-            transform.position = Vector3.Lerp(transform.position, correctPlayerPosition, 0); //@Notice: Remember this zero could cause extreme changes to remote chars
+            //@TODO: Smooth this bitch (last argument should be parameterized based on:
+            //                                  Vector3.Distance(transform.position, correctPlayerPosition);)
+            transform.position = Vector3.Lerp(transform.position, correctPlayerPosition, 0);
             transform.rotation = Quaternion.Lerp(transform.rotation, correctPlayerRotation, 0);
         }
     }
