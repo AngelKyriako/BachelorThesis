@@ -24,8 +24,8 @@ public class NetworkController: Photon.MonoBehaviour {
             transform.parent = GameObject.Find("Characters/BabyDragons").transform;
         }
         else {
-            cameraController.enabled = false;
-            characterController.enabled = false;
+            cameraController.enabled = true;
+            characterController.enabled = true;
         }
     }
 

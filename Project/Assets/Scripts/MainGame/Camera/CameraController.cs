@@ -3,21 +3,22 @@ using System.Collections;
 
 /// <summary>
 /// A camera controller that gives an RTS view perspective.
-/// Locks on the character when it is visible or "c" is hit.
-/// Should be a component of the character in order the automatic lock to work.
+/// Locks on the target character when it is in a lock state. (hit 'L' to lock and unlock).
+/// Drag and drop the character you wish to target.
 /// </summary>
 public class CameraController: MonoBehaviour {
 
     private Vector3 originPosition, originRotation;
-    private bool isLocked;
+    private bool lockedOnTarget;
 
+    public Transform target;
     public float targetOffsetX = 0f,
                  targetOffsetZ = -10f,
                  smoothLockOn = 5f;
     //free
     public int scrollOffset = 100;
     public float movementInputWeight = 35,
-                 movementSpeed = 35,
+                 minMovementSpeed = 25, maxMovementSpeed = 100,
                  rotateInputWeight = 35,
                  rotateSpeed = 35;
 
@@ -26,13 +27,17 @@ public class CameraController: MonoBehaviour {
                  minCameraZ = 10f, maxCameraZ = 80f;
 
     private void Awake() {
+        Utilities.Instance.Assert(target, "CameraController", "Awake", "target transform is not defined");
         //@TODO: Init camera rotation
-        isLocked = true;
+        lockedOnTarget = true;
     }
 
     private void Update() {
         Vector3 movement;
-        if (LockedOnTarget)
+        
+        ToggleCameraLock();
+
+        if (lockedOnTarget)
             movement = ReceiveMovementToTarget();
         else {
             movement = ReceiveMovementInput();
@@ -46,18 +51,15 @@ public class CameraController: MonoBehaviour {
         //ApplyRotation(ValidateRotationDestination(GetRotationDestination(ReceiveRotationInput())));
     }
 
-    private void OnBecomeVisible() { isLocked = true; }
-
-    private void OnBecomeInvisible() { isLocked = false; }
-
     ////////////////////////////////// Movement  //////////////////////////////////
-    private bool LockedOnTarget {
-        get { return isLocked || Input.GetKey(KeyCode.C); }
+    private void ToggleCameraLock() {
+        if (Input.GetKey(KeyCode.L))
+            lockedOnTarget = !lockedOnTarget;
     }
 
     private Vector3 ReceiveMovementToTarget() {
-        float movementX = ((transform.position.x - Camera.main.transform.position.x + targetOffsetX));
-        float movementZ = ((transform.position.z - Camera.main.transform.position.z + targetOffsetZ));
+        float movementX = ((target.position.x - Camera.main.transform.position.x + targetOffsetX));
+        float movementZ = ((target.position.z - Camera.main.transform.position.z + targetOffsetZ));
         return new Vector3(movementX, 0, movementZ);
     }
 
@@ -123,7 +125,7 @@ public class CameraController: MonoBehaviour {
 
     private void ApplyMovement(Vector3 destination) {
         if (destination != originPosition)
-            Camera.main.transform.position = Vector3.MoveTowards(originPosition, destination, Time.deltaTime * movementSpeed);
+            Camera.main.transform.position = Vector3.MoveTowards(originPosition, destination, Time.deltaTime * minMovementSpeed);
     }
 
     ////////////////////////////////// Rotation  //////////////////////////////////
