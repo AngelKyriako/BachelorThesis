@@ -43,12 +43,14 @@ public class NetworkController: Photon.MonoBehaviour {
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
             stream.SendNext(rigidbody.velocity);
+            stream.SendNext(characterController.GetCurrentSpeed());
 
         }
         else { // receive data from remote characters
             correctPlayerPosition = (Vector3)stream.ReceiveNext();
             correctPlayerRotation = (Quaternion)stream.ReceiveNext();
             rigidbody.velocity = (Vector3)stream.ReceiveNext();
+            characterController.SetCurrentSpeed((float)stream.ReceiveNext());
         }
     }
 }
