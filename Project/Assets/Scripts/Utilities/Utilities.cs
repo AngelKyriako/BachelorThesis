@@ -12,23 +12,31 @@ public class Utilities {
     }
 
     public void Assert(bool b, string s) {
-        if(!b)
+        if (!b) {
             Debug.LogError(s);
+            Application.Quit();
+        }
     }
 
-    public void Assert(bool b, string scriptName, string methodName ,string s) {
-        if (!b)
+    public void Assert(bool b, string scriptName, string methodName, string s) {
+        if (!b) {
             Debug.LogError(s + " @ script: " + scriptName + ", method: " + methodName);
+            Application.Quit();
+        }
     }
 
     public void PreCondition(bool b, string scriptName, string methodName, string s) {
-        if (!b)
+        if (!b) {
             Debug.LogError("Invalid pre condition: '" + s + "' @ script: " + scriptName + ",method:" + methodName);
+            Application.Quit();
+        }
     }
 
     public void PostCondition(bool b, string scriptName, string methodName, string s) {
-        if (!b)
+        if (!b) {
             Debug.LogError("Invalid post condition: '" + s + "' @ script: " + scriptName + ",method:" + methodName);
+            Application.Quit();
+        }
     }
 
     public void LogMessage(string s) {
