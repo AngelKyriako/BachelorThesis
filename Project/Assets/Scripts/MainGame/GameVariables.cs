@@ -4,13 +4,16 @@ using System.Collections.Generic;
 public enum GameMode {
     BattleRoyal,
     Conquerors,
-    CaptureTheFlag
+    CaptureTheFlag,
+    Survival
 };
 public enum Difficulty {
     Easy,
     Medium,
     Hard
 };
+
+//@TODO A BIG REFACTOR HERE 
 
 public class GameVariables {
 
@@ -42,13 +45,13 @@ public class GameVariables {
         {200, "200"}, {500, "500"}, {750, "750"}, {1000,"1000"}
 	};
 
-    private Dictionary<string, BaseSkill> usedSkills = new Dictionary<string, BaseSkill>(){
-        {"skill 1", new BaseSkill("skill 1", "description 1")},
-        {"skill 2", new BaseSkill("skill 2", "description 2")}, 
-        {"skill 3", new BaseSkill("skill 3", "description 3")},
-        {"skill 4", new BaseSkill("skill 4", "description 4")}
+    private Dictionary<string, Skill> usedSkills = new Dictionary<string, Skill>(){
+        {"skill 1", new Skill()},
+        {"skill 2", new Skill()}, 
+        {"skill 3", new Skill()},
+        {"skill 4", new Skill()}
     };
-    private Dictionary<string, BaseSkill> bannedSkills = new Dictionary<string, BaseSkill>();
+    private Dictionary<string, Skill> bannedSkills = new Dictionary<string, Skill>();
 
     private double timer;
     private Dictionary<double, string> availableTimers = new Dictionary<double, string>(){
@@ -119,6 +122,6 @@ public class GameVariables {
         Utilities.Instance.Assert(usedSkills.ContainsKey(key) && !bannedSkills.ContainsKey(key),
                                                             "Error post, class:GameVariables, method: UnbanSkill");
     }
-    public Dictionary<string, BaseSkill> GetUsedSkills() { return usedSkills; }
-    public Dictionary<string, BaseSkill> GetBannedSkills() { return bannedSkills; }
+    public Dictionary<string, Skill> GetUsedSkills() { return usedSkills; }
+    public Dictionary<string, Skill> GetBannedSkills() { return bannedSkills; }
 }

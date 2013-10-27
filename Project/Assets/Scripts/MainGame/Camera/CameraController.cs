@@ -13,9 +13,9 @@ public class CameraController: MonoBehaviour {
 
     public Transform target;
     public float targetOffsetX = 0f,
-                 targetOffsetZ = -10f,
+                 targetOffsetZ = -15f,
                  smoothLockOn = 5f;
-    //free
+
     public int scrollOffset = 100;
     public float movementInputWeight = 35,
                  minMovementSpeed = 25, maxMovementSpeed = 100,
@@ -86,7 +86,8 @@ public class CameraController: MonoBehaviour {
     }
 
     private Vector3 ZoomMovement(Vector3 move) {
-        move.y = -(movementInputWeight * Input.GetAxis("Mouse ScrollWheel"));
+        float input = Input.GetAxis("Mouse ScrollWheel");
+        move.y = -(movementInputWeight * input);
         return move;
     }
 
