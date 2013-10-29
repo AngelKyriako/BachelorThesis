@@ -7,121 +7,109 @@ public enum GameMode {
     CaptureTheFlag,
     Survival
 };
-public enum Difficulty {
+
+public enum GameDifficulty {
     Easy,
     Medium,
     Hard
 };
 
-//@TODO A BIG REFACTOR HERE 
-
 public class GameVariables {
 
-    private string title;
-    private string host;
-    private GameMode mode;
-    private Dictionary<GameMode, string> availableModes = new Dictionary<GameMode, string>(){
-        {GameMode.BattleRoyal, Enum.GetName(typeof(GameMode), GameMode.BattleRoyal)},
-        {GameMode.Conquerors, Enum.GetName(typeof(GameMode), GameMode.Conquerors)},
-        {GameMode.CaptureTheFlag, Enum.GetName(typeof(GameMode), GameMode.CaptureTheFlag)}
-    };
-    
-    private Difficulty difficulty;
-    private Dictionary<Difficulty,string> availableDifficulties = new Dictionary<Difficulty, string>(){
-        {Difficulty.Easy, Enum.GetName(typeof(Difficulty), Difficulty.Easy)},
-        {Difficulty.Medium, Enum.GetName(typeof(Difficulty), Difficulty.Medium)},
-        {Difficulty.Hard, Enum.GetName(typeof(Difficulty), Difficulty.Hard)}
-    };
+#region attributes
+    private string title, host;
+    private KeyValuePair<string, GameMode> mode;
+    private KeyValuePair<string, GameDifficulty> difficulty;
+    private KeyValuePair<string, int> maxPlayers, targetKills;
+    private KeyValuePair<string, double> timer;
 
-    private int maxPlayers;
-    private Dictionary<int, string> availableMaxPlayers = new Dictionary<int, string>(){
-        {2, "2"}, {3, "3"}, {4, "4"}, {5, "5"}, {6, "6"},
-        {7, "7"}, {8, "8"}, {9, "9"}, {10, "10"}
-    };
-
-    private int maxKills;
-    private Dictionary<int, string> availableMaxKills = new Dictionary<int, string>(){
-        {10, "10"}, {25, "25"}, {50, "50"}, {75, "75"}, {100, "100"},
-        {200, "200"}, {500, "500"}, {750, "750"}, {1000,"1000"}
-	};
-
-    private Dictionary<string, Skill> usedSkills = new Dictionary<string, Skill>(){
-        {"skill 1", new Skill()},
-        {"skill 2", new Skill()}, 
-        {"skill 3", new Skill()},
-        {"skill 4", new Skill()}
-    };
-    private Dictionary<string, Skill> bannedSkills = new Dictionary<string, Skill>();
-
-    private double timer;
-    private Dictionary<double, string> availableTimers = new Dictionary<double, string>(){
-        {-1, "none"}, {600, "10'"}, {900, "15'"}, {1200, "20'"}, {1800, "30'"},
-        {3600, "60'"}, {5400, "90'"}, {7200, "120'"}, {10800, "180'"}
-    };
+    private Dictionary<string, GameMode> availableModes;
+    private Dictionary<string, GameDifficulty> availableDifficulties;
+    private Dictionary<string, int> availableMaxPlayers, availableTargetKills;
+    private Dictionary<string, double> availableTimers;
+#endregion
 
     private static GameVariables instance = new GameVariables();
+
     private GameVariables() {
-        title = "";
-        host = "";
-        mode = GameMode.BattleRoyal;
-        difficulty = Difficulty.Medium;
-        maxPlayers = 10;
-        maxKills = 50;
-        timer = -1;
+        title = string.Empty;
+        host = string.Empty;
+        mode = new KeyValuePair<string, GameMode>(Enum.GetName(typeof(GameMode), GameMode.BattleRoyal), GameMode.BattleRoyal);
+        availableModes = new Dictionary<string, GameMode>(){ {Enum.GetName(typeof(GameMode), GameMode.BattleRoyal), GameMode.BattleRoyal},
+                                                             {Enum.GetName(typeof(GameMode), GameMode.Conquerors), GameMode.Conquerors},
+                                                             {Enum.GetName(typeof(GameMode), GameMode.CaptureTheFlag), GameMode.CaptureTheFlag}
+                                                           };
+        difficulty = new KeyValuePair<string, GameDifficulty>(Enum.GetName(typeof(GameDifficulty), GameDifficulty.Medium), GameDifficulty.Medium);
+        availableDifficulties = new Dictionary<string, GameDifficulty>(){ {Enum.GetName(typeof(GameDifficulty), GameDifficulty.Easy), GameDifficulty.Easy},
+                                                                          {Enum.GetName(typeof(GameDifficulty), GameDifficulty.Medium), GameDifficulty.Medium},
+                                                                          {Enum.GetName(typeof(GameDifficulty), GameDifficulty.Hard), GameDifficulty.Hard}
+                                                                        };
+        maxPlayers = new KeyValuePair<string, int>("4", 4);
+        availableMaxPlayers = new Dictionary<string, int>(){ {"2", 2}, {"3", 3}, {"4", 4}, {"5", 5}, {"6", 6},
+                                                             {"7", 7}, {"8", 8}, {"9", 9}, {"10", 10}
+                                                           };
+        targetKills = new KeyValuePair<string, int>("50", 50);
+        availableTargetKills = new Dictionary<string, int>(){ {"10", 10}, {"25", 25}, {"50", 50}, {"75", 75}, {"100", 100},
+                                                              {"200", 200}, {"500", 500}, {"750", 750}, {"1000", 1000}
+	                                                        };
+        timer = new KeyValuePair<string, double>("None", -1);
+        availableTimers = new Dictionary<string, double>(){ {"None", -1}, {"10'", 600}, {"15'", 900}, {"20'", 1200}, {"30'", 1800},
+                                                            {"60'", 3600}, {"90'", 5400}, {"120'", 7200}, {"180'", 10800}
+                                                          };
     }
 
     public static GameVariables Instance {
         get { return instance; }
     }
 
-    public void SetTitle(string t) {
-        string trimStr = t.TrimStart();
-        if(trimStr.Length > 0 && trimStr.Length < 128)
-            title = t;
+#region setters & getters
+    public string Title {
+        get { return title; }
+        set {
+            string trimStr = value.TrimStart();
+            if (trimStr.Length > 0 && trimStr.Length < 128)
+                title = value;
+        }
     }
-    public string GetTitle() { return title; }
-
-    public void SetHost(string h) { host = h; }
-    public string GetHost() { return host; }
-
-    public void SetMode(GameMode m) { mode = m; }
-    public GameMode GetMode() { return mode; }
-    public Dictionary<GameMode, string> GetAvailableModes() { return availableModes; }
-
-    public void SetMaxKills(int mk) { maxKills = mk; }
-    public int GetMaxKills() { return maxKills; }
-    public Dictionary<int, string> GetAvailableMaxKills() { return availableMaxKills; }
-        
-    public void SetMaxPlayers(int mp) { maxPlayers = mp; }
-    public int GetMaxPlayers() { return maxPlayers; }
-    public Dictionary<int, string> GetAvailableMaxPlayers() { return availableMaxPlayers; }
-
-    public void SetDifficulty(Difficulty dif) { difficulty = dif; }
-    public Difficulty GetDifficulty() { return difficulty; }
-    public Dictionary<Difficulty, string> GetAvailableDifficulties() { return availableDifficulties; }
-
-    public void SetTimer(double t) { timer = t; }
-    public double GetTimer() { return timer; }
-    public Dictionary<double, string> GetAvailableTimers() { return availableTimers; }
-
-    public void BanSkill(string key) {
-        Utilities.Instance.Assert(usedSkills.ContainsKey(key) && !bannedSkills.ContainsKey(key),
-                                                            "Error pre, class:GameVariables, method: BanSkill");
-        bannedSkills.Add(key, usedSkills[key]);
-        usedSkills.Remove(key);
-
-        Utilities.Instance.Assert(!usedSkills.ContainsKey(key) && bannedSkills.ContainsKey(key),
-                                                            "Error post, class:GameVariables, method: BanSkill");
+    public string Host {
+        get { return host; }
+        set { host = value; }
     }
-    public void UnbanSkill(string key) {
-        Utilities.Instance.Assert(!usedSkills.ContainsKey(key) && bannedSkills.ContainsKey(key),
-                                                            "Error pre, class:GameVariables, method: UnbanSkill");
-        usedSkills.Add(key, bannedSkills[key]);
-        bannedSkills.Remove(key);
-
-        Utilities.Instance.Assert(usedSkills.ContainsKey(key) && !bannedSkills.ContainsKey(key),
-                                                            "Error post, class:GameVariables, method: UnbanSkill");
+    public KeyValuePair<string, GameMode> Mode {
+        get { return mode; }
+        set { mode = value; }
     }
-    public Dictionary<string, Skill> GetUsedSkills() { return usedSkills; }
-    public Dictionary<string, Skill> GetBannedSkills() { return bannedSkills; }
+    public KeyValuePair<string, GameDifficulty> Difficulty {
+        get { return difficulty; }
+        set { difficulty = value; }
+    }
+    public KeyValuePair<string, int> MaxPlayers {
+        get { return maxPlayers; }
+        set { maxPlayers = value; }
+    }
+    public KeyValuePair<string, int> TargetKills {
+        get { return targetKills; }
+        set { targetKills = value; }
+    }
+    public KeyValuePair<string, double> Timer {
+        get { return timer; }
+        set { timer = value; }
+    }
+
+    public Dictionary<string, GameMode> AvailableModes {
+        get { return availableModes; }
+    }
+    public Dictionary<string, GameDifficulty> AvailableDifficulties {
+        get { return availableDifficulties; }
+    }
+    public Dictionary<string, int> AvailableMaxPlayers {
+        get { return availableMaxPlayers; }
+    }
+    public Dictionary<string, int> AvailableTargetKills {
+        get { return availableTargetKills; }
+    }
+    public Dictionary<string, double> AvailableTimers {
+        get { return availableTimers; }
+    }
+#endregion
 }

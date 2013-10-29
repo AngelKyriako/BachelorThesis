@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 public enum EditProperty {
@@ -8,7 +7,7 @@ public enum EditProperty {
     Mode,
     Difficulty,
     MaxPlayers,
-    MaxKills,
+    targetKills,
     Timer
 };
 
@@ -50,8 +49,8 @@ public class MainLobby: MonoBehaviour {
         joinRoomName = "";
         createRoomName = PhotonNetwork.playerName.EndsWith("s") ? PhotonNetwork.playerName + "' room"
                                                                 : PhotonNetwork.playerName + "'s room";
-        GameVariables.Instance.SetTitle(createRoomName);
-        GameVariables.Instance.SetHost(PhotonNetwork.playerName);
+        GameVariables.Instance.Title = createRoomName;
+        GameVariables.Instance.Host = PhotonNetwork.playerName;
 
         buttonPressedLast = Action.None;
         editingField = EditProperty.None;
@@ -128,55 +127,45 @@ public class MainLobby: MonoBehaviour {
     private void CreatePropertiesGUI() {
         GUILayout.BeginHorizontal();
         GUILayout.Label("Title:", propertyLabel);
-        GameVariables.Instance.SetTitle(GUILayout.TextField(GameVariables.Instance.GetTitle(), GUILayout.MaxWidth(250)));
+        GameVariables.Instance.Title = GUILayout.TextField(GameVariables.Instance.Title, GUILayout.MaxWidth(250));
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Mode:", propertyLabel);
-        GameVariables.Instance.SetMode(
-            MyGUIHolder.Instance.RoomPropertyOptions<GameMode>(ref editingField, EditProperty.Mode,
-                                                               GameVariables.Instance.GetMode(),
-                                                               GameVariables.Instance.GetAvailableModes(), 110)
-        );
+        GameVariables.Instance.Mode = GUIUtilities.Instance.ButtonOptions<GameMode, EditProperty>(ref editingField, EditProperty.Mode,
+                                                               GameVariables.Instance.Mode,
+                                                               GameVariables.Instance.AvailableModes, 110);
         GUILayout.EndHorizontal();
-        if(GameVariables.Instance.GetMode() == GameMode.BattleRoyal) {
+        if(GameVariables.Instance.Mode.Value == GameMode.BattleRoyal) {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Max kills:", propertyLabel);
-            GameVariables.Instance.SetMaxKills(
-                MyGUIHolder.Instance.RoomPropertyOptions<int>(ref editingField, EditProperty.MaxKills,
-                                                              GameVariables.Instance.GetMaxKills(),
-                                                              GameVariables.Instance.GetAvailableMaxKills(), 40)
-            );
+            GameVariables.Instance.TargetKills = GUIUtilities.Instance.ButtonOptions<int, EditProperty>(ref editingField, EditProperty.targetKills,
+                                                              GameVariables.Instance.TargetKills,
+                                                              GameVariables.Instance.AvailableTargetKills, 40);
             GUILayout.EndHorizontal();
         }
         GUILayout.BeginHorizontal();
         GUILayout.Label("Max players:", propertyLabel);
-        GameVariables.Instance.SetMaxPlayers(
-            MyGUIHolder.Instance.RoomPropertyOptions<int>(ref editingField, EditProperty.MaxPlayers,
-                                                          GameVariables.Instance.GetMaxPlayers(),
-                                                          GameVariables.Instance.GetAvailableMaxPlayers(), 28)
-        );
+        GameVariables.Instance.MaxPlayers = GUIUtilities.Instance.ButtonOptions<int, EditProperty>(ref editingField, EditProperty.MaxPlayers,
+                                                          GameVariables.Instance.MaxPlayers,
+                                                          GameVariables.Instance.AvailableMaxPlayers, 28);
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         GUILayout.Label("Difficulty:", propertyLabel);
-        GameVariables.Instance.SetDifficulty(
-            MyGUIHolder.Instance.RoomPropertyOptions<Difficulty>(ref editingField, EditProperty.Difficulty,
-                                                                 GameVariables.Instance.GetDifficulty(),
-                                                                 GameVariables.Instance.GetAvailableDifficulties(), 60)
-        );
+        GameVariables.Instance.Difficulty = GUIUtilities.Instance.ButtonOptions<GameDifficulty, EditProperty>(ref editingField, EditProperty.Difficulty,
+                                                                 GameVariables.Instance.Difficulty,
+                                                                 GameVariables.Instance.AvailableDifficulties, 60);
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         GUILayout.Label("Timer:", propertyLabel);
-        GameVariables.Instance.SetTimer(
-            MyGUIHolder.Instance.RoomPropertyOptions<double>(ref editingField, EditProperty.Timer,
-                                                             GameVariables.Instance.GetTimer(),
-                                                             GameVariables.Instance.GetAvailableTimers(), 39)
-        );
+        GameVariables.Instance.Timer = GUIUtilities.Instance.ButtonOptions<double, EditProperty>(ref editingField, EditProperty.Timer,
+                                                             GameVariables.Instance.Timer,
+                                                             GameVariables.Instance.AvailableTimers, 39);
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         if(GUILayout.Button("Go", goButtonStyle)) {
             //@TODO: Add properties on server map
-            PhotonNetwork.CreateRoom(createRoomName, true, true, GameVariables.Instance.GetMaxPlayers());
+            PhotonNetwork.CreateRoom(createRoomName, true, true, GameVariables.Instance.MaxPlayers.Value);
             PhotonNetwork.LoadLevel("MeetingPoint");
         }
         GUILayout.EndHorizontal();
@@ -187,7 +176,8 @@ public class MainLobby: MonoBehaviour {
         //@TODO: Game properties here
         if (GUILayout.Button("Go", goButtonStyle)) {
             PhotonNetwork.JoinRoom(joinRoomName);
-            PhotonNetwork.LoadLevel("MeetingPoint");
+            if (PhotonNetwork.room != null)
+                PhotonNetwork.LoadLevel("MeetingPoint");
         }
         GUILayout.EndHorizontal();
     }
@@ -197,7 +187,8 @@ public class MainLobby: MonoBehaviour {
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Go", goButtonStyle)) {
             PhotonNetwork.JoinRandomRoom();
-            PhotonNetwork.LoadLevel("MeetingPoint");
+            if (PhotonNetwork.room != null)
+                PhotonNetwork.LoadLevel("MeetingPoint");
         }
         GUILayout.EndHorizontal();
     }
