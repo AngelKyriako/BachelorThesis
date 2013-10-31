@@ -10,10 +10,10 @@
         buffValue = 0;
     }
 
-    public BaseStatistic(string n, string d, int v) {
-        name = n;
-        description = d;
-        baseValue = v;
+    public BaseStatistic(string _name, string _desc, int _val) {
+        name = _name;
+        description = _desc;
+        baseValue = _val;
         buffValue = 0;
     }
 

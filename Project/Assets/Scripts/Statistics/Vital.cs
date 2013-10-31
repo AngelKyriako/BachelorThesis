@@ -7,7 +7,7 @@ public class Vital: Attribute {
 
     private int currentValue;
 
-    public Vital() {
+    public Vital(): base() {
         currentValue = base.FinalValue;
     }
 

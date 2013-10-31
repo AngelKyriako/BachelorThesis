@@ -6,8 +6,7 @@ public enum AttributeType {
     MovementSpeed,
     AttackSpeed,
     CriticalChance,
-    Regeneration,
-    Radius,
+    Regeneration
 }
 
 public struct ModifyingStat {
@@ -25,7 +24,7 @@ public class Attribute: BaseStatistic {
     private List<ModifyingStat> modifiers;
     private int statBonus;
 
-    public Attribute() {
+    public Attribute(): base() {
         modifiers = new List<ModifyingStat>();
         statBonus = 0;
     }

@@ -7,5 +7,6 @@
 }
 
 public class Stat: BaseStatistic{
-    public Stat() { }
+    public Stat(): base(){ }
+    public Stat(string _name, string _desc, int _val) : base(_name, _desc, _val) { }
 }

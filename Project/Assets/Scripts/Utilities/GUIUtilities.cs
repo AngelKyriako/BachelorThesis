@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class GUIUtilities {
 
+    public GUIStyle effectStyle, skillStyle, statStyle;
+
     private static GUIUtilities instance = new GUIUtilities();
 
     private GUIUtilities() { }
@@ -14,7 +16,7 @@ public class GUIUtilities {
     public KeyValuePair<string, T> ButtonOptions<T, K>(ref K editingField, K targetedState, KeyValuePair<string, T> selectedPair,
                                                        Dictionary<string, T> availablePairs, int width) {
 
-        if (editingField.Equals(default(K)) &&
+        if (!editingField.Equals(targetedState) &&
             GUILayout.Button(selectedPair.Key, GUILayout.Width(width)))
             editingField = targetedState;
 
