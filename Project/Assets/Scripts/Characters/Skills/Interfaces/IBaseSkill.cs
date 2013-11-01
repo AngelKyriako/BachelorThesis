@@ -2,6 +2,10 @@
 
 public interface IBaseSkill {
 
+    void Target();
+    void Cast();
+    void Update();
+
     string Title { get; set; }
     string Description { get; set; }
     Texture2D Icon { get; set; }
@@ -13,7 +17,4 @@ public interface IBaseSkill {
     float CoolDownTime { get; set; }
     float CoolDownTimer { get; }
     bool IsReady { get; }
-
-    void Cast();
-    void Update();
 }

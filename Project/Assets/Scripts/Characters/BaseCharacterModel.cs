@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-public class BaseCharacter: MonoBehaviour {
+public class BaseCharacterModel: MonoBehaviour {
 
 #region const values
     public const uint MAX_LEVEL = 25;
@@ -10,7 +10,7 @@ public class BaseCharacter: MonoBehaviour {
     public const uint STARTING_EXP_TO_LEVEL = 50;
     public const float STARTING_EXP_MODIFIER = 1.1f;
 
-    //  str   agi   sta   int   cha                               
+                                                                        //  str   agi   sta   int   cha                               
     private static readonly float[,] ATTRIBUTE_RATIOS = new float[6, 5] { { 0.5f, 0.0f, 0.0f, 0.0f, 0.0f },//atk
                                                                           { 0.4f, 0.0f, 0.1f, 0.0f, 0.0f },//def
                                                                           { 0.0f, 0.5f, 0.0f, 0.0f, 0.1f },//mvs 
@@ -31,7 +31,7 @@ public class BaseCharacter: MonoBehaviour {
     private Attribute[] attributes;
     private Vital[] vitals;
 
-    public void Awake() {
+    public virtual void Awake() {
         name = PlayerPrefs.GetString("name");
         Level = STARTING_LEVEL;
         expModifier = STARTING_EXP_MODIFIER;

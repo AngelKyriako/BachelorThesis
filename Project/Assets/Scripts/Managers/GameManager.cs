@@ -2,14 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameManager: Photon.MonoBehaviour {
+public class GameManager: SingletonPhotonMono<GameManager> {
 
-    private Dictionary<string, GameObject> playerCharacters;
+    private const string pathToPlayerCharPrefab = "Characters/BabyDragon";
 
-    public string pathToPlayerCharPrefab = "Characters/BabyDragon";
+    private GameObject playerCharacter, gui;
+    private Dictionary<string, GameObject> allies;
+    private Dictionary<string, GameObject> enemies;
+
+    private GameManager() { }
 
     void Awake() {
-        playerCharacters = new Dictionary<string, GameObject>();
+        gui = GameObject.Find("GUIScripts");
+        allies = new Dictionary<string, GameObject>();
+        enemies = new Dictionary<string, GameObject>();
     }
 
     void OnJoinedRoom() {
@@ -19,26 +25,56 @@ public class GameManager: Photon.MonoBehaviour {
         else
             spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
         PhotonNetwork.Instantiate(pathToPlayerCharPrefab, spawnPoint, Quaternion.identity, 0);
+        GameManager.Instance.InitGUIScripts();
     }
 
     void OnLeaveRoom() {
+        //@TODO: implement
     }
 
-    void Update() {
-
+    public void InitGUIScripts() {
+        gui.GetComponent<ChatWindow>().enabled = true;
+        gui.GetComponent<CharacterWindow>().enabled = true;
     }
 
-    public void AddPlayerCharacter(string name, GameObject character) {
-        if (!playerCharacters.ContainsKey(name))
-            playerCharacters.Add(name, character);
+#region Accessors
+    public GameObject PlayerCharacter {
+        get { return playerCharacter; }
+        set { playerCharacter = value; }
     }
 
-    public void RemovePlayerCharacter(string name) {
-        if (playerCharacters.ContainsKey(name))
-            playerCharacters.Remove(name);
+    public GameObject Gui {
+        get { return gui; }
     }
 
-    public GameObject GetPlayerCharacter(string name) {
-        return playerCharacters[name];
+    public void AddAlly(string name, GameObject character) {
+        if (!allies.ContainsKey(name))
+            allies.Add(name, character);
     }
+    public void RemoveAlly(string name) {
+        if (allies.ContainsKey(name))
+            allies.Remove(name);
+    }
+    public bool IsAlly(string name) {
+        return allies.ContainsKey(name);
+    }
+    public GameObject GetAlly(string name) {
+        return allies[name];
+    }
+
+    public void AddEnemy(string name, GameObject character) {
+        if (!enemies.ContainsKey(name))
+            enemies.Add(name, character);
+    }
+    public void RemoveEnemy(string name) {
+        if (enemies.ContainsKey(name))
+            enemies.Remove(name);
+    }
+    public bool IsEnemy(string name) {
+        return enemies.ContainsKey(name);
+    }
+    public GameObject GetEnemy(string name) {
+        return enemies[name];
+    }
+#endregion
 }

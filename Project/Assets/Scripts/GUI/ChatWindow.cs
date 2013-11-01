@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Chat: Photon.MonoBehaviour {
+public class ChatWindow: Photon.MonoBehaviour {
 
-    public static Chat SP;
+    public static ChatWindow instance;
     public List<string> messages = new List<string>();
 
     private int chatHeight = 140, chatWidth = 300;
@@ -12,7 +12,10 @@ public class Chat: Photon.MonoBehaviour {
     private string chatInput = "";
     private float lastUnfocusTime = 0;
 
-    void Awake() { SP = this; }
+    void Awake() {
+        instance = this;
+        enabled = false;
+    }
 
     void OnGUI() {
         GUI.SetNextControlName("");
@@ -52,9 +55,9 @@ public class Chat: Photon.MonoBehaviour {
     }
 
     public static void AddMessage(string text) {
-        SP.messages.Add(text);
-        if (SP.messages.Count > 15)
-            SP.messages.RemoveAt(0);
+        instance.messages.Add(text);
+        if (instance.messages.Count > 15)
+            instance.messages.RemoveAt(0);
     }
 
 

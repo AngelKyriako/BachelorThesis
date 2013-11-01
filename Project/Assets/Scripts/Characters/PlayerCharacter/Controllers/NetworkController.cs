@@ -12,40 +12,27 @@ public class NetworkController: Photon.MonoBehaviour {
     private float currentSpeed;
 
     void Awake() {
-        cameraController = GetComponent<CameraController>();
-        characterController = GetComponent<CharacterController>();
-        visionController = GetComponent<VisionController>();
+        cameraController = gameObject.GetComponent<CameraController>();
+        cameraController.enabled = photonView.isMine;
+        characterController = gameObject.GetComponent<CharacterController>();
+        characterController.enabled = photonView.isMine;
+        visionController = gameObject.GetComponent<VisionController>();
+        visionController.enabled = photonView.isMine;//@TODO: for team play this should be only for enemies
+
+        gameObject.transform.parent = GameObject.Find("Characters/BabyDragons").transform;
+        gameObject.name = photonView.viewID.ToString();
+        if (photonView.isMine) {
+            GameManager.Instance.PlayerCharacter = gameObject;
+            Utilities.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));
+        }
+        else {
+            GameManager.Instance.AddEnemy(gameObject.name, gameObject);
+            Utilities.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("HiddenEnemies"));
+        }
 
         correctPlayerPosition = transform.position;
         correctPlayerRotation = Quaternion.identity;
-        currentSpeed = 0;
-    }
-
-    private static void SetGameObjectLayer(GameObject obj, int l) {
-        if (obj == null)
-            return;
-        obj.layer = l;
-        foreach (Transform child in obj.transform)
-            if (child)
-                SetGameObjectLayer(child.gameObject, l);
-    }
-
-    void Start() {
-        characterController.SetIsLocal(photonView.isMine);
-        gameObject.name = "BabyDragon" + photonView.viewID.ToString();
-        transform.parent = GameObject.Find("Characters/BabyDragons").transform;
-        if (photonView.isMine) {
-            cameraController.enabled = true;
-            characterController.enabled = true;
-            visionController.enabled = true;
-            SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));
-        }
-        else {
-            cameraController.enabled = false;
-            characterController.enabled = false;
-            visionController.enabled = false;//@TODO: for team play this should be only for enemies
-            SetGameObjectLayer(gameObject, LayerMask.NameToLayer("HiddenEnemies"));
-        }
+        currentSpeed = 0;                
     }
 
     void Update() {

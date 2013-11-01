@@ -3,7 +3,6 @@ using System.Collections;
 
 public class CharacterController: MonoBehaviour {
 
-    private bool isLocal;
     private Vector3 destination;
     private float distance,
                   currentSpeed;
@@ -47,9 +46,6 @@ public class CharacterController: MonoBehaviour {
         if (distance > .2f)
             transform.position = Vector3.MoveTowards(transform.position, destination, movementSpeed * Time.deltaTime);
     }
-
-    public void SetIsLocal(bool b) { isLocal = b; }
-    public bool GetIsLocal() { return isLocal; }
 
     public void SetCurrentSpeed(float s) { currentSpeed = s; }
     public float GetCurrentSpeed() { return currentSpeed; }

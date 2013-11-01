@@ -31,7 +31,7 @@ public class VisionController: MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer(hiddenLayer)){
-            SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(visibleLayer));
+            Utilities.SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(visibleLayer));
         }
         //if (Physics.Raycast(transform.position, transform.position - other.transform.position, out blockedVisionBy, ignoredLayers)) {
         //}
@@ -39,22 +39,13 @@ public class VisionController: MonoBehaviour {
 
     void OnTriggerStay(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer(hiddenLayer)){
-            SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(visibleLayer));
+            Utilities.SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(visibleLayer));
         }
     }
 
     void OnTriggerExit(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer(visibleLayer)) {
-            SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(hiddenLayer));
+            Utilities.SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(hiddenLayer));
         }
-    }
-
-    private static void SetGameObjectLayer(GameObject obj, int layer) {
-        if (obj == null)
-            return;
-        obj.layer = layer;
-        foreach (Transform child in obj.transform)
-            if (child)
-                SetGameObjectLayer(child.gameObject, layer);
     }
 }
