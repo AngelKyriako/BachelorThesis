@@ -10,16 +10,11 @@ public class Vital: Attribute {
     public Vital(): base() {
         currentValue = base.FinalValue;
     }
-
+    public Vital(string _name, string _desc, int _val): base(_name, _desc, _val) {
+        currentValue = base.FinalValue;
+    }
     public int CurrentValue {
         get { return currentValue; }
-        set {
-            if (value > base.FinalValue)
-                currentValue = base.FinalValue;
-            else if (value < 0)
-                currentValue = 0;
-            else
-                currentValue = value;
-        }
+        set { currentValue = (value < 0)?0:((value > base.FinalValue)?base.FinalValue:value); }
     }
 }

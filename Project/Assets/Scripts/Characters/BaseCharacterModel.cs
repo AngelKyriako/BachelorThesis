@@ -11,15 +11,15 @@ public class BaseCharacterModel: MonoBehaviour {
     public const float STARTING_EXP_MODIFIER = 1.1f;
 
                                                                         //  str   agi   sta   int   cha                               
-    private static readonly float[,] ATTRIBUTE_RATIOS = new float[6, 5] { { 0.5f, 0.0f, 0.0f, 0.0f, 0.0f },//atk
-                                                                          { 0.4f, 0.0f, 0.1f, 0.0f, 0.0f },//def
-                                                                          { 0.0f, 0.5f, 0.0f, 0.0f, 0.1f },//mvs 
-                                                                          { 0.0f, 0.4f, 0.0f, 0.0f, 0.0f },//ats 
-                                                                          { 0.0f, 0.1f, 0.0f, 0.1f, 0.6f },//crt 
-                                                                          { 0.0f, 0.0f, 0.4f, 0.2f, 0.2f } //rgn 
+    private static readonly float[,] ATTRIBUTE_RATIOS = new float[6, 5] { { 4.5f, 0.0f, 0.0f, 0.0f, 0.0f },//atk
+                                                                          { 3.5f, 0.0f, 1.0f, 0.0f, 0.0f },//def
+                                                                          { 0.0f, 4.5f, 0.0f, 0.0f, 0.5f },//mvs 
+                                                                          { 0.0f, 4.0f, 0.0f, 0.0f, 2.5f },//ats 
+                                                                          { 0.0f, 0.5f, 0.0f, 0.5f, 5.5f },//crt 
+                                                                          { 0.0f, 0.0f, 4.0f, 2.0f, 1.0f } //rgn 
                                                                         },
-                                   VITAL_RATIOS = new float[2, 5]       { { 0.1f, 0.0f, 0.7f, 0.0f, 0.2f },//hp 
-                                                                          { 0.0f, 0.0f, 0.3f, 0.7f, 0.2f } //mana 
+                                     VITAL_RATIOS = new float[2, 5]     { { 1.0f, 0.0f, 7.0f, 0.0f, 1.5f },//hp 
+                                                                          { 0.0f, 0.0f, 2.0f, 7.5f, 1.0f } //mana 
                                                                         };
 #endregion
 
@@ -44,6 +44,7 @@ public class BaseCharacterModel: MonoBehaviour {
         SetupAttributes();
         vitals = new Vital[Enum.GetValues(typeof(VitalType)).Length];
         SetupVitals();
+        UpdateAttributes();
     }
 
     public void UpdateAttributes() {
@@ -72,12 +73,12 @@ public class BaseCharacterModel: MonoBehaviour {
 #region Setup
     private void SetupStats() {
         for (int i = 0; i < stats.Length; ++i)
-            stats[i] = new Stat("", "", 5);
+            stats[i] = new Stat(Enum.GetName(typeof(StatType), i), "", 5);
     }
 
     private void SetupAttributes() {
         for (int i = 0; i < attributes.Length; ++i) {
-            attributes[i] = new Attribute();
+            attributes[i] = new Attribute(Enum.GetName(typeof(AttributeType), i), "", 0);
             for (int j = 0; j < stats.Length; ++j)
                 if (ATTRIBUTE_RATIOS[i,j] > 0)
                     attributes[i].AddModifier(new ModifyingStat(stats[j], ATTRIBUTE_RATIOS[i,j]));
@@ -86,7 +87,7 @@ public class BaseCharacterModel: MonoBehaviour {
 
     private void SetupVitals() {
         for (int i = 0; i < vitals.Length; ++i) {
-            vitals[i] = new Vital();
+            vitals[i] = new Vital(Enum.GetName(typeof(VitalType), i), "", 0);
             for (int j = 0; j < stats.Length; ++j)
                 if (VITAL_RATIOS[i,j] > 0)
                     vitals[i].AddModifier(new ModifyingStat(stats[j], VITAL_RATIOS[i, j]));
@@ -118,13 +119,22 @@ public class BaseCharacterModel: MonoBehaviour {
     public Stat GetStat(StatType stat) {
         return stats[(int)stat];
     }
+    public int GetStatsLength(){
+        return Enum.GetValues(typeof(StatType)).Length;
+    }
 
     public Attribute GetAttribute(AttributeType attribute) {
         return attributes[(int)attribute];
     }
+    public int GetAttributesLength() {
+        return Enum.GetValues(typeof(AttributeType)).Length;
+    }
 
     public Vital GetVital(VitalType vital) {
         return vitals[(int)vital];
+    }
+    public int GetVitalsLength() {
+        return Enum.GetValues(typeof(VitalType)).Length;
     }
 #endregion
 }

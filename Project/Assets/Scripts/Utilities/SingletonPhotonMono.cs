@@ -27,7 +27,7 @@ public class SingletonPhotonMono<T>: Photon.MonoBehaviour where T: Photon.MonoBe
             lock (_lock) {
                 if (_instance == null) {
                     _instance = (T)FindObjectOfType(typeof(T));
-
+                    DontDestroyOnLoad(_instance.gameObject);
                     if (FindObjectsOfType(typeof(T)).Length > 1) {
                         Debug.LogError("[Singleton] Something went really wrong " +
                                        " - there should never be more than 1 singleton!");
@@ -43,7 +43,6 @@ public class SingletonPhotonMono<T>: Photon.MonoBehaviour where T: Photon.MonoBe
                             Debug.Log("[Singleton] GameObject " + singletonContainer.name + "was created as a container " +
                                       "of all Monobehavior singleton classes");
                         }
-
                         _instance = singletonContainer.AddComponent<T>();
 
                         Debug.Log("[Singleton] Added an instance of <" + typeof(T) +

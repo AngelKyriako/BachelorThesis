@@ -29,12 +29,24 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     void OnLeaveRoom() {
-        //@TODO: implement
+        playerCharacter = null;
     }
 
     public void InitGUIScripts() {
         gui.GetComponent<ChatWindow>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
+    }
+
+    public void LogPlayerCharacters() {
+        string alliesStr = string.Empty;
+        string enemiesStr = string.Empty;
+        foreach (KeyValuePair<string, GameObject> entry in allies)
+            alliesStr += entry.Key + " ";
+        foreach (KeyValuePair<string, GameObject> entry in enemies)
+            enemiesStr += entry.Key + " ";
+        Utilities.Instance.LogMessage("PlayerCharacter: "+playerCharacter.name);
+        Utilities.Instance.LogMessage("Allies: " + alliesStr);
+        Utilities.Instance.LogMessage("Enemies: " + enemiesStr);
     }
 
 #region Accessors

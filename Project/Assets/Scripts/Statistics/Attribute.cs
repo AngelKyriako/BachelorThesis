@@ -28,6 +28,10 @@ public class Attribute: BaseStatistic {
         modifiers = new List<ModifyingStat>();
         statBonus = 0;
     }
+    public Attribute(string _name, string _desc, int _val): base(_name, _desc, _val) {
+        modifiers = new List<ModifyingStat>();
+        statBonus = 0;
+    }
 
     public void AddModifier(ModifyingStat mod) {
         modifiers.Add(mod);

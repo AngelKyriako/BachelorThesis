@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public enum CharacterWindowState {
@@ -9,19 +8,37 @@ public enum CharacterWindowState {
 
 public class CharacterWindow: MonoBehaviour {
 
-#region constants
+#region Gui constants
     private const int CHARACTER_WINDOW_ID = 0;
-    private const string CHARACTER_WINDOW_TEXT = "";
-
-    public Rect menu, content, description;
+    private const string CHARACTER_WINDOW_TEXT = "",
+                         MENU_ITEM_STATS = "Statistics",
+                         MENU_ITEM_SKILLS = "Skills";
 #endregion
 
-#region attributes
-    private PlayerCharacterModel characterModel;
+#region Model attributes
+    private PlayerCharacterModel playerCharModel;
     private Dictionary<string, BaseSkill> availableSkills;
+#endregion
+
+#region Gui attributes
+    //Layout rects
+    public int spaceOffset = 5, mainWidth = 600, mainHeight = 400,
+               menuHeight = 70,
+               descriptionHeight = 100;
+
+    private Rect windowRect, menuRect, descriptionRect;
+    private Rect statsRect, attributesRect, skillBookRect, skillbarRect;
+
+    //menu
+    public GUIStyle statisticsItem, skillsItem;
+
+    private int normalFontSize, selectedFontSize;
+    private Color selectedFontColor, normalFontColor;
+    //main
+    public GUIStyle statLabel, AttributeLabel, valueLabel;
+    public int statModifyButtonSize = 25;
     private bool isVisible;
     private CharacterWindowState displayState;
-    private Rect windowRect = new Rect((Screen.width - 400 / 2) / 2, (Screen.height - 350 / 2) / 2, 400, 350);
 #endregion
 
     void Awake() {
@@ -29,7 +46,37 @@ public class CharacterWindow: MonoBehaviour {
     }
 
     void Start() {
-        characterModel = GameManager.Instance.PlayerCharacter.GetComponent<PlayerCharacterModel>();
+        playerCharModel = GameManager.Instance.PlayerCharacter.GetComponent<PlayerCharacterModel>();
+
+        //Rects
+        windowRect = new Rect((Screen.width - mainWidth / 2) / 2,
+                              (Screen.height - mainHeight / 2) / 2,
+                              mainWidth,
+                              mainHeight);
+        menuRect = new Rect(spaceOffset,spaceOffset, mainWidth, menuHeight);
+        descriptionRect = new Rect(spaceOffset,
+                                   windowRect.height - descriptionHeight,
+                                   mainWidth,
+                                   descriptionHeight);
+
+        statsRect = new Rect(spaceOffset,
+                             menuRect.y + menuRect.height + spaceOffset,
+                             mainWidth / 2,
+                             mainHeight);
+        attributesRect = new Rect(statsRect.x + statsRect.width + spaceOffset,
+                                  menuRect.y + menuRect.height + spaceOffset,
+                                  mainWidth - statsRect.width,
+                                  mainHeight);
+
+        //menu
+        normalFontSize = statisticsItem.fontSize;
+        selectedFontSize = (int)(normalFontSize * 1.3);
+        normalFontColor = statisticsItem.normal.textColor;
+        selectedFontColor = statisticsItem.active.textColor;
+
+        displayState = default(CharacterWindowState);
+        statisticsItem.fontSize = selectedFontSize;
+        statisticsItem.normal.textColor = selectedFontColor;
 
         availableSkills = new Dictionary<string, BaseSkill>();
         availableSkills.Add("skill 1", new BaseSkill("skill 1", "skill 1 description", null));
@@ -37,7 +84,9 @@ public class CharacterWindow: MonoBehaviour {
         availableSkills.Add("skill 3", new BaseSkill("skill 3", "skill 3 description", null));
 
         isVisible = true;
-        displayState = default(CharacterWindowState);
+    }
+
+    void Update() {
     }
 
     void OnGUI(){
@@ -63,17 +112,67 @@ public class CharacterWindow: MonoBehaviour {
             SkillBar();
         }
         Description();
-        GUI.DragWindow(new Rect(0, 0, windowRect.width, 100));
+        GUI.DragWindow();
     }
     
     private void Menu() {
-        GUI.Label(new Rect(0, 0, 50, 50), characterModel.GetStat(StatType.Agility).BaseValue.ToString());
+        GUILayout.BeginArea(menuRect);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button(MENU_ITEM_STATS, statisticsItem)) {
+            displayState = CharacterWindowState.Statistics;
+            statisticsItem.normal.textColor = selectedFontColor;
+            statisticsItem.fontSize = selectedFontSize;
+            skillsItem.normal.textColor = normalFontColor;
+            skillsItem.fontSize = normalFontSize;
+        }
+        if (GUILayout.Button(MENU_ITEM_SKILLS, skillsItem)) {
+            displayState = CharacterWindowState.Skills;
+            statisticsItem.normal.textColor = normalFontColor;
+            statisticsItem.fontSize = normalFontSize;
+            skillsItem.normal.textColor = selectedFontColor;
+            skillsItem.fontSize = selectedFontSize;
+        }
+        GUILayout.EndHorizontal();
+        GUILayout.EndArea();
     }
-    private void Stats() {
 
+    private void Stats() {
+        GUILayout.BeginArea(statsRect);
+        for (int i = 0; i < playerCharModel.GetStatsLength(); ++i) {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(playerCharModel.GetStat((StatType)i).Name + ": ", statLabel);
+            GUILayout.Label(playerCharModel.GetStat((StatType)i).FinalValue.ToString(), valueLabel);
+            if (GUILayout.Button("-", GUILayout.Width(statModifyButtonSize), GUILayout.Height(statModifyButtonSize))
+               && (playerCharModel.TrainingPoints < playerCharModel.MAX_TRAINING_POINTS)) {
+                --playerCharModel.GetStat((StatType)i).BaseValue;
+                ++playerCharModel.TrainingPoints;
+                playerCharModel.UpdateAttributes();
+            }
+            if (GUILayout.Button("+", GUILayout.Width(statModifyButtonSize), GUILayout.Height(statModifyButtonSize))
+               && (playerCharModel.TrainingPoints > 0)){
+                ++playerCharModel.GetStat((StatType)i).BaseValue;
+                --playerCharModel.TrainingPoints;
+                playerCharModel.UpdateAttributes();
+            }
+            GUILayout.EndHorizontal();
+        }
+        GUILayout.EndArea();
     }
     private void Attributes() {
-
+        GUILayout.BeginArea(attributesRect);
+        for (int i = 0; i < playerCharModel.GetVitalsLength(); ++i) {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(playerCharModel.GetVital((VitalType)i).Name + ": ", AttributeLabel);
+            GUILayout.Label(playerCharModel.GetVital((VitalType)i).FinalValue.ToString(), valueLabel);
+            GUILayout.EndHorizontal();
+        }
+        for (int i = 0; i < playerCharModel.GetAttributesLength(); ++i) {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(playerCharModel.GetAttribute((AttributeType)i).Name + ": ", AttributeLabel);
+            GUILayout.Label(playerCharModel.GetAttribute((AttributeType)i).FinalValue.ToString(), valueLabel);
+            GUILayout.EndHorizontal();
+        }
+        GUILayout.EndArea();
     }
     private void AvailableSkills() {
 
