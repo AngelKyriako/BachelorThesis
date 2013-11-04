@@ -19,7 +19,7 @@ public struct ModifyingStat {
     }
 }
 
-public class Attribute: BaseStatistic {
+public class Attribute: BaseStat {
 
     private List<ModifyingStat> modifiers;
     private int statBonus;

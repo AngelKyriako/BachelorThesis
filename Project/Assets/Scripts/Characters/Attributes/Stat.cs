@@ -6,7 +6,7 @@
     Charisma
 }
 
-public class Stat: BaseStatistic{
+public class Stat: BaseStat{
     public Stat(): base(){ }
     public Stat(string _name, string _desc, int _val) : base(_name, _desc, _val) { }
 }

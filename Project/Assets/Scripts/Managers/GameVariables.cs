@@ -30,6 +30,9 @@ public class GameVariables {
 #endregion
 
     private static GameVariables instance = new GameVariables();
+    public static GameVariables Instance {
+        get { return instance; }
+    }
 
     private GameVariables() {
         title = string.Empty;
@@ -56,10 +59,6 @@ public class GameVariables {
         availableTimers = new Dictionary<string, double>(){ {"None", -1}, {"10'", 600}, {"15'", 900}, {"20'", 1200}, {"30'", 1800},
                                                             {"60'", 3600}, {"90'", 5400}, {"120'", 7200}, {"180'", 10800}
                                                           };
-    }
-
-    public static GameVariables Instance {
-        get { return instance; }
     }
 
 #region setters & getters

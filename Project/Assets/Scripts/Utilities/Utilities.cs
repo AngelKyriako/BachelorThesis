@@ -55,4 +55,6 @@ public class Utilities {
             if (child)
                 SetGameObjectLayer(child.gameObject, l);
     }
+
+    public readonly float TOGGLE_KEY_DELAY = 0.25f;
 }

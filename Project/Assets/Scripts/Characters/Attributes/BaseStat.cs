@@ -1,16 +1,19 @@
-﻿public class BaseStatistic {
+﻿public class BaseStat {
+
+    private const int MIN_BASE_VALUE = 10,
+                      MAX_BASE_VALUE = 100;
 
     private string name, description;
     private int baseValue, buffValue;
 
-    public BaseStatistic() {
+    public BaseStat() {
         name = string.Empty;
         description = string.Empty;
-        baseValue = 0;
+        baseValue = MIN_BASE_VALUE;
         buffValue = 0;
     }
 
-    public BaseStatistic(string _name, string _desc, int _val) {
+    public BaseStat(string _name, string _desc, int _val) {
         name = _name;
         description = _desc;
         baseValue = _val;

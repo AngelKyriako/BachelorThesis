@@ -22,7 +22,13 @@ public class PlayerCharacterModel: BaseCharacterModel {
         get { return trainingPoints; }
         set { trainingPoints = (value < 0) ? 0 : ((value > MAX_TRAINING_POINTS)?MAX_TRAINING_POINTS:value); }
     }
-    public BaseSkill GetSkill(CharacterSkillSlots slot) {
-        return skills[(int)slot];
+    public BaseSkill GetSkill(int index) {
+        return skills[index];
+    }
+    public BaseSkill SetSkill(int index, BaseSkill skill) {
+        return skills[index] = skill;
+    }
+    public int SkillCount {
+        get { return skills.Length; }
     }
 }

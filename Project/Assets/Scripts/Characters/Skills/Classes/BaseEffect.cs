@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
 public enum EffectType {
-    DirectDamage,
-    DamageOverTime,
-    Heal,
-    Buff,
-    DeBuff,
-    Stun
+    VitalModifierDirect,
+    VitalModifierOverTime,
+    StatModifierDirect,
+    StatModifierOverTime,
+    Stun,
+    Invulnerable
 }
 
 public abstract class BaseEffect {
@@ -21,15 +21,15 @@ public abstract class BaseEffect {
         icon = null;
     }
 
-    public BaseEffect(string ttl, string dsc, Texture2D icn) {
-        title = ttl;
-        description = dsc;
-        icon = icn;
+    public BaseEffect(string _title, string _descr, Texture2D _icon) {
+        title = _title;
+        description = _descr;
+        icon = _icon;
     }
 
     public abstract void Activate();
 
-#region Setters and Getters
+#region Accessors
     public string Title {
         get { return title; }
         set { title = value; }

@@ -10,6 +10,7 @@ public class CameraController: MonoBehaviour {
 
     private Vector3 originPosition, originRotation;
     private bool lockedOnTarget;
+    private float lastLockTime;
 
     public Transform target;
     public float targetOffsetX = 0f,
@@ -28,8 +29,9 @@ public class CameraController: MonoBehaviour {
 
     private void Awake() {
         Utilities.Instance.Assert(target, "CameraController", "Awake", "target transform is not defined");
-        //@TODO: Init camera rotation
+        //@TODO: Init fixed camera rotation
         lockedOnTarget = true;
+        lastLockTime = 0;
     }
 
     private void Update() {
@@ -53,7 +55,7 @@ public class CameraController: MonoBehaviour {
 
     ////////////////////////////////// Movement  //////////////////////////////////
     private void ToggleCameraLock() {
-        if (Input.GetKey(KeyCode.L))
+        if (Input.GetKey(KeyCode.L) && Time.time - lastLockTime > Utilities.Instance.TOGGLE_KEY_DELAY)
             lockedOnTarget = !lockedOnTarget;
     }
 

@@ -1,17 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class GUIUtilities {
-
-    public GUIStyle effectStyle, skillStyle, statStyle;
+public class GUIUtilities {    
 
     private static GUIUtilities instance = new GUIUtilities();
-
-    private GUIUtilities() { }
-
     public static GUIUtilities Instance {
         get { return instance; }
     }
+
+    private GUIUtilities() { }
+
 
     public KeyValuePair<string, T> ButtonOptions<T, K>(ref K editingField, K targetedState, KeyValuePair<string, T> selectedPair,
                                                        Dictionary<string, T> availablePairs, int width) {

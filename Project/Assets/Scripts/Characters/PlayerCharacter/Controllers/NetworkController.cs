@@ -4,7 +4,7 @@ using System.Collections;
 public class NetworkController: Photon.MonoBehaviour {
 
     private CameraController cameraController;
-    private CharacterController characterController;
+    private MovementController movementController;
     private VisionController visionController;
 
     private Vector3 correctPlayerPosition;
@@ -14,8 +14,8 @@ public class NetworkController: Photon.MonoBehaviour {
     void Awake() {
         cameraController = gameObject.GetComponent<CameraController>();
         cameraController.enabled = photonView.isMine;
-        characterController = gameObject.GetComponent<CharacterController>();
-        characterController.enabled = photonView.isMine;
+        movementController = gameObject.GetComponent<MovementController>();
+        movementController.enabled = photonView.isMine;
         visionController = gameObject.GetComponent<VisionController>();
         visionController.enabled = photonView.isMine;//@TODO: for team play this should be only for enemies
 
@@ -37,11 +37,11 @@ public class NetworkController: Photon.MonoBehaviour {
 
     void Update() {
         if (!photonView.isMine) {
-            //Check if able to smooth (last argument proly should be parameterized based on:
+            //Check if able to smooth (last argument probably should be parameterized based on:
             //                                  Vector3.Distance(transform.position, correctPlayerPosition);)
             transform.position = Vector3.Lerp(transform.position, correctPlayerPosition, 0);
             transform.rotation = Quaternion.Lerp(transform.rotation, correctPlayerRotation, 0);
-            characterController.SetCurrentSpeed(currentSpeed);
+            movementController.MovementSpeed = currentSpeed;
         }
     }
 
@@ -50,7 +50,7 @@ public class NetworkController: Photon.MonoBehaviour {
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
             stream.SendNext(rigidbody.velocity);
-            stream.SendNext(characterController.GetCurrentSpeed());
+            stream.SendNext(movementController.MovementSpeed);
 
         }
         else { // receive data from remote characters
