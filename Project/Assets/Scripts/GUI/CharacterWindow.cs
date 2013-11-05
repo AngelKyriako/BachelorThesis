@@ -57,7 +57,7 @@ public class CharacterWindow: MonoBehaviour {
     }
 
     void Start() {
-        playerCharModel = GameManager.Instance.PlayerCharacter.GetComponent<PlayerCharacterModel>();
+        playerCharModel = GameManager.Instance.Me.Character.GetComponent<PlayerCharacterModel>();
         lastSelectedSkill = null;
     #region Layout Rects
         windowRect          = new Rect((Screen.width - mainWidth / 2) / 2,
@@ -126,14 +126,8 @@ public class CharacterWindow: MonoBehaviour {
     void OnGUI(){
         GUI.skin = characterWindowSkin;
         if(isVisible)
-            windowRect = ClampToScreen(GUI.Window(CHARACTER_WINDOW_ID, windowRect, MainWindow, CHARACTER_WINDOW_TEXT));
+            windowRect = GUIUtilities.Instance.ClampToScreen(GUI.Window(CHARACTER_WINDOW_ID, windowRect, MainWindow, CHARACTER_WINDOW_TEXT));
 
-    }
-
-    private Rect ClampToScreen(Rect r) {
-        r.x = Mathf.Clamp(r.x, 0, Screen.width - r.width);
-        r.y = Mathf.Clamp(r.y, 0, Screen.height - r.height);
-        return r;
     }
 
     private void MainWindow(int windowID) {

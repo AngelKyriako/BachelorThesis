@@ -27,7 +27,7 @@ public abstract class BaseEffect {
         icon = _icon;
     }
 
-    public abstract void Activate();
+    public abstract void Activate(PlayerCharacterModel caster, PlayerCharacterModel receiver);
 
 #region Accessors
     public string Title {

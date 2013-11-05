@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-public class BaseCharacterModel: MonoBehaviour {
+public class BaseCharacterModel: Photon.MonoBehaviour  {
 
 #region const values
     public const uint MAX_LEVEL = 25;
@@ -32,7 +32,7 @@ public class BaseCharacterModel: MonoBehaviour {
     private Vital[] vitals;
 
     public virtual void Awake() {
-        name = PlayerPrefs.GetString("name");
+        name = photonView.owner.name;
         Level = STARTING_LEVEL;
         expModifier = STARTING_EXP_MODIFIER;
         expToLevel = STARTING_EXP_TO_LEVEL;

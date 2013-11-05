@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerInput : MonoBehaviour {
+public class PlayerInput: MonoBehaviour {
 
 	void Start () {
 	
@@ -10,4 +10,12 @@ public class PlayerInput : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    void OnEnable() {
+
+    }
+
+    void OnDisable() {
+
+    }
 }

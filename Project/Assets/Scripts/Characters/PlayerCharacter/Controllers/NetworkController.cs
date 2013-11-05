@@ -22,12 +22,12 @@ public class NetworkController: Photon.MonoBehaviour {
         gameObject.transform.parent = GameObject.Find("Characters/BabyDragons").transform;
         gameObject.name = photonView.viewID.ToString();
         if (photonView.isMine) {
-            GameManager.Instance.PlayerCharacter = gameObject;
+            GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
             Utilities.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));
         }
         else {
-            GameManager.Instance.AddEnemy(gameObject.name, gameObject);
-            Utilities.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("HiddenEnemies"));
+            //GameManager.Instance.AddPlayerCharacter(new PlayerCharacterPair(photonView.owner, gameObject));
+            Utilities.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("HiddenEnemies"));//@TODO Must be called when game starts when everyone is connected
         }
 
         correctPlayerPosition = transform.position;
@@ -51,7 +51,6 @@ public class NetworkController: Photon.MonoBehaviour {
             stream.SendNext(transform.rotation);
             stream.SendNext(rigidbody.velocity);
             stream.SendNext(movementController.MovementSpeed);
-
         }
         else { // receive data from remote characters
             correctPlayerPosition = (Vector3)stream.ReceiveNext();

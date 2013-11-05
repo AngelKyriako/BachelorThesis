@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using ExitGames.Client.Photon;
 using System.Collections.Generic;
 
-public enum EditProperty {
+public enum VariableType {
     None,
     Title,
     Mode,
@@ -11,7 +12,7 @@ public enum EditProperty {
     Timer
 };
 
-public enum Action {
+public enum LobbyAction {
     None,
     CreateRoom,
     ViewRoom,
@@ -20,20 +21,20 @@ public enum Action {
 
 public class MainLobby: MonoBehaviour {
 
-    private Action buttonPressedLast;
-    private EditProperty editingField;
-    private string createRoomName, joinRoomName;
-    private Vector2 scrollPos = Vector2.zero;
-    private Rect fullscreen, north, south, west, east;
-
     public int northHeight;
     public int westWidth;
     public Texture2D background;
     public GUIStyle titleStyle, welcomeLabelStyle, roomStyle;
-    public GUIStyle westButtonStyle, propertyLabel, propertyValue, goButtonStyle;
+    public GUIStyle westButtonStyle, propertyLabel, goButtonStyle;
     public int space;
 
-    private void Awake() {
+    private LobbyAction buttonPressedLast;
+    private VariableType editingField;
+    private string createRoomName, joinRoomName;
+    private Vector2 scrollPos = Vector2.zero;
+    private Rect fullscreen, north, south, west, east;
+
+    void Awake() {
         if(!PhotonNetwork.connected)
             PhotonNetwork.ConnectUsingSettings("v0.1");
 
@@ -52,8 +53,22 @@ public class MainLobby: MonoBehaviour {
         GameVariables.Instance.Title = createRoomName;
         GameVariables.Instance.Host = PhotonNetwork.playerName;
 
-        buttonPressedLast = Action.None;
-        editingField = EditProperty.None;
+        buttonPressedLast = default(LobbyAction);
+        editingField = default(VariableType);
+    }
+
+    void OnGUI() {
+        if (!PhotonNetwork.connected) {
+            GUI.DrawTexture(fullscreen, background, ScaleMode.StretchToFill);
+            ConnectingGUI();
+        }
+        else if (PhotonNetwork.room == null) {
+            GUI.DrawTexture(fullscreen, background, ScaleMode.StretchToFill);
+            NorthGUI();
+            SouthGUI();
+            WestGUI();
+            EastGUI();
+        }
     }
 
     private void ConnectingGUI() {
@@ -76,42 +91,7 @@ public class MainLobby: MonoBehaviour {
         GUILayout.EndArea();
     }
 
-    private void CreateRoomGUI() {
-        if(GUILayout.Button("Create", westButtonStyle, GUILayout.Width(130)))
-            buttonPressedLast = Action.CreateRoom;
-    }
-
-    private void MatchMakingGUI() {
-        if(GUILayout.Button("Matchmaking", westButtonStyle, GUILayout.Width(250)))
-            buttonPressedLast = Action.MatchMaking;
-    }
-
-    private void RoomsGUI() {
-        if(PhotonNetwork.GetRoomList().Length == 0)
-            GUILayout.Label("...no rooms available.", roomStyle);
-        else {
-            scrollPos = GUILayout.BeginScrollView(scrollPos);
-            foreach(RoomInfo room in PhotonNetwork.GetRoomList()) {
-                if (GUILayout.Button(room.name + " (" + room.playerCount + "/" + room.maxPlayers + ")", roomStyle)) {
-                    buttonPressedLast = Action.ViewRoom;
-                    joinRoomName = room.name;
-                }
-            }
-            GUILayout.EndScrollView();
-        }
-    }
-
-    private void JoinRoomGUI() {
-        GUILayout.BeginVertical();
-        joinRoomName = GUILayout.TextField(joinRoomName, GUILayout.MaxWidth(180));
-        GUILayout.Space(space / 2);
-        if (GUILayout.Button("Join", westButtonStyle, GUILayout.Width(90))) {
-            PhotonNetwork.JoinRoom(joinRoomName);
-            PhotonNetwork.LoadLevel("MeetingPoint");
-        }
-        GUILayout.EndVertical();
-    }
-
+    #region West GUI
     private void WestGUI() {
         GUILayout.BeginArea(west);
         CreateRoomGUI();
@@ -124,6 +104,59 @@ public class MainLobby: MonoBehaviour {
         GUILayout.EndArea();
     }
 
+    private void CreateRoomGUI() {
+        if (GUILayout.Button("Create", westButtonStyle, GUILayout.Width(130)))
+            buttonPressedLast = LobbyAction.CreateRoom;
+    }
+
+    private void MatchMakingGUI() {
+        if (GUILayout.Button("Matchmaking", westButtonStyle, GUILayout.Width(250)))
+            buttonPressedLast = LobbyAction.MatchMaking;
+    }
+
+    private void RoomsGUI() {
+        if (PhotonNetwork.GetRoomList().Length == 0)
+            GUILayout.Label("...no rooms available.", roomStyle);
+        else {
+            scrollPos = GUILayout.BeginScrollView(scrollPos);
+            foreach (RoomInfo room in PhotonNetwork.GetRoomList()) {
+                if (GUILayout.Button(room.name + " (" + room.playerCount + "/" + room.maxPlayers + ")", roomStyle)) {
+                    buttonPressedLast = LobbyAction.ViewRoom;
+                    joinRoomName = room.name;
+                }
+            }
+            GUILayout.EndScrollView();
+        }
+    }
+
+    private void JoinRoomGUI() {
+        GUILayout.BeginVertical();
+        joinRoomName = GUILayout.TextField(joinRoomName, GUILayout.MaxWidth(180));
+        GUILayout.Space(space / 2);
+        if (GUILayout.Button("Join", westButtonStyle, GUILayout.Width(90))) {
+            PhotonNetwork.LoadLevel("MeetingPoint");
+            PhotonNetwork.JoinRoom(joinRoomName);
+            if (GUILayout.Button("Go", goButtonStyle)) {
+                PhotonNetwork.LoadLevel("MeetingPoint");
+                PhotonNetwork.JoinRoom(joinRoomName);
+            }
+        }
+        GUILayout.EndVertical();
+    }
+#endregion
+
+    #region East GUI
+    private void EastGUI() {
+        GUILayout.BeginArea(east);
+        if(buttonPressedLast == LobbyAction.ViewRoom)
+            JoinPropertiesGUI();
+        else if (buttonPressedLast == LobbyAction.CreateRoom)
+            CreatePropertiesGUI();
+        else if(buttonPressedLast == LobbyAction.MatchMaking)
+            MatchmakingPropertiesGUI();
+        GUILayout.EndArea();
+    }
+
     private void CreatePropertiesGUI() {
         GUILayout.BeginHorizontal();
         GUILayout.Label("Title:", propertyLabel);
@@ -132,40 +165,48 @@ public class MainLobby: MonoBehaviour {
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Mode:", propertyLabel);
-        GameVariables.Instance.Mode = GUIUtilities.Instance.ButtonOptions<GameMode, EditProperty>(ref editingField, EditProperty.Mode,
+        GameVariables.Instance.Mode = GUIUtilities.Instance.ButtonOptions<GameMode, VariableType>(ref editingField, VariableType.Mode,
                                                                GameVariables.Instance.Mode,
                                                                GameVariables.Instance.AvailableModes, 110);
         GUILayout.EndHorizontal();
-        if(GameVariables.Instance.Mode.Value == GameMode.BattleRoyal) {
+        if (GameVariables.Instance.Mode.Value == GameMode.BattleRoyal) {
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Max kills:", propertyLabel);
-            GameVariables.Instance.TargetKills = GUIUtilities.Instance.ButtonOptions<int, EditProperty>(ref editingField, EditProperty.targetKills,
+            GUILayout.Label("Target kills:", propertyLabel);
+            GameVariables.Instance.TargetKills = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingField, VariableType.targetKills,
                                                               GameVariables.Instance.TargetKills,
                                                               GameVariables.Instance.AvailableTargetKills, 40);
             GUILayout.EndHorizontal();
         }
         GUILayout.BeginHorizontal();
         GUILayout.Label("Max players:", propertyLabel);
-        GameVariables.Instance.MaxPlayers = GUIUtilities.Instance.ButtonOptions<int, EditProperty>(ref editingField, EditProperty.MaxPlayers,
+        GameVariables.Instance.MaxPlayers = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingField, VariableType.MaxPlayers,
                                                           GameVariables.Instance.MaxPlayers,
                                                           GameVariables.Instance.AvailableMaxPlayers, 28);
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         GUILayout.Label("Difficulty:", propertyLabel);
-        GameVariables.Instance.Difficulty = GUIUtilities.Instance.ButtonOptions<GameDifficulty, EditProperty>(ref editingField, EditProperty.Difficulty,
+        GameVariables.Instance.Difficulty = GUIUtilities.Instance.ButtonOptions<GameDifficulty, VariableType>(ref editingField, VariableType.Difficulty,
                                                                  GameVariables.Instance.Difficulty,
                                                                  GameVariables.Instance.AvailableDifficulties, 60);
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         GUILayout.Label("Timer:", propertyLabel);
-        GameVariables.Instance.Timer = GUIUtilities.Instance.ButtonOptions<double, EditProperty>(ref editingField, EditProperty.Timer,
+        GameVariables.Instance.Timer = GUIUtilities.Instance.ButtonOptions<double, VariableType>(ref editingField, VariableType.Timer,
                                                              GameVariables.Instance.Timer,
                                                              GameVariables.Instance.AvailableTimers, 39);
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        if(GUILayout.Button("Go", goButtonStyle)) {
-            //@TODO: Add properties on server map
-            PhotonNetwork.CreateRoom(createRoomName, true, true, GameVariables.Instance.MaxPlayers.Value);
+        if (GUILayout.Button("Go", goButtonStyle)) {
+
+            string[] roomPropsInLobby = { "Mode", "Difficulty", "Target kills", "Timer" };
+            string[] roomPropsInLobbyBR = { "Mode", "Difficulty", "Timer" };
+
+            PhotonNetwork.CreateRoom(createRoomName, true, true, GameVariables.Instance.MaxPlayers.Value,
+                                     new Hashtable() {  {"Mode", GameVariables.Instance.Mode.Value},
+                                                        {"Difficulty", GameVariables.Instance.Difficulty.Value},
+                                                        {"Target kills", GameVariables.Instance.TargetKills.Value},
+                                                        {"Timer", GameVariables.Instance.Timer.Value} },
+                                     GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)?roomPropsInLobbyBR:roomPropsInLobby);    
             PhotonNetwork.LoadLevel("MeetingPoint");
         }
         GUILayout.EndHorizontal();
@@ -175,9 +216,8 @@ public class MainLobby: MonoBehaviour {
         GUILayout.BeginHorizontal();
         //@TODO: Game properties here
         if (GUILayout.Button("Go", goButtonStyle)) {
+            PhotonNetwork.LoadLevel("MeetingPoint");
             PhotonNetwork.JoinRoom(joinRoomName);
-            if (PhotonNetwork.room != null)
-                PhotonNetwork.LoadLevel("MeetingPoint");
         }
         GUILayout.EndHorizontal();
     }
@@ -186,34 +226,10 @@ public class MainLobby: MonoBehaviour {
         //@TODO: Game properties here
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Go", goButtonStyle)) {
+            PhotonNetwork.LoadLevel("MeetingPoint");
             PhotonNetwork.JoinRandomRoom();
-            if (PhotonNetwork.room != null)
-                PhotonNetwork.LoadLevel("MeetingPoint");
         }
         GUILayout.EndHorizontal();
     }
-
-    private void EastGUI() {
-        GUILayout.BeginArea(east);
-        if(buttonPressedLast == Action.ViewRoom)
-            JoinPropertiesGUI();
-        else if (buttonPressedLast == Action.CreateRoom)
-            CreatePropertiesGUI();
-        else if(buttonPressedLast == Action.MatchMaking)
-            MatchmakingPropertiesGUI();
-        GUILayout.EndArea();
-    }
-
-    private void OnGUI() {
-        if(!PhotonNetwork.connected) {
-            GUI.DrawTexture(fullscreen, background, ScaleMode.StretchToFill);
-            ConnectingGUI();
-        } else if(PhotonNetwork.room == null) {
-            GUI.DrawTexture(fullscreen, background, ScaleMode.StretchToFill);
-            NorthGUI();
-            SouthGUI();
-            WestGUI();
-            EastGUI();
-        }
-    }
+#endregion
 }
