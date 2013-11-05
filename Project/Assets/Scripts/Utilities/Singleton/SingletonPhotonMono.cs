@@ -27,7 +27,7 @@ public class SingletonPhotonMono<T>: Photon.MonoBehaviour where T: Photon.MonoBe
             lock (_lock) {
                 if (_instance == null) {
                     _instance = (T)FindObjectOfType(typeof(T));
-                    DontDestroyOnLoad(_instance.gameObject);
+
                     if (FindObjectsOfType(typeof(T)).Length > 1) {
                         Debug.LogError("[Singleton] Something went really wrong " +
                                        " - there should never be more than 1 singleton!");
@@ -50,6 +50,7 @@ public class SingletonPhotonMono<T>: Photon.MonoBehaviour where T: Photon.MonoBe
                                   "' object.");
                     }
                     else {
+                        DontDestroyOnLoad(_instance.gameObject);
                         Debug.Log("[Singleton] Using instance already created: " +
                             _instance.gameObject.name);
                     }

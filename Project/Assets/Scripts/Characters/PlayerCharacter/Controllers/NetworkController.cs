@@ -15,7 +15,7 @@ public class NetworkController: Photon.MonoBehaviour {
         cameraController = gameObject.GetComponent<CameraController>();
         cameraController.enabled = photonView.isMine;
         movementController = gameObject.GetComponent<MovementController>();
-        movementController.enabled = photonView.isMine;
+        movementController.enabled = true;
         visionController = gameObject.GetComponent<VisionController>();
         visionController.enabled = photonView.isMine;//@TODO: for team play this should be only for enemies
 
@@ -41,22 +41,32 @@ public class NetworkController: Photon.MonoBehaviour {
             //                                  Vector3.Distance(transform.position, correctPlayerPosition);)
             transform.position = Vector3.Lerp(transform.position, correctPlayerPosition, 0);
             transform.rotation = Quaternion.Lerp(transform.rotation, correctPlayerRotation, 0);
-            movementController.MovementSpeed = currentSpeed;
+            movementController.CurrentSpeed = currentSpeed;
         }
     }
 
-    void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
-        if (stream.isWriting) { // send the local character's data
-            stream.SendNext(transform.position);
-            stream.SendNext(transform.rotation);
-            stream.SendNext(rigidbody.velocity);
-            stream.SendNext(movementController.MovementSpeed);
-        }
-        else { // receive data from remote characters
-            correctPlayerPosition = (Vector3)stream.ReceiveNext();
-            correctPlayerRotation = (Quaternion)stream.ReceiveNext();
-            rigidbody.velocity = (Vector3)stream.ReceiveNext();
-            currentSpeed = (float)stream.ReceiveNext();
-        }
+    [RPC]
+    private void SyncInputForCharacterMovement(Vector3 _dest, Quaternion _rotation) {
+        movementController.Destination = _dest;
+        transform.rotation = _rotation;
+    }
+
+    //void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+    //    if (stream.isWriting) { // send the local character's data
+    //        stream.SendNext(transform.position);
+    //        stream.SendNext(transform.rotation);
+    //        stream.SendNext(rigidbody.velocity);
+    //        stream.SendNext(movementController.CurrentSpeed);
+    //    }
+    //    else { // receive data from remote characters
+    //        correctPlayerPosition = (Vector3)stream.ReceiveNext();
+    //        correctPlayerRotation = (Quaternion)stream.ReceiveNext();
+    //        rigidbody.velocity = (Vector3)stream.ReceiveNext();
+    //        currentSpeed = (float)stream.ReceiveNext();
+    //    }
+    //}
+
+    public PhotonView PhotonView{
+        get { return photonView; }
     }
 }

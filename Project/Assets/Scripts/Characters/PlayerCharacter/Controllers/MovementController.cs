@@ -3,52 +3,60 @@ using System.Collections;
 
 public class MovementController: MonoBehaviour {
 
-    private Vector3 destination;
-    private float distance,
-                  currentSpeed;
+    private const float MAX_MOVEMENT_SPEED = 10;
 
     public Animator animator;
-    private float movementSpeed = 10;
+
+    private NetworkController networkController;
+    private float currentSpeed;
+    private Vector3 destination;
 
     void Awake() {
         Utilities.Instance.Assert(animator, "CharacterController", "Awake", "animator not defined");
-        Utilities.Instance.Assert(movementSpeed > 0, "CharacterController", "Awake", "movementSpeed not valid"); 
     }
 
     void Start() {
+        networkController = gameObject.GetComponent<NetworkController>();
         animator.enabled = false;
-        distance = 0;
-        currentSpeed = 0;
+        destination = transform.position;
+        currentSpeed = 0f;
+        if (networkController.PhotonView.isMine)
+            PlayerInputManager.Instance.OnCharacterMovementInput += OnMovementInput;
     }
 
     void Update() {
-
-        if (!Input.GetKey(KeyCode.LeftAlt) && !Input.GetKey(KeyCode.RightAlt) &&
-            Input.GetMouseButtonDown(1) && GUIUtility.hotControl == 0) {
-            animator.enabled = true;
-            Plane playerPlane = new Plane(Vector3.up, transform.position);
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            float hitdist = 0.0f;
-
-            if (playerPlane.Raycast(ray, out hitdist)) {
-                Vector3 targetPoint = ray.GetPoint(hitdist);
-                destination = ray.GetPoint(hitdist);
-                Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
-                transform.rotation = targetRotation;
-            }
-            currentSpeed = movementSpeed;
-            distance = Vector3.Distance(destination, transform.position);
-        }
+        //position based on currentSpeed
+        if (Vector3.Distance(destination, transform.position) > 0.5f && animator.enabled)
+            transform.position = Vector3.MoveTowards(transform.position, destination, currentSpeed = MAX_MOVEMENT_SPEED * Time.deltaTime);
         else
-            currentSpeed = 0;
-
+            currentSpeed = 0f;
         animator.SetFloat("movementSpeed", currentSpeed);
-        if (distance > .2f)
-            transform.position = Vector3.MoveTowards(transform.position, destination, movementSpeed * Time.deltaTime);
     }
 
-    public float MovementSpeed {
-        get { return movementSpeed; }
-        set { movementSpeed = value; }
+    private void OnMovementInput(Ray ray) {
+        ReceiveLocalInput(ray);
+        networkController.PhotonView.RPC("SyncInputForCharacterMovement", PhotonTargets.Others, destination, transform.rotation);
+    }
+
+    private void ReceiveLocalInput(Ray ray) {
+        animator.enabled = true;
+        float hitdistance = 0.0f;
+
+        if (new Plane(Vector3.up, transform.position).Raycast(ray, out hitdistance)) {
+            Vector3 targetPoint = ray.GetPoint(hitdistance);
+            destination = ray.GetPoint(hitdistance);
+            //rotate on click
+            transform.rotation = Quaternion.LookRotation(targetPoint - transform.position);
+        }
+    }
+
+    public float CurrentSpeed {
+        get { return currentSpeed; }
+        set { currentSpeed = value; }
+    }
+
+    public Vector3 Destination {
+        get { return destination; }
+        set { destination = value; }
     }
 }
