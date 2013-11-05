@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameVariablesWindow : Photon.MonoBehaviour {
 
     private const int GAME_VARIABLES_WINDOW_ID = 1, MAIN_WIDTH = 300, MAIN_HEIGHT = 300;
     private const string GAME_VARIABLES_WINDOW_TEXT = "Game Properties";
+    private const float RPC_COOLDOWN_TIME = 2.0f;
 
     private VariableType editingField;
     private Rect windowRect;
     private bool isVisible;
+    private float lastRPCTime, lastToggleTime;
 
 	void Start () {
         editingField = default(VariableType);
@@ -16,8 +19,21 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
                               (Screen.height - MAIN_HEIGHT / 2) / 2,
                               MAIN_WIDTH,
                               MAIN_HEIGHT);
-        isVisible = true;
+        isVisible = false;
+        lastRPCTime = 0f;
+        lastToggleTime = 0f;
 	}
+
+    void Update() {
+        if (!IsInvoking("GetInput")) {
+            InvokeRepeating("GetInput", 0, Utilities.Instance.TOGGLE_KEY_DELAY);
+        }
+    }
+
+    private void GetInput() {
+        if (Input.GetKey(KeyCode.G) && Time.time - lastToggleTime > Utilities.Instance.TOGGLE_KEY_DELAY)
+            isVisible = !isVisible;
+    }
 
     void OnGUI() {
         if (isVisible)
@@ -45,7 +61,7 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
     private void GameVariablesEditableGUI() {
         GUILayout.BeginHorizontal();
         GUILayout.Label("Title:");
-        GameVariables.Instance.Title = GUILayout.TextField(GameVariables.Instance.Title, GUILayout.MaxWidth(250));
+        GameVariables.Instance.Title = GUILayout.TextField(GameVariables.Instance.Title, GUILayout.MaxWidth(200));
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
@@ -80,5 +96,49 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
                                                              GameVariables.Instance.Timer,
                                                              GameVariables.Instance.AvailableTimers, 39);
         GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Start Game")) {
+            SyncGameVariables();
+            //if (AllPlayersReady())
+            //    PhotonNetwork.LoadLevel("MainState"+GameVariables.Instance.Mode.Key);
+        }
+        GUILayout.EndHorizontal();
+
+        SyncGameVariables();
+    }
+
+    private bool AllPlayersReady() {
+        foreach (PhotonPlayer player in PhotonNetwork.playerList)
+            if (!(bool)player.customProperties["IsReady"])
+                return false;
+
+        return true;
+    }
+
+    private void SyncGameVariables() {
+        if (Time.time - lastRPCTime > RPC_COOLDOWN_TIME) {
+            photonView.RPC("SetGameVariables", PhotonTargets.Others, GameVariables.Instance.Title, GameVariables.Instance.Mode.Key, GameVariables.Instance.Difficulty.Key,
+                            GameVariables.Instance.MaxPlayers.Key, GameVariables.Instance.TargetKills.Key, GameVariables.Instance.Timer.Key);
+
+            PhotonNetwork.room.name = GameVariables.Instance.Title;
+            PhotonNetwork.room.maxPlayers = GameVariables.Instance.MaxPlayers.Value;
+            PhotonNetwork.room.customProperties["Mode"] = GameVariables.Instance.Mode.Value;
+            PhotonNetwork.room.customProperties["Difficulty"] = GameVariables.Instance.Difficulty.Value;
+            PhotonNetwork.room.customProperties["Target kills"] = GameVariables.Instance.TargetKills.Value;
+            PhotonNetwork.room.customProperties["Timer"] = GameVariables.Instance.Timer.Value;
+
+            lastRPCTime = Time.time;
+        }
+    }
+
+    [RPC]
+    private void SetGameVariables(string _title, string _mode, string _difficulty, string _maxPlayers, string _targetKills, string _timer) {
+        GameVariables.Instance.Title = _title;
+        GameVariables.Instance.Mode = new KeyValuePair <string, GameMode>(_mode, GameVariables.Instance.AvailableModes[_mode]);
+        GameVariables.Instance.Difficulty = new KeyValuePair<string, GameDifficulty>(_difficulty, GameVariables.Instance.AvailableDifficulties[_difficulty]);
+        GameVariables.Instance.MaxPlayers = new KeyValuePair<string, int>(_maxPlayers, GameVariables.Instance.AvailableMaxPlayers[_maxPlayers]);
+        GameVariables.Instance.TargetKills = new KeyValuePair<string, int>(_targetKills, GameVariables.Instance.AvailableTargetKills[_targetKills]);
+        GameVariables.Instance.Timer = new KeyValuePair<string, double>(_timer, GameVariables.Instance.AvailableTimers[_timer]);
     }
 }
