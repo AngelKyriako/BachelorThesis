@@ -2,14 +2,11 @@
 using System;
 using System.Collections;
 
-public class BaseCharacterModel: Photon.MonoBehaviour  {
+public class BaseCharacterModel: MonoBehaviour  {
 
-#region const values
+    #region constants
     public const uint MAX_LEVEL = 25;
     public const uint STARTING_LEVEL = 1;
-    public const uint STARTING_EXP_TO_LEVEL = 50;
-    public const float STARTING_EXP_MODIFIER = 1.1f;
-
                                                                         //  str   agi   sta   int   cha                               
     private static readonly float[,] ATTRIBUTE_RATIOS = new float[6, 5] { { 4.5f, 0.0f, 0.0f, 0.0f, 0.0f },//atk
                                                                           { 3.5f, 0.0f, 1.0f, 0.0f, 0.0f },//def
@@ -23,20 +20,22 @@ public class BaseCharacterModel: Photon.MonoBehaviour  {
                                                                         };
 #endregion
 
+    #region attributes
+    private NetworkController networkController;
     private new string name;
     private uint level;
-    private uint currentExp, expToLevel;
-    private float expModifier;
     private Stat[] stats;
     private Attribute[] attributes;
     private Vital[] vitals;
+#endregion
 
     public virtual void Awake() {
-        name = photonView.owner.name;
+        networkController = gameObject.GetComponent<NetworkController>();
+    }
+
+    public virtual void Start() {
+        name = networkController.photonView.owner.name;
         Level = STARTING_LEVEL;
-        expModifier = STARTING_EXP_MODIFIER;
-        expToLevel = STARTING_EXP_TO_LEVEL;
-        currentExp = 0;
 
         stats = new Stat[Enum.GetValues(typeof(StatType)).Length];
         SetupStats();
@@ -54,31 +53,15 @@ public class BaseCharacterModel: Photon.MonoBehaviour  {
             vitals[i].UpdateAttribute();
     }
 
-
-    public void GainExp(uint exp) {
-        if (level != MAX_LEVEL) {
-            currentExp += exp;
-            LevelUp();
-        }
-    }
-
-    private void LevelUp() {
-        if (currentExp >= expToLevel) {
-            ++level;
-            expToLevel = (uint)(expToLevel * expModifier);
-            currentExp = 0;
-        }
-    }
-
 #region Setup
     private void SetupStats() {
         for (int i = 0; i < stats.Length; ++i)
-            stats[i] = new Stat(Enum.GetName(typeof(StatType), i), "", 5);
+            stats[i] = new Stat(Enum.GetName(typeof(StatType), i), "", 5);//@TODO: Define an array for stat descriptions & starting baseValues
     }
 
     private void SetupAttributes() {
         for (int i = 0; i < attributes.Length; ++i) {
-            attributes[i] = new Attribute(Enum.GetName(typeof(AttributeType), i), "", 0);
+            attributes[i] = new Attribute(Enum.GetName(typeof(AttributeType), i), "", 0);//@TODO: Define an array for attribute descriptions (& starting baseValues)
             for (int j = 0; j < stats.Length; ++j)
                 if (ATTRIBUTE_RATIOS[i,j] > 0)
                     attributes[i].AddModifier(new ModifyingStat(stats[j], ATTRIBUTE_RATIOS[i,j]));
@@ -87,7 +70,7 @@ public class BaseCharacterModel: Photon.MonoBehaviour  {
 
     private void SetupVitals() {
         for (int i = 0; i < vitals.Length; ++i) {
-            vitals[i] = new Vital(Enum.GetName(typeof(VitalType), i), "", 0);
+            vitals[i] = new Vital(Enum.GetName(typeof(VitalType), i), "", 0);//@TODO: Define an array for vital descriptions (& starting baseValues)
             for (int j = 0; j < stats.Length; ++j)
                 if (VITAL_RATIOS[i,j] > 0)
                     vitals[i].AddModifier(new ModifyingStat(stats[j], VITAL_RATIOS[i, j]));
@@ -95,43 +78,31 @@ public class BaseCharacterModel: Photon.MonoBehaviour  {
     }
 #endregion
 
-#region Setters and Getters
+#region Accessors
     public string Name {
         get { return name; }
         set { name = value; }
     }
-
     public uint Level {
-        get { return level; }
+        get { return Level; }
         set { level = value; }
     }
-
-    public uint CurrentExp {
-        get { return currentExp; }
-        set { currentExp = value; }
-    }
-
-    public uint ExpToLevel {
-        get { return expToLevel; }
-        set { expToLevel = value; }
-    }
-
-    public Stat GetStat(StatType stat) {
-        return stats[(int)stat];
+    public Stat GetStat(int _index) {
+        return stats[_index];
     }
     public int GetStatsLength(){
         return Enum.GetValues(typeof(StatType)).Length;
     }
 
-    public Attribute GetAttribute(AttributeType attribute) {
-        return attributes[(int)attribute];
+    public Attribute GetAttribute(int _index) {
+        return attributes[_index];
     }
     public int GetAttributesLength() {
         return Enum.GetValues(typeof(AttributeType)).Length;
     }
 
-    public Vital GetVital(VitalType vital) {
-        return vitals[(int)vital];
+    public Vital GetVital(int _index) {
+        return vitals[_index];
     }
     public int GetVitalsLength() {
         return Enum.GetValues(typeof(VitalType)).Length;

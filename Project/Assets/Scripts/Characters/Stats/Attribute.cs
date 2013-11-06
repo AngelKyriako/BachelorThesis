@@ -5,7 +5,7 @@ public enum AttributeType {
     Defence,
     MovementSpeed,
     AttackSpeed,
-    CriticalChance,
+    Luck,
     Regeneration
 }
 
@@ -22,15 +22,15 @@ public struct ModifyingStat {
 public class Attribute: BaseStat {
 
     private List<ModifyingStat> modifiers;
-    private int statBonus;
+    private int statBonusValue;
 
     public Attribute(): base() {
         modifiers = new List<ModifyingStat>();
-        statBonus = 0;
+        statBonusValue = 0;
     }
     public Attribute(string _name, string _desc, int _val): base(_name, _desc, _val) {
         modifiers = new List<ModifyingStat>();
-        statBonus = 0;
+        statBonusValue = 0;
     }
 
     public void AddModifier(ModifyingStat mod) {
@@ -38,16 +38,12 @@ public class Attribute: BaseStat {
     }
 
     public void UpdateAttribute() {
-        UpdateStatBonus();
+        statBonusValue = 0;
+        foreach (ModifyingStat mod in modifiers)
+            statBonusValue += (int)(mod.stat.FinalValue * mod.ratio);
     }
 
     public override int FinalValue {
-        get { return base.FinalValue + statBonus; }
-    }
-
-    private void UpdateStatBonus() {
-        statBonus = 0;
-        foreach (ModifyingStat mod in modifiers)
-            statBonus += (int)(mod.stat.FinalValue * mod.ratio);
+        get { return base.FinalValue + statBonusValue; }
     }
 }

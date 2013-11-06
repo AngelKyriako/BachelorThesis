@@ -3,6 +3,9 @@ using System.Collections;
 
 public class NetworkController: Photon.MonoBehaviour {
 
+    #region attributes
+    // references to local gameObjects
+    private PlayerCharacterModel model;
     private CameraController cameraController;
     private MovementController movementController;
     private VisionController visionController;
@@ -10,8 +13,10 @@ public class NetworkController: Photon.MonoBehaviour {
     private Vector3 correctPlayerPosition;
     private Quaternion correctPlayerRotation;
     private float currentSpeed;
+#endregion
 
     void Awake() {
+        model = gameObject.GetComponent<PlayerCharacterModel>();
         cameraController = gameObject.GetComponent<CameraController>();
         cameraController.enabled = photonView.isMine;
         movementController = gameObject.GetComponent<MovementController>();
@@ -36,19 +41,7 @@ public class NetworkController: Photon.MonoBehaviour {
     }
 
     void Update() {
-        if (!photonView.isMine) {
-            //Check if able to smooth (last argument probably should be parameterized based on:
-            //                                  Vector3.Distance(transform.position, correctPlayerPosition);)
-            transform.position = Vector3.Lerp(transform.position, correctPlayerPosition, 0);
-            transform.rotation = Quaternion.Lerp(transform.rotation, correctPlayerRotation, 0);
-            movementController.CurrentSpeed = currentSpeed;
-        }
-    }
-
-    [RPC]
-    private void SyncInputForCharacterMovement(Vector3 _dest, Quaternion _rotation) {
-        movementController.Destination = _dest;
-        transform.rotation = _rotation;
+        SyncRemoteCharacter();
     }
 
     //void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
@@ -66,7 +59,61 @@ public class NetworkController: Photon.MonoBehaviour {
     //    }
     //}
 
+    private void SyncRemoteCharacter(){
+        //if (!photonView.isMine) {
+        //    //Check if able to smooth (last argument probably should be parameterized based on:
+        //    //                                  Vector3.Distance(transform.position, correctPlayerPosition);)
+        //    transform.position = Vector3.Lerp(transform.position, correctPlayerPosition, 0);
+        //    transform.rotation = Quaternion.Lerp(transform.rotation, correctPlayerRotation, 0);
+        //    movementController.CurrentSpeed = currentSpeed;
+        //}
+    }
+
+    #region RPCs
+    //Movement
+    [RPC]
+    private void SyncInputForCharacterMovement(Vector3 _dest, Quaternion _rotation) {
+        movementController.Destination = _dest;
+        transform.rotation = _rotation;
+    }
+    //Stats
+    [RPC]
+    private void SyncCharacterStat(int _index, int _baseValue, int _buffValue) {
+        model.GetStat(_index).BaseValue = _baseValue;
+        model.GetStat(_index).BuffValue = _buffValue;
+    }
+    [RPC]
+    private void SyncCharacterAttribute(int _index, int _baseValue, int _buffValue) {
+        model.GetAttribute(_index).BaseValue = _baseValue;
+        model.GetAttribute(_index).BuffValue = _buffValue;
+    }
+    [RPC]
+    private void SyncCharacterVital(int _index, int _baseValue, int _buffValue, int _currentValue) {
+        model.GetVital(_index).BaseValue = _baseValue;
+        model.GetVital(_index).BuffValue = _buffValue;
+        model.GetVital(_index).CurrentValue = _currentValue;
+    }
+    [RPC]
+    private void SyncAttributesBasedOnStats() {
+        model.UpdateAttributes();
+    }
+#endregion
+
+    #region Accessors
     public PhotonView PhotonView{
         get { return photonView; }
     }
+    public PlayerCharacterModel Model {
+        get { return model; }
+    }
+    public CameraController CameraController {
+        get { return cameraController; }
+    }
+    public MovementController MovementController {
+        get { return movementController; }
+    }
+    public VisionController VisionController {
+        get { return visionController; }
+    }
+#endregion
 }

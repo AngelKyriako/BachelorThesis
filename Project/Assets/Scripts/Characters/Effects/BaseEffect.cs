@@ -1,19 +1,9 @@
 ﻿using UnityEngine;
 
-public enum EffectType {
-    VitalModifierDirect,
-    VitalModifierOverTime,
-    StatModifierDirect,
-    StatModifierOverTime,
-    Stun,
-    Invulnerable
-}
-
-public abstract class BaseEffect {
+public class BaseEffect {
 
     private string title, description;
     private Texture2D icon;
-    private EffectType type;
     
     public BaseEffect() {
         title = string.Empty;
@@ -26,8 +16,6 @@ public abstract class BaseEffect {
         description = _descr;
         icon = _icon;
     }
-
-    public abstract void Activate(PlayerCharacterModel caster, PlayerCharacterModel receiver);
 
 #region Accessors
     public string Title {
@@ -43,11 +31,6 @@ public abstract class BaseEffect {
     public Texture2D Icon {
         get { return icon; }
         set { icon = value; }
-    }
-
-    public EffectType Type {
-        get { return type; }
-        set { type = value; }
     }
 #endregion
 }

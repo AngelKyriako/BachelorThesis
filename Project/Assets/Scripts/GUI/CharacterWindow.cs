@@ -171,12 +171,12 @@ public class CharacterWindow: MonoBehaviour {
         GUILayout.BeginArea(statsRect);
         for (int i = 0; i < playerCharModel.GetStatsLength(); ++i) {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(playerCharModel.GetStat((StatType)i).Name + ": ", statLabel);
-            GUILayout.Label(playerCharModel.GetStat((StatType)i).FinalValue.ToString(), valueLabel);
+            GUILayout.Label(playerCharModel.GetStat(i).Name + ": ", statLabel);
+            GUILayout.Label(playerCharModel.GetStat(i).FinalValue.ToString(), valueLabel);
             if (GUILayout.RepeatButton("-", GUILayout.Width(statModifyButtonSize), GUILayout.Height(statModifyButtonSize))
                && (Time.time - lastClickTime > repeatButtonCooldown)
                && (playerCharModel.TrainingPoints < playerCharModel.MAX_TRAINING_POINTS)) {
-                --playerCharModel.GetStat((StatType)i).BaseValue;
+                --playerCharModel.GetStat(i).BaseValue;
                 ++playerCharModel.TrainingPoints;
                 playerCharModel.UpdateAttributes();
 
@@ -185,7 +185,7 @@ public class CharacterWindow: MonoBehaviour {
             if (GUILayout.RepeatButton("+", GUILayout.Width(statModifyButtonSize), GUILayout.Height(statModifyButtonSize))
                && (Time.time - lastClickTime > repeatButtonCooldown)
                && (playerCharModel.TrainingPoints > 0)){
-                ++playerCharModel.GetStat((StatType)i).BaseValue;
+                ++playerCharModel.GetStat(i).BaseValue;
                 --playerCharModel.TrainingPoints;
                 playerCharModel.UpdateAttributes();
 
@@ -199,14 +199,14 @@ public class CharacterWindow: MonoBehaviour {
         GUILayout.BeginArea(attributesRect);
         for (int i = 0; i < playerCharModel.GetVitalsLength(); ++i) {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(playerCharModel.GetVital((VitalType)i).Name + ": ", AttributeLabel);
-            GUILayout.Label(playerCharModel.GetVital((VitalType)i).FinalValue.ToString(), valueLabel);
+            GUILayout.Label(playerCharModel.GetVital(i).Name + ": ", AttributeLabel);
+            GUILayout.Label(playerCharModel.GetVital(i).FinalValue.ToString(), valueLabel);
             GUILayout.EndHorizontal();
         }
         for (int i = 0; i < playerCharModel.GetAttributesLength(); ++i) {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(playerCharModel.GetAttribute((AttributeType)i).Name + ": ", AttributeLabel);
-            GUILayout.Label(playerCharModel.GetAttribute((AttributeType)i).FinalValue.ToString(), valueLabel);
+            GUILayout.Label(playerCharModel.GetAttribute(i).Name + ": ", AttributeLabel);
+            GUILayout.Label(playerCharModel.GetAttribute(i).FinalValue.ToString(), valueLabel);
             GUILayout.EndHorizontal();
         }
         GUILayout.EndArea();

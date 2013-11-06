@@ -7,18 +7,56 @@ public enum CharacterSkillSlots{
 
 public class PlayerCharacterModel: BaseCharacterModel {
 
-    public readonly int MAX_TRAINING_POINTS = 50;
+    #region constants
+    public const uint STARTING_EXP_TO_LEVEL = 50;
+    public const float STARTING_EXP_MODIFIER = 1.1f;
+    public readonly uint MAX_TRAINING_POINTS = 10;
+#endregion
 
-    private int trainingPoints;
+    #region attributes
+    private uint currentExp, expToLevel;
+    private float expModifier;
+    private uint trainingPoints;
     private BaseSkill[] skills;
+#endregion
 
     public override void Awake() {
         base.Awake();
+    }
+
+    public override void Start() {
+        base.Start();
+        expModifier = STARTING_EXP_MODIFIER;
+        expToLevel = STARTING_EXP_TO_LEVEL;
+        currentExp = 0;
         trainingPoints = MAX_TRAINING_POINTS;
         skills = new BaseSkill[Enum.GetValues(typeof(CharacterSkillSlots)).Length];
     }
 
-    public int TrainingPoints {
+    private void ModifyExp(uint exp) {
+        if (Level != MAX_LEVEL) {
+            currentExp += exp;
+            while (currentExp >= expToLevel)
+                LevelUp();
+        }
+    }
+
+    private void LevelUp() {
+        ++Level;
+        currentExp -= expToLevel;
+        expToLevel = (uint)(expToLevel * expModifier);
+    }
+
+    #region Accessors
+    public uint CurrentExp {
+        get { return currentExp; }
+        set { currentExp = value; }
+    }
+    public uint ExpToLevel {
+        get { return expToLevel; }
+        set { expToLevel = value; }
+    }
+    public uint TrainingPoints {
         get { return trainingPoints; }
         set { trainingPoints = (value < 0) ? 0 : ((value > MAX_TRAINING_POINTS)?MAX_TRAINING_POINTS:value); }
     }
@@ -31,4 +69,5 @@ public class PlayerCharacterModel: BaseCharacterModel {
     public int SkillCount {
         get { return skills.Length; }
     }
+#endregion
 }

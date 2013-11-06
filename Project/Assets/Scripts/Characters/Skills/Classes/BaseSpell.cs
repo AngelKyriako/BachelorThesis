@@ -11,7 +11,7 @@ public class BaseSpell: BaseSkill, IBaseSpell {
 
     #region constructors
     public BaseSpell()
-        :base() {
+        : base() {
         lineOfSight = true;
         targetEffect = null;
         coolDownTimer = coolDownTime = 0f;
