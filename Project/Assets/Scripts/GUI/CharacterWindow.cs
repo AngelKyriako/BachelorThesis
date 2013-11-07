@@ -59,7 +59,8 @@ public class CharacterWindow: MonoBehaviour {
     void Start() {
         playerCharModel = GameManager.Instance.Me.Character.GetComponent<PlayerCharacterModel>();
         lastSelectedSkill = null;
-    #region Layout Rects
+
+        #region Layout Rects
         windowRect          = new Rect((Screen.width - mainWidth / 2) / 2,
                                        (Screen.height - mainHeight / 2) / 2,
                                        mainWidth,
@@ -95,6 +96,7 @@ public class CharacterWindow: MonoBehaviour {
                                        windowRect.width - selectedSkillsRect.width,
                                        windowRect.height - (menuRect.y + menuRect.height));
 #endregion
+
         //menu
         normalFontSize = statisticsItem.fontSize;
         selectedFontSize = (int)(normalFontSize * 1.3);
@@ -224,8 +226,11 @@ public class CharacterWindow: MonoBehaviour {
         availableSkillScrollPos = GUILayout.BeginScrollView(availableSkillScrollPos);
         GUILayout.BeginHorizontal();
         foreach (BaseSkill skill in SkillBook.Instance.AvailableSkills) {
-            if (GUILayout.Button(skill.Title, GUILayout.Width(skillButtonSize), GUILayout.Height(skillButtonSize)))
+            if (GUILayout.Button(skill.Title, GUILayout.Width(skillButtonSize), GUILayout.Height(skillButtonSize))) {
                 lastSelectedSkill = skill;
+                Utilities.Instance.LogMessage("Skill title: "+skill.Title);
+            }
+
             if (++count % 4 == 0) {
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();

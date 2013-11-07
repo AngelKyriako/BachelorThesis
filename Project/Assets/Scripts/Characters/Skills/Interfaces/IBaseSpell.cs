@@ -4,6 +4,7 @@ public interface IBaseSpell: IBaseSkill {
 
     void Target();
     void Cast();
+    void Trigger(PlayerCharacterModel _caster, PlayerCharacterModel _receiver);
     void Update();
 
     float Range { get; set; }

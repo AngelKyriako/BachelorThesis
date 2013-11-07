@@ -28,42 +28,48 @@ public class StatModifierEffect: BaseEffect {
 
     public StatModifierEffect()
         : base() {
+        modifiedStats = new Dictionary<int, StatModifier>();
+        modifiedAttributes = new Dictionary<int, StatModifier>();
+        modifiedVitals = new Dictionary<int, VitalModifier>();
     }
 
     public StatModifierEffect(string _title, string _descr, Texture2D _icon)
         : base(_title, _descr, _icon) {
+        modifiedStats = new Dictionary<int, StatModifier>();
+        modifiedAttributes = new Dictionary<int, StatModifier>();
+        modifiedVitals = new Dictionary<int, VitalModifier>();
     }
 
     //@TODO figure out how to consider the caster's stats in this
-    public void Activate(PlayerCharacterModel caster, PlayerCharacterModel receiver) {
+    public override void Activate(PlayerCharacterModel caster, PlayerCharacterModel receiver) {
         foreach (KeyValuePair<int, StatModifier> entry in modifiedStats)
             receiver.GetStat(entry.Key).BuffValue += entry.Value.raw +
-                                                     (int)(entry.Value.basePercent * receiver.GetStat(entry.Key).BaseValue);
+                                                     (int)(entry.Value.basePercent * receiver.GetStat(entry.Key).FinalValue);
 
         foreach (KeyValuePair<int, StatModifier> entry in modifiedAttributes)
             receiver.GetAttribute(entry.Key).BuffValue += entry.Value.raw +
-                                                          (int)(entry.Value.basePercent * receiver.GetAttribute(entry.Key).BaseValue);
+                                                          (int)(entry.Value.basePercent * receiver.GetAttribute(entry.Key).FinalValue);
 
         foreach (KeyValuePair<int, VitalModifier> entry in modifiedVitals) {
             receiver.GetVital(entry.Key).BuffValue += entry.Value.max.raw +
-                                                      (int)(entry.Value.max.basePercent * receiver.GetVital(entry.Key).BaseValue);
+                                                      (int)(entry.Value.max.basePercent * receiver.GetVital(entry.Key).FinalValue);
             receiver.GetVital(entry.Key).CurrentValue += entry.Value.current.raw +
                                                          (int)(entry.Value.current.basePercent * receiver.GetVital(entry.Key).CurrentValue);
         }
     }
 
-    public void DeActivate(PlayerCharacterModel caster, PlayerCharacterModel receiver) {
+    public override void Deactivate(PlayerCharacterModel caster, PlayerCharacterModel receiver) {
         foreach (KeyValuePair<int, StatModifier> entry in modifiedStats)
             receiver.GetStat(entry.Key).BuffValue -= entry.Value.raw +
-                                                     (int)(entry.Value.basePercent * receiver.GetStat(entry.Key).BaseValue);
+                                                     (int)(entry.Value.basePercent * receiver.GetStat(entry.Key).FinalValue);
 
         foreach (KeyValuePair<int, StatModifier> entry in modifiedAttributes)
             receiver.GetAttribute(entry.Key).BuffValue -= entry.Value.raw +
-                                                          (int)(entry.Value.basePercent * receiver.GetAttribute(entry.Key).BaseValue);
+                                                          (int)(entry.Value.basePercent * receiver.GetAttribute(entry.Key).FinalValue);
 
         foreach (KeyValuePair<int, VitalModifier> entry in modifiedVitals)
             receiver.GetVital(entry.Key).BuffValue -= entry.Value.max.raw +
-                                                      (int)(entry.Value.max.basePercent * receiver.GetVital(entry.Key).BaseValue);
+                                                      (int)(entry.Value.max.basePercent * receiver.GetVital(entry.Key).FinalValue);
     }
 
     #region Accessors
@@ -88,4 +94,6 @@ public class StatModifierEffect: BaseEffect {
         modifiedVitals.Remove(index);
     }
 #endregion
+
+    public override EffectType GetEffectType() { return EffectType.StatModifierEffect_T; }
 }

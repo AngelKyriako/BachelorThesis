@@ -19,13 +19,14 @@ public class BaseSpell: BaseSkill, IBaseSpell {
         triggerEffect = null;
     }
 
-    public BaseSpell(string _title, string _desc, Texture2D _icon, int _effectsCount, float _cd, GameObject _target, GameObject _cast, GameObject _trigger)
-        : base(_title, _desc, _icon, _effectsCount) {
+    public BaseSpell(string _title, string _desc, Texture2D _icon, float _cd, GameObject _target, GameObject _cast, GameObject _trigger, GameObject _projectile)
+        : base(_title, _desc, _icon) {
         lineOfSight = true;
         targetEffect = _target;
         coolDownTimer = coolDownTime = _cd;
         castEffect = _cast;
         triggerEffect = _trigger;
+        projectile = _projectile;
     }
 #endregion
 
@@ -38,6 +39,13 @@ public class BaseSpell: BaseSkill, IBaseSpell {
         coolDownTimer = coolDownTime;
         if (castEffect)
             GameObject.Instantiate(castEffect);
+    }
+
+    public virtual void Trigger(PlayerCharacterModel _caster, PlayerCharacterModel _receiver) {
+        for (int i = 0; i < EffectsCount; ++i) {
+            Utilities.Instance.LogMessage("Activate effect: " + GetEffect(i).Title);
+            GetEffect(i).Activate(_caster, _receiver);
+        }
     }
 
     public virtual void Update(){
@@ -82,4 +90,6 @@ public class BaseSpell: BaseSkill, IBaseSpell {
         set { projectile = value; }
     }
 #endregion
+
+    public override SkillType GetSkillType() { return SkillType.BaseSpell_T; }
 }

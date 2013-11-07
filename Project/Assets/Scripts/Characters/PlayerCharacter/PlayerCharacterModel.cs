@@ -30,7 +30,8 @@ public class PlayerCharacterModel: BaseCharacterModel {
         expToLevel = STARTING_EXP_TO_LEVEL;
         currentExp = 0;
         trainingPoints = MAX_TRAINING_POINTS;
-        skills = new BaseSkill[Enum.GetValues(typeof(CharacterSkillSlots)).Length];
+        skills = new BaseSpell[Enum.GetValues(typeof(CharacterSkillSlots)).Length];
+        PlayerInputManager.Instance.OnSkillSelectInput += OnSkillClick;
     }
 
     private void ModifyExp(uint exp) {
@@ -45,6 +46,12 @@ public class PlayerCharacterModel: BaseCharacterModel {
         ++Level;
         currentExp -= expToLevel;
         expToLevel = (uint)(expToLevel * expModifier);
+    }
+
+    private void OnSkillClick(CharacterSkillSlots _slot) {
+        Utilities.Instance.LogMessage("Casting skill " + skills[(int)_slot] + "using key: " + _slot.ToString());
+        if (skills[(int)_slot]!=null)
+            ((BaseSpell)skills[(int)_slot]).Trigger(this, this);
     }
 
     #region Accessors

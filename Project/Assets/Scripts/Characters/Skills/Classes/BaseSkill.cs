@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
-public class BaseSkill: IBaseSkill {
+public enum SkillType {
+    UnknownSkill_T,
+    BaseSpell_T
+}
+
+public abstract class BaseSkill: IBaseSkill {
 
     #region attributes
     private string title, description;
     private Texture2D icon;
-    private BaseEffect[] effects;
+    private List<BaseEffect> effects;
 #endregion
 
     #region constructors
@@ -16,17 +22,17 @@ public class BaseSkill: IBaseSkill {
         effects = null;
     }
 
-    public BaseSkill(string _title, string _desc, Texture2D _icon, int _effectsCount) {
-        title = string.Empty;
-        description = string.Empty;
-        icon = null;
-        effects = new BaseEffect[_effectsCount];
+    public BaseSkill(string _title, string _desc, Texture2D _icon) {
+        title = _title;
+        description = _desc;
+        icon = _icon;
+        effects = new List<BaseEffect>();
     }
 
     //public BaseSkill(string _title, string _desc, Texture2D _icon, float _cd, GameObject _cast, GameObject _trigger) {
-    //    title = string.Empty;
-    //    description = string.Empty;
-    //    icon = null;
+    //    title = _title;
+    //    description = _desc;
+    //    icon = _icon;
     //}
 #endregion
 
@@ -43,14 +49,19 @@ public class BaseSkill: IBaseSkill {
         get { return icon; }
         set { icon = value; }
     }
-    public void SetEffect(int index, BaseEffect effect) {
-        effects[index] = effect;
+    public void AddEffect(BaseEffect _effect) {
+        effects.Add(_effect);
+    }
+    public void RemoveEffect(BaseEffect _effect){
+        effects.Remove(_effect);
     }
     public BaseEffect GetEffect(int index) {
         return effects[index];
     }
     public int EffectsCount {
-        get { return effects.Length; }
+        get { return effects.Count; }
     }
 #endregion
+
+    public virtual SkillType GetSkillType() { return SkillType.UnknownSkill_T; }
 }
