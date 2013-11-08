@@ -226,10 +226,8 @@ public class CharacterWindow: MonoBehaviour {
         availableSkillScrollPos = GUILayout.BeginScrollView(availableSkillScrollPos);
         GUILayout.BeginHorizontal();
         foreach (BaseSkill skill in SkillBook.Instance.AvailableSkills) {
-            if (GUILayout.Button(skill.Title, GUILayout.Width(skillButtonSize), GUILayout.Height(skillButtonSize))) {
+            if (GUILayout.Button(skill.Title, GUILayout.Width(skillButtonSize), GUILayout.Height(skillButtonSize)))
                 lastSelectedSkill = skill;
-                Utilities.Instance.LogMessage("Skill title: "+skill.Title);
-            }
 
             if (++count % 4 == 0) {
                 GUILayout.EndHorizontal();

@@ -16,26 +16,26 @@ public class SkillBook{
 
         availableSkills = new List<BaseSkill>();
         tempSkill = new BaseSpell("skill 1", "skill 1 description", null, 2f, null, null, null, (GameObject)Resources.Load("MyPrefab"));
-            tempEffect = new StatModifierEffect("effect1", "effect1 description", null);
-            ((StatModifierEffect)tempEffect).AddModifiedAttribute((int)AttributeType.Attack, new StatModifier(10, 0.5f));           
+            tempEffect = new BaseEffect("effect1", "effect1 description", null, 2f);
+            tempEffect.AddModifiedAttribute((int)AttributeType.Attack, new StatModifier(10, 0.5f));           
         tempSkill.AddEffect(tempEffect);
         availableSkills.Add(tempSkill);
 
         tempSkill = new BaseSpell("skill 2", "skill 2 description", null, 2f, null, null, null, (GameObject)Resources.Load("MyPrefab"));
-            tempEffect = new StatModifierEffect("effect1", "effect1 description", null);
-            ((StatModifierEffect)tempEffect).AddModifiedAttribute((int)AttributeType.Defence, new StatModifier(20, 0.5f));
+            tempEffect = new BaseEffect("effect1", "effect1 description", null, 2f);
+            tempEffect.AddModifiedAttribute((int)AttributeType.Defence, new StatModifier(20, 0.5f));
         tempSkill.AddEffect(tempEffect);    
         availableSkills.Add(tempSkill);
 
         tempSkill = new BaseSpell("skill 3", "skill 3 description", null, 2f, null, null, null, (GameObject)Resources.Load("MyPrefab"));
-            tempEffect = new StatModifierEffect("effect1", "effect1 description", null);
-            ((StatModifierEffect)tempEffect).AddModifiedAttribute((int)AttributeType.AttackSpeed, new StatModifier(30, 1f));
+            tempEffect = new BaseEffect("effect1", "effect1 description", null, 2f);
+            tempEffect.AddModifiedAttribute((int)AttributeType.AttackSpeed, new StatModifier(30, 1f));
         tempSkill.AddEffect(tempEffect);    
         availableSkills.Add(tempSkill);
 
         tempSkill = new BaseSpell("skill 4", "skill 4 description", null, 2f, null, null, null, (GameObject)Resources.Load("MyPrefab"));
-            tempEffect = new StatModifierEffect("effect1", "effect1 description", null);
-            ((StatModifierEffect)tempEffect).AddModifiedAttribute((int)AttributeType.MovementSpeed, new StatModifier(40, 1f));
+            tempEffect = new BaseEffect("effect1", "effect1 description", null, 2f);
+            tempEffect.AddModifiedAttribute((int)AttributeType.MovementSpeed, new StatModifier(40, 1f));
         tempSkill.AddEffect(tempEffect);
         availableSkills.Add(tempSkill);
 

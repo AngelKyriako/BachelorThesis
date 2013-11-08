@@ -43,8 +43,7 @@ public class BaseSpell: BaseSkill, IBaseSpell {
 
     public virtual void Trigger(PlayerCharacterModel _caster, PlayerCharacterModel _receiver) {
         for (int i = 0; i < EffectsCount; ++i) {
-            Utilities.Instance.LogMessage("Activate effect: " + GetEffect(i).Title);
-            GetEffect(i).Activate(_caster, _receiver);
+            _receiver.AddEffectAttached(new AttachedEffect(new BaseEffect(GetEffect(i)), _caster));
         }
     }
 

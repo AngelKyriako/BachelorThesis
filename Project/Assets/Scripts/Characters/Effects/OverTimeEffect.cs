@@ -1,26 +1,44 @@
 ﻿using UnityEngine;
 
-public abstract class OverTimeEffect: StatModifierEffect {
+public class OverTimeEffect: BaseEffect {
 
-    private float countdownTimer, time;
+    private float overTimeCountdownTimer;
+    private float frequency, lastActivationTime;
 
+    #region constructors
     public OverTimeEffect()
         : base() {
-        countdownTimer = time = 0f;
+        overTimeCountdownTimer = 0f;
+        frequency = 0f;
     }
 
-    public OverTimeEffect(string _title, string _descr, Texture2D _icon)
-        : base(_title, _descr, _icon) {
-            countdownTimer = time = 0f;
+    public OverTimeEffect(string _title, string _descr, Texture2D _icon, float _duration, float _overTimeDuration, float _freq)
+        : base(_title, _descr, _icon, _duration) {
+        overTimeCountdownTimer = 0f;
+        overTimeCountdownTimer = _overTimeDuration;
     }
+
+    public OverTimeEffect(OverTimeEffect _effect)
+        : base(_effect) {
+        overTimeCountdownTimer = 0f;
+        overTimeCountdownTimer = _effect.overTimeCountdownTimer;
+    }
+#endregion
 
     #region Accessors
-    public float CountdownTimer {
-        get { return countdownTimer; }
+    public float OverTimeCountdownTimer {
+        get { return overTimeCountdownTimer; }
+        set { overTimeCountdownTimer = value; }
     }
-    public float Time {
-        get { return time; }
-        set { time = value; }
+    public bool IsReadyForNextActivation(float nowTime) {
+        return (overTimeCountdownTimer > 0 && (nowTime - lastActivationTime) >= frequency);
+    }
+    public float LastActivationTime {
+        get { return lastActivationTime; }
+        set { lastActivationTime = value; }
+    }
+    public float Frequency {
+        get { return frequency; }
     }
 #endregion
 }
