@@ -1,19 +1,8 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections.Generic;
 
 public enum CharacterSkillSlots{
     Q, W, E, R
-}
-
-public struct AttachedEffect {
-    public BaseEffect Self;
-    public PlayerCharacterModel Caster;
-
-    public AttachedEffect(BaseEffect _effect, PlayerCharacterModel _caster) {
-        Self = _effect;
-        Caster = _caster;
-    }
 }
 
 public class PlayerCharacterModel: BaseCharacterModel {
@@ -28,8 +17,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
     private uint currentExp, expToLevel;
     private float expModifier;
     private uint trainingPoints;
-    private BaseSkill[] skills;
-    private List<AttachedEffect> effectsAttached; 
+    private BaseSkill[] skills;    
 #endregion
 
     public override void Awake() {
@@ -42,48 +30,13 @@ public class PlayerCharacterModel: BaseCharacterModel {
         expToLevel = STARTING_EXP_TO_LEVEL;
         currentExp = 0;
         trainingPoints = MAX_TRAINING_POINTS;
-        skills = new BaseSpell[Enum.GetValues(typeof(CharacterSkillSlots)).Length];
-        effectsAttached = new List<AttachedEffect>();
+        skills = new BaseSpell[Enum.GetValues(typeof(CharacterSkillSlots)).Length];        
 
         PlayerInputManager.Instance.OnSkillSelectInput += OnSkillUse;
     }
 
-    void Update() {
-        ManageEffectsAttached();
-    }
-
     void OnDestroy() {
         //PlayerInputManager.Instance.OnSkillSelectInput -= OnSkillUse;
-    }
-
-    //@TODO Find a more elegant way to do this
-    private void ManageEffectsAttached() {
-        if (effectsAttached.Count > 0) {
-            for (int i = 0; i < effectsAttached.Count; ++i) {
-                if (!effectsAttached[i].Self.IsActivated) {
-                    effectsAttached[i].Self.Activate(effectsAttached[i].Caster, this);
-                    //LogAttributes();
-                    if (effectsAttached[i].Self.Equals(typeof(OverTimeEffect)))
-                        ((OverTimeEffect)effectsAttached[i].Self).LastActivationTime = Time.time;
-                }
-                if (effectsAttached[i].Self.Equals(typeof(OverTimeEffect))) {
-                    if (((OverTimeEffect)effectsAttached[i].Self).IsReadyForNextActivation(Time.time)) {
-                        effectsAttached[i].Self.Activate(effectsAttached[i].Caster, this);
-                        ((OverTimeEffect)effectsAttached[i].Self).LastActivationTime = Time.time;
-                        //LogAttributes();
-                    }
-                    ((OverTimeEffect)effectsAttached[i].Self).OverTimeCountdownTimer -= Time.deltaTime;
-                }
-                effectsAttached[i].Self.CountdownTimer -= Time.deltaTime;
-
-                if (!effectsAttached[i].Self.InProgress) {
-                    effectsAttached[i].Self.Deactivate(this);
-                    effectsAttached.Remove(effectsAttached[i]);
-                    //LogAttributes();
-                }
-            }
-            //Utilities.Instance.LogMessage("effect count:" + effectsAttached.Count);
-        }
     }
 
     private void ModifyExp(uint exp) {
@@ -134,19 +87,6 @@ public class PlayerCharacterModel: BaseCharacterModel {
     }    
     public int SkillCount {
         get { return skills.Length; }
-    }
-
-    public void AddEffectAttached(AttachedEffect _effect) {
-        effectsAttached.Add(_effect);
-    }
-    public void RemoveEffectAttached(AttachedEffect _effect) {
-        effectsAttached.Remove(_effect);
-    }
-    public AttachedEffect GetEffectAttached(int _index) {
-        return effectsAttached[_index];
-    }
-    public int EffectAttachedCount {
-        get { return effectsAttached.Count; }
     }
 #endregion
 }

@@ -1,6 +1,16 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
+using System.Collections.Generic;
+
+public struct AttachedEffect {
+    public BaseEffect Self;
+    public BaseCharacterModel Caster;
+
+    public AttachedEffect(BaseEffect _effect, BaseCharacterModel _caster) {
+        Self = _effect;
+        Caster = _caster;
+    }
+}
 
 public class BaseCharacterModel: MonoBehaviour  {
 
@@ -24,6 +34,7 @@ public class BaseCharacterModel: MonoBehaviour  {
     private NetworkController networkController;
     private new string name;
     private uint level;
+    private List<AttachedEffect> effectsAttached;
     private Stat[] stats;
     private Attribute[] attributes;
     private Vital[] vitals;
@@ -36,6 +47,7 @@ public class BaseCharacterModel: MonoBehaviour  {
     public virtual void Start() {
         name = networkController.photonView.owner.name;
         Level = STARTING_LEVEL;
+        effectsAttached = new List<AttachedEffect>();
 
         stats = new Stat[Enum.GetValues(typeof(StatType)).Length];
         SetupStats();
@@ -44,6 +56,40 @@ public class BaseCharacterModel: MonoBehaviour  {
         vitals = new Vital[Enum.GetValues(typeof(VitalType)).Length];
         SetupVitals();
         UpdateAttributes();
+    }
+
+    void Update() {
+        ManageEffectsAttached();
+    }
+
+    //@TODO Find a more elegant way to do this
+    private void ManageEffectsAttached() {
+        if (effectsAttached.Count > 0) {
+            for (int i = 0; i < effectsAttached.Count; ++i) {
+                if (!effectsAttached[i].Self.IsActivated) {
+                    effectsAttached[i].Self.Activate(effectsAttached[i].Caster, this);
+                    //LogAttributes();
+                    if (effectsAttached[i].Self.Equals(typeof(OverTimeEffect)))
+                        ((OverTimeEffect)effectsAttached[i].Self).LastActivationTime = Time.time;
+                }
+                if (effectsAttached[i].Self.Equals(typeof(OverTimeEffect))) {
+                    if (((OverTimeEffect)effectsAttached[i].Self).IsReadyForNextActivation(Time.time)) {
+                        effectsAttached[i].Self.Activate(effectsAttached[i].Caster, this);
+                        ((OverTimeEffect)effectsAttached[i].Self).LastActivationTime = Time.time;
+                        //LogAttributes();
+                    }
+                    ((OverTimeEffect)effectsAttached[i].Self).OverTimeCountdownTimer -= Time.deltaTime;
+                }
+                effectsAttached[i].Self.CountdownTimer -= Time.deltaTime;
+
+                if (!effectsAttached[i].Self.InProgress) {
+                    effectsAttached[i].Self.Deactivate(this);
+                    effectsAttached.Remove(effectsAttached[i]);
+                    //LogAttributes();
+                }
+            }
+            //Utilities.Instance.LogMessage("effect count:" + effectsAttached.Count);
+        }
     }
 
     public void UpdateAttributes() {
@@ -106,6 +152,19 @@ public class BaseCharacterModel: MonoBehaviour  {
     }
     public int VitalsLength {
         get { return Enum.GetValues(typeof(VitalType)).Length; }
+    }
+
+    public void AddEffectAttached(AttachedEffect _effect) {
+        effectsAttached.Add(_effect);
+    }
+    public void RemoveEffectAttached(AttachedEffect _effect) {
+        effectsAttached.Remove(_effect);
+    }
+    public AttachedEffect GetEffectAttached(int _index) {
+        return effectsAttached[_index];
+    }
+    public int EffectAttachedCount {
+        get { return effectsAttached.Count; }
     }
 #endregion
 }

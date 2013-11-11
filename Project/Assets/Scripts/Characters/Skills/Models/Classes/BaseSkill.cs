@@ -36,10 +36,10 @@ public abstract class BaseSkill: IBaseSkill {
     //}
 #endregion
 
-    public abstract void Target(PlayerCharacterModel _caster);
-    public abstract void Cast(PlayerCharacterModel _caster);
-    public abstract void Trigger(PlayerCharacterModel _caster, PlayerCharacterModel _receiver);
-    public abstract void ActivateEffects(PlayerCharacterModel _caster, PlayerCharacterModel _receiver);
+    public abstract void Target(BaseCharacterModel _caster);
+    public abstract void Cast(BaseCharacterModel _caster);
+    public abstract void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver);
+    public abstract void ActivateEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver);
 
     #region Accessors
     public string Title {

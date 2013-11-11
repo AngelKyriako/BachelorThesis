@@ -5,7 +5,6 @@ public interface IBaseSpell: IBaseSkill {
     void Update();
 
     float Range { get; set; }
-    bool LineOfSight { get; set; }
 
     float CoolDownTimer { get; set; }
     bool IsReady { get; }

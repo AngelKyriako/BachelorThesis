@@ -27,7 +27,7 @@ public class BaseEffect{
     #region attributes
     private string title, description;
     private Texture2D icon;
-    private bool isActivated;    
+    private bool isActivated, isPassive;
     private float countdownTimer;
     // modifiers of the value of the stat
     private Dictionary<int, StatModifier> modifiedStats, modifiedAttributes;
@@ -44,6 +44,7 @@ public class BaseEffect{
         description = string.Empty;
         icon = null;
         isActivated = false;
+        isPassive = false;
         countdownTimer = 0f;
         modifiedStats = new Dictionary<int, StatModifier>();
         modifiedAttributes = new Dictionary<int, StatModifier>();
@@ -54,11 +55,12 @@ public class BaseEffect{
         RefreshActivationBuffValues();
     }
 
-    public BaseEffect(string _title, string _descr, Texture2D _icon, float _duration) {
+    public BaseEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration) {
         title = _title;
         description = _descr;
         icon = _icon;
         isActivated = false;
+        isPassive = _isPassive;
         countdownTimer = _duration;
         modifiedStats = new Dictionary<int, StatModifier>();
         modifiedAttributes = new Dictionary<int, StatModifier>();
@@ -74,6 +76,7 @@ public class BaseEffect{
         description = _effect.description;
         icon = _effect.icon;
         isActivated = false;
+        isPassive = _effect.IsPassive;
         countdownTimer = _effect.CountdownTimer;
         modifiedStats = _effect.modifiedStats;
         modifiedAttributes = _effect.modifiedAttributes;
@@ -85,7 +88,7 @@ public class BaseEffect{
     }
 #endregion
 
-    public void Activate(PlayerCharacterModel caster, PlayerCharacterModel receiver) {
+    public void Activate(BaseCharacterModel caster, BaseCharacterModel receiver) {
         int tempValue = 0;
         foreach (KeyValuePair<int, StatModifier> entry in modifiedStats) {
             //@TODO dispatch depending on the stat to include caster and receiver stats
@@ -93,7 +96,6 @@ public class BaseEffect{
             statActivationBuffValues[entry.Key] += tempValue;
             receiver.GetStat(entry.Key).BuffValue += tempValue;
         }
-
         foreach (KeyValuePair<int, StatModifier> entry in modifiedAttributes) {
             //@TODO dispatch depending on the stat to include caster and receiver stats
             tempValue = entry.Value.raw + (int)(entry.Value.basePercent * receiver.GetStat(entry.Key).FinalValue);
@@ -112,15 +114,15 @@ public class BaseEffect{
         isActivated = true;
     }
 
-    public void Deactivate(PlayerCharacterModel receiver) {
+    public void Deactivate(BaseCharacterModel _receiver) {
         foreach (KeyValuePair<int, StatModifier> entry in modifiedStats)
-            receiver.GetStat(entry.Key).BuffValue -= statActivationBuffValues[entry.Key];
+            _receiver.GetStat(entry.Key).BuffValue -= statActivationBuffValues[entry.Key];
 
         foreach (KeyValuePair<int, StatModifier> entry in modifiedAttributes)
-            receiver.GetAttribute(entry.Key).BuffValue -= attributeActivationBuffValues[entry.Key];
+            _receiver.GetAttribute(entry.Key).BuffValue -= attributeActivationBuffValues[entry.Key];
 
         foreach (KeyValuePair<int, VitalModifier> entry in modifiedVitals)
-            receiver.GetVital(entry.Key).BuffValue -= vitalActivationBuffValues[entry.Key];
+            _receiver.GetVital(entry.Key).BuffValue -= vitalActivationBuffValues[entry.Key];
         isActivated = false;
         RefreshActivationBuffValues();
     }
@@ -150,6 +152,10 @@ public class BaseEffect{
 
     public bool IsActivated {
         get { return isActivated; }
+    }
+    public bool IsPassive {
+        get { return isPassive; }
+        set { isPassive = value; }
     }
 
     public void AddModifiedStat(int index, StatModifier _mod) {

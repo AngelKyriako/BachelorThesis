@@ -5,10 +5,7 @@ public class BaseProjectile: MonoBehaviour {
 
     private const int MAX_MOVEMENT_SPEED = 10, RANGE = 25;
 
-    public delegate void OnTrigger(PlayerCharacterModel caster, PlayerCharacterModel receiver);
-    public event OnTrigger OnSkillTriggered;
-
-    private Pair<BaseSkill,PlayerCharacterModel> skillCasterPair;
+    private Pair<BaseSkill, BaseCharacterModel> skillCasterPair;
     private Vector3 origin, destination;
 
     void Awake() {
@@ -29,7 +26,7 @@ public class BaseProjectile: MonoBehaviour {
     public virtual void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.layer.Equals("VisibleEnemies") || collision.gameObject.layer.Equals("HiddenEnemies")) {
             skillCasterPair.First.Trigger(skillCasterPair.Second,
-                                                       collision.gameObject.GetComponent<PlayerCharacterModel>());
+                                          collision.gameObject.GetComponent<PlayerCharacterModel>());
             foreach (ContactPoint contact in collision.contacts)
                 Debug.DrawRay(contact.point, contact.normal, Color.red);
 
@@ -37,7 +34,7 @@ public class BaseProjectile: MonoBehaviour {
         }
     }
 
-    public Pair<BaseSkill, PlayerCharacterModel> SkillCasterPair {
+    public Pair<BaseSkill, BaseCharacterModel> SkillCasterPair {
         get { return skillCasterPair; }
         set { skillCasterPair = value; }
     }
