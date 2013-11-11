@@ -10,5 +10,10 @@ public interface IBaseSkill {
     BaseEffect GetEffect(int index);
     int EffectsCount { get; }
 
-    SkillType GetSkillType();
+    void Target(PlayerCharacterModel _caster);
+    void Cast(PlayerCharacterModel _caster);
+    void Trigger(PlayerCharacterModel _caster, PlayerCharacterModel _receiver);
+    void ActivateEffects(PlayerCharacterModel _caster, PlayerCharacterModel _receiver);
+
+    SkillType Type { get; }
 }

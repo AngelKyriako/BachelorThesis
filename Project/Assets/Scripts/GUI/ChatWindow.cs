@@ -15,24 +15,26 @@ public struct ChatMessage {
 public class ChatWindow: Photon.MonoBehaviour {
 
     private const int MAX_MESSAGES_COUNT = 30;
-    private const int MAIN_HEIGHT = 140, MAIN_WIDTH = 300;
-
-    private static ChatWindow instance;
+    private const int MAIN_X = 0, MAIN_HEIGHT = 140, MAIN_WIDTH = 300;   
 
     private List<ChatMessage> messages = new List<ChatMessage>();
     private Vector2 scrollPos = Vector2.zero;
     private string chatInput = "";
     private float lastUnfocusTime = 0;
+    private Rect layoutRect;
 
-    void Awake() {
+    private static ChatWindow instance;
+
+    void Start() {
         instance = this;
         enabled = false;
+        layoutRect = new Rect(MAIN_X, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
     }
 
     void OnGUI() {
         GUI.SetNextControlName("");
 
-        GUILayout.BeginArea(new Rect(0, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT));
+        GUILayout.BeginArea(layoutRect);
 
         //Show scroll list of chat messages
         scrollPos = GUILayout.BeginScrollView(scrollPos);
@@ -66,9 +68,9 @@ public class ChatWindow: Photon.MonoBehaviour {
         GUILayout.EndArea();
     }
 
-    void OnJoinedRoom() { this.enabled = true; }
-    void OnCreatedRoom() { this.enabled = true; }
-    void OnLeftRoom() { this.enabled = false; }
+    void OnJoinedRoom() { enabled = true; }
+    void OnCreatedRoom() { enabled = true; }
+    void OnLeftRoom() { enabled = false; }
 
     void Send(PhotonTargets targets) {
         if (chatInput != "") {

@@ -45,11 +45,45 @@ public class PlayerCharacterModel: BaseCharacterModel {
         skills = new BaseSpell[Enum.GetValues(typeof(CharacterSkillSlots)).Length];
         effectsAttached = new List<AttachedEffect>();
 
-        PlayerInputManager.Instance.OnSkillSelectInput += OnSkillClick;
+        PlayerInputManager.Instance.OnSkillSelectInput += OnSkillUse;
     }
 
-    public void Update() {
+    void Update() {
         ManageEffectsAttached();
+    }
+
+    void OnDestroy() {
+        //PlayerInputManager.Instance.OnSkillSelectInput -= OnSkillUse;
+    }
+
+    //@TODO Find a more elegant way to do this
+    private void ManageEffectsAttached() {
+        if (effectsAttached.Count > 0) {
+            for (int i = 0; i < effectsAttached.Count; ++i) {
+                if (!effectsAttached[i].Self.IsActivated) {
+                    effectsAttached[i].Self.Activate(effectsAttached[i].Caster, this);
+                    //LogAttributes();
+                    if (effectsAttached[i].Self.Equals(typeof(OverTimeEffect)))
+                        ((OverTimeEffect)effectsAttached[i].Self).LastActivationTime = Time.time;
+                }
+                if (effectsAttached[i].Self.Equals(typeof(OverTimeEffect))) {
+                    if (((OverTimeEffect)effectsAttached[i].Self).IsReadyForNextActivation(Time.time)) {
+                        effectsAttached[i].Self.Activate(effectsAttached[i].Caster, this);
+                        ((OverTimeEffect)effectsAttached[i].Self).LastActivationTime = Time.time;
+                        //LogAttributes();
+                    }
+                    ((OverTimeEffect)effectsAttached[i].Self).OverTimeCountdownTimer -= Time.deltaTime;
+                }
+                effectsAttached[i].Self.CountdownTimer -= Time.deltaTime;
+
+                if (!effectsAttached[i].Self.InProgress) {
+                    effectsAttached[i].Self.Deactivate(this);
+                    effectsAttached.Remove(effectsAttached[i]);
+                    //LogAttributes();
+                }
+            }
+            //Utilities.Instance.LogMessage("effect count:" + effectsAttached.Count);
+        }
     }
 
     private void ModifyExp(uint exp) {
@@ -66,37 +100,16 @@ public class PlayerCharacterModel: BaseCharacterModel {
         expToLevel = (uint)(expToLevel * expModifier);
     }
 
-    private void OnSkillClick(CharacterSkillSlots _slot) {
-        if (skills[(int)_slot]!=null)
-            ((BaseSpell)skills[(int)_slot]).Trigger(this, this);
+    private void OnSkillUse(CharacterSkillSlots _slot) {
+        if (skills[(int)_slot] != null)
+            skills[(int)_slot].Target(this);
     }
 
-    //@TODO Find a more elegant way to do this
-    private void ManageEffectsAttached() {
-        if (effectsAttached.Count > 0) {
-            for (int i = 0; i < effectsAttached.Count; ++i) {
-                if (!effectsAttached[i].Self.IsActivated) {
-                    effectsAttached[i].Self.Activate(effectsAttached[i].Caster, this);
-
-                    if (effectsAttached[i].Self.Equals(typeof(OverTimeEffect)))
-                        ((OverTimeEffect)effectsAttached[i].Self).LastActivationTime = Time.time;
-                }
-                if (effectsAttached[i].Self.Equals(typeof(OverTimeEffect))) {
-                    if (((OverTimeEffect)effectsAttached[i].Self).IsReadyForNextActivation(Time.time)) {
-                        effectsAttached[i].Self.Activate(effectsAttached[i].Caster, this);
-                        ((OverTimeEffect)effectsAttached[i].Self).LastActivationTime = Time.time;
-                    }
-                    ((OverTimeEffect)effectsAttached[i].Self).OverTimeCountdownTimer -= Time.deltaTime;
-                }
-                effectsAttached[i].Self.CountdownTimer -= Time.deltaTime;
-
-                if (!effectsAttached[i].Self.InProgress) {
-                    effectsAttached[i].Self.Deactivate(this);
-                    effectsAttached.Remove(effectsAttached[i]);
-                }
-            }
-            Utilities.Instance.LogMessage("effect count:" + effectsAttached.Count);
-        }
+    public void LogAttributes() {
+        for (int i = 0; i < VitalsLength; ++i)
+            Utilities.Instance.LogMessage(GetVital(i).Name + ": (" + GetVital(i).CurrentValue + "/" + GetVital(i).FinalValue + ")");
+        for (int i = 0; i < AttributesLength; ++i)
+            Utilities.Instance.LogMessage(GetAttribute(i).Name + ": " + GetAttribute(i).FinalValue);
     }
 
     #region Accessors

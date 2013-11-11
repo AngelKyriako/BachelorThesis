@@ -90,22 +90,22 @@ public class BaseCharacterModel: MonoBehaviour  {
     public Stat GetStat(int _index) {
         return stats[_index];
     }
-    public int GetStatsLength(){
-        return Enum.GetValues(typeof(StatType)).Length;
+    public int StatsLength{
+        get { return Enum.GetValues(typeof(StatType)).Length; }
     }
 
     public Attribute GetAttribute(int _index) {
         return attributes[_index];
     }
-    public int GetAttributesLength() {
-        return Enum.GetValues(typeof(AttributeType)).Length;
+    public int AttributesLength {
+        get { return Enum.GetValues(typeof(AttributeType)).Length; }
     }
 
     public Vital GetVital(int _index) {
         return vitals[_index];
     }
-    public int GetVitalsLength() {
-        return Enum.GetValues(typeof(VitalType)).Length;
+    public int VitalsLength {
+        get { return Enum.GetValues(typeof(VitalType)).Length; }
     }
 #endregion
 }

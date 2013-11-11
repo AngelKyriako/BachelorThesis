@@ -36,6 +36,11 @@ public abstract class BaseSkill: IBaseSkill {
     //}
 #endregion
 
+    public abstract void Target(PlayerCharacterModel _caster);
+    public abstract void Cast(PlayerCharacterModel _caster);
+    public abstract void Trigger(PlayerCharacterModel _caster, PlayerCharacterModel _receiver);
+    public abstract void ActivateEffects(PlayerCharacterModel _caster, PlayerCharacterModel _receiver);
+
     #region Accessors
     public string Title {
         get { return title; }
@@ -48,7 +53,8 @@ public abstract class BaseSkill: IBaseSkill {
     public Texture2D Icon {
         get { return icon; }
         set { icon = value; }
-    }
+    }    
+
     public void AddEffect(BaseEffect _effect) {
         effects.Add(_effect);
     }
@@ -63,5 +69,7 @@ public abstract class BaseSkill: IBaseSkill {
     }
 #endregion
 
-    public virtual SkillType GetSkillType() { return SkillType.UnknownSkill_T; }
+    public virtual SkillType Type{
+        get { return SkillType.UnknownSkill_T; }
+    }
 }

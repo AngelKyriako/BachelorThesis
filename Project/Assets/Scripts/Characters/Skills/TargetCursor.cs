@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BattleManager : MonoBehaviour {
+public class TargetCursor : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

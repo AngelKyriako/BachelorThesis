@@ -37,7 +37,7 @@ public class Attribute: BaseStat {
         modifiers.Add(mod);
     }
 
-    public void UpdateAttribute() {
+    public virtual void UpdateAttribute() {
         statBonusValue = 0;
         foreach (ModifyingStat mod in modifiers)
             statBonusValue += (int)(mod.stat.FinalValue * mod.ratio);

@@ -33,6 +33,10 @@ public class MovementController: MonoBehaviour {
         animator.SetFloat("movementSpeed", currentSpeed);
     }
 
+    void OnDestroy() {
+        //PlayerInputManager.Instance.OnCharacterMovementInput -= OnMovementInput;
+    }
+
     private void OnMovementInput(Ray ray) {
         ReceiveLocalInput(ray);
         networkController.PhotonView.RPC("SyncInputForCharacterMovement", PhotonTargets.Others, destination, transform.rotation);

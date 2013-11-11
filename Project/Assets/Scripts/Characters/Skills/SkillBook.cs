@@ -15,19 +15,19 @@ public class SkillBook{
         BaseEffect tempEffect = null;
 
         availableSkills = new List<BaseSkill>();
-        tempSkill = new BaseSpell("skill 1", "skill 1 description", null, 2f, null, null, null, (GameObject)Resources.Load("MyPrefab"));
-            tempEffect = new BaseEffect("effect1", "effect1 description", null, 2f);
-            tempEffect.AddModifiedAttribute((int)AttributeType.Attack, new StatModifier(10, 0.5f));           
+        tempSkill = new BaseSpell("skill 1", "skill 1 description", null, 2f, null, null, null, null);//(GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath));
+            tempEffect = new BaseEffect("BasicDamage", "BasicDamage description", null, 5f);
+            tempEffect.AddModifiedVital((int)VitalType.Health, new VitalModifier(new StatModifier(0, -0.2f), new StatModifier(0, -0.5f)));
         tempSkill.AddEffect(tempEffect);
         availableSkills.Add(tempSkill);
 
-        tempSkill = new BaseSpell("skill 2", "skill 2 description", null, 2f, null, null, null, (GameObject)Resources.Load("MyPrefab"));
+        tempSkill = new BaseSpell("skill 2", "skill 2 description", null, 2f, null, null, null, (GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath));
             tempEffect = new BaseEffect("effect1", "effect1 description", null, 2f);
             tempEffect.AddModifiedAttribute((int)AttributeType.Defence, new StatModifier(20, 0.5f));
         tempSkill.AddEffect(tempEffect);    
         availableSkills.Add(tempSkill);
 
-        tempSkill = new BaseSpell("skill 3", "skill 3 description", null, 2f, null, null, null, (GameObject)Resources.Load("MyPrefab"));
+        tempSkill = new BaseSpell("skill 3", "skill 3 description", null, 2f, null, null, null, (GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath));
             tempEffect = new BaseEffect("effect1", "effect1 description", null, 2f);
             tempEffect.AddModifiedAttribute((int)AttributeType.AttackSpeed, new StatModifier(30, 1f));
         tempSkill.AddEffect(tempEffect);    

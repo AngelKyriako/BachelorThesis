@@ -33,13 +33,13 @@ public class PlayerInputManager: SingletonPhotonMono<PlayerInputManager> {
             OnCharacterMovementInput(Camera.main.ScreenPointToRay(Input.mousePosition));
         }
         //Skill Input
-        if(Input.GetKey(KeyCode.Q))
+        if (Input.GetKeyUp(KeyCode.Q) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlots.Q))
             OnSkillSelectInput(CharacterSkillSlots.Q);
-        else if (Input.GetKey(KeyCode.W))
+        else if (Input.GetKeyUp(KeyCode.W) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlots.W))
             OnSkillSelectInput(CharacterSkillSlots.W);
-        else if (Input.GetKey(KeyCode.E))
+        else if (Input.GetKeyUp(KeyCode.E) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlots.E))
             OnSkillSelectInput(CharacterSkillSlots.E);
-        else if (Input.GetKey(KeyCode.R))
+        else if (Input.GetKeyUp(KeyCode.R) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlots.R))
             OnSkillSelectInput(CharacterSkillSlots.R);
 	}    
 }

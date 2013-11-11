@@ -45,10 +45,8 @@ public class CharacterWindow: MonoBehaviour {
     private float repeatButtonCooldown = 0.1f, lastClickTime;
     //skills
     private Vector2 availableSkillScrollPos;
-    private int skillButtonSize = 60;
     //misc
     private bool isVisible;
-    private float lastToggleTime;
     
 #endregion
 
@@ -111,17 +109,10 @@ public class CharacterWindow: MonoBehaviour {
         availableSkillScrollPos = Vector2.zero;
         //misc
         isVisible = false;
-        lastToggleTime = 0;
     }
 
     void Update() {
-        if(!IsInvoking("GetInput")){
-            InvokeRepeating("GetInput", 0, Utilities.Instance.TOGGLE_KEY_DELAY);
-        }
-    }
-
-    private void GetInput() {
-        if (Input.GetKey(KeyCode.C) && Time.time - lastToggleTime > Utilities.Instance.TOGGLE_KEY_DELAY)
+        if (Input.GetKeyUp(KeyCode.C))
             isVisible = !isVisible;
     }
 
@@ -171,7 +162,7 @@ public class CharacterWindow: MonoBehaviour {
     #region Statistics Panel
     private void Stats() {
         GUILayout.BeginArea(statsRect);
-        for (int i = 0; i < playerCharModel.GetStatsLength(); ++i) {
+        for (int i = 0; i < playerCharModel.StatsLength; ++i) {
             GUILayout.BeginHorizontal();
             GUILayout.Label(playerCharModel.GetStat(i).Name + ": ", statLabel);
             GUILayout.Label(playerCharModel.GetStat(i).FinalValue.ToString(), valueLabel);
@@ -186,7 +177,7 @@ public class CharacterWindow: MonoBehaviour {
             }
             if (GUILayout.RepeatButton("+", GUILayout.Width(statModifyButtonSize), GUILayout.Height(statModifyButtonSize))
                && (Time.time - lastClickTime > repeatButtonCooldown)
-               && (playerCharModel.TrainingPoints > 0)){
+               && (playerCharModel.TrainingPoints > 0)) {
                 ++playerCharModel.GetStat(i).BaseValue;
                 --playerCharModel.TrainingPoints;
                 playerCharModel.UpdateAttributes();
@@ -199,13 +190,13 @@ public class CharacterWindow: MonoBehaviour {
     }
     private void Attributes() {
         GUILayout.BeginArea(attributesRect);
-        for (int i = 0; i < playerCharModel.GetVitalsLength(); ++i) {
+        for (int i = 0; i < playerCharModel.VitalsLength; ++i) {
             GUILayout.BeginHorizontal();
             GUILayout.Label(playerCharModel.GetVital(i).Name + ": ", AttributeLabel);
             GUILayout.Label(playerCharModel.GetVital(i).FinalValue.ToString(), valueLabel);
             GUILayout.EndHorizontal();
         }
-        for (int i = 0; i < playerCharModel.GetAttributesLength(); ++i) {
+        for (int i = 0; i < playerCharModel.AttributesLength; ++i) {
             GUILayout.BeginHorizontal();
             GUILayout.Label(playerCharModel.GetAttribute(i).Name + ": ", AttributeLabel);
             GUILayout.Label(playerCharModel.GetAttribute(i).FinalValue.ToString(), valueLabel);
@@ -226,7 +217,7 @@ public class CharacterWindow: MonoBehaviour {
         availableSkillScrollPos = GUILayout.BeginScrollView(availableSkillScrollPos);
         GUILayout.BeginHorizontal();
         foreach (BaseSkill skill in SkillBook.Instance.AvailableSkills) {
-            if (GUILayout.Button(skill.Title, GUILayout.Width(skillButtonSize), GUILayout.Height(skillButtonSize)))
+            if (GUILayout.Button(skill.Title, GUILayout.Width(60), GUILayout.Height(60)))
                 lastSelectedSkill = skill;
 
             if (++count % 4 == 0) {
@@ -243,7 +234,7 @@ public class CharacterWindow: MonoBehaviour {
         GUILayout.BeginHorizontal();
         for (int i = 0; i < playerCharModel.SkillCount; ++i ) {
             if (playerCharModel.GetSkill(i) != null){
-                if (GUILayout.Button(playerCharModel.GetSkill(i).Title, GUILayout.Width(skillButtonSize), GUILayout.Height(skillButtonSize))
+                if (GUILayout.Button(playerCharModel.GetSkill(i).Title, GUILayout.Width(60), GUILayout.Height(60))
                     && lastSelectedSkill != null) {
                     SkillBook.Instance.AvailableSkills.Add(playerCharModel.GetSkill(i));
                     playerCharModel.SetSkill(i, lastSelectedSkill);
@@ -252,7 +243,7 @@ public class CharacterWindow: MonoBehaviour {
                 }
             }
             else
-                if (GUILayout.Button("Empty", GUILayout.Width(skillButtonSize), GUILayout.Height(skillButtonSize))
+                if (GUILayout.Button("Empty", GUILayout.Width(60), GUILayout.Height(60))
                     && lastSelectedSkill != null) {
                     playerCharModel.SetSkill(i, lastSelectedSkill);
                     SkillBook.Instance.AvailableSkills.Remove(lastSelectedSkill);
@@ -267,9 +258,4 @@ public class CharacterWindow: MonoBehaviour {
         GUILayout.EndArea();
     }
 #endregion
-
-    public bool IsVisible {
-        get { return isVisible; }
-        set { isVisible = value; }
-    }
 }

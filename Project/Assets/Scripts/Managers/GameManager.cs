@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public struct PlayerCharacterPair {
     public PhotonPlayer Player;
     public GameObject Character;
+
     public PlayerCharacterPair(PhotonPlayer _player, GameObject _character) {
         Player = _player;
         Character = _character;
@@ -12,8 +13,6 @@ public struct PlayerCharacterPair {
 }
 
 public class GameManager: SingletonPhotonMono<GameManager> {
-
-    private const string pathToPlayerCharPrefab = "Characters/BabyDragon";
 
     private GameObject gui;
     private PlayerCharacterPair me;
@@ -32,7 +31,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
             spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
         else
             spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
-        PhotonNetwork.Instantiate(pathToPlayerCharPrefab, spawnPoint, Quaternion.identity, 0);
+        PhotonNetwork.Instantiate(ResourcesPathManager.Instance.BabyDragonPath, spawnPoint, Quaternion.identity, 0);
         GameManager.Instance.InitGUIScripts();
     }
 
@@ -42,6 +41,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public void InitGUIScripts() {
         gui.GetComponent<ChatWindow>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
+        gui.GetComponent<CharacterInfoPanel>().enabled = true;
     }
     
     private void LogPlayers() {

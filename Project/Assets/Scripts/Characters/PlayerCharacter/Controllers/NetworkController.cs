@@ -97,6 +97,8 @@ public class NetworkController: Photon.MonoBehaviour {
     private void SyncAttributesBasedOnStats() {
         model.UpdateAttributes();
     }
+    //Skills
+    
 #endregion
 
     #region Accessors
