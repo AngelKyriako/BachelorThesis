@@ -28,8 +28,12 @@ public class BaseSpell: BaseSkill, IBaseSpell {
 #endregion
 
     public override void Target(BaseCharacterModel _caster) {
-        if (targetCursor)
-            GameObject.Instantiate(targetCursor);
+        GameObject obj;
+        if (targetCursor) {
+            obj = (GameObject)GameObject.Instantiate(targetCursor);
+            obj.GetComponent<TargetCursor>().SkillCasterPair = new Pair<BaseSkill, BaseCharacterModel>(this, _caster);
+            obj.GetComponent<TargetCursor>().enabled = true;
+        }
         else
             Cast(_caster);
     }
@@ -47,7 +51,7 @@ public class BaseSpell: BaseSkill, IBaseSpell {
             obj.GetComponent<BaseProjectile>().enabled = true;
         }
         else
-            Trigger(_caster, _caster);
+            Trigger(_caster, null);
     }
 
     //for AoE skills we need a certain behavior of the triggerEffect

@@ -16,9 +16,11 @@ public class SkillBook{
 
         availableSkills = new List<BaseSkill>();
         tempSkill = new BaseSpell("skill 1", "skill 1 description", null, 2f, null, null, null, null);//(GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath));
-            tempEffect = new BaseEffect("BasicDamage", "BasicDamage description", null, true, 5f);
-            tempEffect.AddModifiedVital((int)VitalType.Health, new VitalModifier(new StatModifier(0, -0.2f), new StatModifier(0, -0.5f)));
-            tempEffect.AddModifiedVital((int)VitalType.Mana, new VitalModifier(new StatModifier(0, -0.2f), new StatModifier(0, -0.5f)));
+            //tempEffect = new BaseEffect("BasicDamage", "BasicDamage description", null, true, 5f);
+            //tempEffect.AddModifiedVital((int)VitalType.HitPoints, new VitalModifier(new StatModifier(0, -0.2f), new StatModifier(0, -0.5f)));
+            //tempEffect.AddModifiedVital((int)VitalType.Mana, new VitalModifier(new StatModifier(0, -0.2f), new StatModifier(0, -0.5f)));
+            tempEffect = new OverTimeEffect("over time Bitch", "", null, true, 10f, 10f, 2f);
+            tempEffect.AddModifiedVital((int)VitalType.HitPoints, new VitalModifier(new StatModifier(-5, 0), new StatModifier(-10, 0)));
         tempSkill.AddEffect(tempEffect);
         availableSkills.Add(tempSkill);
 

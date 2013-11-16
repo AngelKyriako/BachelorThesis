@@ -1,26 +1,16 @@
 ﻿public class BaseStat {
 
-    private const int MIN_BASE_VALUE = 10,
-                      MAX_BASE_VALUE = 100;
-
     private string name, description;
-    private int baseValue, buffValue;
+    private float baseValue, buffValue;
 
-    public BaseStat() {
-        name = string.Empty;
-        description = string.Empty;
-        baseValue = MIN_BASE_VALUE;
-        buffValue = 0;
-    }
-
-    public BaseStat(string _name, string _desc, int _val) {
+    public BaseStat(string _name, string _desc, float _val) {
         name = _name;
         description = _desc;
         baseValue = _val;
         buffValue = 0;
     }
 
-    public virtual int FinalValue {
+    public virtual float FinalValue {
         get { return baseValue + buffValue; }
     }
 
@@ -32,11 +22,11 @@
         get { return description; }
         set { description = value; }
     }
-    public int BaseValue {
+    public float BaseValue {
         get { return baseValue; }
         set { baseValue = value; }
     }
-    public int BuffValue {
+    public float BuffValue {
         get { return buffValue; }
         set { buffValue = value; }
     }

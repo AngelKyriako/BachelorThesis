@@ -1,27 +1,28 @@
 ﻿public enum VitalType {
-    Health,
+    HitPoints,
     Mana
 }
 
 public class Vital: Attribute {
 
-    private int currentValue;
+    private float currentValue;
 
-    public Vital(): base() {
-        currentValue = base.FinalValue;
-    }
-    public Vital(string _name, string _desc, int _val): base(_name, _desc, _val) {
+    public Vital(string _name, string _desc, float _val): base(_name, _desc, _val) {
         currentValue = base.FinalValue;
     }
 
     public override void UpdateAttribute() {
-        int previousFinalValue = FinalValue;
+        float previousFinalValue = FinalValue;
         base.UpdateAttribute();
         currentValue += FinalValue - previousFinalValue;
     }
 
     public int CurrentValue {
-        get { return currentValue; }
-        set { currentValue = (value < 0)?0:((value > base.FinalValue)?base.FinalValue:value); }
+        get { return (int)currentValue; }
+        set { currentValue = (int)((value < 0)?0:((value > base.FinalValue)?base.FinalValue:value)); }
+    }
+
+    public override float FinalValue {
+        get { return (int)base.FinalValue; }
     }
 }

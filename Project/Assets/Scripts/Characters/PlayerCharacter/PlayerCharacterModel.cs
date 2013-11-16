@@ -10,7 +10,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
     #region constants
     public const uint STARTING_EXP_TO_LEVEL = 50;
     public const float STARTING_EXP_MODIFIER = 1.1f;
-    public readonly uint MAX_TRAINING_POINTS = 10;
+    public readonly uint MAX_TRAINING_POINTS = 20;
 #endregion
 
     #region attributes
@@ -58,13 +58,6 @@ public class PlayerCharacterModel: BaseCharacterModel {
             skills[(int)_slot].Target(this);
     }
 
-    public void LogAttributes() {
-        for (int i = 0; i < VitalsLength; ++i)
-            Utilities.Instance.LogMessage(GetVital(i).Name + ": (" + GetVital(i).CurrentValue + "/" + GetVital(i).FinalValue + ")");
-        for (int i = 0; i < AttributesLength; ++i)
-            Utilities.Instance.LogMessage(GetAttribute(i).Name + ": " + GetAttribute(i).FinalValue);
-    }
-
     #region Accessors
     public uint CurrentExp {
         get { return currentExp; }
@@ -74,6 +67,10 @@ public class PlayerCharacterModel: BaseCharacterModel {
         get { return expToLevel; }
         set { expToLevel = value; }
     }
+    public override uint ExpWorth {
+        get { return (uint)(expToLevel * 0.33); }
+    }
+
     public uint TrainingPoints {
         get { return trainingPoints; }
         set { trainingPoints = (value < 0) ? 0 : ((value > MAX_TRAINING_POINTS)?MAX_TRAINING_POINTS:value); }
@@ -89,4 +86,11 @@ public class PlayerCharacterModel: BaseCharacterModel {
         get { return skills.Length; }
     }
 #endregion
+
+    public void LogAttributes() {
+        for (int i = 0; i < VitalsLength; ++i)
+            Utilities.Instance.LogMessage(GetVital(i).Name + ": (" + GetVital(i).CurrentValue + "/" + GetVital(i).FinalValue + ")");
+        for (int i = 0; i < AttributesLength; ++i)
+            Utilities.Instance.LogMessage(GetAttribute(i).Name + ": " + GetAttribute(i).FinalValue);
+    }
 }

@@ -3,10 +3,11 @@ using System.Collections;
 
 public class MovementController: MonoBehaviour {
 
-    private const float MAX_MOVEMENT_SPEED = 10;
+    private const float BASE_MOVEMENT_SPEED = 10;
 
     public Animator animator;
 
+    private PlayerCharacterModel model;
     private NetworkController networkController;
     private float currentSpeed;
     private Vector3 destination;
@@ -16,6 +17,7 @@ public class MovementController: MonoBehaviour {
     }
 
     void Start() {
+        model = gameObject.GetComponent<PlayerCharacterModel>();
         networkController = gameObject.GetComponent<NetworkController>();
         animator.enabled = false;
         destination = transform.position;
@@ -27,7 +29,7 @@ public class MovementController: MonoBehaviour {
     void Update() {
         //position based on currentSpeed
         if (Vector3.Distance(destination, transform.position) > 0.5f && animator.enabled)
-            transform.position = Vector3.MoveTowards(transform.position, destination, currentSpeed = MAX_MOVEMENT_SPEED * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, destination, currentSpeed * Time.deltaTime);
         else
             currentSpeed = 0f;
         animator.SetFloat("movementSpeed", currentSpeed);
@@ -38,29 +40,21 @@ public class MovementController: MonoBehaviour {
     }
 
     private void OnMovementInput(Ray ray) {
-        ReceiveLocalInput(ray);
-        networkController.PhotonView.RPC("SyncInputForCharacterMovement", PhotonTargets.Others, destination, transform.rotation);
-    }
-
-    private void ReceiveLocalInput(Ray ray) {
         animator.enabled = true;
         float hitdistance = 0.0f;
 
         if (new Plane(Vector3.up, transform.position).Raycast(ray, out hitdistance)) {
             Vector3 targetPoint = ray.GetPoint(hitdistance);
             destination = ray.GetPoint(hitdistance);
+            //calc current speed on click
+            UpdateCurrentSpeed();
             //rotate on click
             transform.rotation = Quaternion.LookRotation(targetPoint - transform.position);
         }
+        //networkController.PhotonView.RPC("SyncInputForCharacterMovement", PhotonTargets.Others, destination, transform.rotation);
     }
 
-    public float CurrentSpeed {
-        get { return currentSpeed; }
-        set { currentSpeed = value; }
-    }
-
-    public Vector3 Destination {
-        get { return destination; }
-        set { destination = value; }
+    public void UpdateCurrentSpeed() {
+        currentSpeed = BASE_MOVEMENT_SPEED * model.GetAttribute((int)AttributeType.MovementSpeed).FinalValue;
     }
 }

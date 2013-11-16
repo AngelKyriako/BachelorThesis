@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 
 public enum AttributeType {
-    Attack,
+    Damage,
+    Healing,
     Defence,
+    HitPointsRegen,
+    ManaRegen,
     MovementSpeed,
     AttackSpeed,
-    Luck,
-    Regeneration
+    Critical,
+    Evasion,    
+    VisionRadius
 }
 
 public struct ModifyingStat {
@@ -22,13 +26,10 @@ public struct ModifyingStat {
 public class Attribute: BaseStat {
 
     private List<ModifyingStat> modifiers;
-    private int statBonusValue;
+    private float statBonusValue;
 
-    public Attribute(): base() {
-        modifiers = new List<ModifyingStat>();
-        statBonusValue = 0;
-    }
-    public Attribute(string _name, string _desc, int _val): base(_name, _desc, _val) {
+    public Attribute(string _name, string _desc, float _val)
+        : base(_name, _desc, _val) {
         modifiers = new List<ModifyingStat>();
         statBonusValue = 0;
     }
@@ -40,10 +41,10 @@ public class Attribute: BaseStat {
     public virtual void UpdateAttribute() {
         statBonusValue = 0;
         foreach (ModifyingStat mod in modifiers)
-            statBonusValue += (int)(mod.stat.FinalValue * mod.ratio);
+            statBonusValue += mod.stat.FinalValue * mod.ratio;
     }
 
-    public override int FinalValue {
+    public override float FinalValue {
         get { return base.FinalValue + statBonusValue; }
     }
 }

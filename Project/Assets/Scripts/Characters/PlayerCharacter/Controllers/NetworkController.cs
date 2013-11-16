@@ -9,7 +9,8 @@ public class NetworkController: Photon.MonoBehaviour {
     private CameraController cameraController;
     private MovementController movementController;
     private VisionController visionController;
-
+    // interpolation shit
+    private float syncTime = 0f, syncDelay = 0f, lastSynchronizationTime = 0f;
     private Vector3 correctPlayerPosition;
     private Quaternion correctPlayerRotation;
     private float currentSpeed;
@@ -18,10 +19,10 @@ public class NetworkController: Photon.MonoBehaviour {
     void Awake() {
         model = gameObject.GetComponent<PlayerCharacterModel>();
         cameraController = gameObject.GetComponent<CameraController>();
-        cameraController.enabled = photonView.isMine;
         movementController = gameObject.GetComponent<MovementController>();
-        movementController.enabled = true;
         visionController = gameObject.GetComponent<VisionController>();
+        cameraController.enabled = photonView.isMine;
+        movementController.enabled = photonView.isMine;        
         visionController.enabled = photonView.isMine;//@TODO: for team play this should be only for enemies
 
         gameObject.transform.parent = GameObject.Find("Characters/BabyDragons").transform;
@@ -44,38 +45,39 @@ public class NetworkController: Photon.MonoBehaviour {
         SyncRemoteCharacter();
     }
 
-    //void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
-    //    if (stream.isWriting) { // send the local character's data
-    //        stream.SendNext(transform.position);
-    //        stream.SendNext(transform.rotation);
-    //        stream.SendNext(rigidbody.velocity);
-    //        stream.SendNext(movementController.CurrentSpeed);
-    //    }
-    //    else { // receive data from remote characters
-    //        correctPlayerPosition = (Vector3)stream.ReceiveNext();
-    //        correctPlayerRotation = (Quaternion)stream.ReceiveNext();
-    //        rigidbody.velocity = (Vector3)stream.ReceiveNext();
-    //        currentSpeed = (float)stream.ReceiveNext();
-    //    }
-    //}
+    void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+        if (stream.isWriting) { // send the local character's data
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+            stream.SendNext(rigidbody.velocity);
+        }
+        else { // receive data from remote characters
+            correctPlayerPosition = (Vector3)stream.ReceiveNext();
+            correctPlayerRotation = (Quaternion)stream.ReceiveNext();
+            rigidbody.velocity = (Vector3)stream.ReceiveNext();
+            currentSpeed = (float)stream.ReceiveNext();
+
+            syncTime = 0f;
+            syncDelay = Time.time - lastSynchronizationTime;
+            lastSynchronizationTime = Time.time;
+        }
+    }
 
     private void SyncRemoteCharacter(){
-        //if (!photonView.isMine) {
-        //    //Check if able to smooth (last argument probably should be parameterized based on:
-        //    //                                  Vector3.Distance(transform.position, correctPlayerPosition);)
-        //    transform.position = Vector3.Lerp(transform.position, correctPlayerPosition, 0);
-        //    transform.rotation = Quaternion.Lerp(transform.rotation, correctPlayerRotation, 0);
-        //    movementController.CurrentSpeed = currentSpeed;
-        //}
+        if (!photonView.isMine) {
+            syncTime += Time.deltaTime;
+            //Check if able to smooth (last argument probably should be parameterized based on:
+            //                                  Vector3.Distance(transform.position, correctPlayerPosition);)
+            transform.position = Vector3.Lerp(transform.position, correctPlayerPosition, 0);
+            transform.rotation = Quaternion.Lerp(transform.rotation, correctPlayerRotation, 0);
+
+            Utilities.Instance.LogMessage("syncDelay: " + syncDelay);
+            Utilities.Instance.LogMessage("syncTime: " + syncTime);
+            Utilities.Instance.LogMessage("syncTime / syncDelay: " + syncTime / syncDelay);
+        }
     }
 
     #region RPCs
-    //Movement
-    [RPC]
-    private void SyncInputForCharacterMovement(Vector3 _dest, Quaternion _rotation) {
-        movementController.Destination = _dest;
-        transform.rotation = _rotation;
-    }
     //Stats
     [RPC]
     private void SyncCharacterStat(int _index, int _baseValue, int _buffValue) {
@@ -96,9 +98,7 @@ public class NetworkController: Photon.MonoBehaviour {
     [RPC]
     private void SyncAttributesBasedOnStats() {
         model.UpdateAttributes();
-    }
-    //Skills
-    
+    }    
 #endregion
 
     #region Accessors

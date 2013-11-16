@@ -40,5 +40,9 @@ public class OverTimeEffect: BaseEffect {
     public float Frequency {
         get { return frequency; }
     }
+
+    public virtual bool IsOverTimeEffect {
+        get { return true; }
+    }
 #endregion
 }

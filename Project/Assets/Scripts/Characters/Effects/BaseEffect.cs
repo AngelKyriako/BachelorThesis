@@ -91,14 +91,13 @@ public class BaseEffect{
     public void Activate(BaseCharacterModel caster, BaseCharacterModel receiver) {
         int tempValue = 0;
         foreach (KeyValuePair<int, StatModifier> entry in modifiedStats) {
-            //@TODO dispatch depending on the stat to include caster and receiver stats
             tempValue = entry.Value.raw + (int)(entry.Value.basePercent * receiver.GetStat(entry.Key).FinalValue);
             statActivationBuffValues[entry.Key] += tempValue;
             receiver.GetStat(entry.Key).BuffValue += tempValue;
         }
         foreach (KeyValuePair<int, StatModifier> entry in modifiedAttributes) {
             //@TODO dispatch depending on the stat to include caster and receiver stats
-            tempValue = entry.Value.raw + (int)(entry.Value.basePercent * receiver.GetStat(entry.Key).FinalValue);
+            tempValue = entry.Value.raw + (int)(entry.Value.basePercent * receiver.GetAttribute(entry.Key).FinalValue);
             attributeActivationBuffValues[entry.Key] += tempValue;
             receiver.GetAttribute(entry.Key).BuffValue += tempValue;
         }
@@ -183,9 +182,15 @@ public class BaseEffect{
         get { return countdownTimer; }
         set { countdownTimer = value; }
     }
+
     public bool InProgress {
         get { return countdownTimer > 0; }
     }
+
+    public virtual bool IsOverTimeEffect {
+        get { return false; }
+    }
+
 #endregion
 
 }
