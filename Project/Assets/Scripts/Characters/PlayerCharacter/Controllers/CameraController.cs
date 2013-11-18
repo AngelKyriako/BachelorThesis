@@ -8,7 +8,8 @@ using System.Collections;
 /// </summary>
 public class CameraController: MonoBehaviour {
 
-    private Vector3 originPosition, originRotation;
+    private Vector3 originPosition;
+    //private Vector3 originRotation;
     private bool lockedOnTarget;
 
     public Transform target;
@@ -129,28 +130,28 @@ public class CameraController: MonoBehaviour {
             Camera.main.transform.position = Vector3.MoveTowards(originPosition, destination, Time.deltaTime * minMovementSpeed);
     }
 
-    ////////////////////////////////// Rotation  //////////////////////////////////
-    private Vector3 ReceiveRotationInput() {
-        Vector3 rotation = new Vector3(0, 0, 0);
+    //////////////////////////////////// Rotation  //////////////////////////////////
+    //private Vector3 ReceiveRotationInput() {
+    //    Vector3 rotation = new Vector3(0, 0, 0);
 
-        if ((Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && Input.GetMouseButton(1)) {
-            rotation.x = -Input.GetAxis("Mouse Y") * rotateInputWeight;
-            rotation.y = Input.GetAxis("Mouse X") * rotateInputWeight;
-        }
-        return rotation;
-    }
+    //    if ((Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && Input.GetMouseButton(1)) {
+    //        rotation.x = -Input.GetAxis("Mouse Y") * rotateInputWeight;
+    //        rotation.y = Input.GetAxis("Mouse X") * rotateInputWeight;
+    //    }
+    //    return rotation;
+    //}
 
-    private Vector3 GetRotationDestination(Vector3 rotation) {
-        Vector3 origin = originRotation;
-        return origin += rotation;
-    }
+    //private Vector3 GetRotationDestination(Vector3 rotation) {
+    //    Vector3 origin = originRotation;
+    //    return origin += rotation;
+    //}
 
-    private Vector3 ValidateRotationDestination(Vector3 destination) {
-        return destination;
-    }
+    //private Vector3 ValidateRotationDestination(Vector3 destination) {
+    //    return destination;
+    //}
     
-    private void ApplyRotation(Vector3 destination) {
-        if (destination != originRotation)
-            Camera.main.transform.eulerAngles = Vector3.MoveTowards(originRotation, destination, Time.deltaTime * rotateSpeed);
-    }
+    //private void ApplyRotation(Vector3 destination) {
+    //    if (destination != originRotation)
+    //        Camera.main.transform.eulerAngles = Vector3.MoveTowards(originRotation, destination, Time.deltaTime * rotateSpeed);
+    //}
 }

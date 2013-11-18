@@ -41,7 +41,7 @@ public class OverTimeEffect: BaseEffect {
         get { return frequency; }
     }
 
-    public virtual bool IsOverTimeEffect {
+    public override bool IsOverTimeEffect {
         get { return true; }
     }
 #endregion
