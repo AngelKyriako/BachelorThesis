@@ -5,25 +5,17 @@ public class OverTimeEffect: BaseEffect {
     private float overTimeCountdownTimer;
     private float frequency, lastActivationTime;
 
-    #region constructors
-    public OverTimeEffect()
-        : base() {
+    public override void Awake(){
+        base.Awake();
         overTimeCountdownTimer = 0f;
         frequency = 0f;
     }
 
-    public OverTimeEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration, float _overTimeDuration, float _freq)
-        : base(_title, _descr, _icon, _isPassive, _duration) {
-        overTimeCountdownTimer = 0f;
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration, float _overTimeDuration, float _freq) {
+        base.SetUpEffect(_title, _descr, _icon, _isPassive, _duration);        
         overTimeCountdownTimer = _overTimeDuration;
+        frequency = _freq;
     }
-
-    public OverTimeEffect(OverTimeEffect _effect)
-        : base(_effect) {
-        overTimeCountdownTimer = 0f;
-        overTimeCountdownTimer = _effect.overTimeCountdownTimer;
-    }
-#endregion
 
     #region Accessors
     public float OverTimeCountdownTimer {

@@ -66,9 +66,9 @@ public class BaseSpell: BaseSkill, IBaseSpell {
     public override void ActivateEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         for (int i = 0; i < EffectsCount; ++i)
             if (!GetEffect(i).IsPassive)
-                _receiver.AddEffectAttached(new AttachedEffect(new BaseEffect(GetEffect(i)), _caster));
+                ;//_receiver.AddEffectAttached(new AttachedEffect(new BaseEffect(GetEffect(i)), _caster));
             else
-                _caster.AddEffectAttached(new AttachedEffect(new BaseEffect(GetEffect(i)), _caster));
+                ;//_caster.AddEffectAttached(new AttachedEffect(new BaseEffect(GetEffect(i)), _caster));
     }
     
     public virtual void Update(){
