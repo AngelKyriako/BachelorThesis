@@ -16,29 +16,27 @@ public class SkillBook{
 
         availableSkills = new List<BaseSkill>();
         tempSkill = new BaseSpell("skill 1", "skill 1 description", null, 2f, null, null, null, null);//(GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath));
-            //tempEffect = new BaseEffect("BasicDamage", "BasicDamage description", null, true, 5f);
-            //tempEffect.AddModifiedVital((int)VitalType.HitPoints, new VitalModifier(new StatModifier(0, -0.2f), new StatModifier(0, -0.5f)));
-            //tempEffect.AddModifiedVital((int)VitalType.Mana, new VitalModifier(new StatModifier(0, -0.2f), new StatModifier(0, -0.5f)));
-            tempEffect = new OverTimeEffect("over time Bitch", "", null, true, 10f, 10f, 2f);
-            tempEffect.AddModifiedVital((int)VitalType.HitPoints, new VitalModifier(new StatModifier(-5, 0), new StatModifier(-10, 0)));
+            tempEffect = new BaseEffect("BasicDamage", "BasicDamage description", null, true, 5f);
+            tempEffect.AddModifiedVital((int)VitalType.Health, new VitalModifier(new EffectModifier(0, -0.2f), new EffectModifier(0, -0.5f)));
+            tempEffect.AddModifiedVital((int)VitalType.Mana, new VitalModifier(new EffectModifier(0, -0.2f), new EffectModifier(0, -0.5f)));
         tempSkill.AddEffect(tempEffect);
         availableSkills.Add(tempSkill);
 
         tempSkill = new BaseSpell("skill 2", "skill 2 description", null, 2f, null, null, null, (GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath));
             tempEffect = new BaseEffect("effect1", "effect1 description", null, true, 2f);
-            tempEffect.AddModifiedAttribute((int)AttributeType.Defence, new StatModifier(20, 0.5f));
+            tempEffect.AddModifiedAttribute((int)AttributeType.Defence, new EffectModifier(20, 0.5f));
         tempSkill.AddEffect(tempEffect);    
         availableSkills.Add(tempSkill);
 
         tempSkill = new BaseSpell("skill 3", "skill 3 description", null, 2f, null, null, null, (GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath));
             tempEffect = new BaseEffect("effect1", "effect1 description", null, true, 2f);
-            tempEffect.AddModifiedAttribute((int)AttributeType.AttackSpeed, new StatModifier(30, 1f));
+            tempEffect.AddModifiedAttribute((int)AttributeType.AttackSpeed, new EffectModifier(30, 1f));
         tempSkill.AddEffect(tempEffect);    
         availableSkills.Add(tempSkill);
 
         tempSkill = new BaseSpell("skill 4", "skill 4 description", null, 2f, null, null, null, (GameObject)Resources.Load("MyPrefab"));
             tempEffect = new BaseEffect("effect1", "effect1 description", null, true, 2f);
-            tempEffect.AddModifiedAttribute((int)AttributeType.MovementSpeed, new StatModifier(40, 1f));
+            tempEffect.AddModifiedAttribute((int)AttributeType.MovementSpeed, new EffectModifier(40, 1f));
         tempSkill.AddEffect(tempEffect);
         availableSkills.Add(tempSkill);
 

@@ -25,33 +25,37 @@ public class BaseCharacterModel: MonoBehaviour  {
                                                                         "Your ability of finding ways to use skills more often",
                                                                         "Capability of playing on a leading role" };
 
-    private static readonly float[] ATTRIBUTE_BASE_VALUES = new float[10] { 10, 8, 7, 1, 1, 1, 0, 0, 0, 1 };
-    private static readonly string[] ATTRIBUTE_DESCRIPTIONS = new string[10]{ "Boosts HP loss on attack attack effect",
+    private static readonly float[] ATTRIBUTE_BASE_VALUES = new float[12] { 10, 8, 7, 6, 1, 1, 1, 0, 0, 0, 1, 0};
+    private static readonly string[] ATTRIBUTE_DESCRIPTIONS = new string[12]{ "Boosts HP loss on attack attack effect",
                                                                               "Boosts HP gain on heal effect",
                                                                               "Reduces HP loss on attack effect",
+                                                                              "Reduces mana loss on attack effect",
                                                                               "Hit points gained per second",
                                                                               "Mana points gained per second",
                                                                               "Movement speed percent added to base speed",
                                                                               "Skill cooldowns percent subtracted for cooldown time",
                                                                               "Percent chance of dealing double damage",
                                                                               "Percent chance evading an attack",
-                                                                              "Percent of radius added to base radius"};
+                                                                              "Percent of radius added to base radius",
+                                                                              "Boosts supportive spells"};
 
     private static readonly int[] VITAL_BASE_VALUES =     new int[2]  { 200, 100 };
     private static readonly string[] VITAL_DESCRIPTIONS = new string[2]{ "Your life",
                                                                          "Spent when casting skills" };
     
                                                                         //  str     agi     sta     int     cha                               
-    private static readonly float[,] ATTRIBUTE_RATIOS = new float[10, 5]{ { 11.0f,  0.0f,   0.0f,   0.0f,   0.0f  },//damage (boosts hp loss on atk)
-                                                                          { 0.0f,   0.0f,   0.0f,   0.0f,   7.0f  },//healing (hp boost on heal)
+    private static readonly float[,] ATTRIBUTE_RATIOS = new float[12, 5]{ { 11.0f,  0.0f,   0.0f,   0.0f,   0.0f  },//damage (boosts hp loss on atk)
+                                                                          { 0.0f,   0.0f,   0.0f,   0.0f,   7.0f  },//magic damage (hp boost on heal)
                                                                           { 3.0f,   0.0f,   8.0f,   0.0f,   0.0f  },//defence (reduces hp loss on atk)
+                                                                          { 0.0f,   0.0f,   6.0f,   5.0f,   0.0f  },//MagicDefence (reduces mana loss on atk)
                                                                           { 0.01f,  0.0f,   0.04f,  0.0f,   0.005f},//HeathRegen (hp gained per second)
                                                                           { 0.0f,   0.0f,   0.08f,  0.05f,  0.02f },//ManaRegen (mana gained per second)                                                                            
                                                                           { 0.0f,   0.025f, 0.0f,   0.0f,   0.0f  },//moveSpeed (movement speed percent added to basic movement)
                                                                           { 0.0f,   0.02f,  0.0f,   0.0f,   0.0f  },//attackSpeed (skill cooldowns percent subtracted for cooldown time)
                                                                           { 0.0f,   0.0f,   0.0f,   0.012f, 0.0f  },//critical (percent chance of dealing double damage)
                                                                           { 0.0f,   0.012f, 0.0f,   0.0f,   0.003f},//evasion (percent chance evading an attack)
-                                                                          { 0.0f,   0.0f,   0.0f,   0.01f,  0.06f } //radius (percent of radius added to base radius)
+                                                                          { 0.0f,   0.0f,   0.0f,   0.01f,  0.06f },//radius (percent of radius added to base radius)
+                                                                          { 0.0f,   0.0f,   0.0f,   0.0f,   1.0f }  //leadership (boosts supportive spells)
                                                                         },
                                      VITAL_RATIOS = new float[2, 5]     { { 5.0f,   0.0f,   20.0f,  0.0f,   0.0f  },//health (hit points)
                                                                           { 0.0f,   0.0f,   5.0f,   15.0f,  0.0f  } //mana (mana points)

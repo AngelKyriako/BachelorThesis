@@ -1,5 +1,5 @@
 ﻿public enum VitalType {
-    HitPoints,
+    Health,
     Mana
 }
 

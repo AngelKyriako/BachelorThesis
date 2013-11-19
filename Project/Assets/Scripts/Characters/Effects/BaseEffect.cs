@@ -2,23 +2,13 @@
 using System;
 using System.Collections.Generic;
 
-public struct StatModifier {
-    public int raw;
-    public float basePercent;
+public struct EffectModifier {
+    public int Raw;
+    public float Percent;
 
-    public StatModifier(int _raw, float _percent) {
-        raw = _raw;
-        basePercent = _percent;
-    }
-}
-
-public struct VitalModifier {
-    public StatModifier max;
-    public StatModifier current;
-
-    public VitalModifier(StatModifier _max, StatModifier _current) {
-        max = _max;
-        current = _current;
+    public EffectModifier(int _raw, float _percent) {
+        Raw = _raw;
+        Percent = _percent;
     }
 }
 
@@ -30,7 +20,7 @@ public class BaseEffect{
     private bool isActivated, isPassive;
     private float countdownTimer;
     // modifiers of the value of the stat
-    private Dictionary<int, StatModifier> modifiedStats, modifiedAttributes;
+    private Dictionary<int, EffectModifier> modifiedStats, modifiedAttributes;
     private Dictionary<int, VitalModifier> modifiedVitals;
     // to be removed during deactivation 
     private Dictionary<int, int> statActivationBuffValues,
@@ -39,22 +29,6 @@ public class BaseEffect{
 #endregion
 
     #region constructors
-    public BaseEffect(){
-        title = string.Empty;
-        description = string.Empty;
-        icon = null;
-        isActivated = false;
-        isPassive = false;
-        countdownTimer = 0f;
-        modifiedStats = new Dictionary<int, StatModifier>();
-        modifiedAttributes = new Dictionary<int, StatModifier>();
-        modifiedVitals = new Dictionary<int, VitalModifier>();
-        statActivationBuffValues = new Dictionary<int, int>();
-        attributeActivationBuffValues = new Dictionary<int, int>();
-        vitalActivationBuffValues = new Dictionary<int, int>();
-        RefreshActivationBuffValues();
-    }
-
     public BaseEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration) {
         title = _title;
         description = _descr;
@@ -62,8 +36,8 @@ public class BaseEffect{
         isActivated = false;
         isPassive = _isPassive;
         countdownTimer = _duration;
-        modifiedStats = new Dictionary<int, StatModifier>();
-        modifiedAttributes = new Dictionary<int, StatModifier>();
+        modifiedStats = new Dictionary<int, EffectModifier>();
+        modifiedAttributes = new Dictionary<int, EffectModifier>();
         modifiedVitals = new Dictionary<int, VitalModifier>();
         statActivationBuffValues = new Dictionary<int, int>();
         attributeActivationBuffValues = new Dictionary<int, int>();
@@ -90,34 +64,32 @@ public class BaseEffect{
 
     public void Activate(BaseCharacterModel caster, BaseCharacterModel receiver) {
         int tempValue = 0;
-        foreach (KeyValuePair<int, StatModifier> entry in modifiedStats) {
-            tempValue = entry.Value.raw + (int)(entry.Value.basePercent * receiver.GetStat(entry.Key).FinalValue);
+        foreach (KeyValuePair<int, EffectModifier> entry in modifiedStats) {
+            tempValue = entry.Value.Raw + (int)(entry.Value.Percent * receiver.GetStat(entry.Key).FinalValue);
             statActivationBuffValues[entry.Key] += tempValue;
             receiver.GetStat(entry.Key).BuffValue += tempValue;
         }
-        foreach (KeyValuePair<int, StatModifier> entry in modifiedAttributes) {
-            //@TODO dispatch depending on the stat to include caster and receiver stats
-            tempValue = entry.Value.raw + (int)(entry.Value.basePercent * receiver.GetAttribute(entry.Key).FinalValue);
+        foreach (KeyValuePair<int, EffectModifier> entry in modifiedAttributes) {
+            tempValue = entry.Value.Raw + (int)(entry.Value.Percent * receiver.GetAttribute(entry.Key).FinalValue);
             attributeActivationBuffValues[entry.Key] += tempValue;
             receiver.GetAttribute(entry.Key).BuffValue += tempValue;
         }
         foreach (KeyValuePair<int, VitalModifier> entry in modifiedVitals) {
-            //@TODO dispatch depending on the stat to include caster and receiver stats
-            tempValue = entry.Value.max.raw + (int)(entry.Value.max.basePercent * receiver.GetVital(entry.Key).FinalValue);
+            tempValue = entry.Value.Max.Raw + (int)(entry.Value.Max.Percent * receiver.GetVital(entry.Key).FinalValue);
             vitalActivationBuffValues[entry.Key] += tempValue;
             receiver.GetVital(entry.Key).BuffValue += tempValue;
 
-            receiver.GetVital(entry.Key).CurrentValue += entry.Value.current.raw +
-                                                         (int)(entry.Value.current.basePercent * receiver.GetVital(entry.Key).CurrentValue);
+            receiver.GetVital(entry.Key).CurrentValue += entry.Value.Current.Raw +
+                                                         (int)(entry.Value.Current.Percent * receiver.GetVital(entry.Key).CurrentValue);
         }
         isActivated = true;
     }
 
     public void Deactivate(BaseCharacterModel _receiver) {
-        foreach (KeyValuePair<int, StatModifier> entry in modifiedStats)
+        foreach (KeyValuePair<int, EffectModifier> entry in modifiedStats)
             _receiver.GetStat(entry.Key).BuffValue -= statActivationBuffValues[entry.Key];
 
-        foreach (KeyValuePair<int, StatModifier> entry in modifiedAttributes)
+        foreach (KeyValuePair<int, EffectModifier> entry in modifiedAttributes)
             _receiver.GetAttribute(entry.Key).BuffValue -= attributeActivationBuffValues[entry.Key];
 
         foreach (KeyValuePair<int, VitalModifier> entry in modifiedVitals)
@@ -151,20 +123,21 @@ public class BaseEffect{
 
     public bool IsActivated {
         get { return isActivated; }
+        set { isActivated = value; }
     }
     public bool IsPassive {
         get { return isPassive; }
         set { isPassive = value; }
     }
 
-    public void AddModifiedStat(int index, StatModifier _mod) {
+    public void AddModifiedStat(int index, EffectModifier _mod) {
         modifiedStats.Add(index, _mod);
     }
     public void RemoveModifiedStat(int index) {
         modifiedStats.Remove(index);
     }
 
-    public void AddModifiedAttribute(int index, StatModifier _mod) {
+    public void AddModifiedAttribute(int index, EffectModifier _mod) {
         modifiedAttributes.Add(index, _mod);
     }
     public void RemoveModifiedAttribute(int index) {

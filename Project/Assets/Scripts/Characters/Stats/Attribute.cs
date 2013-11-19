@@ -2,15 +2,17 @@
 
 public enum AttributeType {
     Damage,
-    Healing,
+    MagicDamage,
     Defence,
-    HitPointsRegen,
+    MagicDefence,
+    HealthRegen,
     ManaRegen,
     MovementSpeed,
     AttackSpeed,
     Critical,
     Evasion,    
-    VisionRadius
+    VisionRadius,
+    Leadership
 }
 
 public struct ModifyingStat {

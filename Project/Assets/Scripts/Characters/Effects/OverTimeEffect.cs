@@ -6,12 +6,6 @@ public class OverTimeEffect: BaseEffect {
     private float frequency, lastActivationTime;
 
     #region constructors
-    public OverTimeEffect()
-        : base() {
-        overTimeCountdownTimer = 0f;
-        frequency = 0f;
-    }
-
     public OverTimeEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration, float _overTimeDuration, float _freq)
         : base(_title, _descr, _icon, _isPassive, _duration) {
         overTimeCountdownTimer = 0f;
