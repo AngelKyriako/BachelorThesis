@@ -1,27 +1,27 @@
 ﻿using UnityEngine;
+using System.Collections;
 
-public class OverTimeAttributeBuff: AttributeBuff {
+public class OverTimeEffect : LastingEffect {
 
     private float overTimeCountdownTimer;
     private float frequency, lastActivationTime;
 
-    public override void Awake(){
+    public override void Awake() {
         base.Awake();
         overTimeCountdownTimer = 0f;
         frequency = 0f;
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, AttributeType _attribute, EffectMod _modifier,
-                                                                           float _duration, float _overTimeDuration, float _freq) {
-        base.SetUpEffect(_title, _descr, _icon, _isPassive, _duration, _attribute, _modifier);
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration, float _overTimeDuration, float _freq) {
+        base.SetUpEffect(_title, _descr, _icon, _isPassive, _duration);
         overTimeCountdownTimer = _overTimeDuration;
         frequency = _freq;
     }
 
     public override void SetUpEffect(BaseCharacterModel _caster, BaseEffect _effect) {
         base.SetUpEffect(_caster, _effect);
-        overTimeCountdownTimer = ((OverTimeAttributeBuff)_effect).OverTimeCountdownTimer;
-        frequency = ((OverTimeAttributeBuff)_effect).Frequency;
+        overTimeCountdownTimer = ((OverTimeBuff)_effect).OverTimeCountdownTimer;
+        frequency = ((OverTimeBuff)_effect).Frequency;
     }
 
     public override void Update() {
@@ -31,9 +31,8 @@ public class OverTimeAttributeBuff: AttributeBuff {
         }
         else if (!InProgress)
             Deactivate();
-        Utilities.Instance.LogMessage("overTimeCountdownTimer: " + overTimeCountdownTimer);
-        Utilities.Instance.LogMessage("left bool" + (overTimeCountdownTimer > 0 )+ "right bool: " + ((Time.time - lastActivationTime) >= frequency));
-        CountdownTimer -= Time.deltaTime;
+
+        DurationTimer -= Time.deltaTime;
         overTimeCountdownTimer -= Time.deltaTime;
     }
 
@@ -50,5 +49,5 @@ public class OverTimeAttributeBuff: AttributeBuff {
     public float Frequency {
         get { return frequency; }
     }
-#endregion
+    #endregion
 }

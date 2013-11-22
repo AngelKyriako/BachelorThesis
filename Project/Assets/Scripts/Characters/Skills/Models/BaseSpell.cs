@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BaseSpell: BaseSkill, IBaseSpell {
+public class BaseSpell: BaseSkill {
 
     #region attributes
     private float range;
@@ -27,18 +27,20 @@ public class BaseSpell: BaseSkill, IBaseSpell {
     }
 #endregion
 
-    public override void Target(BaseCharacterModel _caster) {
+    public override void Target(BaseCharacterModel _caster, CharacterSkillSlots _slot) {
         GameObject obj;
         if (targetCursor) {
             obj = (GameObject)GameObject.Instantiate(targetCursor);
             obj.GetComponent<TargetCursor>().SkillCasterPair = new Pair<BaseSkill, BaseCharacterModel>(this, _caster);
+            obj.GetComponent<TargetCursor>().SlotSelected = _slot;
             obj.GetComponent<TargetCursor>().enabled = true;
         }
         else
-            Cast(_caster);
+            Cast(_caster, Vector3.zero);
+        IsSelected = true;
     }
 
-    public override void Cast(BaseCharacterModel _caster) {
+    public override void Cast(BaseCharacterModel _caster, Vector3 _destination) {
         GameObject obj;
         coolDownTimer = coolDownTime;
         if (castEffect)
@@ -47,11 +49,12 @@ public class BaseSpell: BaseSkill, IBaseSpell {
         if (projectile) {
             obj = (GameObject)GameObject.Instantiate(projectile, _caster.transform.position, Quaternion.identity);
             obj.GetComponent<BaseProjectile>().SkillCasterPair = new Pair<BaseSkill, BaseCharacterModel>(this, _caster);
-            obj.GetComponent<BaseProjectile>().Destination = targetCursor != null ? targetCursor.transform.position : Vector3.zero;
+            obj.GetComponent<BaseProjectile>().Destination = _destination;
             obj.GetComponent<BaseProjectile>().enabled = true;
         }
         else
             Trigger(_caster, null);
+        IsSelected = false;
     }
 
     //for AoE skills we need a certain behavior of the triggerEffect

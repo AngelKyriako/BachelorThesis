@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 
-public class BaseEffect: MonoBehaviour {
+public abstract class BaseEffect: MonoBehaviour {
 
     #region attributes
     private BaseCharacterModel caster;
     private string title, description;
     private Texture2D icon;
-    private bool isActivated, isPassive;
+    private bool isPassive;
     #endregion
 
     public virtual void Awake() {
@@ -16,7 +16,6 @@ public class BaseEffect: MonoBehaviour {
         title = string.Empty;
         description = string.Empty;
         icon = null;
-        isActivated = false;
         isPassive = false;
         enabled = false;
     }
@@ -38,19 +37,13 @@ public class BaseEffect: MonoBehaviour {
     }
 
     public virtual void Update() {
-        if (!isActivated)
-            Activate();
-        else
-            Deactivate();
+        Activate();
+        Deactivate();
     }
 
-    public virtual void Activate() {
-        isActivated = true;
-    }
+    public abstract void Activate();
 
-    public virtual void Deactivate() {
-        Destroy(this);
-    }
+    public virtual void Deactivate() { Destroy(this); }
 
     #region Accessors
     public BaseCharacterModel Caster {
@@ -68,11 +61,6 @@ public class BaseEffect: MonoBehaviour {
     }
     public Texture2D Icon {
         get { return icon; }
-    }
-
-    public bool IsActivated {
-        get { return isActivated; }
-        set { isActivated = value; }
     }
     public bool IsPassive {
         get { return isPassive; }

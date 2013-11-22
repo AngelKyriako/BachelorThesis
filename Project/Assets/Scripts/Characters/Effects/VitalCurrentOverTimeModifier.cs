@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
+using System.Collections;
 
-public class VitalCurrentModifier: BaseEffect {
+public class VitalCurrentOverTimeModifier: OverTimeEffect {
 
     private VitalType vitalType;
     private EffectMod modifier;
@@ -13,16 +12,16 @@ public class VitalCurrentModifier: BaseEffect {
         base.Awake();
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, VitalType _vital, EffectMod _modifier) {
-        base.SetUpEffect(_title, _descr, _icon, _isPassive);
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration, float _overTimeDuration, float _freq, VitalType _vital, EffectMod _modifier) {
+        base.SetUpEffect(_title, _descr, _icon, _isPassive, _duration, _overTimeDuration, _freq);
         vitalType = _vital;
         modifier = _modifier;
     }
 
     public override void SetUpEffect(BaseCharacterModel _caster, BaseEffect _effect) {
         base.SetUpEffect(_caster, _effect);
-        vitalType = ((VitalCurrentModifier)_effect).vitalType;
-        modifier = ((VitalCurrentModifier)_effect).modifier;
+        vitalType = ((VitalCurrentOverTimeModifier)_effect).vitalType;
+        modifier = ((VitalCurrentOverTimeModifier)_effect).modifier;
         SetUpModifierDispatcheTable();
         enabled = true;
     }
@@ -57,7 +56,6 @@ public class VitalCurrentModifier: BaseEffect {
         });
     }
 
-    #region Accessors
     public VitalType VitalType {
         get { return vitalType; }
         set { vitalType = value; }
@@ -66,5 +64,8 @@ public class VitalCurrentModifier: BaseEffect {
         get { return modifier; }
         set { modifier = value; }
     }
-#endregion
+
+    public DispatchTable<VitalType, int, BaseCharacterModel, BaseCharacterModel, int> ModifierDispatcher {
+        get { return modifierDispatcher; }
+    }
 }

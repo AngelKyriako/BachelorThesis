@@ -14,6 +14,10 @@ public class BaseProjectile: MonoBehaviour {
 
 	void Start () {
         origin = transform.position;
+        transform.LookAt(destination);
+        transform.Rotate(0, 180, 0);
+
+        skillCasterPair.Second.gameObject.transform.LookAt(destination);
 	}
 	
 	public virtual void Update () {

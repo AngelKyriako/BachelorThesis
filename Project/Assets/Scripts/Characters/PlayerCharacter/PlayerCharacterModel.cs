@@ -35,10 +35,6 @@ public class PlayerCharacterModel: BaseCharacterModel {
         PlayerInputManager.Instance.OnSkillSelectInput += OnSkillUse;
     }
 
-    void OnDestroy() {
-        //PlayerInputManager.Instance.OnSkillSelectInput -= OnSkillUse;
-    }
-
     private void ModifyExp(uint exp) {
         if (Level != MAX_LEVEL) {
             currentExp += exp;
@@ -54,8 +50,8 @@ public class PlayerCharacterModel: BaseCharacterModel {
     }
 
     private void OnSkillUse(CharacterSkillSlots _slot) {
-        if (skills[(int)_slot] != null)//@TODO check if not static skill & cooldown is ready
-            skills[(int)_slot].Target(this);
+        if (skills[(int)_slot] != null && !skills[(int)_slot].IsSelected)//@TODO check if not static skill & cooldown is ready & not already selected 
+            skills[(int)_slot].Target(this, _slot);
     }
 
     #region Accessors

@@ -12,17 +12,9 @@ public class PlayerInputManager: SingletonPhotonMono<PlayerInputManager> {
     public delegate void SkillSelectEvent(CharacterSkillSlots _slot);
     public event SkillSelectEvent OnSkillSelectInput;
 
-    private DispatchTable<KeyCode> SkillDispatcher;
-
     private PlayerInputManager() { }
 
     void Start() {
-        SkillDispatcher = new DispatchTable<KeyCode>();
-
-        SkillDispatcher.AddAction(KeyCode.Q, new Action(() => OnSkillSelectInput(CharacterSkillSlots.Q)));
-        SkillDispatcher.AddAction(KeyCode.W, new Action(() => OnSkillSelectInput(CharacterSkillSlots.W)));
-        SkillDispatcher.AddAction(KeyCode.E, new Action(() => OnSkillSelectInput(CharacterSkillSlots.E)));
-        SkillDispatcher.AddAction(KeyCode.R, new Action(() => OnSkillSelectInput(CharacterSkillSlots.R)));
     }
 
 	void Update () {
@@ -41,5 +33,9 @@ public class PlayerInputManager: SingletonPhotonMono<PlayerInputManager> {
             OnSkillSelectInput(CharacterSkillSlots.E);
         else if (Input.GetKeyUp(KeyCode.R) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlots.R))
             OnSkillSelectInput(CharacterSkillSlots.R);
-	}    
+	}
+
+    public Vector3 MousePosition {
+        get { return Input.mousePosition; }
+    }
 }

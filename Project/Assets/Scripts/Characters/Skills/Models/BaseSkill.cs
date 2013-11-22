@@ -6,11 +6,12 @@ public enum SkillType {
     BaseSpell_T
 }
 
-public abstract class BaseSkill: IBaseSkill {
+public abstract class BaseSkill {
 
     #region attributes
     private string title, description;
     private Texture2D icon;
+    private bool isSelected;
     private List<BaseEffect> effects;
 #endregion
 
@@ -19,6 +20,7 @@ public abstract class BaseSkill: IBaseSkill {
         title = string.Empty;
         description = string.Empty;
         icon = null;
+        isSelected = false;
         effects = null;
     }
 
@@ -26,18 +28,13 @@ public abstract class BaseSkill: IBaseSkill {
         title = _title;
         description = _desc;
         icon = _icon;
+        isSelected = false;
         effects = new List<BaseEffect>();
     }
-
-    //public BaseSkill(string _title, string _desc, Texture2D _icon, float _cd, GameObject _cast, GameObject _trigger) {
-    //    title = _title;
-    //    description = _desc;
-    //    icon = _icon;
-    //}
 #endregion
 
-    public abstract void Target(BaseCharacterModel _caster);
-    public abstract void Cast(BaseCharacterModel _caster);
+    public abstract void Target(BaseCharacterModel _caster, CharacterSkillSlots _slot);
+    public abstract void Cast(BaseCharacterModel _caster, Vector3 _destination);
     public abstract void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver);
     public abstract void ActivateEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver);
 
@@ -53,7 +50,11 @@ public abstract class BaseSkill: IBaseSkill {
     public Texture2D Icon {
         get { return icon; }
         set { icon = value; }
-    }    
+    }
+    public bool IsSelected {
+        get { return isSelected; }
+        set { isSelected = value; }
+    }
 
     public void AddEffect(BaseEffect _effect) {
         effects.Add(_effect);

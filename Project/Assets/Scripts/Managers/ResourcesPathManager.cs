@@ -5,7 +5,7 @@ public class ResourcesPathManager {
     #region folders
     private const string charactersF = "Characters";
     private const string skillsF = "Skills",
-                         targetF = "TargetCursors", castsF = "CastEffects", triggerF = "TriggerEffects", projectilesF = "Projectiles";
+                         targetF = "TargetCursors", castF = "CastEffects", triggerF = "TriggerEffects", projectilesF = "Projectiles";
 
 #endregion
 
@@ -18,6 +18,18 @@ public class ResourcesPathManager {
 
     public string BabyDragonPath {
         get { return MergeToPath(charactersF, "BabyDragon"); }
+    }
+
+    public string TargetCursorPath {
+        get { return MergeToPath(skillsF, targetF, "TestTargetCursor"); }
+    }
+
+    public string CastEffectPath {
+        get { return MergeToPath(skillsF, castF, "-"); }
+    }
+
+    public string TriggerEffectPath {
+        get { return MergeToPath(skillsF, triggerF, "-"); }
     }
 
     public string ProjectilePath {

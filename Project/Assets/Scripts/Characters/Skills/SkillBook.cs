@@ -17,26 +17,23 @@ public class SkillBook{
         BaseEffect tempEffect = null;
 
         availableSkills = new List<BaseSkill>();
-        tempSkill = new BaseSpell("skill 1", "skill 1 description", null, 2f, null, null, null, null);
+        tempSkill = new BaseSpell("skill 1", "skill 1 description", null, 2f,
+                                  (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath), null, null,
+                                  (GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath));
 
             tempEffect = NextVitalCurrentModifier(effectsHolder);
-            ((VitalCurrentModifier)tempEffect).SetUpEffect("damage effect", "damage effect description", null, true,
+            ((VitalCurrentModifier)tempEffect).SetUpEffect("damage effect", "damage effect description", null, false,
                                                            VitalType.Health, new EffectMod(-10f, 0f));
             tempSkill.AddEffect(tempEffect);
 
             tempEffect = NextVitalBuff(effectsHolder);
-            ((VitalBuff)tempEffect).SetUpEffect("mana burn effect", "mana burn effect description", null, true, 10f,
+            ((VitalBuff)tempEffect).SetUpEffect("mana burn effect", "mana burn effect description", null, false, 10f,
                                                 VitalType.Mana, new EffectMod(0f, 1f));
             tempSkill.AddEffect(tempEffect);
 
         availableSkills.Add(tempSkill);
 
         tempSkill = new BaseSpell("skill 2", "skill 2 description", null, 2f, null, null, null, null);
-
-        tempEffect = NextOverTimeAttributeBuff(effectsHolder);
-        ((OverTimeAttributeBuff)tempEffect).SetUpEffect("damage effect", "damage effect description", null, true, AttributeType.Defence, new EffectMod(5f, 0f), 8f, 5f, 1f);
-        tempSkill.AddEffect(tempEffect);
-
         availableSkills.Add(tempSkill);
 
         tempSkill = new BaseSpell("skill 3", "skill 3 description", null, 2f, null, null, null, (GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath));   
@@ -70,11 +67,6 @@ public class SkillBook{
     private AttributeBuff NextAttributeBuff(GameObject _effectsHolder) {
         return _effectsHolder.AddComponent<AttributeBuff>();
     }
-
-    private OverTimeAttributeBuff NextOverTimeAttributeBuff(GameObject _effectsHolder) {
-        return _effectsHolder.AddComponent<OverTimeAttributeBuff>();
-    }
-    
 
     public List<BaseSkill> AvailableSkills {
         get { return availableSkills; }
