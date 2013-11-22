@@ -26,6 +26,7 @@ public class BaseCharacterModel: MonoBehaviour  {
                                                                         "Capability of playing on a leading role" };
 
     private static readonly float[] ATTRIBUTE_BASE_VALUES = new float[12] { 10, 10, 10, 10, 1, 1, 1, 0, 0, 0, 1, 1 };
+
     private static readonly string[] ATTRIBUTE_DESCRIPTIONS = new string[12]{ "Boosts HP loss on attack attack effect",
                                                                               "Boosts HP gain on heal effect",
                                                                               "Reduces HP loss on attack effect",

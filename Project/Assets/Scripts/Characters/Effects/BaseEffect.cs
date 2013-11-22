@@ -2,6 +2,16 @@
 using System;
 using System.Collections.Generic;
 
+public struct EffectModifier {
+    public int Raw;
+    public float Percent;
+
+    public EffectModifier(int _raw, float _percent) {
+        Raw = _raw;
+        Percent = _percent;
+    }
+}
+
 public class BaseEffect: MonoBehaviour{
 
     #region attributes
@@ -50,6 +60,7 @@ public class BaseEffect: MonoBehaviour{
         enabled = true;
     }
 
+
     public virtual void Activate() {
         isActivated = true;
     }
@@ -78,6 +89,7 @@ public class BaseEffect: MonoBehaviour{
 
     public bool IsActivated {
         get { return isActivated; }
+        set { isActivated = value; }
     }
     public bool IsPassive {
         get { return isPassive; }

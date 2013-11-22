@@ -10,7 +10,7 @@ public enum AttributeType {
     MovementSpeed,
     AttackSpeed,
     Critical,
-    Evasion,
+    Evasion,    
     VisionRadius,
     Leadership
 }

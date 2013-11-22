@@ -18,7 +18,7 @@ public class SkillBook{
 
         availableSkills = new List<BaseSkill>();
         tempSkill = new BaseSpell("skill 1", "skill 1 description", null, 2f, null, null, null, null);//(GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath));
-        //@TODO NOT ACTUALLY INSTANTIATING AN OBJECT !!!!
+
             tempEffect = NextStatModifierEffect(effectsHolder);
             tempEffect.SetUpEffect("damage effect", "damage effect description", null, true, 0.5f);
             ((StatModifierEffect)tempEffect).AddModifiedVital((int)VitalType.Health, new EffectModifier(-10f, 0f), new EffectModifier(0f, 0f));
@@ -26,7 +26,7 @@ public class SkillBook{
 
             tempEffect = NextStatModifierEffect(effectsHolder);
             tempEffect.SetUpEffect("damage debuff effect", "damage debuff effect description", null, true, 5f);
-            ((StatModifierEffect)tempEffect).AddModifiedAttribute((int)AttributeType.Damage, new EffectModifier(0f, -0.5f));
+            ((StatModifierEffect)tempEffect).AddModifiedAttribute((int)AttributeType.Damage, new EffectModifier(0f, -0.33f));
             tempSkill.AddEffect(tempEffect);
 
         availableSkills.Add(tempSkill);
