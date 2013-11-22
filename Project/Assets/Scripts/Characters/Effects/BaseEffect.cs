@@ -2,54 +2,47 @@
 using System;
 using System.Collections.Generic;
 
-public class BaseEffect: MonoBehaviour{
+public class BaseEffect: MonoBehaviour {
 
     #region attributes
-    private BaseCharacterModel caster, receiver;
+    private BaseCharacterModel caster;
     private string title, description;
     private Texture2D icon;
     private bool isActivated, isPassive;
-    private float countdownTimer;
-#endregion
+    #endregion
 
     public virtual void Awake() {
-        caster = receiver = null;
+        caster = null;
         title = string.Empty;
         description = string.Empty;
         icon = null;
         isActivated = false;
         isPassive = false;
-        countdownTimer = 0;
         enabled = false;
+    }
+
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive) {
+        title = _title;
+        description = _descr;
+        icon = _icon;
+        isPassive = _isPassive;
+    }
+
+    public virtual void SetUpEffect(BaseCharacterModel _caster, BaseEffect _effect) {
+        caster = _caster;
+        title = _effect.Title;
+        description = _effect.Description;
+        icon = _effect.Icon;
+        isPassive = _effect.IsPassive;
+        enabled = true;
     }
 
     public virtual void Update() {
         if (!isActivated)
             Activate();
-        else if (!InProgress)
+        else
             Deactivate();
-        countdownTimer -= Time.deltaTime;
     }
-
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration) {
-        title = _title;
-        description = _descr;
-        icon = _icon;
-        isPassive = _isPassive;
-        countdownTimer = _duration;
-    }
-
-    public virtual void SetUpEffect(BaseCharacterModel _caster, BaseEffect _effect) {
-        caster = _caster;
-        receiver = gameObject.GetComponent<BaseCharacterModel>();
-        title = _effect.Title;
-        description = _effect.Description;
-        icon = _effect.Icon;
-        isPassive = _effect.IsPassive;
-        countdownTimer = _effect.CountdownTimer;
-        enabled = true;
-    }
-
 
     public virtual void Activate() {
         isActivated = true;
@@ -64,7 +57,7 @@ public class BaseEffect: MonoBehaviour{
         get { return caster; }
     }
     public BaseCharacterModel Receiver {
-        get { return receiver; }
+        get { return gameObject.GetComponent<BaseCharacterModel>(); }
     }
 
     public string Title {
@@ -84,18 +77,5 @@ public class BaseEffect: MonoBehaviour{
     public bool IsPassive {
         get { return isPassive; }
     }
-
-    public float CountdownTimer {
-        get { return countdownTimer; }
-    }
-
-    public bool InProgress {
-        get { return countdownTimer > 0; }
-    }
-
-    public virtual bool IsOverTimeEffect {
-        get { return false; }
-    }
-
-#endregion
+    #endregion
 }
