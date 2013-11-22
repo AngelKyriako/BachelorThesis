@@ -20,31 +20,32 @@ public class VitalModifierEffect: BaseEffect {
     private VitalModifier modifier;
     private int buffValue;
 
-    #region constructors
-    public VitalModifierEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration, VitalType _vital, VitalModifier _modifier)
-        : base(_title, _descr, _icon, _isPassive, _duration) {
+    public override void Awake() {
+        base.Awake();
+    }
+
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration, VitalType _vital, VitalModifier _modifier) {
+        base.SetUpEffect(_title, _descr, _icon, _isPassive, _duration);
         vital = _vital;
         modifier = _modifier;
         buffValue = 0;
         SetUpVitalDispatcheTable();
     }
 
-    public VitalModifierEffect(BaseEffect _effect)
-        : base(_effect) {
+    public virtual void SetUpEffect(BaseCharacterModel _caster, BaseEffect _effect) {
+        base.SetUpEffect(_caster, _effect);
         vital = ((VitalModifierEffect)_effect).Vital;
         modifier = ((VitalModifierEffect)_effect).Modifier;
-        buffValue = 0;
-        SetUpVitalDispatcheTable();
+        enabled = true;
     }
-#endregion
 
     public void Activate(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         //max
-        buffValue = modifier.Max.Raw + (int)(modifier.Max.Percent * _receiver.GetVital((int)vital).FinalValue);
+        buffValue = (int)modifier.Max.RawValue + (int)(modifier.Max.PercentageValue * _receiver.GetVital((int)vital).FinalValue);
         _receiver.GetVital((int)vital).BuffValue += buffValue;
         //current
-        _receiver.GetVital((int)vital).CurrentValue += currentValueDispatcher.Dispatch(vital, modifier.Current.Raw, _caster, _receiver)+
-                                                       (int)(modifier.Current.Percent * _receiver.GetVital((int)vital).CurrentValue);        
+        _receiver.GetVital((int)vital).CurrentValue += currentValueDispatcher.Dispatch(vital, (int)modifier.Current.RawValue, _caster, _receiver) +
+                                                       (int)(modifier.Current.PercentageValue * _receiver.GetVital((int)vital).CurrentValue);        
     }
 
     public void Deactivate(BaseCharacterModel _receiver) {

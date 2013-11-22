@@ -2,16 +2,6 @@
 using System;
 using System.Collections.Generic;
 
-public struct EffectModifier {
-    public int Raw;
-    public float Percent;
-
-    public EffectModifier(int _raw, float _percent) {
-        Raw = _raw;
-        Percent = _percent;
-    }
-}
-
 public class BaseEffect: MonoBehaviour{
 
     #region attributes
