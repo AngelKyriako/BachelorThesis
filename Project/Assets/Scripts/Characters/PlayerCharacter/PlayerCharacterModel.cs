@@ -54,7 +54,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
     }
 
     private void OnSkillUse(CharacterSkillSlots _slot) {
-        if (skills[(int)_slot] != null)
+        if (skills[(int)_slot] != null)//@TODO check if not static skill & cooldown is ready
             skills[(int)_slot].Target(this);
     }
 

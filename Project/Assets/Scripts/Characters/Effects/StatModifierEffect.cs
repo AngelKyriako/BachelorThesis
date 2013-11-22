@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 
 public struct EffectModifier {
-    public int RawValue;
+    public float RawValue;
     public float PercentageValue;
 
-    public EffectModifier(int _RawValue, float _percent) {
+    public EffectModifier(float _RawValue, float _percent) {
         RawValue = _RawValue;
         PercentageValue = _percent;
     }
@@ -28,54 +28,73 @@ public class StatModifierEffect: BaseEffect {
     private Dictionary<int, EffectModifier> modifiedStats, modifiedAttributes;
     private Dictionary<int, VitalEffectModifier> modifiedVitals;
     // to be removed during deactivation 
-    private Dictionary<int, int> statActivationBuffValues,
-                                 attributeActivationBuffValues,
-                                 vitalActivationBuffValues;
+    private Dictionary<int, float> statActivationBuffValues,
+                                   attributeActivationBuffValues,
+                                   vitalActivationBuffValues;
+
+    private DispatchTable<VitalType, int, BaseCharacterModel, BaseCharacterModel, int> currentValueDispatcher;
 
     public override void Awake() {
         base.Awake();
         modifiedStats = new Dictionary<int, EffectModifier>();
         modifiedAttributes = new Dictionary<int, EffectModifier>();
         modifiedVitals = new Dictionary<int, VitalEffectModifier>();
-        statActivationBuffValues = new Dictionary<int, int>();
-        attributeActivationBuffValues = new Dictionary<int, int>();
-        vitalActivationBuffValues = new Dictionary<int, int>();
-        RefreshActivationBuffValues();
+        attributeActivationBuffValues = new Dictionary<int, float>();
+        statActivationBuffValues = new Dictionary<int, float>();
+        vitalActivationBuffValues = new Dictionary<int, float>();
+        enabled = false;
     }
 
-    public override void Activate(BaseCharacterModel caster, BaseCharacterModel receiver) {
-        int tempValue = 0;
+    public override void SetUpEffect(BaseCharacterModel _caster, BaseEffect _effect) {
+        base.SetUpEffect(_caster, _effect);
+        modifiedStats = ((StatModifierEffect)_effect).modifiedStats;
+        modifiedAttributes = ((StatModifierEffect)_effect).modifiedAttributes;
+        modifiedVitals = ((StatModifierEffect)_effect).modifiedVitals;
+        RefreshActivationBuffValues();
+        SetUpVitalDispatcheTable();
+        enabled = true;
+    }
+
+    public override void Activate() {
+        float tempBuffValue = 0;
+        //stats
         foreach (KeyValuePair<int, EffectModifier> entry in modifiedStats) {
-            tempValue = entry.Value.RawValue + (int)(entry.Value.PercentageValue * receiver.GetStat(entry.Key).FinalValue);
-            statActivationBuffValues[entry.Key] += tempValue;
-            receiver.GetStat(entry.Key).BuffValue += tempValue;
+            tempBuffValue = entry.Value.RawValue + (entry.Value.PercentageValue * Receiver.GetStat(entry.Key).FinalValue);
+            statActivationBuffValues[entry.Key] += (int)tempBuffValue;
+            Receiver.GetStat(entry.Key).BuffValue += (int)tempBuffValue;
+            Utilities.Instance.LogMessage("Stat buff value: " + tempBuffValue);
         }
+        Receiver.UpdateAttributes();
+        //attributes
         foreach (KeyValuePair<int, EffectModifier> entry in modifiedAttributes) {
-            tempValue = entry.Value.RawValue + (int)(entry.Value.PercentageValue * receiver.GetAttribute(entry.Key).FinalValue);
-            attributeActivationBuffValues[entry.Key] += tempValue;
-            receiver.GetAttribute(entry.Key).BuffValue += tempValue;
+            tempBuffValue = entry.Value.RawValue + (entry.Value.PercentageValue * Receiver.GetAttribute(entry.Key).FinalValue);
+            attributeActivationBuffValues[entry.Key] += tempBuffValue;
+            Receiver.GetAttribute(entry.Key).BuffValue += tempBuffValue;
+            Utilities.Instance.LogMessage("Attribute buff value: " + tempBuffValue);
         }
+        //vitals
         foreach (KeyValuePair<int, VitalEffectModifier> entry in modifiedVitals) {
-            //@TODO dispatch depending on the stat to include caster and receiver stats
-            tempValue = entry.Value.Max.RawValue + (int)(entry.Value.Max.PercentageValue * receiver.GetVital(entry.Key).FinalValue);
-            vitalActivationBuffValues[entry.Key] += tempValue;
-            receiver.GetVital(entry.Key).BuffValue += tempValue;
-
-            receiver.GetVital(entry.Key).CurrentValue += entry.Value.Current.RawValue +
-                                                         (int)(entry.Value.Current.PercentageValue * receiver.GetVital(entry.Key).CurrentValue);
+            tempBuffValue = entry.Value.Max.RawValue + (entry.Value.Max.PercentageValue * Receiver.GetVital(entry.Key).FinalValue);
+            Utilities.Instance.LogMessage("Vital buff value: " + tempBuffValue);
+            vitalActivationBuffValues[entry.Key] += (int)tempBuffValue;
+            //Max Value
+            Receiver.GetVital(entry.Key).BuffValue += (int)tempBuffValue;
+            //Current Value
+            Receiver.GetVital(entry.Key).CurrentValue += currentValueDispatcher.Dispatch((VitalType)entry.Key, (int)entry.Value.Current.RawValue, Caster, Receiver) +
+                                                         (int)(entry.Value.Current.PercentageValue * Receiver.GetVital(entry.Key).FinalValue);
+            Utilities.Instance.LogMessage("Dispatch ret value: " + currentValueDispatcher.Dispatch((VitalType)entry.Key, (int)entry.Value.Current.RawValue, Caster, Receiver));
         }
+        base.Activate();
     }
 
-    public override void Deactivate(BaseCharacterModel _receiver) {
+    public override void Deactivate() {
         foreach (KeyValuePair<int, EffectModifier> entry in modifiedStats)
-            _receiver.GetStat(entry.Key).BuffValue -= statActivationBuffValues[entry.Key];
-
+            Receiver.GetStat(entry.Key).BuffValue -= statActivationBuffValues[entry.Key];
         foreach (KeyValuePair<int, EffectModifier> entry in modifiedAttributes)
-            _receiver.GetAttribute(entry.Key).BuffValue -= attributeActivationBuffValues[entry.Key];
-
+            Receiver.GetAttribute(entry.Key).BuffValue -= attributeActivationBuffValues[entry.Key];
         foreach (KeyValuePair<int, VitalEffectModifier> entry in modifiedVitals)
-            _receiver.GetVital(entry.Key).BuffValue -= vitalActivationBuffValues[entry.Key];
-        RefreshActivationBuffValues();
+            Receiver.GetVital(entry.Key).BuffValue -= vitalActivationBuffValues[entry.Key];
+        base.Deactivate();
     }
 
     private void RefreshActivationBuffValues() {
@@ -85,6 +104,31 @@ public class StatModifierEffect: BaseEffect {
             attributeActivationBuffValues[i] = 0;
         for (int i = 0; i < Enum.GetValues(typeof(VitalType)).Length; ++i)
             vitalActivationBuffValues[i] = 0;
+    }
+
+    private void SetUpVitalDispatcheTable() {
+        currentValueDispatcher = new DispatchTable<VitalType, int, BaseCharacterModel, BaseCharacterModel, int>();
+
+        currentValueDispatcher.AddAction(VitalType.Health, delegate(int rawValue, BaseCharacterModel _caster, BaseCharacterModel _receiver) {
+            return (int)((rawValue < 0) ?
+                           //Physical Damage
+                          rawValue * (_caster.GetAttribute((int)AttributeType.Damage).FinalValue /
+                                      _receiver.GetAttribute((int)AttributeType.Defence).FinalValue)
+                          ://Health Healing
+                          rawValue * (_caster.GetAttribute((int)AttributeType.Leadership).FinalValue /
+                                      _receiver.GetAttribute((int)AttributeType.Leadership).FinalValue)
+                        );
+        });
+        currentValueDispatcher.AddAction(VitalType.Mana, delegate(int rawValue, BaseCharacterModel _caster, BaseCharacterModel _receiver) {
+            return (int)((rawValue < 0) ?
+                           //Magic Damage
+                          rawValue * (_caster.GetAttribute((int)AttributeType.MagicDamage).FinalValue /
+                                      _receiver.GetAttribute((int)AttributeType.MagicDefence).FinalValue)
+                          ://Mana Healing
+                          rawValue * (_caster.GetAttribute((int)AttributeType.Leadership).FinalValue /
+                                      _receiver.GetAttribute((int)AttributeType.Leadership).FinalValue)
+                        );
+        });
     }
 
     #region accessors

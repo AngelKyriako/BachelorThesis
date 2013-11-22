@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class BaseEffect: MonoBehaviour{
 
     #region attributes
+    private BaseCharacterModel caster, receiver;
     private string title, description;
     private Texture2D icon;
     private bool isActivated, isPassive;
@@ -12,12 +13,22 @@ public class BaseEffect: MonoBehaviour{
 #endregion
 
     public virtual void Awake() {
+        caster = receiver = null;
         title = string.Empty;
         description = string.Empty;
         icon = null;
         isActivated = false;
         isPassive = false;
         countdownTimer = 0;
+        enabled = false;
+    }
+
+    public virtual void Update() {
+        if (!isActivated)
+            Activate();
+        else if (!InProgress)
+            Deactivate();
+        countdownTimer -= Time.deltaTime;
     }
 
     public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration) {
@@ -28,26 +39,41 @@ public class BaseEffect: MonoBehaviour{
         countdownTimer = _duration;
     }
 
-    public virtual void Activate(BaseCharacterModel caster, BaseCharacterModel receiver) {
+    public virtual void SetUpEffect(BaseCharacterModel _caster, BaseEffect _effect) {
+        caster = _caster;
+        receiver = gameObject.GetComponent<BaseCharacterModel>();
+        title = _effect.Title;
+        description = _effect.Description;
+        icon = _effect.Icon;
+        isPassive = _effect.IsPassive;
+        countdownTimer = _effect.CountdownTimer;
+        enabled = true;
+    }
+
+    public virtual void Activate() {
         isActivated = true;
     }
 
-    public virtual void Deactivate(BaseCharacterModel _receiver) {
-        isActivated = false;
+    public virtual void Deactivate() {
+        Destroy(this);
     }
 
     #region Accessors
+    public BaseCharacterModel Caster {
+        get { return caster; }
+    }
+    public BaseCharacterModel Receiver {
+        get { return receiver; }
+    }
+
     public string Title {
         get { return title; }
-        set { title = value; }
     }
     public string Description {
         get { return description; }
-        set { description = value; }
     }
     public Texture2D Icon {
         get { return icon; }
-        set { icon = value; }
     }
 
     public bool IsActivated {
@@ -55,12 +81,10 @@ public class BaseEffect: MonoBehaviour{
     }
     public bool IsPassive {
         get { return isPassive; }
-        set { isPassive = value; }
     }
 
     public float CountdownTimer {
         get { return countdownTimer; }
-        set { countdownTimer = value; }
     }
 
     public bool InProgress {

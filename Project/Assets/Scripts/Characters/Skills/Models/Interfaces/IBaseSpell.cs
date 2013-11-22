@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 
-public interface IBaseSpell: IBaseSkill {    
-
-    void Update();
+public interface IBaseSpell: IBaseSkill {
 
     float Range { get; set; }
 
