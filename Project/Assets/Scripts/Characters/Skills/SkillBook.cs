@@ -26,7 +26,7 @@ public class SkillBook{
             tempSkill.AddEffect(tempEffect);
 
             tempEffect = NextManaBurnEffect(effectsHolder);
-            ((HealingEffect)tempEffect).SetUpEffect("mana burn effect", "mana burn effect description", null, false, new EffectMod(0f, 0.2f));
+            ((ManaBurnEffect)tempEffect).SetUpEffect("mana burn effect", "mana burn effect description", null, false, new EffectMod(0f, 0.2f));
             tempSkill.AddEffect(tempEffect);
 
         availableSkills.Add(tempSkill);
