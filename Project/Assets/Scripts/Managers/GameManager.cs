@@ -23,6 +23,8 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     void Awake() {
         gui = GameObject.Find("GUIScripts");
         others = new Dictionary<string, PlayerCharacterPair>();
+        if (PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected))
+            InitGUIScripts();
     }
 
     void OnJoinedRoom() {
@@ -32,13 +34,13 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         else
             spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
         PhotonNetwork.Instantiate(ResourcesPathManager.Instance.BabyDragonPath, spawnPoint, Quaternion.identity, 0);
-        GameManager.Instance.InitGUIScripts();
+        InitGUIScripts();
     }
 
     void OnLeaveRoom() {
     }
 
-    public void InitGUIScripts() {
+    private void InitGUIScripts() {
         gui.GetComponent<ChatWindow>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
         gui.GetComponent<CharacterInfoPanel>().enabled = true;

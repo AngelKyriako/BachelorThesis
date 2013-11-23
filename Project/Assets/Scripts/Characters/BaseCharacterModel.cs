@@ -79,7 +79,8 @@ public class BaseCharacterModel: MonoBehaviour  {
     }
 
     public virtual void Start() {
-        name = networkController.photonView.owner.name;
+        //name = networkController.photonView.owner.name;
+        name = string.Empty;
         Level = STARTING_LEVEL;
         effectsAttached = new List<AttachedEffect>();
 

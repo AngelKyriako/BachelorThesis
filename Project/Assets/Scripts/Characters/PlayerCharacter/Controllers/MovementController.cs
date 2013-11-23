@@ -22,12 +22,12 @@ public class MovementController: MonoBehaviour {
         //animator.enabled = false;
         destination = transform.position;
         currentSpeed = 0f;
-        if (networkController.PhotonView.isMine)
+        if (networkController.IsLocalClient)
             PlayerInputManager.Instance.OnCharacterMovementInput += OnMovementInput;
     }
 
     void Update() {
-        if (networkController.PhotonView.isMine) {
+        if (networkController.IsLocalClient) {
             AnimatorMovementSpeed = currentSpeed;
 
             //move to destination
@@ -41,8 +41,8 @@ public class MovementController: MonoBehaviour {
     }
 
     void OnDestroy() {
-        if (networkController.PhotonView.isMine)
-            PlayerInputManager.Instance.OnCharacterMovementInput -= OnMovementInput;
+        //if (networkController.IsLocalClient)
+        //    PlayerInputManager.Instance.OnCharacterMovementInput -= OnMovementInput;
     }
 
     private void OnMovementInput(Ray ray) {

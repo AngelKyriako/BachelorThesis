@@ -13,27 +13,32 @@ public class CameraController: MonoBehaviour {
     private bool lockedOnTarget;
 
     public Transform target;
+    public Vector3 defaultRotation;
     public float targetOffsetX = 0f,
                  targetOffsetZ = -15f,
                  smoothLockOn = 5f;
 
     public int scrollOffset = 100;
     public float movementInputWeight = 35,
-                 minMovementSpeed = 25, maxMovementSpeed = 100,
-                 rotateInputWeight = 35,
-                 rotateSpeed = 35;
+                 minMovementSpeed = 25, maxMovementSpeed = 100;
+                 //rotateInputWeight = 35,
+                 //rotateSpeed = 35;
 
     public float minCameraX = 10f, maxCameraX = 80f,
-                 minCameraY = 10f, maxCameraY = 40f,
+                 minCameraY = 10f, maxCameraY = 20f,
                  minCameraZ = 10f, maxCameraZ = 80f;
 
-    private void Awake() {
-        Utilities.Instance.Assert(target, "CameraController", "Awake", "target transform is not defined");
-        //@TODO: Init fixed camera rotation
+
+    void Awake() {
+        Utilities.Instance.Assert(target, "CameraController", "Start", "target transform is not defined");
+    }
+
+    void Start() {
+        transform.rotation = Quaternion.Euler(defaultRotation);
         lockedOnTarget = true;
     }
 
-    private void Update() {
+    void Update() {
         Vector3 movement;
         
         ToggleCameraLock();

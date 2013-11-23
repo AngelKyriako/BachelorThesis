@@ -22,13 +22,14 @@ public class NetworkController: Photon.MonoBehaviour {
         cameraController = gameObject.GetComponent<CameraController>();
         movementController = gameObject.GetComponent<MovementController>();
         visionController = gameObject.GetComponent<VisionController>();
-        cameraController.enabled = photonView.isMine;
+        cameraController.enabled = IsLocalClient;
         movementController.enabled = true;
-        visionController.enabled = photonView.isMine;//@TODO: for team play this should be only for enemies
+        visionController.enabled = IsLocalClient;//@TODO: for team play this should be only for enemies
+
 
         gameObject.transform.parent = GameObject.Find("Characters/BabyDragons").transform;
         gameObject.name = photonView.viewID.ToString();
-        if (photonView.isMine) {
+        if (photonView.isMine || PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected)) {
             GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
             Utilities.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));
         }
@@ -41,12 +42,14 @@ public class NetworkController: Photon.MonoBehaviour {
     }
 
     void Update() {
-        if (!photonView.isMine)
-            SyncRemoteCharacter();
-        else if (statSyncTimer > statSyncDelay) {
-            SyncCharacterStats();
-            SyncCharacterAttributes();
-            statSyncTimer = 0;
+        if (PhotonNetwork.connectionState.Equals(ConnectionState.Connected)) {
+            if (!photonView.isMine)
+                SyncRemoteCharacter();
+            else if (statSyncTimer > statSyncDelay) {
+                SyncCharacterStats();
+                SyncCharacterAttributes();
+                statSyncTimer = 0;
+            }
         }
         statSyncTimer += Time.deltaTime;
     }
@@ -75,7 +78,6 @@ public class NetworkController: Photon.MonoBehaviour {
     }
 
     private void SyncRemoteCharacter(){
-
         transform.position = Vector3.Lerp(transform.position, correctPlayerPosition, syncTime / syncDelay);
         transform.rotation = Quaternion.Lerp(transform.rotation, correctPlayerRotation, syncTime / syncDelay);
 
@@ -135,6 +137,9 @@ public class NetworkController: Photon.MonoBehaviour {
     }
     public VisionController VisionController {
         get { return visionController; }
+    }
+    public bool IsLocalClient {
+        get { return photonView.isMine || PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected); }
     }
 #endregion
 }
