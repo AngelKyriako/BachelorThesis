@@ -2,16 +2,6 @@
 using System;
 using System.Collections.Generic;
 
-public struct EffectMod {
-    public float RawValue;
-    public float PercentageValue;
-
-    public EffectMod(float _RawValue, float _percent) {
-        RawValue = _RawValue;
-        PercentageValue = _percent;
-    }
-}
-
 public class BuffEffect: LastingEffect {
 
     private EffectMod modifier;
@@ -22,7 +12,9 @@ public class BuffEffect: LastingEffect {
         modifier = default(EffectMod);
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration, EffectMod _modifier) {
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive,
+                            float _duration,
+                            EffectMod _modifier) {
         base.SetUpEffect(_title, _descr, _icon, _isPassive, _duration);
         modifier = _modifier;
         buffValue = 0;

@@ -2,6 +2,16 @@
 using System;
 using System.Collections.Generic;
 
+public struct EffectMod {
+    public float RawValue;
+    public float PercentageValue;
+
+    public EffectMod(float _RawValue, float _percent) {
+        RawValue = _RawValue;
+        PercentageValue = _percent;
+    }
+}
+
 public abstract class BaseEffect: MonoBehaviour {
 
     #region attributes
@@ -9,7 +19,7 @@ public abstract class BaseEffect: MonoBehaviour {
     private string title, description;
     private Texture2D icon;
     private bool isPassive;
-    #endregion
+#endregion
 
     public virtual void Awake() {
         caster = null;

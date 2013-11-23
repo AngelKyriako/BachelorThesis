@@ -12,7 +12,9 @@ public class OverTimeEffect : LastingEffect {
         frequency = 0f;
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration, float _overTimeDuration, float _freq) {
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, //base
+                            float _duration,                                                //lasting
+                            float _overTimeDuration, float _freq) {
         base.SetUpEffect(_title, _descr, _icon, _isPassive, _duration);
         overTimeCountdownTimer = _overTimeDuration;
         frequency = _freq;
@@ -20,8 +22,8 @@ public class OverTimeEffect : LastingEffect {
 
     public override void SetUpEffect(BaseCharacterModel _caster, BaseEffect _effect) {
         base.SetUpEffect(_caster, _effect);
-        overTimeCountdownTimer = ((OverTimeBuff)_effect).OverTimeCountdownTimer;
-        frequency = ((OverTimeBuff)_effect).Frequency;
+        overTimeCountdownTimer = ((OverTimeEffect)_effect).OverTimeCountdownTimer;
+        frequency = ((OverTimeEffect)_effect).Frequency;
     }
 
     public override void Update() {

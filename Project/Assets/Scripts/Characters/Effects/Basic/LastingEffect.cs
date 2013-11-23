@@ -12,7 +12,8 @@ public class LastingEffect : BaseEffect {
         durationTimer = 0;
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, float _duration) {
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive,
+                            float _duration) {
         base.SetUpEffect(_title, _descr, _icon, _isPassive);
         durationTimer = _duration;
     }
