@@ -93,6 +93,10 @@ public class BaseCharacterModel: MonoBehaviour  {
         UpdateAttributes();
     }
 
+    public virtual void Update() {
+
+    }
+
     public void UpdateAttributes() {
         for (int i = 0; i < attributes.Length; ++i)
             attributes[i].UpdateAttribute();

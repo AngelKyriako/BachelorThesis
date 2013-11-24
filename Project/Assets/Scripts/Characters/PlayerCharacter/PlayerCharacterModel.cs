@@ -17,6 +17,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
     private uint currentExp, expToLevel;
     private float expModifier;
     private uint trainingPoints;
+    private uint killsCount;
     private BaseSkill[] skills;    
 #endregion
 
@@ -35,6 +36,14 @@ public class PlayerCharacterModel: BaseCharacterModel {
         PlayerInputManager.Instance.OnSkillSelectInput += OnSkillUse;
     }
 
+    public override void Update() {
+        base.Update();
+        for (int i = 0; i < skills.Length; ++i ) {
+            if (skills[i] != null)
+                skills[i].Update();
+        }
+    }
+
     private void ModifyExp(uint exp) {
         if (Level != MAX_LEVEL) {
             currentExp += exp;
@@ -50,7 +59,8 @@ public class PlayerCharacterModel: BaseCharacterModel {
     }
 
     private void OnSkillUse(CharacterSkillSlots _slot) {
-        if (skills[(int)_slot] != null && !skills[(int)_slot].IsSelected)//@TODO check if not static skill & cooldown is ready & not already selected 
+        //@TODO check if not static skill & cooldown is ready
+        if (skills[(int)_slot] != null && skills[(int)_slot].IsReady(this))
             skills[(int)_slot].Target(this, _slot);
     }
 
@@ -70,6 +80,10 @@ public class PlayerCharacterModel: BaseCharacterModel {
     public uint TrainingPoints {
         get { return trainingPoints; }
         set { trainingPoints = (value < 0) ? 0 : ((value > MAX_TRAINING_POINTS)?MAX_TRAINING_POINTS:value); }
+    }
+    public uint Kills {
+        get { return killsCount; }
+        set { killsCount = value; }
     }
 
     public void SetSkill(int index, BaseSkill skill) {

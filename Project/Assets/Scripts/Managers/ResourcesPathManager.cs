@@ -20,20 +20,20 @@ public class ResourcesPathManager {
         get { return MergeToPath(charactersF, "BabyDragon"); }
     }
 
-    public string TargetCursorPath {
-        get { return MergeToPath(skillsF, targetF, "TestTargetCursor"); }
+    public string TargetCursorPath(string _cursor) {
+        return MergeToPath(skillsF, targetF, _cursor);
     }
 
-    public string CastEffectPath {
-        get { return MergeToPath(skillsF, castF, "-"); }
+    public string CastEffectPath(string _castEffect) {
+        return MergeToPath(skillsF, castF, _castEffect);
     }
 
-    public string TriggerEffectPath {
-        get { return MergeToPath(skillsF, triggerF, "-"); }
+    public string TriggerEffectPath(string _triggerEffect) {
+        return MergeToPath(skillsF, triggerF, _triggerEffect);
     }
 
-    public string ProjectilePath {
-        get { return MergeToPath(skillsF, projectilesF, "TestProjectile"); }
+    public string ProjectilePath(string _projectile) {
+        return MergeToPath(skillsF, projectilesF, _projectile);
     }
 
     private string MergeToPath (params string[] nodes){

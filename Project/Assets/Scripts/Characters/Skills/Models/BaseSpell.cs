@@ -38,6 +38,7 @@ public class BaseSpell: BaseSkill {
         else
             Cast(_caster, Vector3.zero);
         IsSelected = true;
+        coolDownTimer = coolDownTime;
     }
 
     public override void Cast(BaseCharacterModel _caster, Vector3 _destination) {
@@ -77,6 +78,10 @@ public class BaseSpell: BaseSkill {
         }
     }
 
+    public override void Update() {
+        CoolDownTimer -= Time.deltaTime;
+    }
+
     #region Accessors
     public float Range {
         get { return range; }
@@ -85,10 +90,10 @@ public class BaseSpell: BaseSkill {
 
     public float CoolDownTimer {
         get { return coolDownTimer; }
-        set { coolDownTimer = value; }
+        set { coolDownTimer = value > 0 ? value : 0; }
     }
-    public bool IsReady {
-        get { return (coolDownTimer == 0f); }
+    public override bool IsReady(BaseCharacterModel _char) {
+        return base.IsReady(_char) && (coolDownTimer == 0f);
     }
 
     public GameObject TargetCursor {
@@ -108,8 +113,4 @@ public class BaseSpell: BaseSkill {
         set { projectile = value; }
     }
 #endregion
-
-    public override SkillType Type{
-        get { return SkillType.BaseSpell_T; }
-    }
 }
