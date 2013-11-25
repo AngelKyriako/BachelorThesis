@@ -4,7 +4,7 @@ using System.Collections;
 public class TargetCursor: MonoBehaviour {
 
     private Pair<BaseSkill, BaseCharacterModel> skillCasterPair;
-    private CharacterSkillSlots slotSelected;
+    private CharacterSkillSlot slotSelected;
     public LayerMask ignoredLayers;
 
     void Awake() {
@@ -13,6 +13,12 @@ public class TargetCursor: MonoBehaviour {
 
     void Start() {
         PlayerInputManager.Instance.OnSkillSelectInput += OnSkillCast;
+    }
+
+    public virtual void SetUpTargetCursor(Pair<BaseSkill, BaseCharacterModel> _pair, CharacterSkillSlot _slot) {
+        skillCasterPair = _pair;
+        slotSelected = _slot;
+        enabled = true;
     }
 
 	void Update () {
@@ -39,7 +45,7 @@ public class TargetCursor: MonoBehaviour {
         transform.position = new Vector3(worldMousePos.x, 2, worldMousePos.z);
 	}
 
-    private void OnSkillCast(CharacterSkillSlots _slot) {
+    private void OnSkillCast(CharacterSkillSlot _slot) {
         if (slotSelected.Equals(_slot)) {
             skillCasterPair.First.Cast(skillCasterPair.Second, transform.position);
             PlayerInputManager.Instance.OnSkillSelectInput -= OnSkillCast;
@@ -51,7 +57,7 @@ public class TargetCursor: MonoBehaviour {
         get { return skillCasterPair; }
         set { skillCasterPair = value; }
     }
-    public CharacterSkillSlots SlotSelected {
+    public CharacterSkillSlot SlotSelected {
         get { return slotSelected; }
         set { slotSelected = value; }
     }

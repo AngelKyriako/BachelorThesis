@@ -12,7 +12,7 @@ public class NetworkController: Photon.MonoBehaviour {
     // stat sync delay
     private float statSyncDelay = 1.5f, statSyncTimer = 0f;
     // interpolation shit
-    private float syncTime = 0f, syncDelay = 0f, lastSynchronizationTime = 0f;
+    private float syncTime, syncDelay, lastSynchronizationTime;
     private Vector3 correctPlayerPosition;
     private Quaternion correctPlayerRotation;
 #endregion
@@ -26,28 +26,35 @@ public class NetworkController: Photon.MonoBehaviour {
         movementController.enabled = true;
         visionController.enabled = IsLocalClient;//@TODO: for team play this should be only for enemies
 
-
-        gameObject.transform.parent = GameObject.Find("Characters/BabyDragons").transform;
-        gameObject.name = photonView.viewID.ToString();
-        if (photonView.isMine || PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected)) {
+        transform.parent = GameObject.Find("Characters/BabyDragons").transform;
+        name = photonView.viewID.ToString();
+        if (IsLocalClient) {
             GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
-            Utilities.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));
+            GameManager.Instance.HostAddToAll(photonView.name);
+            Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));
         }
         else {
-            //GameManager.Instance.AddPlayerCharacter(new PlayerCharacterPair(photonView.owner, gameObject));
-            Utilities.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("HiddenEnemies"));//@TODO Must be called when game starts when everyone is connected
+            Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("HiddenEnemies"));//@TODO Must be called when game starts when everyone is connected
         }
+    }
+
+    void Start() {
+        model.SetUpModel(photonView.name);
+
         correctPlayerPosition = transform.position;
         correctPlayerRotation = Quaternion.identity;
+
+        syncTime = syncDelay = 0.001f;
+        lastSynchronizationTime = Time.time;
     }
 
     void Update() {
         if (PhotonNetwork.connectionState.Equals(ConnectionState.Connected)) {
             if (!photonView.isMine)
-                SyncRemoteCharacter();
+                SyncWithRemoteCharacter();
             else if (statSyncTimer > statSyncDelay) {
-                SyncCharacterStats();
-                SyncCharacterAttributes();
+                SendCharacterStats();
+                SendCharacterAttributes();
                 statSyncTimer = 0;
             }
         }
@@ -71,26 +78,32 @@ public class NetworkController: Photon.MonoBehaviour {
             //animating
             movementController.AnimatorMovementSpeed = (float)stream.ReceiveNext();
 
-            syncTime = 0f;
+            syncTime = 0.001f;
             syncDelay = (Time.time - lastSynchronizationTime)+0.001f;
             lastSynchronizationTime = Time.time;
         }
     }
 
-    private void SyncRemoteCharacter(){
+    private void SyncWithRemoteCharacter() {
+        Utilities.Instance.PreCondition((!float.IsNaN(correctPlayerPosition.x) && !float.IsNaN(correctPlayerPosition.y) && !float.IsNaN(correctPlayerPosition.z)),
+                                        "NetworkController", "SyncRemoteCharacter", "Fucking NaN Values: " + correctPlayerPosition);
+        Utilities.Instance.PreCondition((!float.IsNaN(correctPlayerRotation.x) && !float.IsNaN(correctPlayerRotation.y) && !float.IsNaN(correctPlayerRotation.z) && !float.IsNaN(correctPlayerRotation.w)),
+                                        "NetworkController", "SyncRemoteCharacter", "Fucking NaN Values: " + correctPlayerRotation);
+        Utilities.Instance.PreCondition(!float.IsNaN(syncTime / syncDelay), "NetworkController", "SyncRemoteCharacter", "Fucking NaN!!! syncTime: " + syncTime + ", syncDelay" + syncDelay);
+
         transform.position = Vector3.Lerp(transform.position, correctPlayerPosition, syncTime / syncDelay);
         transform.rotation = Quaternion.Lerp(transform.rotation, correctPlayerRotation, syncTime / syncDelay);
 
         syncTime += Time.deltaTime;
     }
 
-    private void SyncCharacterStats() {
+    private void SendCharacterStats() {
         for (int i = 0; i < model.StatsLength; ++i)
             photonView.RPC("SyncCharacterStat", PhotonTargets.Others,
                             i, model.GetStat(i).BaseValue, model.GetStat(i).BuffValue);
         photonView.RPC("SyncAttributesBonusStatValues", PhotonTargets.Others);
     }
-    private void SyncCharacterAttributes() {
+    private void SendCharacterAttributes() {
         for (int i = 0; i < model.AttributesLength; ++i)
             photonView.RPC("SyncCharacterAttribute", PhotonTargets.Others,
                             i, model.GetAttribute(i).BaseValue, model.GetAttribute(i).BuffValue);
@@ -99,7 +112,25 @@ public class NetworkController: Photon.MonoBehaviour {
                            i, model.GetVital(i).BaseValue, model.GetVital(i).BuffValue, model.GetVital(i).CurrentValue);
     }
 
+    public void AttachEffectToRemotePlayer(PhotonView _receiverView, BaseEffect _effect, BaseCharacterModel _caster) {
+        Utilities.Instance.LogMessage(_caster.Name + " attaching the effect <" + _effect.Title + "> to: " + _receiverView.owner.name);
+        photonView.RPC("AttachEffect", _receiverView.owner, _effect.Title, _caster.Name);
+    }
+
     #region RPCs
+
+    #region Effects
+    [RPC]
+    private void AttachEffect(string _effectTitle, string _casterName) {
+        BaseEffect effectToAttach = EffectBook.Instance.GetEffect(_effectTitle);
+        BaseEffect tempEffect = (BaseEffect)gameObject.AddComponent(effectToAttach.GetType());
+        Utilities.Instance.LogMessage("Effect attached and ready to setup");
+        tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), EffectBook.Instance.GetEffect(_effectTitle));
+        //@TODO: SOMEHOW Get the corrent PlayerCharacterModel from the master client
+    }
+    #endregion
+
+    #region Stats
     [RPC]
     private void SyncCharacterStat(int _index, float _baseValue, float _buffValue) {
         model.GetStat(_index).BaseValue = _baseValue;
@@ -114,18 +145,17 @@ public class NetworkController: Photon.MonoBehaviour {
     private void SyncCharacterVital(int _index, float _baseValue, float _buffValue, int _currentValue) {
         model.GetVital(_index).BaseValue = _baseValue;
         model.GetVital(_index).BuffValue = _buffValue;
-        model.GetVital(_index).CurrentValue = _currentValue;        
+        model.GetVital(_index).CurrentValue = _currentValue;
     }
     [RPC]
     private void SyncAttributesBonusStatValues() {
         model.UpdateAttributes();
     }
+    #endregion
+
 #endregion
 
-    #region Accessors
-    public PhotonView PhotonView{
-        get { return photonView; }
-    }
+    #region Accessors    
     public PlayerCharacterModel Model {
         get { return model; }
     }

@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseProjectile: MonoBehaviour {
+public class BaseProjectile: Photon.MonoBehaviour {
 
-    private const int MAX_MOVEMENT_SPEED = 10, RANGE = 25;
+    public int movementSpeed=10, range=25;
 
     private Pair<BaseSkill, BaseCharacterModel> skillCasterPair;
     private Vector3 origin, destination;
@@ -19,23 +19,33 @@ public class BaseProjectile: MonoBehaviour {
 
         skillCasterPair.Second.gameObject.transform.LookAt(destination);
 	}
-	
+
+    public virtual void SetUpProjectile(Pair<BaseSkill, BaseCharacterModel> _pair, Vector3 _dest) {
+        skillCasterPair = _pair;
+        destination = _dest;
+        enabled = true;
+    }
+
 	public virtual void Update () {
-        transform.position = Vector3.MoveTowards(transform.position, destination, MAX_MOVEMENT_SPEED * Time.deltaTime);
-        if (Vector3.Distance(origin, transform.position) > RANGE)
-            Destroy(gameObject);
+        transform.position = Vector3.MoveTowards(transform.position, destination, movementSpeed * Time.deltaTime);
+        if (Vector3.Distance(origin, transform.position) > range)
+            CombatManager.Instance.HostDestroySceneObject(gameObject);
 
 	}
 
     public virtual void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.layer.Equals("VisibleEnemies") || collision.gameObject.layer.Equals("HiddenEnemies")) {
+        if (collision.gameObject.layer.Equals("VisibleEnemies") || collision.gameObject.layer.Equals("HiddenEnemies")) {            
             skillCasterPair.First.Trigger(skillCasterPair.Second,
                                           collision.gameObject.GetComponent<PlayerCharacterModel>());
             foreach (ContactPoint contact in collision.contacts)
                 Debug.DrawRay(contact.point, contact.normal, Color.red);
 
-            Destroy(gameObject);
+            CombatManager.Instance.HostDestroySceneObject(gameObject);
+            Utilities.Instance.LogMessage("Just triggered the effect faggot !!!");
         }
+        else if (!GameManager.Instance.Me.Player.isMasterClient)
+            skillCasterPair.First.Trigger(skillCasterPair.Second,
+                              collision.gameObject.GetComponent<PlayerCharacterModel>());
     }
 
     public Pair<BaseSkill, BaseCharacterModel> SkillCasterPair {

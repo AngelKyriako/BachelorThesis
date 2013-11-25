@@ -41,13 +41,7 @@ public class Utilities {
     }
 #endregion
 
-    public IEnumerator WaitForSecondsUntil(bool condition, float sec) {
-        while (!condition) {
-            yield return new WaitForSeconds(sec);
-        }
-    }
-
-    public static void SetGameObjectLayer(GameObject obj, int l) {
+    public void SetGameObjectLayer(GameObject obj, int l) {
         if (obj == null)
             return;
         obj.layer = l;

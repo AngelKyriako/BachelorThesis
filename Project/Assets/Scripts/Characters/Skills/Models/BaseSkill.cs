@@ -8,7 +8,7 @@ public abstract class BaseSkill {
     private Texture2D icon;
     private bool isSelected;
     private Requirements requirements;
-    private List<BaseEffect> effects;
+    private Dictionary<string, BaseEffect> effects;
 
 #endregion
 
@@ -18,7 +18,7 @@ public abstract class BaseSkill {
         description = string.Empty;
         icon = null;
         isSelected = false;
-        requirements = new Requirements();
+        requirements = null;
         effects = null;
     }
 
@@ -28,11 +28,11 @@ public abstract class BaseSkill {
         icon = _icon;
         isSelected = false;
         requirements = new Requirements();
-        effects = new List<BaseEffect>();
+        effects = new Dictionary<string, BaseEffect>();
     }
 #endregion
 
-    public abstract void Target(BaseCharacterModel _caster, CharacterSkillSlots _slot);
+    public abstract void Target(BaseCharacterModel _caster, CharacterSkillSlot _slot);
     public abstract void Cast(BaseCharacterModel _caster, Vector3 _destination);
     public abstract void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver);
     public abstract void ActivateEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver);
@@ -74,13 +74,16 @@ public abstract class BaseSkill {
     }
 
     public void AddEffect(BaseEffect _effect) {
-        effects.Add(_effect);
+        effects.Add(_effect.Title, _effect);
     }
     public void RemoveEffect(BaseEffect _effect){
-        effects.Remove(_effect);
+        effects.Remove(_effect.Title);
     }
-    public BaseEffect GetEffect(int index) {
-        return effects[index];
+    public BaseEffect GetEffect(string key) {
+        return effects[key];
+    }
+    public Dictionary<string, BaseEffect> Effects {
+        get { return effects; }
     }
     public int EffectsCount {
         get { return effects.Count; }

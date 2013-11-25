@@ -25,10 +25,10 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
     }
 
 	void Start () {
-        playerCharModel = GameManager.Instance.Me.Character.GetComponent<PlayerCharacterModel>();
+        playerCharModel = GameManager.Instance.MyCharacterModel;
         layoutRect = new Rect(MAIN_X, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
 
-        skillButtonPressed = new bool[Enum.GetNames(typeof(CharacterSkillSlots)).Length];
+        skillButtonPressed = new bool[Enum.GetNames(typeof(CharacterSkillSlot)).Length];
 	}
 	
 	void Update () {

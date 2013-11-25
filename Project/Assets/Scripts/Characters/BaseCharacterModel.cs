@@ -79,7 +79,6 @@ public class BaseCharacterModel: MonoBehaviour  {
     }
 
     public virtual void Start() {
-        //name = networkController.photonView.owner.name;
         name = string.Empty;
         Level = STARTING_LEVEL;
         effectsAttached = new List<AttachedEffect>();
@@ -93,8 +92,11 @@ public class BaseCharacterModel: MonoBehaviour  {
         UpdateAttributes();
     }
 
-    public virtual void Update() {
+    public virtual void SetUpModel(string _name) {
+        name = _name;
+    }
 
+    public virtual void Update() {
     }
 
     public void UpdateAttributes() {
@@ -130,6 +132,10 @@ public class BaseCharacterModel: MonoBehaviour  {
 #endregion
 
 #region Accessors
+    public NetworkController NetworkController {
+        get { return networkController; }
+    }
+
     public string Name {
         get { return name; }
         set { name = value; }

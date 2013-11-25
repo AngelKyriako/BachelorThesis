@@ -27,13 +27,11 @@ public class BaseSpell: BaseSkill {
     }
 #endregion
 
-    public override void Target(BaseCharacterModel _caster, CharacterSkillSlots _slot) {
+    public override void Target(BaseCharacterModel _caster, CharacterSkillSlot _slot) {
         GameObject obj;
         if (targetCursor) {
             obj = (GameObject)GameObject.Instantiate(targetCursor);
-            obj.GetComponent<TargetCursor>().SkillCasterPair = new Pair<BaseSkill, BaseCharacterModel>(this, _caster);
-            obj.GetComponent<TargetCursor>().SlotSelected = _slot;
-            obj.GetComponent<TargetCursor>().enabled = true;
+            obj.GetComponent<TargetCursor>().SetUpTargetCursor(new Pair<BaseSkill, BaseCharacterModel>(this, _caster), _slot);
         }
         else
             Cast(_caster, Vector3.zero);
@@ -42,17 +40,14 @@ public class BaseSpell: BaseSkill {
     }
 
     public override void Cast(BaseCharacterModel _caster, Vector3 _destination) {
-        GameObject obj;
         coolDownTimer = coolDownTime;
         if (castEffect)
-            GameObject.Instantiate(castEffect, _caster.transform.position, Quaternion.identity);
+            CombatManager.Instance.HostInstantiateSceneObject(ResourcesPathManager.Instance.CastEffectPath(castEffect.name),
+                                                              _caster.transform.position, Quaternion.identity);
 
-        if (projectile) {
-            obj = (GameObject)GameObject.Instantiate(projectile, _caster.transform.position, Quaternion.identity);
-            obj.GetComponent<BaseProjectile>().SkillCasterPair = new Pair<BaseSkill, BaseCharacterModel>(this, _caster);
-            obj.GetComponent<BaseProjectile>().Destination = _destination;
-            obj.GetComponent<BaseProjectile>().enabled = true;
-        }
+        if (projectile)
+            CombatManager.Instance.HostInstantiateSceneProjectile(ResourcesPathManager.Instance.ProjectilePath(projectile.name),
+                                                                  _caster.transform.position, Quaternion.identity, Title, _caster.name, _destination);
         else
             Trigger(_caster, null);
         IsSelected = false;
@@ -61,20 +56,22 @@ public class BaseSpell: BaseSkill {
     //for AoE skills we need a certain behavior of the triggerEffect
     public override void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         if (triggerEffect)
-            GameObject.Instantiate(triggerEffect,
-                                   targetCursor != null ? targetCursor.transform.position : _caster.transform.position,
-                                   Quaternion.identity);
+            CombatManager.Instance.HostInstantiateSceneObject(ResourcesPathManager.Instance.TriggerEffectPath(triggerEffect.name),
+                                                          targetCursor != null ? targetCursor.transform.position : _caster.transform.position, Quaternion.identity);
         ActivateEffects(_caster, _receiver);
     }
 
     public override void ActivateEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         BaseEffect tempEffect;
-        for (int i = 0; i < EffectsCount; ++i) {
-            if (!GetEffect(i).IsPassive && _receiver)
-                tempEffect = (BaseEffect)_receiver.gameObject.AddComponent(GetEffect(i).GetType());
-            else
-                tempEffect = (BaseEffect)_caster.gameObject.AddComponent(GetEffect(i).GetType());
-            tempEffect.SetUpEffect(_caster, GetEffect(i));
+        foreach (string key in Effects.Keys) {
+            if (!GetEffect(key).IsPassive && _receiver) {
+                Utilities.Instance.LogMessage("Attaching an effect bitch");
+                _caster.NetworkController.AttachEffectToRemotePlayer(_receiver.NetworkController.photonView, GetEffect(key), _caster);
+            }
+            else {
+                tempEffect = (BaseEffect)_caster.gameObject.AddComponent(GetEffect(key).GetType());
+                tempEffect.SetUpEffect(_caster, GetEffect(key));
+            }
         }
     }
 

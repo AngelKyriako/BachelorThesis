@@ -55,7 +55,7 @@ public class CharacterWindow: MonoBehaviour {
     }
 
     void Start() {
-        playerCharModel = GameManager.Instance.Me.Character.GetComponent<PlayerCharacterModel>();
+        playerCharModel = GameManager.Instance.MyCharacterModel;
         lastSelectedSkill = null;
 
         #region Layout Rects
@@ -159,7 +159,7 @@ public class CharacterWindow: MonoBehaviour {
         GUILayout.EndArea();
     }
 
-    #region Statistics Panel
+    #region Stats Panel
     private void Stats() {
         GUILayout.BeginArea(statsRect);
         for (int i = 0; i < playerCharModel.StatsLength; ++i) {
@@ -216,9 +216,9 @@ public class CharacterWindow: MonoBehaviour {
         GUILayout.BeginArea(availableSkillsRect);
         availableSkillScrollPos = GUILayout.BeginScrollView(availableSkillScrollPos);
         GUILayout.BeginHorizontal();
-        foreach (BaseSkill skill in SkillBook.Instance.AvailableSkills) {
-            if (GUILayout.Button(skill.Title, GUILayout.Width(60), GUILayout.Height(60)))
-                lastSelectedSkill = skill;
+        foreach (string title in SkillBook.Instance.AllSkillsKeys) {
+            if (SkillBook.Instance.IsSkillAvailable(title) && GUILayout.Button(title, GUILayout.Width(60), GUILayout.Height(60)))
+                lastSelectedSkill = SkillBook.Instance.GetSkill(title);
 
             if (++count % 4 == 0) {
                 GUILayout.EndHorizontal();
@@ -232,23 +232,25 @@ public class CharacterWindow: MonoBehaviour {
     private void SelectedSkills() {
         GUILayout.BeginArea(selectedSkillsRect);
         GUILayout.BeginHorizontal();
+
         for (int i = 0; i < playerCharModel.SkillCount; ++i ) {
             if (playerCharModel.GetSkill(i) != null){
-                if (GUILayout.Button(playerCharModel.GetSkill(i).Title, GUILayout.Width(60), GUILayout.Height(60))
-                    && lastSelectedSkill != null) {
-                    SkillBook.Instance.AvailableSkills.Add(playerCharModel.GetSkill(i));
-                    playerCharModel.SetSkill(i, lastSelectedSkill);
-                    SkillBook.Instance.AvailableSkills.Remove(lastSelectedSkill);
-                    lastSelectedSkill = null;
-                }
+                if (GUILayout.Button(playerCharModel.GetSkill(i).Title, GUILayout.Width(60), GUILayout.Height(60)))
+                    if (lastSelectedSkill != null) {
+                        SkillBook.Instance.SetSkillAvailable(playerCharModel.GetSkill(i), true);
+                        //SkillBook.Instance.AddSkill(playerCharModel.GetSkill(i));
+                        playerCharModel.SetSkill(i, lastSelectedSkill);
+                        SkillBook.Instance.SetSkillAvailable(lastSelectedSkill, false);
+                        lastSelectedSkill = null;
+                    }
             }
             else
-                if (GUILayout.Button("Empty", GUILayout.Width(60), GUILayout.Height(60))
-                    && lastSelectedSkill != null) {
-                    playerCharModel.SetSkill(i, lastSelectedSkill);
-                    SkillBook.Instance.AvailableSkills.Remove(lastSelectedSkill);
-                    lastSelectedSkill = null;
-                }
+                if (GUILayout.Button("Empty", GUILayout.Width(60), GUILayout.Height(60)))
+                    if (lastSelectedSkill != null) {
+                        playerCharModel.SetSkill(i, lastSelectedSkill);
+                        SkillBook.Instance.SetSkillAvailable(lastSelectedSkill, false);
+                        lastSelectedSkill = null;
+                    }
         }
         GUILayout.EndHorizontal();
         GUILayout.EndArea();

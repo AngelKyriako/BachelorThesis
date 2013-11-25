@@ -9,7 +9,7 @@ public class PlayerInputManager: SingletonPhotonMono<PlayerInputManager> {
     //public event CameraMovementEvent OnCameraMovementInput;
     public delegate void CharacterMovementEvent(Ray ray);
     public event CharacterMovementEvent OnCharacterMovementInput;
-    public delegate void SkillSelectEvent(CharacterSkillSlots _slot);
+    public delegate void SkillSelectEvent(CharacterSkillSlot _slot);
     public event SkillSelectEvent OnSkillSelectInput;
 
     private PlayerInputManager() { }
@@ -25,14 +25,14 @@ public class PlayerInputManager: SingletonPhotonMono<PlayerInputManager> {
             OnCharacterMovementInput(Camera.main.ScreenPointToRay(Input.mousePosition));
         }
         //Skill Input
-        if (Input.GetKeyUp(KeyCode.Q) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlots.Q))
-            OnSkillSelectInput(CharacterSkillSlots.Q);
-        else if (Input.GetKeyUp(KeyCode.W) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlots.W))
-            OnSkillSelectInput(CharacterSkillSlots.W);
-        else if (Input.GetKeyUp(KeyCode.E) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlots.E))
-            OnSkillSelectInput(CharacterSkillSlots.E);
-        else if (Input.GetKeyUp(KeyCode.R) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlots.R))
-            OnSkillSelectInput(CharacterSkillSlots.R);
+        if (Input.GetKeyUp(KeyCode.Q) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlot.Q))
+            OnSkillSelectInput(CharacterSkillSlot.Q);
+        else if (Input.GetKeyUp(KeyCode.W) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlot.W))
+            OnSkillSelectInput(CharacterSkillSlot.W);
+        else if (Input.GetKeyUp(KeyCode.E) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlot.E))
+            OnSkillSelectInput(CharacterSkillSlot.E);
+        else if (Input.GetKeyUp(KeyCode.R) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlot.R))
+            OnSkillSelectInput(CharacterSkillSlot.R);
 	}
 
     public Vector3 MousePosition {

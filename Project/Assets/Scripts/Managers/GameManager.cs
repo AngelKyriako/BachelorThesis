@@ -16,13 +16,13 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     private GameObject gui;
     private PlayerCharacterPair me;
-    private Dictionary<string, PlayerCharacterPair> others;
+    private Dictionary<string, Pair<PhotonPlayer, PlayerCharacterModel>> all;
 
     private GameManager() { }
 
     void Awake() {
         gui = GameObject.Find("GUIScripts");
-        others = new Dictionary<string, PlayerCharacterPair>();
+        all = new Dictionary<string, Pair<PhotonPlayer, PlayerCharacterModel>>();
         if (PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected))
             InitGUIScripts();
     }
@@ -40,21 +40,49 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     void OnLeaveRoom() {
     }
 
+    public void HostAddToAll(string _name) {
+        if (me.Player.isMasterClient)
+            AddToAll(_name, me.Player);
+        else
+            photonView.RPC("AddToAll", PhotonNetwork.masterClient, _name, me.Player);
+    }
+
     private void InitGUIScripts() {
         gui.GetComponent<ChatWindow>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
         gui.GetComponent<CharacterInfoPanel>().enabled = true;
     }
-    
-    private void LogPlayers() {
-        string allStr = string.Empty;
-        foreach (KeyValuePair<string, PlayerCharacterPair> entry in others)
-            allStr += entry.Key + " ";
-        Utilities.Instance.LogMessage("PlayerCharacter: " + me.Player.name);
-        Utilities.Instance.LogMessage("Allies: " + allStr);
+
+    private PlayerCharacterModel NewPlayerCharacterModel() {
+        PlayerCharacterModel model;
+        GameObject tempObj = new GameObject("tempObj");
+
+        tempObj.AddComponent<PlayerCharacterModel>();
+        model = tempObj.GetComponent<PlayerCharacterModel>();
+
+        //MonoBehaviour.Destroy(tempObj);
+        return model;
     }
-    
-#region Accessors
+
+    #region RPCs (To be used only by the master client)
+    [RPC]
+    private void AddToAll(string _name, PhotonPlayer _player) {
+        if (!all.ContainsKey(_name))
+            all.Add(_name, new Pair<PhotonPlayer, PlayerCharacterModel>(_player, NewPlayerCharacterModel()));
+    }
+    [RPC]
+    private void RemoveFromAll(string _name) {
+        if (all.ContainsKey(_name))
+            all.Remove(_name);
+    }
+
+    [RPC]
+    public bool AreAllies(string _name1, string _name2) {
+        return GetPlayer(_name1).customProperties["team"].Equals(GetPlayer(_name2).customProperties["team"]);
+    }
+#endregion
+
+    #region Accessors
     public GameObject Gui {
         get { return gui; }
     }
@@ -63,24 +91,18 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         get { return me; }
         set { me = value; }
     }
+    public PhotonView MyPhotonView{
+        get { return me.Character.GetComponent<NetworkController>().photonView; }
+    }
+    public PlayerCharacterModel MyCharacterModel {
+        get { return me.Character.GetComponent<PlayerCharacterModel>(); }
+    }
 
-    [RPC]
-    public void AddPlayerCharacter(PlayerCharacterPair playerCharacterPair) {
-        if (!others.ContainsKey(playerCharacterPair.Player.name))
-            others.Add(name, playerCharacterPair);
-        LogPlayers();
+    public PhotonPlayer GetPlayer(string _name) {
+        return all[_name].First;
     }
-    [RPC]
-    public void RemovePlayerCharacter(string name) {
-        if (others.ContainsKey(name))
-            others.Remove(name);
-    }
-    public bool IsAlly(string name) {
-        return others[name].Player.customProperties["team"].
-                        Equals(me.Player.customProperties["team"]);
-    }
-    public PlayerCharacterPair GetPlayerCharacter(string name) {
-        return others[name];
+    public PlayerCharacterModel GetPlayerModel(string _name) {
+        return all[_name].Second;
     }
 #endregion
 }

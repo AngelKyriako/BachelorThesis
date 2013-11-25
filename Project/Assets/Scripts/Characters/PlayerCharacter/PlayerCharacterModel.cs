@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-public enum CharacterSkillSlots{
+public enum CharacterSkillSlot{
     Q, W, E, R
 }
 
@@ -18,7 +18,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
     private float expModifier;
     private uint trainingPoints;
     private uint killsCount;
-    private BaseSkill[] skills;    
+    private BaseSkill[] skills;
 #endregion
 
     public override void Awake() {
@@ -31,16 +31,21 @@ public class PlayerCharacterModel: BaseCharacterModel {
         expToLevel = STARTING_EXP_TO_LEVEL;
         currentExp = 0;
         trainingPoints = MAX_TRAINING_POINTS;
-        skills = new BaseSpell[Enum.GetValues(typeof(CharacterSkillSlots)).Length];        
+        killsCount = 0;
+        skills = new BaseSpell[Enum.GetValues(typeof(CharacterSkillSlot)).Length];        
+    }
 
+    public override void SetUpModel(string _name) {
+        base.SetUpModel(_name);
         PlayerInputManager.Instance.OnSkillSelectInput += OnSkillUse;
     }
 
     public override void Update() {
         base.Update();
         for (int i = 0; i < skills.Length; ++i ) {
-            if (skills[i] != null)
+            if (skills[i] != null) {
                 skills[i].Update();
+            }
         }
     }
 
@@ -58,8 +63,8 @@ public class PlayerCharacterModel: BaseCharacterModel {
         expToLevel = (uint)(expToLevel * expModifier);
     }
 
-    private void OnSkillUse(CharacterSkillSlots _slot) {
-        //@TODO check if not static skill & cooldown is ready
+    private void OnSkillUse(CharacterSkillSlot _slot) {
+        //@TODO check if not static skill
         if (skills[(int)_slot] != null && skills[(int)_slot].IsReady(this))
             skills[(int)_slot].Target(this, _slot);
     }
