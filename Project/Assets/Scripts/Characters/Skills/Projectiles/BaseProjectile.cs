@@ -34,18 +34,19 @@ public class BaseProjectile: Photon.MonoBehaviour {
 	}
 
     public virtual void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.layer.Equals("VisibleEnemies") || collision.gameObject.layer.Equals("HiddenEnemies")) {            
+        //@TODO Check out collision with remote characters
+        if (!collision.gameObject.GetComponent<NetworkController>().photonView.Equals(GameManager.Instance.MyPhotonView))
+            Utilities.Instance.LogMessage("OnCollision with other object");    
+        if (collision.gameObject.layer.Equals("VisibleEnemies") || collision.gameObject.layer.Equals("HiddenEnemies")) {
+            Utilities.Instance.LogMessage("It is an enemy");
             skillCasterPair.First.Trigger(skillCasterPair.Second,
                                           collision.gameObject.GetComponent<PlayerCharacterModel>());
             foreach (ContactPoint contact in collision.contacts)
                 Debug.DrawRay(contact.point, contact.normal, Color.red);
 
             CombatManager.Instance.HostDestroySceneObject(gameObject);
-            Utilities.Instance.LogMessage("Just triggered the effect faggot !!!");
+            Utilities.Instance.LogMessage("Just triggered the effect");
         }
-        else if (!GameManager.Instance.Me.Player.isMasterClient)
-            skillCasterPair.First.Trigger(skillCasterPair.Second,
-                              collision.gameObject.GetComponent<PlayerCharacterModel>());
     }
 
     public Pair<BaseSkill, BaseCharacterModel> SkillCasterPair {

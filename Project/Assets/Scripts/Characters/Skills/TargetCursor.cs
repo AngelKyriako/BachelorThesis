@@ -42,7 +42,7 @@ public class TargetCursor: MonoBehaviour {
 
         if (mousePos.y < Screen.height / 2)//@TODO: Modify this mpakalia !!!
             worldMousePos.z -= (Screen.height / 2 - mousePos.y)/100;
-        transform.position = new Vector3(worldMousePos.x, 2, worldMousePos.z);
+        transform.position = new Vector3(worldMousePos.x, 3.5f, worldMousePos.z);
 	}
 
     private void OnSkillCast(CharacterSkillSlot _slot) {
