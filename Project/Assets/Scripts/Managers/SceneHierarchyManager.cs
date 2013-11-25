@@ -18,6 +18,6 @@ public class SceneHierarchyManager {
         string path = string.Empty;
         foreach (string node in nodes)
             path += node + "/";
-        return path;
+        return path.Substring(0, path.Length - 1);
     }
 }

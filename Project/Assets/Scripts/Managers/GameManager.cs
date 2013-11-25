@@ -40,36 +40,34 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     void OnLeaveRoom() {
     }
 
-    public void HostAddToAll(string _name) {
-        if (me.Player.isMasterClient)
-            AddToAll(_name, me.Player);
-        else
-            photonView.RPC("AddToAll", PhotonNetwork.masterClient, _name, me.Player);
-    }
-
     private void InitGUIScripts() {
         gui.GetComponent<ChatWindow>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
         gui.GetComponent<CharacterInfoPanel>().enabled = true;
     }
 
-    #region RPCs (To be used only by the master client)
+    public void RequestConnectedPlayerCharacters() {
+        Utilities.Instance.LogMessage("Requesting for Connected players from master client");
+        photonView.RPC("SendPlayerCharacters", PhotonNetwork.masterClient);
+    }
+
+    #region RPCs
     [RPC]
-    private void AddToAll(string _name, PhotonPlayer _player) {
-        GameObject obj = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath + _name);
-        Utilities.Instance.LogMessage("Object added: " + obj.name);
+    public void AddPlayerCharacter(string _name, PhotonPlayer _player) {
         if (!all.ContainsKey(_name))
-            all.Add(_name, new PlayerCharacterPair(_player, GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath + _name)));
+            all.Add(_name, new PlayerCharacterPair(_player, GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath +"/"+_name)));
     }
     [RPC]
-    private void RemoveFromAll(string _name) {
+    public void RemovePlayerCharacter(string _name) {
         if (all.ContainsKey(_name))
             all.Remove(_name);
     }
-
     [RPC]
-    public bool AreAllies(string _name1, string _name2) {
-        return GetPlayer(_name1).customProperties["team"].Equals(GetPlayer(_name2).customProperties["team"]);
+    private void SendPlayerCharacters(PhotonMessageInfo info) {
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "[RPC]SendPlayerCharacters", "This RPC is only available for the master client.");
+        foreach (string _name in all.Keys) {
+            photonView.RPC("AddPlayerCharacter", info.sender, _name, all[_name].Player);
+        }
     }
 #endregion
 
@@ -86,7 +84,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         get { return me.Character.GetComponent<PlayerCharacterModel>(); }
     }
     public PhotonView MyPhotonView{
-        get { return me.Character.GetComponent<NetworkController>().photonView; }
+        get { return me.Character.GetComponent<PlayerCharacterNetworkController>().photonView; }
     }
 
     public PhotonPlayer GetPlayer(string _name) {
@@ -96,7 +94,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         return all[_name].Character.GetComponent<PlayerCharacterModel>();
     }
     public PhotonView GetPlayerPhotonView(string _name) {
-        return all[_name].Character.GetComponent<NetworkController>().photonView;
+        return all[_name].Character.GetComponent<PlayerCharacterNetworkController>().photonView;
     }
 #endregion
 }

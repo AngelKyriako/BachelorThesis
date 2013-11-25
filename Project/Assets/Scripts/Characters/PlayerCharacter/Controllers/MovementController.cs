@@ -7,7 +7,7 @@ public class MovementController: MonoBehaviour {
     public float baseMovementSpeed = 10;
 
     private PlayerCharacterModel model;
-    private NetworkController networkController;
+    private PlayerCharacterNetworkController networkController;
     private float currentSpeed;
     private Vector3 destination;
 
@@ -17,7 +17,7 @@ public class MovementController: MonoBehaviour {
 
     void Start() {
         model = gameObject.GetComponent<PlayerCharacterModel>();
-        networkController = gameObject.GetComponent<NetworkController>();
+        networkController = gameObject.GetComponent<PlayerCharacterNetworkController>();
         //animator.enabled = false;
         destination = transform.position;
         currentSpeed = 0f;
@@ -40,7 +40,7 @@ public class MovementController: MonoBehaviour {
     }
 
     void OnDestroy() {
-        //if (networkController.IsLocalClient)
+        //if (PlayerCharacterNetworkController.IsLocalClient)
         //    PlayerInputManager.Instance.OnCharacterMovementInput -= OnMovementInput;
     }
 
@@ -61,8 +61,8 @@ public class MovementController: MonoBehaviour {
     }
 
     public float AnimatorMovementSpeed {
-        get { return animator.GetFloat("movementSpeed"); }
-        set { animator.SetFloat("movementSpeed", value); }     
+        get { return animator.GetFloat("MovementSpeed"); }
+        set { animator.SetFloat("MovementSpeed", value); }     
     }
     public float CurrentSpeed {        
         get { return currentSpeed; }

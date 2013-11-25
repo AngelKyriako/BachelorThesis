@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseProjectile: Photon.MonoBehaviour {
+public class BaseProjectile: MonoBehaviour {
 
     public int movementSpeed=10, range=25;
 
@@ -33,19 +33,28 @@ public class BaseProjectile: Photon.MonoBehaviour {
 
 	}
 
+    //if (!collision.gameObject.name.Equals(GameManager.Instance.Me.Character.name)) {
+    //     Utilities.Instance.LogMessage("On collision with enemy: " + collision.gameObject.GetComponent<PlayerCharacterModel>().Name);
+    //     if (PhotonNetwork.isMasterClient) {
+    //         Utilities.Instance.LogMessage("Master client is triggering effect of caster: " + skillCasterPair.Second.Name);
+    //         skillCasterPair.First.Trigger(skillCasterPair.Second,
+    //                       collision.gameObject.GetComponent<PlayerCharacterModel>());
+    //         CombatManager.Instance.HostDestroySceneObject(gameObject);
+    //     }
+    // }
+
     public virtual void OnCollisionEnter(Collision collision) {
-        //@TODO Check out collision with remote characters
-        if (!collision.gameObject.GetComponent<NetworkController>().photonView.Equals(GameManager.Instance.MyPhotonView))
-            Utilities.Instance.LogMessage("OnCollision with other object");    
-        if (collision.gameObject.layer.Equals("VisibleEnemies") || collision.gameObject.layer.Equals("HiddenEnemies")) {
-            Utilities.Instance.LogMessage("It is an enemy");
-            skillCasterPair.First.Trigger(skillCasterPair.Second,
+        if (!collision.gameObject.GetComponent<PlayerCharacterNetworkController>().photonView.Equals(GameManager.Instance.MyPhotonView)) {
+            Utilities.Instance.LogMessage("On collision with enemy: " + collision.gameObject.GetComponent<PlayerCharacterModel>().Name);
+            if (PhotonNetwork.isMasterClient) {
+                skillCasterPair.First.Trigger(skillCasterPair.Second,
                                           collision.gameObject.GetComponent<PlayerCharacterModel>());
+                CombatManager.Instance.HostDestroySceneObject(gameObject);
+            }
             foreach (ContactPoint contact in collision.contacts)
                 Debug.DrawRay(contact.point, contact.normal, Color.red);
-
-            CombatManager.Instance.HostDestroySceneObject(gameObject);
-            Utilities.Instance.LogMessage("Just triggered the effect");
+            if (PhotonNetwork.isMasterClient)
+            Utilities.Instance.LogMessage("Just triggered the effect on: " + collision.gameObject.GetComponent<PlayerCharacterModel>());
         }
     }
 

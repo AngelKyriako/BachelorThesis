@@ -65,7 +65,7 @@ public class BaseCharacterModel: MonoBehaviour  {
 #endregion
 
     #region attributes
-    private NetworkController networkController;
+    private PlayerCharacterNetworkController networkController;
     private new string name;
     private uint level;
     private List<AttachedEffect> effectsAttached;
@@ -75,7 +75,7 @@ public class BaseCharacterModel: MonoBehaviour  {
 #endregion
 
     public virtual void Awake() {
-        networkController = gameObject.GetComponent<NetworkController>();
+        networkController = gameObject.GetComponent<PlayerCharacterNetworkController>();
     }
 
     public virtual void Start() {
@@ -132,7 +132,7 @@ public class BaseCharacterModel: MonoBehaviour  {
 #endregion
 
 #region Accessors
-    public NetworkController NetworkController {
+    public PlayerCharacterNetworkController NetworkController {
         get { return networkController; }
     }
 
