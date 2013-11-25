@@ -3,9 +3,8 @@ using System.Collections;
 
 public class MovementController: MonoBehaviour {
 
-    private const float BASE_MOVEMENT_SPEED = 10;
-
     public Animator animator;
+    public float baseMovementSpeed = 10;
 
     private PlayerCharacterModel model;
     private NetworkController networkController;
@@ -58,7 +57,7 @@ public class MovementController: MonoBehaviour {
     }
 
     private void UpdateCurrentSpeed() {
-        currentSpeed = BASE_MOVEMENT_SPEED * model.GetAttribute((int)AttributeType.MovementSpeed).FinalValue;
+        currentSpeed = baseMovementSpeed * model.GetAttribute((int)AttributeType.MovementSpeed).FinalValue;
     }
 
     public float AnimatorMovementSpeed {

@@ -16,13 +16,13 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     private GameObject gui;
     private PlayerCharacterPair me;
-    private Dictionary<string, Pair<PhotonPlayer, PlayerCharacterModel>> all;
+    private Dictionary<string, PlayerCharacterPair> all;
 
     private GameManager() { }
 
     void Awake() {
         gui = GameObject.Find("GUIScripts");
-        all = new Dictionary<string, Pair<PhotonPlayer, PlayerCharacterModel>>();
+        all = new Dictionary<string, PlayerCharacterPair>();
         if (PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected))
             InitGUIScripts();
     }
@@ -33,7 +33,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
             spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
         else
             spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
-        PhotonNetwork.Instantiate(ResourcesPathManager.Instance.BabyDragonPath, spawnPoint, Quaternion.identity, 0);
+        PhotonNetwork.Instantiate(ResourcesPathManager.Instance.PlayerCharacterPath, spawnPoint, Quaternion.identity, 0);
         InitGUIScripts();
     }
 
@@ -53,22 +53,13 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         gui.GetComponent<CharacterInfoPanel>().enabled = true;
     }
 
-    private PlayerCharacterModel NewPlayerCharacterModel() {
-        PlayerCharacterModel model;
-        GameObject tempObj = new GameObject("tempObj");
-
-        tempObj.AddComponent<PlayerCharacterModel>();
-        model = tempObj.GetComponent<PlayerCharacterModel>();
-
-        //MonoBehaviour.Destroy(tempObj);
-        return model;
-    }
-
     #region RPCs (To be used only by the master client)
     [RPC]
     private void AddToAll(string _name, PhotonPlayer _player) {
+        GameObject obj = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath + _name);
+        Utilities.Instance.LogMessage("Object added: " + obj.name);
         if (!all.ContainsKey(_name))
-            all.Add(_name, new Pair<PhotonPlayer, PlayerCharacterModel>(_player, NewPlayerCharacterModel()));
+            all.Add(_name, new PlayerCharacterPair(_player, GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath + _name)));
     }
     [RPC]
     private void RemoveFromAll(string _name) {
@@ -91,18 +82,21 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         get { return me; }
         set { me = value; }
     }
-    public PhotonView MyPhotonView{
-        get { return me.Character.GetComponent<NetworkController>().photonView; }
-    }
     public PlayerCharacterModel MyCharacterModel {
         get { return me.Character.GetComponent<PlayerCharacterModel>(); }
     }
+    public PhotonView MyPhotonView{
+        get { return me.Character.GetComponent<NetworkController>().photonView; }
+    }
 
     public PhotonPlayer GetPlayer(string _name) {
-        return all[_name].First;
+        return all[_name].Player;
     }
     public PlayerCharacterModel GetPlayerModel(string _name) {
-        return all[_name].Second;
+        return all[_name].Character.GetComponent<PlayerCharacterModel>();
+    }
+    public PhotonView GetPlayerPhotonView(string _name) {
+        return all[_name].Character.GetComponent<NetworkController>().photonView;
     }
 #endregion
 }

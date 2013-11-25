@@ -2,13 +2,6 @@
 
 public class ResourcesPathManager {
 
-    #region folders
-    private const string charactersF = "Characters";
-    private const string skillsF = "Skills",
-                         targetF = "TargetCursors", castF = "CastEffects", triggerF = "TriggerEffects", projectilesF = "Projectiles";
-
-#endregion
-
     private static ResourcesPathManager instance = new ResourcesPathManager();
     public static ResourcesPathManager Instance {
         get { return instance; }
@@ -16,24 +9,24 @@ public class ResourcesPathManager {
 
     private ResourcesPathManager() { }
 
-    public string BabyDragonPath {
-        get { return MergeToPath(charactersF, "BabyDragon"); }
+    public string PlayerCharacterPath {
+        get { return MergeToPath("Characters", "BabyDragon"); }
     }
 
-    public string TargetCursorPath(string _cursor) {
-        return MergeToPath(skillsF, targetF, _cursor);
+    public string TargetCursorPath(string _targetCursor) {
+        return MergeToPath("Skills", "TargetCursors", _targetCursor);
     }
 
     public string CastEffectPath(string _castEffect) {
-        return MergeToPath(skillsF, castF, _castEffect);
+        return MergeToPath("Skills", "CastEffects", _castEffect);
     }
 
     public string TriggerEffectPath(string _triggerEffect) {
-        return MergeToPath(skillsF, triggerF, _triggerEffect);
+        return MergeToPath("Skills", "TriggerEffects", _triggerEffect);
     }
 
     public string ProjectilePath(string _projectile) {
-        return MergeToPath(skillsF, projectilesF, _projectile);
+        return MergeToPath("Skills", "Projectiles", _projectile);
     }
 
     private string MergeToPath (params string[] nodes){

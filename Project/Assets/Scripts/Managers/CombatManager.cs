@@ -3,8 +3,6 @@ using System.Collections;
 
 public class CombatManager: SingletonPhotonMono<CombatManager> {
 
-    private PhotonView myView;
-
     private CombatManager() { }
 
     public void HostInstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
@@ -20,7 +18,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
         if (PhotonNetwork.isMasterClient)
             InstantiateSceneProjectile(_obj, _position, _rotation, _skillName, _casterName, _destination);
         else {
-            Utilities.Instance.LogMessage("Photon view: "+GameManager.Instance.MyPhotonView.name);
+            Utilities.Instance.LogMessage(GameManager.Instance.MyPhotonView.name+" is sending message to masterclient to instantiate a projectile !");
             photonView.RPC("InstantiateSceneProjectile", PhotonNetwork.masterClient,
                                                    _obj, _position, _rotation, _skillName, _casterName, _destination);
         }
@@ -36,18 +34,24 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     #region RPCs (To be used only by the master client)
     [RPC]
     private void InstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
+        Utilities.Instance.LogMessage(GameManager.Instance.MyPhotonView.name + " is instantiating scene object !");
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneObject", "Method can not be called from another player than the master client.");
         PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
     }
     
     [RPC]
     private void InstantiateSceneProjectile(string _obj, Vector3 _position, Quaternion _rotation,
                                             string _skillName, string _casterName, Vector3 _destination) {
+        Utilities.Instance.LogMessage(GameManager.Instance.MyPhotonView.name + " is instantiating scene projectile !");
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneObject", "Method can not be called from another player than the master client.");
         GameObject obj = PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
-        obj.GetComponent<BaseProjectile>().SetUpProjectile(new Pair<BaseSkill, BaseCharacterModel>(SkillBook.Instance.GetSkill(_skillName),
-                                                                               GameManager.Instance.GetPlayerModel(_casterName)), _destination);
+        obj.GetComponent<BaseProjectile>().SetUpProjectile( new Pair<BaseSkill, BaseCharacterModel>(
+                                                                    SkillBook.Instance.GetSkill(_skillName),
+                                                                    GameManager.Instance.GetPlayerModel(_casterName)), _destination);
     }
     [RPC]
     private void DestroySceneObject(GameObject _obj) {
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneObject", "Method can not be called from another player than the master client.");
         PhotonNetwork.Destroy(_obj);
     }
 #endregion
