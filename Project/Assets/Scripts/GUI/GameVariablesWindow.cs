@@ -95,7 +95,7 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
         if (GUILayout.Button("Start Game")) {
             SyncGameVariables();
             //if (AllPlayersReady())
-            //    PhotonNetwork.LoadLevel("MainState"+GameVariables.Instance.Mode.Key);
+            //    PhotonNetwork.LoadLevel("MainStage"+GameVariables.Instance.Mode.Key);
         }
         GUILayout.EndHorizontal();
 
