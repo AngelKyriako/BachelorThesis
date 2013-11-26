@@ -44,11 +44,16 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         gui.GetComponent<ChatWindow>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
         gui.GetComponent<CharacterInfoPanel>().enabled = true;
+        gui.GetComponent<TerrainMap>().enabled = true;
     }
 
     public void RequestConnectedPlayerCharacters() {
         Utilities.Instance.LogMessage("Requesting for Connected players from master client");
         photonView.RPC("SendPlayerCharacters", PhotonNetwork.masterClient);
+    }
+    public void RemovePlayerCharacter(string _name) {
+        if (all.ContainsKey(_name))
+            all.Remove(_name);
     }
 
     #region RPCs
@@ -56,12 +61,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public void AddPlayerCharacter(string _name, PhotonPlayer _player) {
         if (!all.ContainsKey(_name))
             all.Add(_name, new PlayerCharacterPair(_player, GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath +"/"+_name)));
-    }
-    [RPC]
-    public void RemovePlayerCharacter(string _name) {
-        if (all.ContainsKey(_name))
-            all.Remove(_name);
-    }
+    }    
     [RPC]
     private void SendPlayerCharacters(PhotonMessageInfo info) {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "[RPC]SendPlayerCharacters", "This RPC is only available for the master client.");
@@ -80,6 +80,12 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         get { return me; }
         set { me = value; }
     }
+    public PhotonPlayer MyPlayer {
+        get { return me.Player; }
+    }
+    public GameObject MyCharacter {
+        get { return me.Character; }
+    }
     public PlayerCharacterModel MyCharacterModel {
         get { return me.Character.GetComponent<PlayerCharacterModel>(); }
     }
@@ -87,8 +93,14 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         get { return me.Character.GetComponent<PlayerCharacterNetworkController>().photonView; }
     }
 
+    public ICollection<string> AllPlayerKeys {
+        get { return all.Keys; }
+    }
     public PhotonPlayer GetPlayer(string _name) {
         return all[_name].Player;
+    }
+    public GameObject GetCharacter(string _name) {
+        return all[_name].Character;
     }
     public PlayerCharacterModel GetPlayerModel(string _name) {
         return all[_name].Character.GetComponent<PlayerCharacterModel>();

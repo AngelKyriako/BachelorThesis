@@ -25,13 +25,7 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
 	}
 
     void Update() {
-        if (!IsInvoking("GetInput")) {
-            InvokeRepeating("GetInput", 0, Utilities.Instance.TOGGLE_KEY_DELAY);
-        }
-    }
-
-    private void GetInput() {
-        if (Input.GetKey(KeyCode.G) && Time.time - lastToggleTime > Utilities.Instance.TOGGLE_KEY_DELAY)
+        if (Input.GetKeyUp(KeyCode.G))
             isVisible = !isVisible;
     }
 

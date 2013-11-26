@@ -43,6 +43,10 @@ public class PlayerCharacterNetworkController: BaseNetworkController {
         model.SetUpModel(photonView.name);
     }
 
+    public void OnDestroy() {
+        GameManager.Instance.RemovePlayerCharacter(photonView.name);
+    }
+
     public override void Update() {
         base.Update();
         if (!IsLocalClient && statSyncTimer > statSyncDelay) {
