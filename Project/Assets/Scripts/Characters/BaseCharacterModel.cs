@@ -90,7 +90,7 @@ public class BaseCharacterModel: MonoBehaviour  {
         UpdateAttributes();
     }
 
-    public virtual void SetUpModel() { }
+    public virtual void AddListeners() { }
 
     public virtual void Update() {
     }

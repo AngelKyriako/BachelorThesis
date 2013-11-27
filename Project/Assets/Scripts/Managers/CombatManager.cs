@@ -5,12 +5,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
 
     private CombatManager() { }
 
-    public bool AreAllies(string _name1, string _name2) {
-        return GameManager.Instance.GetPlayer(_name1).customProperties["team"].Equals(
-               GameManager.Instance.GetPlayer(_name2).customProperties["team"]);
-    }
-
-    public void HostInstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
+    public void MasterClientInstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
         if (PhotonNetwork.isMasterClient)
             InstantiateSceneObject(_obj, _position, _rotation);
         else
@@ -18,7 +13,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
                                                    _obj, _position, _rotation);
     }
 
-    public void HostInstantiateSceneProjectile(string _obj, Vector3 _position, Quaternion _rotation,
+    public void MasterClientInstantiateSceneProjectile(string _obj, Vector3 _position, Quaternion _rotation,
                                                string _skillName, string _casterName, Vector3 _destination) {
         if (PhotonNetwork.isMasterClient)
             InstantiateSceneProjectile(_obj, _position, _rotation, _skillName, _casterName, _destination);
@@ -29,14 +24,17 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
         }
     }
 
-    public void HostDestroySceneObject(GameObject _obj) {
+    public void MasterClientDestroySceneObject(GameObject _obj) {
         if (PhotonNetwork.isMasterClient)
-            DestroySceneObject(_obj);
-        else
-            photonView.RPC("DestroySceneObject", PhotonNetwork.masterClient, _obj);
+            PhotonNetwork.Destroy(_obj);
     }
 
-    #region RPCs (To be used only by the master client)
+    public bool AreAllies(string _name1, string _name2) {
+        return GameManager.Instance.GetPlayer(_name1).customProperties["team"].Equals(
+               GameManager.Instance.GetPlayer(_name2).customProperties["team"]);
+    }
+
+    #region RPCs (To be sent only to master client)
     [RPC]
     private void InstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
         Utilities.Instance.LogMessage(GameManager.Instance.MyPhotonView.name + " is instantiating scene object !");
@@ -53,11 +51,6 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
         obj.GetComponent<BaseProjectile>().SetUpProjectile(SkillBook.Instance.GetSkill(_skillName), 
                                                            GameManager.Instance.GetPlayerModel(_casterName),
                                                            _destination);
-    }
-    [RPC]
-    private void DestroySceneObject(GameObject _obj) {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneObject", "This RPC is only available for the master client.");
-        PhotonNetwork.Destroy(_obj);
     }
 #endregion
 }

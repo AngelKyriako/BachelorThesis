@@ -42,7 +42,7 @@ public class PlayerCharacterNetworkController: BaseNetworkController {
     public override void Start() {
         base.Start();
         if(IsLocalClient)
-            model.SetUpModel();
+            model.AddListeners();
     }
 
     public void OnDestroy() {
@@ -86,16 +86,17 @@ public class PlayerCharacterNetworkController: BaseNetworkController {
                            i, model.GetVital(i).BaseValue, model.GetVital(i).BuffValue, model.GetVital(i).CurrentValue);
     }
 
-    public void AttachEffectToPlayer(PlayerCharacterNetworkController _receiver, string _effectTitle, string _casterName) {
-        PhotonPlayer _receiverPlayer = _receiver.photonView.owner;
-        Utilities.Instance.LogMessage("local client is: " + photonView.name);
-        Utilities.Instance.LogMessage("local client owner is: " + photonView.owner.name);
-        Utilities.Instance.LogMessage("remote client is masterclient: " + _receiverPlayer.isMasterClient);
+    public void AttachEffectToPlayer(PlayerCharacterNetworkController _caster, PlayerCharacterNetworkController _receiver, string _effectTitle) {
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "AttachEffectToPlayer", "This method is only available for the master client.");
+        //Utilities.Instance.LogMessage("local client is: " + photonView.name);
+        //Utilities.Instance.LogMessage("local client owner is: " + photonView.owner.name);
         if (photonView.Equals(_receiver.photonView))
-            _receiver.AttachEffect(_effectTitle, _casterName);
+            _receiver.AttachEffect(_caster.name, _receiver.name, _effectTitle);
         else {
-            Utilities.Instance.LogMessage("master client is not the receiver, RPC this to " + _receiverPlayer.name);
-            photonView.RPC("AttachEffect", _receiverPlayer, _effectTitle, _casterName);
+            //Utilities.Instance.LogMessage("Send RPC TO !!!");
+            //Utilities.Instance.LogMessage("remote client is: " + _receiver.photonView.name);
+            //Utilities.Instance.LogMessage("remote client owner is: " + _receiver.photonView.owner.name);
+            photonView.RPC("AttachEffect", _receiver.photonView.owner, _caster.name, _receiver.name, _effectTitle);
         }
     }
     
@@ -109,11 +110,11 @@ public class PlayerCharacterNetworkController: BaseNetworkController {
 
     #region Effects RPCs
     [RPC]
-    private void AttachEffect(string _effectTitle, string _casterName) {
+    private void AttachEffect(string _casterName, string _receiverName, string _effectTitle) {
+        LogMessageToMasterClient(_receiverName + " just attached to themselves the effect" + _effectTitle + ", of caster" + _casterName);
         BaseEffect effectToAttach = EffectBook.Instance.GetEffect(_effectTitle);
-        BaseEffect tempEffect = (BaseEffect)gameObject.AddComponent(effectToAttach.GetType());
+        BaseEffect tempEffect = (BaseEffect)GameManager.Instance.GetCharacter(_receiverName).AddComponent(effectToAttach.GetType());
         tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), effectToAttach);
-        LogMessageToMasterClient(photonView.name + " just attached to themselves the effect" + _effectTitle + ", of caster" + _casterName);
     }
 
     #endregion

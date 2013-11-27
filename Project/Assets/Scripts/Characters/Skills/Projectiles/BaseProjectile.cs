@@ -32,15 +32,13 @@ public class BaseProjectile: MonoBehaviour {
 	public virtual void Update () {
         transform.position = Vector3.MoveTowards(transform.position, destination, movementSpeed * Time.deltaTime);
         if (Vector3.Distance(origin, transform.position) > range)
-            CombatManager.Instance.HostDestroySceneObject(gameObject);
+            CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
 
 	}
 
     public virtual void OnCollisionEnter(Collision collision) {
-        if (PhotonNetwork.isMasterClient && !casterModel.name.Equals(collision.gameObject.name)) {
-            collision.gameObject.GetComponent<PlayerCharacterNetworkController>().LogMessageToMasterClient("This should be printed once. Sender must be: "+PhotonNetwork.masterClient.name);
+        if (PhotonNetwork.isMasterClient && !casterModel.name.Equals(collision.gameObject.name))
             skill.Trigger(casterModel, collision.gameObject.GetComponent<PlayerCharacterModel>());
-        }
     }
     public Vector3 Destination {
         get { return destination; }

@@ -41,11 +41,11 @@ public class BaseSpell: BaseSkill {
     public override void Cast(BaseCharacterModel _caster, Vector3 _destination) {
         coolDownTimer = coolDownTime - (coolDownTime * _caster.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
         if (castEffect)
-            CombatManager.Instance.HostInstantiateSceneObject(ResourcesPathManager.Instance.CastEffectPath(castEffect.name),
+            CombatManager.Instance.MasterClientInstantiateSceneObject(ResourcesPathManager.Instance.CastEffectPath(castEffect.name),
                                                               _caster.transform.position, Quaternion.identity);
 
         if (projectile)
-            CombatManager.Instance.HostInstantiateSceneProjectile(ResourcesPathManager.Instance.ProjectilePath(projectile.name),
+            CombatManager.Instance.MasterClientInstantiateSceneProjectile(ResourcesPathManager.Instance.ProjectilePath(projectile.name),
                                                                   _caster.transform.position, Quaternion.identity, Title, _caster.name, _destination);
         //ActivateSupportEffects(_caster, _caster);//@TODO this will leave from here, if teams are added to the game !!!!!
         IsSelected = false;
@@ -54,25 +54,26 @@ public class BaseSpell: BaseSkill {
     //for AoE skills we need a certain behavior of the triggerEffect
     public override void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         if (triggerEffect)
-            CombatManager.Instance.HostInstantiateSceneObject(ResourcesPathManager.Instance.TriggerEffectPath(triggerEffect.name),
-                                                          targetCursor != null ? targetCursor.transform.position : _caster.transform.position, Quaternion.identity);
+            CombatManager.Instance.MasterClientInstantiateSceneObject(ResourcesPathManager.Instance.TriggerEffectPath(triggerEffect.name),
+                                                          targetCursor != null ? targetCursor.transform.position : _caster.transform.position,
+                                                          Quaternion.identity);
         ActivateOffensiveEffects(_caster, _receiver);
         //ActivateSupportEffects(_caster, _receiver);
     }
 
     public override void ActivateOffensiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         if (_receiver)
-            foreach (string _name in OffensiveEffectKeys){
-                Utilities.Instance.LogMessage("Attaching a offensive effect bitch");
-                GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_receiver.NetworkController, _name, _caster.name);
-            }
+            foreach (string _effectTitle in OffensiveEffectKeys)
+                GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
+                                                                                        _receiver.NetworkController,
+                                                                                        _effectTitle);
     }
 
     public override void ActivateSupportEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
-        foreach (string _name in SupportEffectKeys) {
-            Utilities.Instance.LogMessage("Attaching a support effect bitch");
-            GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_receiver.NetworkController, _name, _caster.name);
-        }
+        foreach (string _effectTitle in SupportEffectKeys)
+            GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
+                                                                                    _receiver.NetworkController,
+                                                                                    _effectTitle);
     }
 
     public override void Update() {
