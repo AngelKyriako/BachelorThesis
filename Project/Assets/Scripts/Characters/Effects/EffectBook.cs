@@ -29,7 +29,7 @@ public class EffectBook {
         AddEffect(tempEffect);
 
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect("Health Heal", "Health Heal effect description", null, true, new EffectMod(0f, 0.3f), VitalType.Health);
+        ((HealingEffect)tempEffect).SetUpEffect("Health Heal", "Health Heal effect description", null, false, new EffectMod(0f, 0.3f), VitalType.Health);
         AddEffect(tempEffect);
 
         GameObject.Destroy(effectsHolder);

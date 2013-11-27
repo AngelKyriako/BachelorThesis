@@ -16,6 +16,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     private GameObject gui;
     private PlayerCharacterPair me;
+    private PlayerCharacterPair masterClient;
     private Dictionary<string, PlayerCharacterPair> all;
 
     private GameManager() { }
@@ -60,14 +61,19 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     [RPC]
     public void AddPlayerCharacter(string _name, PhotonPlayer _player) {
         if (!all.ContainsKey(_name))
-            all.Add(_name, new PlayerCharacterPair(_player, GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath +"/"+_name)));
-    }    
+            all.Add(_name, new PlayerCharacterPair(_player, GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath +"/"+_name)));            
+    }
+    [RPC]
+    private void SetMasterClient(string _name) {
+        masterClient = all[_name];
+    }
     [RPC]
     private void SendPlayerCharacters(PhotonMessageInfo info) {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "[RPC]SendPlayerCharacters", "This RPC is only available for the master client.");
         foreach (string _name in all.Keys) {
             photonView.RPC("AddPlayerCharacter", info.sender, _name, all[_name].Player);
         }
+        photonView.RPC("SetMasterClient", info.sender, photonView.name);
     }
 #endregion
 
@@ -91,6 +97,17 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
     public PhotonView MyPhotonView{
         get { return me.Character.GetComponent<PlayerCharacterNetworkController>().photonView; }
+    }
+
+    public PlayerCharacterPair MasterClient {
+        get { return masterClient; }
+        set { masterClient = value; }
+    }
+    public PlayerCharacterNetworkController MasterClientNetworkController {
+        get { return masterClient.Character.GetComponent<PlayerCharacterNetworkController>(); }
+    }
+    public PhotonView MasterClientPhotonView {
+        get { return masterClient.Character.GetComponent<PlayerCharacterNetworkController>().photonView; }
     }
 
     public ICollection<string> AllPlayerKeys {

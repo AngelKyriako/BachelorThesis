@@ -50,9 +50,9 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
         Utilities.Instance.LogMessage(GameManager.Instance.MyPhotonView.name + " is instantiating scene projectile !");
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneObject", "This RPC is only available for the master client.");
         GameObject obj = PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
-        obj.GetComponent<BaseProjectile>().SetUpProjectile( new Pair<BaseSkill, BaseCharacterModel>(
-                                                                    SkillBook.Instance.GetSkill(_skillName),
-                                                                    GameManager.Instance.GetPlayerModel(_casterName)), _destination);
+        obj.GetComponent<BaseProjectile>().SetUpProjectile(SkillBook.Instance.GetSkill(_skillName), 
+                                                           GameManager.Instance.GetPlayerModel(_casterName),
+                                                           _destination);
     }
     [RPC]
     private void DestroySceneObject(GameObject _obj) {

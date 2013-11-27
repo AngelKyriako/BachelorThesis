@@ -11,7 +11,7 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
     private VariableType editingField;
     private Rect windowRect;
     private bool isVisible;
-    private float lastRPCTime, lastToggleTime;
+    private float lastRPCTime;
 
 	void Start () {
         editingField = default(VariableType);
@@ -21,7 +21,6 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
                               MAIN_HEIGHT);
         isVisible = false;
         lastRPCTime = 0f;
-        lastToggleTime = 0f;
 	}
 
     void Update() {

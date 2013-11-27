@@ -34,13 +34,12 @@ public class BaseSpell: BaseSkill {
             obj.GetComponent<TargetCursor>().SetUpTargetCursor(new Pair<BaseSkill, BaseCharacterModel>(this, _caster), _slot);
         }
         else
-            Cast(_caster, Vector3.zero);
+            Cast(_caster, Vector3.zero);//@TODO add destination based on forward vector
         IsSelected = true;
-        coolDownTimer = coolDownTime;
     }
 
     public override void Cast(BaseCharacterModel _caster, Vector3 _destination) {
-        coolDownTimer = coolDownTime;
+        coolDownTimer = coolDownTime - (coolDownTime * _caster.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
         if (castEffect)
             CombatManager.Instance.HostInstantiateSceneObject(ResourcesPathManager.Instance.CastEffectPath(castEffect.name),
                                                               _caster.transform.position, Quaternion.identity);
@@ -48,8 +47,7 @@ public class BaseSpell: BaseSkill {
         if (projectile)
             CombatManager.Instance.HostInstantiateSceneProjectile(ResourcesPathManager.Instance.ProjectilePath(projectile.name),
                                                                   _caster.transform.position, Quaternion.identity, Title, _caster.name, _destination);
-        else
-            Trigger(_caster, null);
+        //ActivateSupportEffects(_caster, _caster);//@TODO this will leave from here, if teams are added to the game !!!!!
         IsSelected = false;
     }
 
@@ -58,20 +56,22 @@ public class BaseSpell: BaseSkill {
         if (triggerEffect)
             CombatManager.Instance.HostInstantiateSceneObject(ResourcesPathManager.Instance.TriggerEffectPath(triggerEffect.name),
                                                           targetCursor != null ? targetCursor.transform.position : _caster.transform.position, Quaternion.identity);
-        ActivateEffects(_caster, _receiver);
+        ActivateOffensiveEffects(_caster, _receiver);
+        //ActivateSupportEffects(_caster, _receiver);
     }
 
-    public override void ActivateEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
-        BaseEffect tempEffect;
-        foreach (string key in Effects.Keys) {
-            if (!GetEffect(key).IsPassive && _receiver) {
-                Utilities.Instance.LogMessage("Attaching an effect bitch");
-                _caster.NetworkController.AttachEffectToRemotePlayer(_receiver.NetworkController.photonView, GetEffect(key), _caster);
+    public override void ActivateOffensiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
+        if (_receiver)
+            foreach (string _name in OffensiveEffectKeys){
+                Utilities.Instance.LogMessage("Attaching a offensive effect bitch");
+                GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_receiver.NetworkController, _name, _caster.name);
             }
-            else {
-                tempEffect = (BaseEffect)_caster.gameObject.AddComponent(GetEffect(key).GetType());
-                tempEffect.SetUpEffect(_caster, GetEffect(key));
-            }
+    }
+
+    public override void ActivateSupportEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
+        foreach (string _name in SupportEffectKeys) {
+            Utilities.Instance.LogMessage("Attaching a support effect bitch");
+            GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_receiver.NetworkController, _name, _caster.name);
         }
     }
 

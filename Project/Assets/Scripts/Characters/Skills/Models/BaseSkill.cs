@@ -6,9 +6,10 @@ public abstract class BaseSkill {
     #region attributes
     private string title, description;
     private Texture2D icon;
-    private bool isSelected;
+    private bool isSelected;    
+    private Dictionary<string, BaseEffect> offensiveEffects;
+    private Dictionary<string, BaseEffect> supportEffects;
     private Requirements requirements;
-    private Dictionary<string, BaseEffect> effects;
 
 #endregion
 
@@ -19,7 +20,8 @@ public abstract class BaseSkill {
         icon = null;
         isSelected = false;
         requirements = null;
-        effects = null;
+        offensiveEffects = null;
+        supportEffects = null;
     }
 
     public BaseSkill(string _title, string _desc, Texture2D _icon) {
@@ -28,14 +30,16 @@ public abstract class BaseSkill {
         icon = _icon;
         isSelected = false;
         requirements = new Requirements();
-        effects = new Dictionary<string, BaseEffect>();
+        offensiveEffects = new Dictionary<string, BaseEffect>();
+        supportEffects = new Dictionary<string, BaseEffect>();
     }
 #endregion
 
     public abstract void Target(BaseCharacterModel _caster, CharacterSkillSlot _slot);
     public abstract void Cast(BaseCharacterModel _caster, Vector3 _destination);
     public abstract void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver);
-    public abstract void ActivateEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver);
+    public abstract void ActivateOffensiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver);
+    public abstract void ActivateSupportEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver);
 
     public virtual void Update() { }
 
@@ -63,36 +67,48 @@ public abstract class BaseSkill {
     public void AddMaximumRequirement(StatType _stat, int _value) {
         requirements.Maximum.Add(new Pair<int, int>((int)_stat, _value));
     }
-    public bool RequirementsFulfilled(BaseCharacterModel _char) {
+    public bool RequirementsFulfilled(BaseCharacterModel _characterModel) {
         for (int i = 0; i < requirements.Minimum.Count; ++i)
-            if (_char.GetStat(requirements.Minimum[i].First).FinalValue < requirements.Minimum[i].Second)
+            if (_characterModel.GetStat(requirements.Minimum[i].First).FinalValue < requirements.Minimum[i].Second)
                 return false;
         for (int i = 0; i < requirements.Maximum.Count; ++i)
-            if (_char.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
+            if (_characterModel.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
                 return false;
-            return true;
+        return true;
     }
 
-    public void AddEffect(BaseEffect _effect) {
-        effects.Add(_effect.Title, _effect);
-    }
-    public void RemoveEffect(BaseEffect _effect){
-        effects.Remove(_effect.Title);
-    }
-    public BaseEffect GetEffect(string key) {
-        return effects[key];
-    }
-    public Dictionary<string, BaseEffect> Effects {
-        get { return effects; }
-    }
-    public int EffectsCount {
-        get { return effects.Count; }
+    public virtual bool IsReady(BaseCharacterModel _characterModel) {
+        return RequirementsFulfilled(_characterModel) && !isSelected;
     }
 
-    public virtual bool IsReady(BaseCharacterModel _char) {
-        return RequirementsFulfilled(_char) && !isSelected;
+    #region Effects
+    public void AddOffensiveEffect(BaseEffect _effect) {
+        offensiveEffects.Add(_effect.Title, _effect);
     }
-#endregion
+    public void RemoveOffensiveEffect(BaseEffect _effect) {
+        offensiveEffects.Remove(_effect.Title);
+    }
+    public BaseEffect GetOffensiveEffect(string key) {
+        return offensiveEffects[key];
+    }
+    public ICollection<string> OffensiveEffectKeys {
+        get { return offensiveEffects.Keys; }
+    }
+
+    public void AddSupportEffect(BaseEffect _effect) {
+        supportEffects.Add(_effect.Title, _effect);
+    }
+    public void RemoveSupportEffect(BaseEffect _effect) {
+        supportEffects.Remove(_effect.Title);
+    }
+    public BaseEffect GetSupportEffect(string key) {
+        return supportEffects[key];
+    }
+    public ICollection<string> SupportEffectKeys {
+        get { return supportEffects.Keys; }
+    }
+    #endregion
+    #endregion
 
     public class Requirements {
         public List<Pair<int, int>> Minimum, Maximum;

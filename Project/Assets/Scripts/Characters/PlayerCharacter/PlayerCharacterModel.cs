@@ -35,8 +35,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
         skills = new BaseSpell[Enum.GetValues(typeof(CharacterSkillSlot)).Length];        
     }
 
-    public override void SetUpModel(string _name) {
-        base.SetUpModel(_name);
+    public override void SetUpModel() {
         PlayerInputManager.Instance.OnSkillSelectInput += OnSkillUse;
     }
 

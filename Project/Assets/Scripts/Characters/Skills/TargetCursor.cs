@@ -22,7 +22,7 @@ public class TargetCursor: MonoBehaviour {
     }
 
 	void Update () {
-        Ray cameraToMouseRay = Camera.main.ScreenPointToRay(PlayerInputManager.Instance.MousePosition);
+        //Ray cameraToMouseRay = Camera.main.ScreenPointToRay(PlayerInputManager.Instance.MousePosition);
         //float ScreenDepth = 0;
         //RaycastHit hitInfo;
         //if (Physics.Raycast(cameraToMouseRay, out hitInfo)) {

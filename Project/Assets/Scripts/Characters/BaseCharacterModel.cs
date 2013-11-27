@@ -52,7 +52,7 @@ public class BaseCharacterModel: MonoBehaviour  {
                                                                           { 0.01f,  0.0f,   0.04f,  0.0f,   0.005f},//HeathRegen (hp gained per second)
                                                                           { 0.0f,   0.0f,   0.08f,  0.05f,  0.02f },//ManaRegen (mana gained per second)                                                                            
                                                                           { 0.0f,   0.025f, 0.0f,   0.0f,   0.0f  },//moveSpeed (movement speed percent added to basic movement)
-                                                                          { 0.0f,   0.02f,  0.0f,   0.0f,   0.0f  },//attackSpeed (skill cooldowns percent subtracted for cooldown time)
+                                                                          { 0.0f,   0.02f,  0.0f,   0.0f,   0.01f },//attackSpeed (skill cooldowns percent subtracted for cooldown time)
                                                                           { 0.0f,   0.0f,   0.0f,   0.012f, 0.0f  },//critical (percent chance of dealing double damage)
                                                                           { 0.0f,   0.012f, 0.0f,   0.0f,   0.003f},//evasion (percent chance evading an attack)
                                                                           { 0.0f,   0.0f,   0.0f,   0.01f,  0.06f },//radius (percent of radius added to base radius)
@@ -66,7 +66,6 @@ public class BaseCharacterModel: MonoBehaviour  {
 
     #region attributes
     private PlayerCharacterNetworkController networkController;
-    private new string name;
     private uint level;
     private List<AttachedEffect> effectsAttached;
     private Stat[] stats;
@@ -79,7 +78,6 @@ public class BaseCharacterModel: MonoBehaviour  {
     }
 
     public virtual void Start() {
-        name = string.Empty;
         Level = STARTING_LEVEL;
         effectsAttached = new List<AttachedEffect>();
 
@@ -92,9 +90,7 @@ public class BaseCharacterModel: MonoBehaviour  {
         UpdateAttributes();
     }
 
-    public virtual void SetUpModel(string _name) {
-        name = _name;
-    }
+    public virtual void SetUpModel() { }
 
     public virtual void Update() {
     }
@@ -136,10 +132,6 @@ public class BaseCharacterModel: MonoBehaviour  {
         get { return networkController; }
     }
 
-    public string Name {
-        get { return name; }
-        set { name = value; }
-    }
     public uint Level {
         get { return Level; }
         set { level = value; }

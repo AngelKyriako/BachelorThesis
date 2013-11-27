@@ -27,23 +27,23 @@ public class SkillBook{
         tempSkill = new BaseSpell("skill 1", "skill 1 description", null, 2f,
                                   (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")), null, null,
                                   (GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath("FireBall")));
-        tempSkill.AddEffect(EffectBook.Instance.GetEffect("Damage"));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect("Damage"));
             AddSkill(tempSkill);
         //2
         tempSkill = new BaseSpell("skill 2", "skill 2 description", null, 5f,
                           (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")), null, null,
                           (GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath("WaterBall")));
-        tempSkill.AddEffect(EffectBook.Instance.GetEffect("Mana burn"));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect("Mana burn"));
         AddSkill(tempSkill);
         //3
         tempSkill = new BaseSpell("skill 3", "skill 3 description", null, 8f,
                                   (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")), null, null,
                                   (GameObject)Resources.Load(ResourcesPathManager.Instance.ProjectilePath("MudBall")));
-        tempSkill.AddEffect(EffectBook.Instance.GetEffect("Slow"));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect("Slow"));
         AddSkill(tempSkill);
         //4
         tempSkill = new BaseSpell("skill 4", "skill 4 description", null, 2f, null, null, null, null);
-        tempSkill.AddEffect(EffectBook.Instance.GetEffect("Health Heal"));
+        tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect("Health Heal"));
         AddSkill(tempSkill);
     }
 
