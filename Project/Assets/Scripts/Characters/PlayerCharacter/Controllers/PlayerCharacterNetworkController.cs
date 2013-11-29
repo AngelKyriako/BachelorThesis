@@ -138,7 +138,8 @@ public class PlayerCharacterNetworkController: BaseNetworkController {
     }
     [RPC]
     private void SyncAttributesBonusStatValues() {
-        model.UpdateAttributes();
+        model.UpdateAttributesBasedOnStats();
+        model.UpdateVitalsBasedOnStats();
     }
     #endregion
 

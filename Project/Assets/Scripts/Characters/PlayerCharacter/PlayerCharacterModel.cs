@@ -18,7 +18,6 @@ public class PlayerCharacterModel: BaseCharacterModel {
     private float expModifier;
     private uint trainingPoints;
     private uint killsCount;
-    private BaseSkill[] skills;
 #endregion
 
     public override void Awake() {
@@ -32,20 +31,10 @@ public class PlayerCharacterModel: BaseCharacterModel {
         currentExp = 0;
         trainingPoints = MAX_TRAINING_POINTS;
         killsCount = 0;
-        skills = new BaseSpell[Enum.GetValues(typeof(CharacterSkillSlot)).Length];        
     }
 
     public override void AddListeners() {
         PlayerInputManager.Instance.OnSkillSelectInput += OnSkillUse;
-    }
-
-    public override void Update() {
-        base.Update();
-        for (int i = 0; i < skills.Length; ++i ) {
-            if (skills[i] != null) {
-                skills[i].Update();
-            }
-        }
     }
 
     private void ModifyExp(uint exp) {
@@ -56,16 +45,16 @@ public class PlayerCharacterModel: BaseCharacterModel {
         }
     }
 
-    private void LevelUp() {
-        ++Level;
+    public override void LevelUp() {
+        base.LevelUp();
         currentExp -= expToLevel;
         expToLevel = (uint)(expToLevel * expModifier);
     }
 
     private void OnSkillUse(CharacterSkillSlot _slot) {
         //@TODO check if not static skill
-        if (skills[(int)_slot] != null && skills[(int)_slot].IsReady(this))
-            skills[(int)_slot].Target(this, _slot);
+        if (GetSkill((int)_slot) != null)
+            GetSkill((int)_slot).Select(this, _slot);
     }
 
     #region Accessors
@@ -89,22 +78,5 @@ public class PlayerCharacterModel: BaseCharacterModel {
         get { return killsCount; }
         set { killsCount = value; }
     }
-
-    public void SetSkill(int index, BaseSkill skill) {
-        skills[index] = skill;
-    }
-    public BaseSkill GetSkill(int index) {
-        return skills[index];
-    }    
-    public int SkillCount {
-        get { return skills.Length; }
-    }
 #endregion
-
-    public void LogAttributes() {
-        for (int i = 0; i < VitalsLength; ++i)
-            Utilities.Instance.LogMessage(GetVital(i).Name + ": (" + GetVital(i).CurrentValue + "/" + GetVital(i).FinalValue + ")");
-        for (int i = 0; i < AttributesLength; ++i)
-            Utilities.Instance.LogMessage(GetAttribute(i).Name + ": " + GetAttribute(i).FinalValue);
-    }
 }

@@ -6,43 +6,62 @@ public abstract class BaseSkill {
     #region attributes
     private string title, description;
     private Texture2D icon;
-    private bool isSelected;
+    private float coolDownTimer, coolDownTime;
+    private uint manaCost;
     private Dictionary<string, BaseEffect> offensiveEffects;
     private Dictionary<string, BaseEffect> supportEffects;
     private Requirements requirements;
-#endregion
+    private bool isSelected;
+    #endregion
 
     #region constructors
     public BaseSkill() {
         title = string.Empty;
         description = string.Empty;
         icon = null;
-        isSelected = false;
+        coolDownTimer = coolDownTime = 0f;
+        manaCost = 0;
         requirements = null;
         offensiveEffects = null;
-        supportEffects = null;
+        supportEffects = null;        
+        isSelected = false;
     }
 
-    public BaseSkill(string _title, string _desc, Texture2D _icon) {
+    public BaseSkill(string _title, string _desc, Texture2D _icon, float _cd) {
         title = _title;
         description = _desc;
         icon = _icon;
-        isSelected = false;
+        coolDownTimer = coolDownTime = _cd;
+        manaCost = 0;
         requirements = new Requirements();
         offensiveEffects = new Dictionary<string, BaseEffect>();
         supportEffects = new Dictionary<string, BaseEffect>();
+        isSelected = false;
     }
-#endregion
+    #endregion
 
-    public abstract void Target(BaseCharacterModel _caster, CharacterSkillSlot _slot);
+    public virtual void OnFrameUpdate() {
+        CoolDownTimer -= Time.deltaTime;
+    }
+
+    public void UpdateManaCost(BaseCharacterModel _characterModel) {
+        manaCost = 10;
+        foreach (string title in offensiveEffects.Keys)
+            if (offensiveEffects[title].RequirementsFulfilled(_characterModel))
+                manaCost += offensiveEffects[title].ManaCost;
+        foreach (string title in supportEffects.Keys)
+            if (offensiveEffects[title].RequirementsFulfilled(_characterModel))
+                manaCost += offensiveEffects[title].ManaCost;
+    }
+
+    public abstract void Select(BaseCharacterModel _caster, CharacterSkillSlot _slot);
     public virtual void Cast(BaseCharacterModel _caster, Vector3 _destination) {
-        _caster.GetVital((int)VitalType.Mana).CurrentValue -= ManaCost(_caster);
+        _caster.GetVital((int)VitalType.Mana).CurrentValue -= manaCost;
+        coolDownTimer = coolDownTime - (coolDownTime * _caster.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
     }
     public abstract void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver);
     public abstract void ActivateOffensiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver);
     public abstract void ActivateSupportEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver);
-
-    public virtual void Update() { }
 
     #region Accessors
     public string Title {
@@ -57,29 +76,23 @@ public abstract class BaseSkill {
         get { return icon; }
         set { icon = value; }
     }
+    public float CoolDownTimer {
+        get { return coolDownTimer; }
+        set { coolDownTimer = value > 0 ? value : 0; }
+    }
     public bool IsSelected {
         get { return isSelected; }
         set { isSelected = value; }
     }
 
-    public uint ManaCost(BaseCharacterModel _characterModel) {
-        uint manaCost = 0;
-        foreach (string title in offensiveEffects.Keys)
-            if (offensiveEffects[title].RequirementsFulfilled(_characterModel))
-                manaCost += offensiveEffects[title].ManaCost;
-        foreach(string title in supportEffects.Keys)
-            if (offensiveEffects[title].RequirementsFulfilled(_characterModel))
-                manaCost += offensiveEffects[title].ManaCost;
-        return manaCost;
-    }
     public bool IsCastableBy(BaseCharacterModel _characterModel) {
-        return (_characterModel.GetVital((int)VitalType.Mana).CurrentValue >= ManaCost(_characterModel));
+        return (_characterModel.GetVital((int)VitalType.Mana).CurrentValue >= manaCost);
+    }
+    public virtual bool IsUsable(BaseCharacterModel _characterModel) {
+        return (!isSelected && (coolDownTimer == 0f) && RequirementsFulfilled(_characterModel));
     }
 
-    public virtual bool IsReady(BaseCharacterModel _characterModel) {
-        return RequirementsFulfilled(_characterModel) && !isSelected;
-    }
-
+    #region requirements
     public void AddMinimumRequirement(StatType _stat, int _value) {
         requirements.Minimum.Add(new Pair<int, int>((int)_stat, _value));
     }
@@ -95,6 +108,7 @@ public abstract class BaseSkill {
                 return false;
         return true;
     }
+    #endregion
 
     #region Effects
     public void AddOffensiveEffect(BaseEffect _effect) {
@@ -123,6 +137,7 @@ public abstract class BaseSkill {
         get { return supportEffects.Keys; }
     }
     #endregion
+
     #endregion
 
     public class Requirements {

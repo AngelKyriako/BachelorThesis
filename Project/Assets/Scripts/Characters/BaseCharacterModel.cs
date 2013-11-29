@@ -72,6 +72,7 @@ public class BaseCharacterModel: MonoBehaviour  {
     private Stat[] stats;
     private Attribute[] attributes;
     private Vital[] vitals;
+    private BaseSkill[] skills;
     private float lastRegenTime;
 #endregion
 
@@ -83,31 +84,46 @@ public class BaseCharacterModel: MonoBehaviour  {
         Level = STARTING_LEVEL;
         effectsAttached = new List<AttachedEffect>();
 
-        stats = new Stat[Enum.GetValues(typeof(StatType)).Length];
+        stats = new Stat[StatsLength];
+        attributes = new Attribute[AttributesLength];
+        vitals = new Vital[VitalsLength];
         SetupStats();
-        attributes = new Attribute[Enum.GetValues(typeof(AttributeType)).Length];
         SetupAttributes();
-        vitals = new Vital[Enum.GetValues(typeof(VitalType)).Length];
         SetupVitals();
-        UpdateAttributes();
+        UpdateAttributesBasedOnStats();
+        UpdateVitalsBasedOnStats();
+        skills = new BaseSkill[SkillSlotsLength];        
+
         lastRegenTime = Time.time;
     }
 
     public virtual void AddListeners() { }
 
     public virtual void Update() {
+        //vital regeneration
         if (Time.time - lastRegenTime >= REGEN_FREQUENCY){
             GetVital((int)VitalType.Health).CurrentValue += GetAttribute((int)AttributeType.HealthRegen).FinalValue;
             GetVital((int)VitalType.Mana).CurrentValue += GetAttribute((int)AttributeType.ManaRegen).FinalValue;
             lastRegenTime = Time.time;
         }
+        //skill cooldowns
+        for (int i = 0; i < SkillCount; ++i)
+            if (skills[i] != null)
+                skills[i].OnFrameUpdate();
     }
 
-    public void UpdateAttributes() {
+    public void UpdateAttributesBasedOnStats() {
         for (int i = 0; i < attributes.Length; ++i)
             attributes[i].UpdateAttribute();
+    }
+    public void UpdateVitalsBasedOnStats() {
         for (int i = 0; i < vitals.Length; ++i)
             vitals[i].UpdateAttribute();
+    }
+
+    public virtual void LevelUp() {
+        ++Level;
+        SetupSkillsManaCost();
     }
 
 #region Setup
@@ -132,6 +148,12 @@ public class BaseCharacterModel: MonoBehaviour  {
                 if (VITAL_RATIOS[i,j] > 0)
                     vitals[i].AddModifier(new ModifyingStat(stats[j], VITAL_RATIOS[i, j]));
         }
+    }
+
+    private void SetupSkillsManaCost() {
+        for (int i = 0; i < SkillCount; ++i)
+            if (skills[i] != null)
+                skills[i].UpdateManaCost(this);
     }
 #endregion
 
@@ -169,6 +191,7 @@ public class BaseCharacterModel: MonoBehaviour  {
         get { return Enum.GetValues(typeof(VitalType)).Length; }
     }
 
+    #region effects
     public void AddEffectAttached(AttachedEffect _effect) {
         effectsAttached.Add(_effect);
     }
@@ -181,5 +204,23 @@ public class BaseCharacterModel: MonoBehaviour  {
     public int EffectAttachedCount {
         get { return effectsAttached.Count; }
     }
-#endregion
+    #endregion
+
+    #region skills
+    public void SetSkill(int _index, BaseSkill skill) {
+        skills[_index] = skill;
+        skills[_index].UpdateManaCost(this);
+    }
+    public BaseSkill GetSkill(int index) {
+        return skills[index];
+    }
+    public int SkillCount {
+        get { return Enum.GetValues(typeof(CharacterSkillSlot)).Length; }//@TODO maybe skills should be a list or a map
+    }
+    public int SkillSlotsLength {
+        get { return Enum.GetValues(typeof(CharacterSkillSlot)).Length; }
+    }
+    #endregion
+
+    #endregion
 }

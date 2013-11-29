@@ -28,7 +28,7 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
         playerCharModel = GameManager.Instance.MyCharacterModel;
         layoutRect = new Rect(MAIN_X, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
 
-        skillButtonPressed = new bool[Enum.GetNames(typeof(CharacterSkillSlot)).Length];
+        skillButtonPressed = new bool[playerCharModel.SkillSlotsLength];
 	}
 	
 	void Update () {
@@ -45,10 +45,9 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
     private void SkillsPanel() {
         GUILayout.BeginHorizontal();
         GUILayout.Space(5);
-        for (int i = 0; i < playerCharModel.SkillCount; ++i) {
-            skillButtonPressed[i] = playerCharModel.GetSkill(i) != null
-                                    && GUILayout.Button(playerCharModel.GetSkill(i).Title, GUILayout.Width(50), GUILayout.Height(50));
-        }
+        for (int i = 0; i < playerCharModel.SkillCount; ++i)
+            skillButtonPressed[i] = playerCharModel.GetSkill(i) != null &&
+                                    GUILayout.Button(playerCharModel.GetSkill(i).Title, GUILayout.Width(50), GUILayout.Height(50));
         GUILayout.EndHorizontal();
         GUILayout.Space(5);
     }

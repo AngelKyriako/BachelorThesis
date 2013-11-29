@@ -11,7 +11,7 @@ public class CharacterWindow: MonoBehaviour {
     #region Gui constants
     private const int CHARACTER_WINDOW_ID = 0;
     private const string CHARACTER_WINDOW_TEXT = "",
-                         MENU_ITEM_STATS = "Statistics",
+                         MENU_ITEM_STATS = "Stats",
                          MENU_ITEM_SKILLS = "Skills";
 #endregion
 
@@ -171,7 +171,8 @@ public class CharacterWindow: MonoBehaviour {
                && (playerCharModel.TrainingPoints < playerCharModel.MAX_TRAINING_POINTS)) {
                 --playerCharModel.GetStat(i).BaseValue;
                 ++playerCharModel.TrainingPoints;
-                playerCharModel.UpdateAttributes();
+                playerCharModel.UpdateAttributesBasedOnStats();
+                playerCharModel.UpdateVitalsBasedOnStats();
 
                 lastClickTime = Time.time;
             }
@@ -180,7 +181,8 @@ public class CharacterWindow: MonoBehaviour {
                && (playerCharModel.TrainingPoints > 0)) {
                 ++playerCharModel.GetStat(i).BaseValue;
                 --playerCharModel.TrainingPoints;
-                playerCharModel.UpdateAttributes();
+                playerCharModel.UpdateAttributesBasedOnStats();
+                playerCharModel.UpdateVitalsBasedOnStats();
 
                 lastClickTime = Time.time;
             }
