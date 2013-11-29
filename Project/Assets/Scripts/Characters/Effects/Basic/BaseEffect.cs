@@ -19,6 +19,7 @@ public abstract class BaseEffect: MonoBehaviour {
     private string title, description;
     private Texture2D icon;
     private bool isPassive;
+    private uint manaCost, levelRequirement;
 #endregion
 
     public virtual void Awake() {
@@ -28,6 +29,8 @@ public abstract class BaseEffect: MonoBehaviour {
         icon = null;
         isPassive = false;
         enabled = false;
+        manaCost = 50;
+        levelRequirement = 0;
     }
 
     public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive) {
@@ -35,6 +38,8 @@ public abstract class BaseEffect: MonoBehaviour {
         description = _descr;
         icon = _icon;
         isPassive = _isPassive;
+        manaCost = 50;
+        levelRequirement = 0;
     }
 
     public virtual void SetUpEffect(BaseCharacterModel _caster, BaseEffect _effect) {
@@ -74,6 +79,12 @@ public abstract class BaseEffect: MonoBehaviour {
     }
     public bool IsPassive {
         get { return isPassive; }
+    }
+    public uint ManaCost {
+        get { return manaCost; }
+    }
+    public bool RequirementsFulfilled(BaseCharacterModel _characterModel) {
+        return (_characterModel.Level >= levelRequirement);
     }
     #endregion
 }

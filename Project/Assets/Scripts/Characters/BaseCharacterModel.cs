@@ -15,8 +15,9 @@ public struct AttachedEffect {
 public class BaseCharacterModel: MonoBehaviour  {
 
     #region constants
-    public const uint MAX_LEVEL = 25;
     public const uint STARTING_LEVEL = 1;
+    public const uint MAX_LEVEL = 25;
+    private const uint REGEN_FREQUENCY = 1;
 
     private static readonly int[] STAT_BASE_VALUES = new int[5] { 0, 0, 0, 0, 0 };
     private static readonly string[] STAT_DESCRIPTIONS = new string[5]{ "The power of your attack and defence",
@@ -71,6 +72,7 @@ public class BaseCharacterModel: MonoBehaviour  {
     private Stat[] stats;
     private Attribute[] attributes;
     private Vital[] vitals;
+    private float lastRegenTime;
 #endregion
 
     public virtual void Awake() {
@@ -88,11 +90,17 @@ public class BaseCharacterModel: MonoBehaviour  {
         vitals = new Vital[Enum.GetValues(typeof(VitalType)).Length];
         SetupVitals();
         UpdateAttributes();
+        lastRegenTime = Time.time;
     }
 
     public virtual void AddListeners() { }
 
     public virtual void Update() {
+        if (Time.time - lastRegenTime >= REGEN_FREQUENCY){
+            GetVital((int)VitalType.Health).CurrentValue += GetAttribute((int)AttributeType.HealthRegen).FinalValue;
+            GetVital((int)VitalType.Mana).CurrentValue += GetAttribute((int)AttributeType.ManaRegen).FinalValue;
+            lastRegenTime = Time.time;
+        }
     }
 
     public void UpdateAttributes() {
@@ -133,7 +141,7 @@ public class BaseCharacterModel: MonoBehaviour  {
     }
 
     public uint Level {
-        get { return Level; }
+        get { return level; }
         set { level = value; }
     }
     public virtual uint ExpWorth {

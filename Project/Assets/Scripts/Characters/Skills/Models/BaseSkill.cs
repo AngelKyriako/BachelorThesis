@@ -6,11 +6,10 @@ public abstract class BaseSkill {
     #region attributes
     private string title, description;
     private Texture2D icon;
-    private bool isSelected;    
+    private bool isSelected;
     private Dictionary<string, BaseEffect> offensiveEffects;
     private Dictionary<string, BaseEffect> supportEffects;
     private Requirements requirements;
-
 #endregion
 
     #region constructors
@@ -36,7 +35,9 @@ public abstract class BaseSkill {
 #endregion
 
     public abstract void Target(BaseCharacterModel _caster, CharacterSkillSlot _slot);
-    public abstract void Cast(BaseCharacterModel _caster, Vector3 _destination);
+    public virtual void Cast(BaseCharacterModel _caster, Vector3 _destination) {
+        _caster.GetVital((int)VitalType.Mana).CurrentValue -= ManaCost(_caster);
+    }
     public abstract void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver);
     public abstract void ActivateOffensiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver);
     public abstract void ActivateSupportEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver);
@@ -61,6 +62,24 @@ public abstract class BaseSkill {
         set { isSelected = value; }
     }
 
+    public uint ManaCost(BaseCharacterModel _characterModel) {
+        uint manaCost = 0;
+        foreach (string title in offensiveEffects.Keys)
+            if (offensiveEffects[title].RequirementsFulfilled(_characterModel))
+                manaCost += offensiveEffects[title].ManaCost;
+        foreach(string title in supportEffects.Keys)
+            if (offensiveEffects[title].RequirementsFulfilled(_characterModel))
+                manaCost += offensiveEffects[title].ManaCost;
+        return manaCost;
+    }
+    public bool IsCastableBy(BaseCharacterModel _characterModel) {
+        return (_characterModel.GetVital((int)VitalType.Mana).CurrentValue >= ManaCost(_characterModel));
+    }
+
+    public virtual bool IsReady(BaseCharacterModel _characterModel) {
+        return RequirementsFulfilled(_characterModel) && !isSelected;
+    }
+
     public void AddMinimumRequirement(StatType _stat, int _value) {
         requirements.Minimum.Add(new Pair<int, int>((int)_stat, _value));
     }
@@ -75,10 +94,6 @@ public abstract class BaseSkill {
             if (_characterModel.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
                 return false;
         return true;
-    }
-
-    public virtual bool IsReady(BaseCharacterModel _characterModel) {
-        return RequirementsFulfilled(_characterModel) && !isSelected;
     }
 
     #region Effects

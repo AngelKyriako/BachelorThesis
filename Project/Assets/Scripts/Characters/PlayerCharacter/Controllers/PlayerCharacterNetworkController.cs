@@ -131,7 +131,7 @@ public class PlayerCharacterNetworkController: BaseNetworkController {
         model.GetAttribute(_index).BuffValue = _buffValue;
     }
     [RPC]
-    private void SyncCharacterVital(int _index, float _baseValue, float _buffValue, int _currentValue) {
+    private void SyncCharacterVital(int _index, float _baseValue, float _buffValue, float _currentValue) {
         model.GetVital(_index).BaseValue = _baseValue;
         model.GetVital(_index).BuffValue = _buffValue;
         model.GetVital(_index).CurrentValue = _currentValue;

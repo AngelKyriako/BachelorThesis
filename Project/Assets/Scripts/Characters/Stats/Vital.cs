@@ -17,12 +17,12 @@ public class Vital: Attribute {
         currentValue += FinalValue - previousFinalValue;
     }
 
-    public int CurrentValue {
-        get { return (int)currentValue; }
-        set { currentValue = (int)((value < 0)?0:((value > base.FinalValue)?base.FinalValue:value)); }
+    public float CurrentValue {
+        get { return (uint)currentValue; }
+        set { currentValue = (value < 0) ? 0 : ((value > base.FinalValue) ? base.FinalValue : value); }
     }
 
     public override float FinalValue {
-        get { return (int)base.FinalValue; }
+        get { return (uint)base.FinalValue; }
     }
 }

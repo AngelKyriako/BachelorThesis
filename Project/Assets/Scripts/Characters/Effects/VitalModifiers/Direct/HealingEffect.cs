@@ -18,12 +18,12 @@ public class HealingEffect: VitalEffect {
 
     public override void Activate() {
         Receiver.GetVital((int)vitalType).CurrentValue += 
-                                    (int)(
+                                    (uint)(
                                             (Modifier.RawValue * (Caster.GetAttribute((int)AttributeType.Leadership).FinalValue /
                                                                     (Receiver.GetAttribute((int)AttributeType.Leadership).FinalValue/2)))
                                                                                 +
                                             (Modifier.PercentageValue * Receiver.GetVital((int)vitalType).FinalValue)
-                                         );
+                                          );
     }
 
     public VitalType VitalType {

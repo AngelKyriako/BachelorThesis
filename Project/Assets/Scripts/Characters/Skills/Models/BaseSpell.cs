@@ -31,7 +31,7 @@ public class BaseSpell: BaseSkill {
         GameObject obj;
         if (targetCursor) {
             obj = (GameObject)GameObject.Instantiate(targetCursor);
-            obj.GetComponent<TargetCursor>().SetUpTargetCursor(new Pair<BaseSkill, BaseCharacterModel>(this, _caster), _slot);
+            obj.GetComponent<TargetCursor>().SetUpTargetCursor(this, _caster, _slot);
         }
         else
             Cast(_caster, Vector3.zero);//@TODO add destination based on forward vector
@@ -39,6 +39,7 @@ public class BaseSpell: BaseSkill {
     }
 
     public override void Cast(BaseCharacterModel _caster, Vector3 _destination) {
+        base.Cast(_caster, _destination);
         coolDownTimer = coolDownTime - (coolDownTime * _caster.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
         if (castEffect)
             CombatManager.Instance.MasterClientInstantiateSceneObject(ResourcesPathManager.Instance.CastEffectPath(castEffect.name),
@@ -63,17 +64,19 @@ public class BaseSpell: BaseSkill {
 
     public override void ActivateOffensiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         if (_receiver)
-            foreach (string _effectTitle in OffensiveEffectKeys)
-                GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
-                                                                                        _receiver.NetworkController,
-                                                                                        _effectTitle);
+            foreach (string effectTitle in OffensiveEffectKeys)
+                if (GetOffensiveEffect(effectTitle).RequirementsFulfilled(_caster))
+                    GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
+                                                                                            _receiver.NetworkController,
+                                                                                            effectTitle);
     }
 
     public override void ActivateSupportEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
-        foreach (string _effectTitle in SupportEffectKeys)
-            GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
-                                                                                    _receiver.NetworkController,
-                                                                                    _effectTitle);
+        foreach (string effectTitle in SupportEffectKeys)
+            if (GetSupportEffect(effectTitle).RequirementsFulfilled(_caster))
+                GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
+                                                                                        _receiver.NetworkController,
+                                                                                        effectTitle);
     }
 
     public override void Update() {

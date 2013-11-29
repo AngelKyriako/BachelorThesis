@@ -3,7 +3,8 @@ using System.Collections;
 
 public class TargetCursor: MonoBehaviour {
 
-    private Pair<BaseSkill, BaseCharacterModel> skillCasterPair;
+    private BaseSkill skill;
+    private BaseCharacterModel caster;
     private CharacterSkillSlot slotSelected;
     public LayerMask ignoredLayers;
 
@@ -15,8 +16,9 @@ public class TargetCursor: MonoBehaviour {
         PlayerInputManager.Instance.OnSkillSelectInput += OnSkillCast;
     }
 
-    public virtual void SetUpTargetCursor(Pair<BaseSkill, BaseCharacterModel> _pair, CharacterSkillSlot _slot) {
-        skillCasterPair = _pair;
+    public virtual void SetUpTargetCursor(BaseSkill _skill, BaseCharacterModel _caster, CharacterSkillSlot _slot) {
+        skill = _skill;
+        caster = _caster;
         slotSelected = _slot;
         enabled = true;
     }
@@ -46,19 +48,10 @@ public class TargetCursor: MonoBehaviour {
 	}
 
     private void OnSkillCast(CharacterSkillSlot _slot) {
-        if (slotSelected.Equals(_slot)) {
-            skillCasterPair.First.Cast(skillCasterPair.Second, transform.position);
+        if (slotSelected.Equals(_slot) && skill.IsCastableBy(caster)) {
+            skill.Cast(caster, transform.position);
             PlayerInputManager.Instance.OnSkillSelectInput -= OnSkillCast;
             Destroy(gameObject);
         }
-    }
-
-    public Pair<BaseSkill, BaseCharacterModel> SkillCasterPair {
-        get { return skillCasterPair; }
-        set { skillCasterPair = value; }
-    }
-    public CharacterSkillSlot SlotSelected {
-        get { return slotSelected; }
-        set { slotSelected = value; }
     }
 }
