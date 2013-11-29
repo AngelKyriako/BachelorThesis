@@ -17,11 +17,11 @@ public class EffectBook {
         BaseEffect tempEffect = null;
 
         tempEffect = NewAttributeBuff(effectsHolder);
-        ((AttributeBuff)tempEffect).SetUpEffect("Slow", "Slow description", null, 10, 1, 20f, new EffectMod(0f, -0.5f), AttributeType.MovementSpeed);
+        ((AttributeBuff)tempEffect).SetUpEffect("Slow", "Slow description", null, 15, 1, 20f, new EffectMod(0f, -0.5f), AttributeType.MovementSpeed);
         AddEffect(tempEffect);
 
         tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect("Damage", "damage effect description", null, 10, 1, new EffectMod(20f, 0f));
+        ((DamageEffect)tempEffect).SetUpEffect("Damage", "damage effect description", null, 13, 1, new EffectMod(20f, 0f));
         AddEffect(tempEffect);
 
         tempEffect = NewManaBurnEffect(effectsHolder);
@@ -29,7 +29,7 @@ public class EffectBook {
         AddEffect(tempEffect);
 
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect("Health Heal", "Health Heal effect description", null, 10, 1, new EffectMod(0f, 0.3f), VitalType.Health);
+        ((HealingEffect)tempEffect).SetUpEffect("Health Heal", "Health Heal effect description", null, 20, 1, new EffectMod(0f, 0.3f), VitalType.Health);
         AddEffect(tempEffect);
 
         GameObject.Destroy(effectsHolder);

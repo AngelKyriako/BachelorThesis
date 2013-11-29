@@ -38,7 +38,7 @@ public class BaseProjectile: MonoBehaviour {
 
     public virtual void OnTriggerEnter(Collider other) {
         if (PhotonNetwork.isMasterClient && !casterModel.name.Equals(other.name))
-            skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>());
+            skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>(), other.transform.position, Quaternion.identity);
     }
 
     public Vector3 Destination {
