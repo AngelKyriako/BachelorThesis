@@ -10,9 +10,9 @@ public abstract class VitalEffect: BaseEffect {
         base.Awake();
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, //base
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, uint _manaCost, uint _minLevelReq, //base
                             EffectMod _modifier) {
-        base.SetUpEffect(_title, _descr, _icon, _isPassive);
+        base.SetUpEffect(_title, _descr, _icon, _manaCost, _minLevelReq);
         modifier = _modifier;
     }
 

@@ -12,10 +12,10 @@ public class BuffEffect: LastingEffect {
         modifier = default(EffectMod);
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive,
-                            float _duration,
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, uint _manaCost, uint _minLevelReq, //base
+                            float _duration,                                                                  //lasting
                             EffectMod _modifier) {
-        base.SetUpEffect(_title, _descr, _icon, _isPassive, _duration);
+        base.SetUpEffect(_title, _descr, _icon, _manaCost, _minLevelReq, _duration);
         modifier = _modifier;
         buffValue = 0;
     }

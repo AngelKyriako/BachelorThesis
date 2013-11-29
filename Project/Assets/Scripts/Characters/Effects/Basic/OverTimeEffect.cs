@@ -12,10 +12,10 @@ public class OverTimeEffect : LastingEffect {
         frequency = 0f;
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive, //base
-                            float _duration,                                                //lasting
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, uint _manaCost, uint _minLevelReq,//base
+                            float _duration,                                                                 //lasting
                             float _overTimeDuration, float _freq) {
-        base.SetUpEffect(_title, _descr, _icon, _isPassive, _duration);
+        base.SetUpEffect(_title, _descr, _icon, _manaCost, _minLevelReq, _duration);
         overTimeCountdownTimer = _overTimeDuration;
         frequency = _freq;
     }

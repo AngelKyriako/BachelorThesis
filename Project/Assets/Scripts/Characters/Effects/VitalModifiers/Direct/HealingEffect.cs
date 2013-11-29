@@ -4,10 +4,10 @@ using System.Collections;
 public class HealingEffect: VitalEffect {
     private VitalType vitalType;
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, bool _isPassive,//base
-                            EffectMod _modifier,                                           //vital
+    public void SetUpEffect(string _title, string _descr, Texture2D _icon, uint _manaCost, uint _minLevelReq,//base
+                            EffectMod _modifier,                                                             //vital
                             VitalType _vital) {
-        base.SetUpEffect(_title, _descr, _icon, _isPassive, _modifier);
+        base.SetUpEffect(_title, _descr, _icon, _manaCost, _minLevelReq, _modifier);
         vitalType = _vital;
     }
 
