@@ -23,12 +23,11 @@ public class TargetedSkill: BaseSkill {
         }
     }
 
-    public override bool Cast(BaseCharacterModel _caster, Vector3 _direction) {
+    public override void Cast(BaseCharacterModel _caster, Vector3 _direction) {
         if (isSelected == true) {
-            return base.Cast(_caster, _direction);
+            base.Cast(_caster, _direction);
+            isSelected = false;
         }
-        else
-            return false;
     }
 	
     public override bool IsUsable(BaseCharacterModel _characterModel) {
