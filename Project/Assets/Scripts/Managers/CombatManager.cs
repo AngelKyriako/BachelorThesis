@@ -14,13 +14,13 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     }
 
     public void MasterClientInstantiateSceneProjectile(string _obj, Vector3 _position, Quaternion _rotation,
-                                               string _skillName, string _casterName, Vector3 _destination) {
+                                               string _skillName, string _casterName, Vector3 _direction) {
         if (PhotonNetwork.isMasterClient)
-            InstantiateSceneProjectile(_obj, _position, _rotation, _skillName, _casterName, _destination);
+            InstantiateSceneProjectile(_obj, _position, _rotation, _skillName, _casterName, _direction);
         else {
             Utilities.Instance.LogMessage(GameManager.Instance.MyPhotonView.name+" is sending message to masterclient to instantiate a projectile !");
             photonView.RPC("InstantiateSceneProjectile", PhotonNetwork.masterClient,
-                                                   _obj, _position, _rotation, _skillName, _casterName, _destination);
+                                                   _obj, _position, _rotation, _skillName, _casterName, _direction);
         }
     }
 
@@ -44,13 +44,13 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     
     [RPC]
     private void InstantiateSceneProjectile(string _obj, Vector3 _position, Quaternion _rotation,
-                                            string _skillName, string _casterName, Vector3 _destination) {
+                                            string _skillName, string _casterName, Vector3 _direction) {
         Utilities.Instance.LogMessage(GameManager.Instance.MyPhotonView.name + " is instantiating scene projectile !");
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneObject", "This RPC is only available for the master client.");
         GameObject obj = PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
         obj.GetComponent<BaseProjectile>().SetUpProjectile(SkillBook.Instance.GetSkill(_skillName), 
                                                            GameManager.Instance.GetPlayerModel(_casterName),
-                                                           _destination);
+                                                           _direction);
     }
 #endregion
 }

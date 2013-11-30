@@ -56,8 +56,9 @@ public class BaseSkill {
         if (!castEffect.Equals(string.Empty))
             CombatManager.Instance.MasterClientInstantiateSceneObject(castEffect, _caster.transform.position, Quaternion.identity);
 
-        if (!projectile.Equals(string.Empty))
+        if (!projectile.Equals(string.Empty)) {
             CombatManager.Instance.MasterClientInstantiateSceneProjectile(projectile, _caster.transform.position, Quaternion.identity, title, _caster.name, _direction);
+        }
     }
 
     public virtual void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver, Vector3 _position, Quaternion _rotation) {

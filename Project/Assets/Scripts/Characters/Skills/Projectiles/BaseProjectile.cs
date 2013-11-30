@@ -3,34 +3,38 @@ using System.Collections;
 
 public class BaseProjectile: MonoBehaviour {
 
-    public int movementSpeed=10, range=25;
+    private const int directionMultiplier = 1000;
+
+    public int movementSpeed=10, range=20;
 
     private BaseSkill skill;
     private BaseCharacterModel casterModel;
-    private Vector3 origin, destination;
+    private Vector3 origin, direction;
 
     void Awake() {
         enabled = false;
     }
 
-	void Start () {
-        origin = transform.position;
-        transform.LookAt(destination);
-        transform.Rotate(0, 180, 0);
-
-        //@TODO: somehow transfer this to movement controller if possible 
-        casterModel.gameObject.transform.LookAt(destination);
-	}
-
-    public virtual void SetUpProjectile(BaseSkill _skill, BaseCharacterModel _model, Vector3 _dest) {
+    public virtual void SetUpProjectile(BaseSkill _skill, BaseCharacterModel _model, Vector3 _direction) {
         skill = _skill;
         casterModel = _model;
-        destination = _dest;
+        direction = _direction.normalized;
+        direction.x *= directionMultiplier;
+        direction.z *= directionMultiplier;
         enabled = true;
     }
 
+	void Start () {
+        origin = transform.position;
+        transform.LookAt(direction);
+        transform.Rotate(0, 180, 0);
+
+        //@TODO: somehow transfer this to movement controller if possible
+        casterModel.gameObject.transform.LookAt(direction);
+	}    
+
 	public virtual void Update () {
-        transform.position = Vector3.MoveTowards(transform.position, destination, movementSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, direction, movementSpeed * Time.deltaTime);
         if (Vector3.Distance(origin, transform.position) > range)
             CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
 
@@ -41,8 +45,8 @@ public class BaseProjectile: MonoBehaviour {
             skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>(), other.transform.position, Quaternion.identity);
     }
 
-    public Vector3 Destination {
-        get { return destination; }
-        set { destination = value; }
+    public Vector3 Direction {
+        get { return direction; }
+        set { direction = value; }
     }
 }

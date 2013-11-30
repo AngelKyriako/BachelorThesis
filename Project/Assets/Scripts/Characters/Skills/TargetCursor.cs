@@ -49,7 +49,7 @@ public class TargetCursor: MonoBehaviour {
 
     private void OnSkillCast(CharacterSkillSlot _slot) {
         if (slotSelected.Equals(_slot) && skill.IsCastableBy(caster)) {
-            skill.Cast(caster, transform.position);
+            skill.Cast(caster, transform.position - caster.transform.position);
             PlayerInputManager.Instance.OnSkillSelectInput -= OnSkillCast;
             Destroy(gameObject);
         }
