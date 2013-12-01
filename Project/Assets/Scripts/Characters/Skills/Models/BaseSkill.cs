@@ -52,13 +52,14 @@ public class BaseSkill {
 
     public virtual void Cast(BaseCharacterModel _caster, Vector3 _direction) {        
         _caster.GetVital((int)VitalType.Mana).CurrentValue -= manaCost;
-        coolDownTimer = coolDownTime - (coolDownTime * _caster.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
+        coolDownTimer = coolDownTime - (coolDownTime * _caster.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);        
         if (!castEffect.Equals(string.Empty))
             CombatManager.Instance.MasterClientInstantiateSceneObject(castEffect, _caster.transform.position, Quaternion.identity);
 
-        if (!projectile.Equals(string.Empty)) {
-            CombatManager.Instance.MasterClientInstantiateSceneProjectile(projectile, _caster.transform.position, Quaternion.identity, title, _caster.name, _direction);
-        }
+        if (!projectile.Equals(string.Empty))
+            CombatManager.Instance.MasterClientInstantiateSceneProjectile(projectile, _caster.ProjectileOriginPosition, Quaternion.identity, title, _caster.name, _direction);
+
+        ActivatePassiveEffects(_caster, _caster);
     }
 
     public virtual void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver, Vector3 _position, Quaternion _rotation) {

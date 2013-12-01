@@ -28,6 +28,16 @@ public class GUIUtilities {
         return selectedPair;
     }
 
+    public string ToggleTextButton(string _current, string _first, string _second) {
+        if (GUILayout.Button(_current)) {
+            if (_current.Equals(_first))
+                _current = _second;
+            else
+                _current = _first;
+        }
+        return _current;
+    }
+
     public Rect ClampToScreen(Rect r) {
         r.x = Mathf.Clamp(r.x, 0, Screen.width - r.width);
         r.y = Mathf.Clamp(r.y, 0, Screen.height - r.height);

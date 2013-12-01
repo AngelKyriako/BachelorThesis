@@ -36,7 +36,7 @@ public class MainLobby: MonoBehaviour {
 
     void Awake() {
         if(!PhotonNetwork.connected)
-            PhotonNetwork.ConnectUsingSettings("v0.1");
+            PhotonNetwork.ConnectUsingSettings("v1.0");
 
         fullscreen = new Rect(0, 0, Screen.width, Screen.height);
         north = new Rect(0, 0, Screen.width, northHeight);
@@ -206,7 +206,11 @@ public class MainLobby: MonoBehaviour {
                                                         {"Difficulty", GameVariables.Instance.Difficulty.Value},
                                                         {"Target kills", GameVariables.Instance.TargetKills.Value},
                                                         {"Timer", GameVariables.Instance.Timer.Value} },
-                                     GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)?roomPropsInLobbyBR:roomPropsInLobby);    
+                                     GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)?roomPropsInLobbyBR:roomPropsInLobby);
+
+            PhotonNetwork.player.customProperties["IsReady"] = false;
+            PhotonNetwork.player.customProperties["Team"] = "Team"+PhotonNetwork.player.ID.ToString();
+
             PhotonNetwork.LoadLevel("MeetingPoint");
         }
         GUILayout.EndHorizontal();

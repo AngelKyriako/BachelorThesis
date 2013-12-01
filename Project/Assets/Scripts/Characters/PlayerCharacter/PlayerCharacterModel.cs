@@ -18,6 +18,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
     private float expModifier;
     private uint trainingPoints;
     private uint killsCount;
+    private GameObject projectileSpawner;
 #endregion
 
     public override void Awake() {
@@ -31,6 +32,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
         currentExp = 0;
         trainingPoints = MAX_TRAINING_POINTS;
         killsCount = 0;
+        projectileSpawner = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterProjectileSpawnerPath(name));
     }
 
     public override void AddListeners() {
@@ -77,6 +79,9 @@ public class PlayerCharacterModel: BaseCharacterModel {
     public uint Kills {
         get { return killsCount; }
         set { killsCount = value; }
+    }
+    public override Vector3 ProjectileOriginPosition {
+        get { return projectileSpawner.transform.position; }
     }
 #endregion
 }

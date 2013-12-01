@@ -17,7 +17,11 @@ public class EffectBook {
         BaseEffect tempEffect = null;
 
         tempEffect = NewAttributeBuff(effectsHolder);
-        ((AttributeBuff)tempEffect).SetUpEffect("Slow", "Slow description", null, 15, 1, 20f, new EffectMod(0f, -0.5f), AttributeType.MovementSpeed);
+        ((AttributeBuff)tempEffect).SetUpEffect("Immobilize", "Immobilize description", null, 20, 1, 3f, new EffectMod(0f, -1.0f), AttributeType.MovementSpeed);
+        AddEffect(tempEffect);
+
+        tempEffect = NewAttributeBuff(effectsHolder);
+        ((AttributeBuff)tempEffect).SetUpEffect("Slow", "Slow description", null, 15, 1, 10f, new EffectMod(0f, -0.5f), AttributeType.MovementSpeed);
         AddEffect(tempEffect);
 
         tempEffect = NewDamageEffect(effectsHolder);
@@ -29,7 +33,11 @@ public class EffectBook {
         AddEffect(tempEffect);
 
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect("Health Heal", "Health Heal effect description", null, 20, 1, new EffectMod(0f, 0.3f), VitalType.Health);
+        ((HealingEffect)tempEffect).SetUpEffect("Health Heal", "Health Heal effect description", null, 15, 1, new EffectMod(0f, 0.3f), VitalType.Health);
+        AddEffect(tempEffect);
+
+        tempEffect = NewHealingEffect(effectsHolder);
+        ((HealingEffect)tempEffect).SetUpEffect("Mana Heal", "Mana Heal effect description", null, 10, 1, new EffectMod(0f, 0.4f), VitalType.Mana);
         AddEffect(tempEffect);
 
         GameObject.Destroy(effectsHolder);

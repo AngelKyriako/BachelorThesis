@@ -14,6 +14,11 @@ public class SceneHierarchyManager {
         get { return MergeToPath("Characters", "BabyDragons"); }
     }
 
+    public string PlayerCharacterProjectileSpawnerPath(string playerCharacterName) {
+        Utilities.Instance.LogMessage(MergeToPath(PlayerCharacterPath, playerCharacterName, "ProjectileSpawner"));
+        return MergeToPath(PlayerCharacterPath, playerCharacterName, "ProjectileSpawner");
+    }
+
     private string MergeToPath (params string[] nodes){
         string path = string.Empty;
         foreach (string node in nodes)

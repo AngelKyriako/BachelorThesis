@@ -25,12 +25,13 @@ public class BaseProjectile: MonoBehaviour {
     }
 
 	void Start () {
-        origin = transform.position;
-        transform.LookAt(direction);
-        transform.Rotate(0, 180, 0);
-
         //@TODO: somehow transfer this to movement controller if possible
         casterModel.gameObject.transform.LookAt(direction);
+
+        origin = casterModel.ProjectileOriginPosition;
+        transform.position = origin;
+        transform.LookAt(direction);
+        transform.Rotate(0, 180, 0);
 	}    
 
 	public virtual void Update () {
@@ -41,8 +42,10 @@ public class BaseProjectile: MonoBehaviour {
 	}
 
     public virtual void OnTriggerEnter(Collider other) {
-        if (PhotonNetwork.isMasterClient && !casterModel.name.Equals(other.name))
+        if (PhotonNetwork.isMasterClient && !casterModel.name.Equals(other.name)) {
             skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>(), other.transform.position, Quaternion.identity);
+            skill.ActivateOffensiveEffects(casterModel, other.GetComponent<PlayerCharacterModel>());
+        }
     }
 
     public Vector3 Direction {

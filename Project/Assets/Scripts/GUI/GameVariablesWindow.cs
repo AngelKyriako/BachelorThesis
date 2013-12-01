@@ -2,16 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameVariablesWindow : Photon.MonoBehaviour {
+public class GameVariablesWindow: Photon.MonoBehaviour {
 
     private const int GAME_VARIABLES_WINDOW_ID = 1, MAIN_WIDTH = 300, MAIN_HEIGHT = 300;
-    private const string GAME_VARIABLES_WINDOW_TEXT = "Game Properties";
+    private const string GAME_VARIABLES_WINDOW_TEXT = "Room info";
     private const float RPC_COOLDOWN_TIME = 2.0f;
 
     private VariableType editingField;
     private Rect windowRect;
     private bool isVisible;
     private float lastRPCTime;
+
+    void Awake() {
+        enabled = false;
+    }
 
 	void Start () {
         editingField = default(VariableType);
@@ -42,9 +46,9 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
     }
 
     private void GameVariablesViewGUI() {
-        GUILayout.Label("Title: " + GameVariables.Instance.Title, GUILayout.MaxWidth(300));
-        GUILayout.Label("Mode: " + GameVariables.Instance.Mode.Key);
-        if (GameVariables.Instance.Mode.Value == GameMode.BattleRoyal)
+        GUILayout.Label("Room: " + GameVariables.Instance.Title, GUILayout.MaxWidth(300));
+        //GUILayout.Label("Mode: " + GameVariables.Instance.Mode.Key);
+        if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal))
             GUILayout.Label("Target kills: "+GameVariables.Instance.TargetKills.Key);
         GUILayout.Label("Max players: "+GameVariables.Instance.MaxPlayers.Key);
         GUILayout.Label("Difficulty: "+GameVariables.Instance.Difficulty.Key);
@@ -53,17 +57,17 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
 
     private void GameVariablesEditableGUI() {
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Title:");
+        GUILayout.Label("Room: " + GameVariables.Instance.Title, GUILayout.MaxWidth(300));
         GameVariables.Instance.Title = GUILayout.TextField(GameVariables.Instance.Title, GUILayout.MaxWidth(200));
         GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Mode:");
-        GameVariables.Instance.Mode = GUIUtilities.Instance.ButtonOptions<GameMode, VariableType>(ref editingField, VariableType.Mode,
-                                                               GameVariables.Instance.Mode,
-                                                               GameVariables.Instance.AvailableModes, 110);
-        GUILayout.EndHorizontal();
-        if (GameVariables.Instance.Mode.Value == GameMode.BattleRoyal) {
+        //GUILayout.BeginHorizontal();
+        //GUILayout.Label("Mode:");
+        //GameVariables.Instance.Mode = GUIUtilities.Instance.ButtonOptions<GameMode, VariableType>(ref editingField, VariableType.Mode,
+        //                                                       GameVariables.Instance.Mode,
+        //                                                       GameVariables.Instance.AvailableModes, 110);
+        //GUILayout.EndHorizontal();
+        if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)){
             GUILayout.BeginHorizontal();
             GUILayout.Label("Max kills:");
             GameVariables.Instance.TargetKills = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingField, VariableType.targetKills,
@@ -97,8 +101,10 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
             //    PhotonNetwork.LoadLevel("MainStage"+GameVariables.Instance.Mode.Key);
         }
         GUILayout.EndHorizontal();
-
-        SyncGameVariables();
+        if (Time.time - lastRPCTime > RPC_COOLDOWN_TIME){
+            SyncGameVariables();
+            lastRPCTime = Time.time;
+        }
     }
 
     private bool AllPlayersReady() {
@@ -109,20 +115,16 @@ public class GameVariablesWindow : Photon.MonoBehaviour {
         return true;
     }
 
-    private void SyncGameVariables() {
-        if (Time.time - lastRPCTime > RPC_COOLDOWN_TIME) {
-            photonView.RPC("SetGameVariables", PhotonTargets.Others, GameVariables.Instance.Title, GameVariables.Instance.Mode.Key, GameVariables.Instance.Difficulty.Key,
-                            GameVariables.Instance.MaxPlayers.Key, GameVariables.Instance.TargetKills.Key, GameVariables.Instance.Timer.Key);
+    private void SyncGameVariables() {        
+        photonView.RPC("SetGameVariables", PhotonTargets.Others, GameVariables.Instance.Title, GameVariables.Instance.Mode.Key, GameVariables.Instance.Difficulty.Key,
+                        GameVariables.Instance.MaxPlayers.Key, GameVariables.Instance.TargetKills.Key, GameVariables.Instance.Timer.Key);
 
-            PhotonNetwork.room.name = GameVariables.Instance.Title;
-            PhotonNetwork.room.maxPlayers = GameVariables.Instance.MaxPlayers.Value;
-            PhotonNetwork.room.customProperties["Mode"] = GameVariables.Instance.Mode.Value;
-            PhotonNetwork.room.customProperties["Difficulty"] = GameVariables.Instance.Difficulty.Value;
-            PhotonNetwork.room.customProperties["Target kills"] = GameVariables.Instance.TargetKills.Value;
-            PhotonNetwork.room.customProperties["Timer"] = GameVariables.Instance.Timer.Value;
-
-            lastRPCTime = Time.time;
-        }
+        //PhotonNetwork.room.name = GameVariables.Instance.Title;
+        PhotonNetwork.room.maxPlayers = GameVariables.Instance.MaxPlayers.Value;
+        PhotonNetwork.room.customProperties["Mode"] = GameVariables.Instance.Mode.Value;
+        PhotonNetwork.room.customProperties["Difficulty"] = GameVariables.Instance.Difficulty.Value;
+        PhotonNetwork.room.customProperties["Target kills"] = GameVariables.Instance.TargetKills.Value;
+        PhotonNetwork.room.customProperties["Timer"] = GameVariables.Instance.Timer.Value;
     }
 
     [RPC]

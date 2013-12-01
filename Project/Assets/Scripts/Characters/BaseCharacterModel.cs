@@ -222,5 +222,9 @@ public class BaseCharacterModel: MonoBehaviour  {
     }
     #endregion
 
+    public virtual Vector3 ProjectileOriginPosition {
+        get { return transform.position; }
+    }
+
     #endregion
 }
