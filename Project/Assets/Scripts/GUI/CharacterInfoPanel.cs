@@ -10,7 +10,7 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
 
     #region Model attributes
     private PlayerCharacterModel playerCharModel;
-    private bool[] skillButtonPressed;
+    private Dictionary<CharacterSkillSlot, bool> skillButtonPressed;
     #endregion
 
     #region Gui attributes
@@ -28,7 +28,13 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
         playerCharModel = GameManager.Instance.MyCharacterModel;
         layoutRect = new Rect(MAIN_X, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
 
-        skillButtonPressed = new bool[playerCharModel.SkillSlotsLength];
+        skillButtonPressed = new Dictionary<CharacterSkillSlot, bool>() {
+            { CharacterSkillSlot.Q, false },
+            { CharacterSkillSlot.W, false },
+            { CharacterSkillSlot.E, false },
+            { CharacterSkillSlot.R, false },
+        };
+
 	}
 	
 	void Update () {
@@ -45,9 +51,9 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
     private void SkillsPanel() {
         GUILayout.BeginHorizontal();
         GUILayout.Space(5);
-        for (int i = 0; i < playerCharModel.SkillCount; ++i)
-            skillButtonPressed[i] = playerCharModel.GetSkill(i) != null &&
-                                    GUILayout.Button(/*playerCharModel.GetSkill(i).Icon, */((int)playerCharModel.GetSkill(i).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
+        foreach (CharacterSkillSlot _key in playerCharModel.AllSkillKeys)
+            skillButtonPressed[_key] = playerCharModel.SkillExists(_key) &&
+                                       GUILayout.Button(/*playerCharModel.GetSkill(i).Icon, */((int)playerCharModel.GetSkill(_key).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
         GUILayout.EndHorizontal();
         GUILayout.Space(5);
     }
@@ -58,8 +64,8 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
                                                                       playerCharModel.GetVital(i).FinalValue + ")", vitalBar);
     }
 
-    public bool IsSkillButtonPressed(int _index) {
-        return skillButtonPressed[_index];
+    public bool IsSkillButtonPressed(CharacterSkillSlot _key) {
+        return skillButtonPressed[_key];
     }
 
 }

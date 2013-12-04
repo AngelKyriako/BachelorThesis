@@ -219,10 +219,10 @@ public class CharacterWindow: MonoBehaviour {
         availableSkillScrollPos = GUILayout.BeginScrollView(availableSkillScrollPos);
         GUILayout.BeginHorizontal();
         foreach (string title in SkillBook.Instance.AllSkillsKeys) {
-            if (SkillBook.Instance.IsSkillAvailable(title) && GUILayout.Button(title, GUILayout.Width(60), GUILayout.Height(60)))
+            if (SkillBook.Instance.IsSkillAvailable(title) && GUILayout.Button(SkillBook.Instance.GetSkill(title).Icon, GUILayout.Width(48), GUILayout.Height(48)))
                 lastSelectedSkill = SkillBook.Instance.GetSkill(title);
 
-            if (++count % 4 == 0) {
+            if (++count % 5 == 0) {
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
             }
@@ -232,28 +232,32 @@ public class CharacterWindow: MonoBehaviour {
         GUILayout.EndArea();
     }
     private void SelectedSkills() {
+        CharacterSkillSlot _tempSlot = default(CharacterSkillSlot);
         GUILayout.BeginArea(selectedSkillsRect);
         GUILayout.BeginHorizontal();
 
-        for (int i = 0; i < playerCharModel.SkillCount; ++i ) {
-            if (playerCharModel.GetSkill(i) != null){
-                if (GUILayout.Button(playerCharModel.GetSkill(i).Title, GUILayout.Width(60), GUILayout.Height(60)))
+        for (int i = 1; i < playerCharModel.SkillSlotsLength; ++i ) {
+            _tempSlot = (CharacterSkillSlot)i;            
+            if (playerCharModel.SkillExists(_tempSlot)) {
+                if (GUILayout.Button(playerCharModel.GetSkill(_tempSlot).Icon, GUILayout.Width(48), GUILayout.Height(48))) {
                     if (lastSelectedSkill != null) {
-                        SkillBook.Instance.SetSkillAvailable(playerCharModel.GetSkill(i), true);
-                        //SkillBook.Instance.AddSkill(playerCharModel.GetSkill(i));
-                        playerCharModel.SetSkill(i, lastSelectedSkill);
+                        SkillBook.Instance.SetSkillAvailable(playerCharModel.GetSkill(_tempSlot), true);
+                        playerCharModel.RemoveSkill(_tempSlot);
+                        playerCharModel.AddSkill(_tempSlot, lastSelectedSkill);
                         SkillBook.Instance.SetSkillAvailable(lastSelectedSkill, false);
                         lastSelectedSkill = null;
                     }
+                }
             }
             else
-                if (GUILayout.Button("Empty", GUILayout.Width(60), GUILayout.Height(60)))
+                if (GUILayout.Button("Empty", GUILayout.Width(48), GUILayout.Height(48))) {
                     if (lastSelectedSkill != null) {
-                        playerCharModel.SetSkill(i, lastSelectedSkill);
-                        playerCharModel.GetSkill(i).SetUpSkill(playerCharModel, (CharacterSkillSlot)i);
+                        playerCharModel.AddSkill(_tempSlot, lastSelectedSkill);
+                        playerCharModel.GetSkill(_tempSlot).SetUpSkill(playerCharModel, (CharacterSkillSlot)i);
                         SkillBook.Instance.SetSkillAvailable(lastSelectedSkill, false);
                         lastSelectedSkill = null;
                     }
+                }
         }
         GUILayout.EndHorizontal();
         GUILayout.EndArea();

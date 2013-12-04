@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TargetCursor: MonoBehaviour {
+public class BaseTargetCursor: MonoBehaviour {
 
     private BaseSkill skill;
     public LayerMask ignoredLayers;
@@ -43,7 +43,7 @@ public class TargetCursor: MonoBehaviour {
         Destroy(gameObject);
     }
 
-    public Vector3 Direction {
+    public virtual Vector3 Direction {
         get { return transform.position - skill.Owner.transform.position; }
     }
 }

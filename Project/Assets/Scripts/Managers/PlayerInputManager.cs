@@ -25,16 +25,16 @@ public class PlayerInputManager: SingletonPhotonMono<PlayerInputManager> {
             SkillRightClick(CharacterSkillSlot.None);
         }
         //Skill select, casting
-        if (Input.GetKeyUp(KeyCode.Q)) {
+        if (Input.GetKeyUp(KeyCode.Q) || CharacterInfoPanel.Instance.IsSkillButtonPressed(CharacterSkillSlot.Q)) {
             SkillQWERorLeftClick(CharacterSkillSlot.Q);
         }
-        else if (Input.GetKeyUp(KeyCode.W)) {
+        else if (Input.GetKeyUp(KeyCode.W) || CharacterInfoPanel.Instance.IsSkillButtonPressed(CharacterSkillSlot.W)) {
             SkillQWERorLeftClick(CharacterSkillSlot.W);
         }
-        else if (Input.GetKeyUp(KeyCode.E)) {
+        else if (Input.GetKeyUp(KeyCode.E) || CharacterInfoPanel.Instance.IsSkillButtonPressed(CharacterSkillSlot.E)) {
             SkillQWERorLeftClick(CharacterSkillSlot.E);
         }
-        else if (Input.GetKeyUp(KeyCode.R)/* || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlot.R)*/) {
+        else if (Input.GetKeyUp(KeyCode.R) || CharacterInfoPanel.Instance.IsSkillButtonPressed(CharacterSkillSlot.R)) {
             SkillQWERorLeftClick(CharacterSkillSlot.R);
         }
         else if (Input.GetMouseButtonDown(LEFT_CLICK)) {

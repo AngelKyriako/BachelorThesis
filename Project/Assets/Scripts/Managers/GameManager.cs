@@ -128,5 +128,8 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public PhotonView GetPlayerPhotonView(string _name) {
         return all[_name].Character.GetComponent<PlayerCharacterNetworkController>().photonView;
     }
+    public bool IsPlayerCharacterObject(string _name) {
+        return all.ContainsKey(_name);
+    }
 #endregion
 }

@@ -4,7 +4,7 @@ using System.Collections;
 public class TargetedSkill: BaseSkill {
 
     private GameObject targetCursor;
-    private TargetCursor currentCursor;
+    private BaseTargetCursor currentCursor;
     private bool isSelected;
 
     public TargetedSkill(string _title, string _desc, Texture2D _icon, float _cd, string _castEff, string _projectile, string _triggerEff, GameObject _targetCursor)
@@ -30,7 +30,7 @@ public class TargetedSkill: BaseSkill {
         if (IsUsable) {            
             GameObject obj;
             obj = (GameObject)GameObject.Instantiate(targetCursor);
-            currentCursor = obj.GetComponent<TargetCursor>();
+            currentCursor = obj.GetComponent<BaseTargetCursor>();
             currentCursor.SetUpTargetCursor(this);
 
             isSelected = true;

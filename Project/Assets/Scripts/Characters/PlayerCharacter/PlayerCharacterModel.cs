@@ -68,16 +68,16 @@ public class PlayerCharacterModel: BaseCharacterModel {
     }
 
     private void SkillSelect(CharacterSkillSlot _slotPressed) {
-        if (!_slotPressed.Equals(CharacterSkillSlot.None) && GetSkill((int)_slotPressed) != null)
-            GetSkill((int)_slotPressed).Pressed();
+        if (SkillExists(_slotPressed))
+            GetSkill(_slotPressed).Pressed();
     }
     private void SkillUnselect(CharacterSkillSlot _slotPressed) {
-        if (!PlayerInputManager.Instance.CurrentTargetedSlot.Equals(CharacterSkillSlot.None))
-            GetSkill((int)PlayerInputManager.Instance.CurrentTargetedSlot).Unpressed();
+        if (SkillExists(PlayerInputManager.Instance.CurrentTargetedSlot))
+            GetSkill(PlayerInputManager.Instance.CurrentTargetedSlot).Unpressed();
 
-        PlayerInputManager.Instance.CurrentTargetedSlot = (!_slotPressed.Equals(CharacterSkillSlot.None) &&
-                                                           !GetSkill((int)_slotPressed).IsSelected) ?
-                                                                            CharacterSkillSlot.None : _slotPressed;
+
+        PlayerInputManager.Instance.CurrentTargetedSlot = (SkillExists(_slotPressed) &&
+                                                           !GetSkill(_slotPressed).IsSelected) ? CharacterSkillSlot.None : _slotPressed;
     }
 
     #region Accessors

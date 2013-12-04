@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 
 public enum CharacterSkillSlot {
+    None,
     Q,
     W,
     E,
-    R,
-    None
+    R    
 }
 
 public struct AttachedEffect {
@@ -80,7 +80,7 @@ public class BaseCharacterModel: MonoBehaviour  {
     private Stat[] stats;
     private Attribute[] attributes;
     private Vital[] vitals;
-    private BaseSkill[] skills;
+    private Dictionary<CharacterSkillSlot, BaseSkill> skills;
     private float lastRegenTime;
     private bool isStunned;
 #endregion
@@ -101,7 +101,7 @@ public class BaseCharacterModel: MonoBehaviour  {
         SetupVitals();
         UpdateAttributesBasedOnStats();
         UpdateVitalsBasedOnStats();
-        skills = new BaseSkill[SkillSlotsLength];
+        skills = new Dictionary<CharacterSkillSlot, BaseSkill>();
         isStunned = false;
 
         lastRegenTime = Time.time;
@@ -117,9 +117,8 @@ public class BaseCharacterModel: MonoBehaviour  {
             lastRegenTime = Time.time;
         }
         //skill cooldowns
-        for (int i = 0; i < SkillCount; ++i)
-            if (skills[i] != null)
-                skills[i].OnFrameUpdate();
+        foreach (CharacterSkillSlot _key in skills.Keys)
+            skills[_key].OnFrameUpdate();
     }
 
     public void UpdateAttributesBasedOnStats() {
@@ -137,7 +136,7 @@ public class BaseCharacterModel: MonoBehaviour  {
     }
 
     public virtual void Death() {
-
+        //@TODO shit
     }
 
 #region Setup
@@ -165,9 +164,8 @@ public class BaseCharacterModel: MonoBehaviour  {
     }
 
     private void SetupSkillsManaCost() {
-        for (int i = 0; i < SkillCount; ++i)
-            if (skills[i] != null)
-                skills[i].UpdateManaCost(this);
+        foreach (CharacterSkillSlot _key in skills.Keys)
+            skills[_key].UpdateManaCost(this);
     }
 #endregion
 
@@ -221,18 +219,25 @@ public class BaseCharacterModel: MonoBehaviour  {
     #endregion
 
     #region skills
-    public void SetSkill(int _index, BaseSkill skill) {
-        skills[_index] = skill;
-        skills[_index].UpdateManaCost(this);
+    public void AddSkill(CharacterSkillSlot _key, BaseSkill _skill) {
+        skills.Add(_key, _skill);
+        skills[_key].UpdateManaCost(this);
     }
-    public BaseSkill GetSkill(int index) {
-        return skills[index];
+    public void RemoveSkill(CharacterSkillSlot _key) {
+        skills.Remove(_key);
     }
-    public int SkillCount {
-        get { return Enum.GetValues(typeof(CharacterSkillSlot)).Length - 1; }//@TODO maybe skills should be a list or a map
+    public bool SkillExists(CharacterSkillSlot _key) {
+        return skills.ContainsKey(_key);
+    }
+    public BaseSkill GetSkill(CharacterSkillSlot _key) {
+        Utilities.Instance.LogMessage("temp: " + _key);
+        return skills[_key];
+    }
+    public ICollection<CharacterSkillSlot> AllSkillKeys {
+        get { return skills.Keys; }
     }
     public int SkillSlotsLength {
-        get { return Enum.GetValues(typeof(CharacterSkillSlot)).Length - 1; }
+        get { return Enum.GetValues(typeof(CharacterSkillSlot)).Length; }
     }
     #endregion
 
