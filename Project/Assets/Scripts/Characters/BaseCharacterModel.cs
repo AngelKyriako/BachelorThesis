@@ -2,6 +2,14 @@
 using System;
 using System.Collections.Generic;
 
+public enum CharacterSkillSlot {
+    Q,
+    W,
+    E,
+    R,
+    None
+}
+
 public struct AttachedEffect {
     public BaseEffect Self;
     public BaseCharacterModel Caster;
@@ -26,7 +34,7 @@ public class BaseCharacterModel: MonoBehaviour  {
                                                                         "Your ability of finding ways to use skills more often",
                                                                         "Capability of playing on a leading role" };
 
-    private static readonly float[] ATTRIBUTE_BASE_VALUES = new float[12] { 10, 10, 10, 10, 1, 1, 1, 0, 0, 0, 1, 1 };
+    private static readonly float[] ATTRIBUTE_BASE_VALUES = new float[12] { 10, 10, 10, 10, 0.5f, 0.5f, 1, 0, 0, 0, 1, 1 };
 
     private static readonly string[] ATTRIBUTE_DESCRIPTIONS = new string[12]{ "Boosts HP loss on attack attack effect",
                                                                               "Boosts HP gain on heal effect",
@@ -74,6 +82,7 @@ public class BaseCharacterModel: MonoBehaviour  {
     private Vital[] vitals;
     private BaseSkill[] skills;
     private float lastRegenTime;
+    private bool isStunned;
 #endregion
 
     public virtual void Awake() {
@@ -92,7 +101,8 @@ public class BaseCharacterModel: MonoBehaviour  {
         SetupVitals();
         UpdateAttributesBasedOnStats();
         UpdateVitalsBasedOnStats();
-        skills = new BaseSkill[SkillSlotsLength];        
+        skills = new BaseSkill[SkillSlotsLength];
+        isStunned = false;
 
         lastRegenTime = Time.time;
     }
@@ -124,6 +134,10 @@ public class BaseCharacterModel: MonoBehaviour  {
     public virtual void LevelUp() {
         ++Level;
         SetupSkillsManaCost();
+    }
+
+    public virtual void Death() {
+
     }
 
 #region Setup
@@ -215,12 +229,17 @@ public class BaseCharacterModel: MonoBehaviour  {
         return skills[index];
     }
     public int SkillCount {
-        get { return Enum.GetValues(typeof(CharacterSkillSlot)).Length; }//@TODO maybe skills should be a list or a map
+        get { return Enum.GetValues(typeof(CharacterSkillSlot)).Length - 1; }//@TODO maybe skills should be a list or a map
     }
     public int SkillSlotsLength {
-        get { return Enum.GetValues(typeof(CharacterSkillSlot)).Length; }
+        get { return Enum.GetValues(typeof(CharacterSkillSlot)).Length - 1; }
     }
     #endregion
+
+    public bool IsStunned {
+        get { return isStunned; }
+        set { isStunned = value; }
+    }
 
     public virtual Vector3 ProjectileOriginPosition {
         get { return transform.position; }

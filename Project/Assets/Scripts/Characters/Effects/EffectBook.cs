@@ -33,36 +33,39 @@ public class EffectBook {
         AddEffect(tempEffect);
 
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect("Health Heal", "Health Heal effect description", null, 15, 1, new EffectMod(0f, 0.3f), VitalType.Health);
+        ((HealingEffect)tempEffect).SetUpEffect("Health Heal", "Health Heal effect description", null, 15, 1, new EffectMod(20f, 0.3f), VitalType.Health);
         AddEffect(tempEffect);
 
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect("Mana Heal", "Mana Heal effect description", null, 10, 1, new EffectMod(0f, 0.4f), VitalType.Mana);
+        ((HealingEffect)tempEffect).SetUpEffect("Mana Heal", "Mana Heal effect description", null, 10, 1, new EffectMod(20f, 0.4f), VitalType.Mana);
+        AddEffect(tempEffect);
+
+        tempEffect = NewStunEffect(effectsHolder);
+        ((StunEffect)tempEffect).SetUpEffect("Stun", "Stun description", null, 15, 1, 4f);
         AddEffect(tempEffect);
 
         GameObject.Destroy(effectsHolder);
     }
-
+    //direct vital effects
     private DamageEffect NewDamageEffect(GameObject _effectsHolder) {
         return _effectsHolder.AddComponent<DamageEffect>();
     }
-
     private ManaBurnEffect NewManaBurnEffect(GameObject _effectsHolder) {
         return _effectsHolder.AddComponent<ManaBurnEffect>();
     }
-
     private HealingEffect NewHealingEffect(GameObject _effectsHolder) {
         return _effectsHolder.AddComponent<HealingEffect>();
     }
-
+    //buff & debuffs
     private VitalBuff NewVitalBuff(GameObject _effectsHolder) {
         return _effectsHolder.AddComponent<VitalBuff>();
     }
-
     private AttributeBuff NewAttributeBuff(GameObject _effectsHolder) {
         return _effectsHolder.AddComponent<AttributeBuff>();
     }
-
+    private StunEffect NewStunEffect(GameObject _effectsHolder) {
+        return _effectsHolder.AddComponent<StunEffect>();
+    }
     #region Accesors
     public ICollection<string> AllEffectsKeys {
         get { return allEffects.Keys; }

@@ -28,7 +28,7 @@ public class MovementController: MonoBehaviour {
     }
 
     void Update() {
-        if (networkController.IsLocalClient) {
+        if (networkController.IsLocalClient && !model.IsStunned) {
             AnimatorMovementSpeed = currentSpeed;
 
             //move to destination
@@ -67,7 +67,7 @@ public class MovementController: MonoBehaviour {
         //animator.enabled = true;
         float hitdistance = 0.0f;
 
-        if (new Plane(Vector3.up, transform.position).Raycast(ray, out hitdistance)) {
+        if (new Plane(Vector3.up, transform.position).Raycast(ray, out hitdistance) && !model.IsStunned) {
             Vector3 targetPoint = ray.GetPoint(hitdistance);
             destination = ray.GetPoint(hitdistance);
             destination.Set(destination.x, groundedY, destination.z);

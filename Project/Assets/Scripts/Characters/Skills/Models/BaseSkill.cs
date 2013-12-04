@@ -11,7 +11,9 @@ public class BaseSkill {
     private Dictionary<string, BaseEffect> offensiveEffects,
                                            supportEffects,
                                            passiveEffects;
-    private Requirements requirements;    
+    private Requirements requirements;
+    private BaseCharacterModel owner;    
+    private CharacterSkillSlot slot;
 
     private string castEffect, projectile, triggerEffect;
     #endregion
@@ -31,6 +33,11 @@ public class BaseSkill {
         triggerEffect = _triggerEff;
     }
 
+    public void SetUpSkill(BaseCharacterModel _owner, CharacterSkillSlot _slot){
+        owner = _owner;
+        slot = _slot;
+    }
+
     public virtual void OnFrameUpdate() {
         CoolDownTimer -= Time.deltaTime;
     }
@@ -45,25 +52,30 @@ public class BaseSkill {
                 manaCost += offensiveEffects[title].ManaCost;
     }
 
-    public virtual void Select(BaseCharacterModel _caster, CharacterSkillSlot _slot) {
-        if (IsUsable(_caster))
-            Cast(_caster, _caster.transform.forward);
+    public virtual void Pressed() {
+        if (IsUsable)
+            Cast(owner.transform.forward);
     }
 
-    public virtual void Cast(BaseCharacterModel _caster, Vector3 _direction) {        
-        _caster.GetVital((int)VitalType.Mana).CurrentValue -= manaCost;
-        coolDownTimer = coolDownTime - (coolDownTime * _caster.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);        
-        if (!castEffect.Equals(string.Empty))
-            CombatManager.Instance.MasterClientInstantiateSceneObject(castEffect, _caster.transform.position, Quaternion.identity);
+    public virtual void Unpressed() { }
 
-        if (!projectile.Equals(string.Empty))
-            CombatManager.Instance.MasterClientInstantiateSceneProjectile(projectile, _caster.ProjectileOriginPosition, Quaternion.identity, title, _caster.name, _direction);
+    public virtual void Select() { }
+    public virtual void Unselect() { }
 
-        ActivatePassiveEffects(_caster, _caster);
+    public virtual void Cast(Vector3 _direction) {
+        owner.GetVital((int)VitalType.Mana).CurrentValue -= manaCost;
+        coolDownTimer = coolDownTime - (coolDownTime * owner.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
+        if (castEffect != null && !castEffect.Equals(string.Empty))
+            CombatManager.Instance.MasterClientInstantiateSceneObject(castEffect, owner.transform.position, Quaternion.identity);
+
+        if (projectile != null && !projectile.Equals(string.Empty))
+            CombatManager.Instance.MasterClientInstantiateSceneProjectile(projectile, owner.ProjectileOriginPosition, Quaternion.identity, title, owner.name, _direction);
+
+        ActivatePassiveEffects(owner, owner);
     }
 
     public virtual void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver, Vector3 _position, Quaternion _rotation) {
-        if (!triggerEffect.Equals(string.Empty))
+        if (triggerEffect != null && !triggerEffect.Equals(string.Empty))
             CombatManager.Instance.MasterClientInstantiateSceneObject(triggerEffect, _position, _rotation);
     }
 
@@ -87,9 +99,7 @@ public class BaseSkill {
     public virtual void ActivatePassiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         foreach (string effectTitle in PassiveEffectKeys)
             if (GetPassiveEffect(effectTitle).RequirementsFulfilled(_caster))
-                GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
-                                                                                        _receiver.NetworkController,
-                                                                                        effectTitle);
+                _caster.NetworkController.AttachEffect(_caster.name, _receiver.name, effectTitle);
     }
 
     #region Accessors
@@ -110,11 +120,13 @@ public class BaseSkill {
         set { coolDownTimer = value > 0 ? value : 0; }
     }
 
-    public bool IsCastableBy(BaseCharacterModel _characterModel) {
-        return (_characterModel.GetVital((int)VitalType.Mana).CurrentValue >= manaCost);
+    public virtual bool IsUsable {
+        get { return (coolDownTimer == 0f) && (owner.GetVital((int)VitalType.Mana).CurrentValue >= manaCost) && RequirementsFulfilled(); }
     }
-    public virtual bool IsUsable(BaseCharacterModel _characterModel) {
-        return ((coolDownTimer == 0f) && RequirementsFulfilled(_characterModel));
+
+    public virtual bool IsSelected {
+        get { return true; }
+        set { }
     }
 
     #region requirements
@@ -124,12 +136,12 @@ public class BaseSkill {
     public void AddMaximumRequirement(StatType _stat, int _value) {
         requirements.Maximum.Add(new Pair<int, int>((int)_stat, _value));
     }
-    public bool RequirementsFulfilled(BaseCharacterModel _characterModel) {
+    public bool RequirementsFulfilled() {
         for (int i = 0; i < requirements.Minimum.Count; ++i)
-            if (_characterModel.GetStat(requirements.Minimum[i].First).FinalValue < requirements.Minimum[i].Second)
+            if (owner.GetStat(requirements.Minimum[i].First).FinalValue < requirements.Minimum[i].Second)
                 return false;
         for (int i = 0; i < requirements.Maximum.Count; ++i)
-            if (_characterModel.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
+            if (owner.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
                 return false;
         return true;
     }
@@ -176,6 +188,15 @@ public class BaseSkill {
         get { return passiveEffects.Keys; }
     }
     #endregion
+
+    public BaseCharacterModel Owner {
+        get { return owner; }
+        set { owner = value; }
+    }
+    public CharacterSkillSlot Slot {
+        get { return slot; }
+        set { slot = value; }
+    }
 
     #endregion
 

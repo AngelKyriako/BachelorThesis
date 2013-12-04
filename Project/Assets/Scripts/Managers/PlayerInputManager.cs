@@ -5,37 +5,48 @@ public class PlayerInputManager: SingletonPhotonMono<PlayerInputManager> {
 
     private const int LEFT_CLICK = 0, RIGHT_CLICK = 1;
 
-    //public delegate void CameraMovementEvent();
-    //public event CameraMovementEvent OnCameraMovementInput;
+    private CharacterSkillSlot currentTargetedSlot;
+
     public delegate void CharacterMovementEvent(Ray ray);
     public event CharacterMovementEvent OnCharacterMovementInput;
-    public delegate void SkillSelectEvent(CharacterSkillSlot _slot);
-    public event SkillSelectEvent OnSkillSelectInput;
+    public delegate void SkillPressEvent(CharacterSkillSlot _slot);
+    public event SkillPressEvent SkillQWERorLeftClick, SkillRightClick;
 
     private PlayerInputManager() { }
 
     void Start() {
+        currentTargetedSlot = CharacterSkillSlot.None;
     }
 
 	void Update () {
-        //Camera Input
-        
-        //Character Input
+        //Character movement input and skill unselect
         if (Input.GetMouseButtonDown(RIGHT_CLICK)) {
             OnCharacterMovementInput(Camera.main.ScreenPointToRay(Input.mousePosition));
+            SkillRightClick(CharacterSkillSlot.None);
         }
-        //Skill Input
-        if (Input.GetKeyUp(KeyCode.Q) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlot.Q))
-            OnSkillSelectInput(CharacterSkillSlot.Q);
-        else if (Input.GetKeyUp(KeyCode.W) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlot.W))
-            OnSkillSelectInput(CharacterSkillSlot.W);
-        else if (Input.GetKeyUp(KeyCode.E) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlot.E))
-            OnSkillSelectInput(CharacterSkillSlot.E);
-        else if (Input.GetKeyUp(KeyCode.R) || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlot.R))
-            OnSkillSelectInput(CharacterSkillSlot.R);
+        //Skill select, casting
+        if (Input.GetKeyUp(KeyCode.Q)) {
+            SkillQWERorLeftClick(CharacterSkillSlot.Q);
+        }
+        else if (Input.GetKeyUp(KeyCode.W)) {
+            SkillQWERorLeftClick(CharacterSkillSlot.W);
+        }
+        else if (Input.GetKeyUp(KeyCode.E)) {
+            SkillQWERorLeftClick(CharacterSkillSlot.E);
+        }
+        else if (Input.GetKeyUp(KeyCode.R)/* || CharacterInfoPanel.Instance.IsSkillButtonPressed((int)CharacterSkillSlot.R)*/) {
+            SkillQWERorLeftClick(CharacterSkillSlot.R);
+        }
+        else if (Input.GetMouseButtonDown(LEFT_CLICK)) {
+            SkillQWERorLeftClick(currentTargetedSlot);
+        }
 	}
 
     public Vector3 MousePosition {
         get { return Input.mousePosition; }
+    }
+    public CharacterSkillSlot CurrentTargetedSlot {
+        get { return currentTargetedSlot; }
+        set { currentTargetedSlot = value; }
     }
 }

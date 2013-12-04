@@ -110,7 +110,7 @@ public class PlayerCharacterNetworkController: BaseNetworkController {
 
     #region Effects RPCs
     [RPC]
-    private void AttachEffect(string _casterName, string _receiverName, string _effectTitle) {
+    public void AttachEffect(string _casterName, string _receiverName, string _effectTitle) {
         LogMessageToMasterClient(_receiverName + " just attached to themselves the effect" + _effectTitle + ", of caster" + _casterName);
         BaseEffect effectToAttach = EffectBook.Instance.GetEffect(_effectTitle);
         BaseEffect tempEffect = (BaseEffect)GameManager.Instance.GetCharacter(_receiverName).AddComponent(effectToAttach.GetType());

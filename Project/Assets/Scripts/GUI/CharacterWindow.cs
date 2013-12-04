@@ -250,6 +250,7 @@ public class CharacterWindow: MonoBehaviour {
                 if (GUILayout.Button("Empty", GUILayout.Width(60), GUILayout.Height(60)))
                     if (lastSelectedSkill != null) {
                         playerCharModel.SetSkill(i, lastSelectedSkill);
+                        playerCharModel.GetSkill(i).SetUpSkill(playerCharModel, (CharacterSkillSlot)i);
                         SkillBook.Instance.SetSkillAvailable(lastSelectedSkill, false);
                         lastSelectedSkill = null;
                     }

@@ -4,22 +4,14 @@ using System.Collections;
 public class TargetCursor: MonoBehaviour {
 
     private BaseSkill skill;
-    private BaseCharacterModel caster;
-    private CharacterSkillSlot slotSelected;
     public LayerMask ignoredLayers;
 
     void Awake() {
         enabled = false;
     }
 
-    void Start() {
-        PlayerInputManager.Instance.OnSkillSelectInput += OnSkillCast;
-    }
-
-    public virtual void SetUpTargetCursor(BaseSkill _skill, BaseCharacterModel _caster, CharacterSkillSlot _slot) {
+    public void SetUpTargetCursor(BaseSkill _skill) {
         skill = _skill;
-        caster = _caster;
-        slotSelected = _slot;
         enabled = true;
     }
 
@@ -47,11 +39,11 @@ public class TargetCursor: MonoBehaviour {
         transform.position = new Vector3(worldMousePos.x, 3.5f, worldMousePos.z);
 	}
 
-    private void OnSkillCast(CharacterSkillSlot _slot) {
-        if (slotSelected.Equals(_slot) && skill.IsCastableBy(caster)) {
-            skill.Cast(caster, transform.position - caster.transform.position);
-            PlayerInputManager.Instance.OnSkillSelectInput -= OnSkillCast;
-            Destroy(gameObject);
-        }
+    public void DestroyTargetCursor() {
+        Destroy(gameObject);
+    }
+
+    public Vector3 Direction {
+        get { return transform.position - skill.Owner.transform.position; }
     }
 }

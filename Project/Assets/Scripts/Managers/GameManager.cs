@@ -67,6 +67,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
     [RPC]
     private void SetMasterClient(string _name) {
+        //while (!all.ContainsKey(_name));
         masterClient = all[_name];
     }
     [RPC]

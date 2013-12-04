@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 using System;
 
-public enum CharacterSkillSlot{
-    Q, W, E, R
-}
-
 public class PlayerCharacterModel: BaseCharacterModel {
 
     #region constants
@@ -17,7 +13,8 @@ public class PlayerCharacterModel: BaseCharacterModel {
     private uint currentExp, expToLevel;
     private float expModifier;
     private uint trainingPoints;
-    private uint killsCount;
+    private uint killsCount, deathCount;
+    private float respawnTimer;
     private GameObject projectileSpawner;
 #endregion
 
@@ -32,11 +29,21 @@ public class PlayerCharacterModel: BaseCharacterModel {
         currentExp = 0;
         trainingPoints = MAX_TRAINING_POINTS;
         killsCount = 0;
+        deathCount = 0;
+        respawnTimer = 0;
         projectileSpawner = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterProjectileSpawnerPath(name));
     }
 
     public override void AddListeners() {
-        PlayerInputManager.Instance.OnSkillSelectInput += OnSkillUse;
+        PlayerInputManager.Instance.SkillQWERorLeftClick += SkillSelect;
+        PlayerInputManager.Instance.SkillQWERorLeftClick += SkillUnselect;
+
+        PlayerInputManager.Instance.SkillRightClick += SkillUnselect;
+    }
+
+    public override void Update() {
+        base.Update();
+        RespawnTimer -= Time.deltaTime;
     }
 
     private void ModifyExp(uint exp) {
@@ -53,10 +60,24 @@ public class PlayerCharacterModel: BaseCharacterModel {
         expToLevel = (uint)(expToLevel * expModifier);
     }
 
-    private void OnSkillUse(CharacterSkillSlot _slot) {
-        //@TODO check if not static skill
-        if (GetSkill((int)_slot) != null)
-            GetSkill((int)_slot).Select(this, _slot);
+    public override void Death() {
+        if (deathCount != 0)
+            RespawnTimer = Level * ((killsCount / 2) / (deathCount * 2));
+        else
+            RespawnTimer = Level * (killsCount / 2);
+    }
+
+    private void SkillSelect(CharacterSkillSlot _slotPressed) {
+        if (!_slotPressed.Equals(CharacterSkillSlot.None) && GetSkill((int)_slotPressed) != null)
+            GetSkill((int)_slotPressed).Pressed();
+    }
+    private void SkillUnselect(CharacterSkillSlot _slotPressed) {
+        if (!PlayerInputManager.Instance.CurrentTargetedSlot.Equals(CharacterSkillSlot.None))
+            GetSkill((int)PlayerInputManager.Instance.CurrentTargetedSlot).Unpressed();
+
+        PlayerInputManager.Instance.CurrentTargetedSlot = (!_slotPressed.Equals(CharacterSkillSlot.None) &&
+                                                           !GetSkill((int)_slotPressed).IsSelected) ?
+                                                                            CharacterSkillSlot.None : _slotPressed;
     }
 
     #region Accessors
@@ -80,6 +101,15 @@ public class PlayerCharacterModel: BaseCharacterModel {
         get { return killsCount; }
         set { killsCount = value; }
     }
+    public uint DeathCount {
+        get { return deathCount; }
+        set { deathCount = value; }
+    }
+    public float RespawnTimer {
+        get { return respawnTimer; }
+        set { respawnTimer = (value < 0) ? 0 : value; }
+    }
+
     public override Vector3 ProjectileOriginPosition {
         get { return projectileSpawner.transform.position; }
     }

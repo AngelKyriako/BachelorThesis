@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
 
     #region Gui constants
-    private const int MAIN_X = 300, MAIN_HEIGHT = 125, MAIN_WIDTH = 300;
+    private const int MAIN_X = 350, MAIN_HEIGHT = 125, MAIN_WIDTH = 300;
 #endregion
 
     #region Model attributes
@@ -47,7 +47,7 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
         GUILayout.Space(5);
         for (int i = 0; i < playerCharModel.SkillCount; ++i)
             skillButtonPressed[i] = playerCharModel.GetSkill(i) != null &&
-                                    GUILayout.Button(playerCharModel.GetSkill(i).Title, GUILayout.Width(50), GUILayout.Height(50));
+                                    GUILayout.Button(/*playerCharModel.GetSkill(i).Icon, */((int)playerCharModel.GetSkill(i).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
         GUILayout.EndHorizontal();
         GUILayout.Space(5);
     }
