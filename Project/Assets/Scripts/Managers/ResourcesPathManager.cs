@@ -8,11 +8,18 @@ public class ResourcesPathManager {
     }
 
     private ResourcesPathManager() { }
-    //characters
+    #region characters
     public string PlayerCharacterPath {
         get { return MergeToPath("Characters", "BabyDragon"); }
     }
-    //skill casting
+    #endregion
+    #region misc
+    public string Vision(string _difficulty) {
+        return MergeToPath("Misc", "Vision", _difficulty);
+    }
+    #endregion
+    #region skills
+    //casting
     public string TargetCursorPath(string _targetCursor) {
         return MergeToPath("Skills", "TargetCursors", _targetCursor);
     }
@@ -28,7 +35,7 @@ public class ResourcesPathManager {
     public string ProjectilePath(string _projectile) {
         return MergeToPath("Skills", "Projectiles", _projectile);
     }
-    //skill icons
+    //icons
     public string SkillIcon48x48(string _iconName) {
         return MergeToPath("Skills", "Icons", "48x48", _iconName);
     }
@@ -43,4 +50,5 @@ public class ResourcesPathManager {
             path += node + "/";
         return path.Substring(0, path.Length - 1);
     }
+    #endregion
 }

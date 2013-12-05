@@ -4,7 +4,6 @@ public class VisionController: MonoBehaviour {
 
     private const float UPDATE_FREQUENCY = 1.5f;
 
-    public GameObject visionPrefab;
     public Vector3 visionPosition = Vector3.zero;
     public string visibleLayer = "",
                   hiddenLayer = "";
@@ -18,13 +17,14 @@ public class VisionController: MonoBehaviour {
     private BaseCharacterModel model;
 
     void Awake() {
-        Utilities.Instance.Assert(visionPrefab, "VisionController", "Awake", "Invalid vision prefab");
         Utilities.Instance.Assert(visibleLayer.Length != 0 && hiddenLayer.Length != 0, "VisionController", "Awake", "Invalid layers");
         model = gameObject.GetComponent<BaseCharacterModel>();
     }
 
     void Start() {
-        vision = (GameObject)Instantiate(visionPrefab);
+        vision = (GameObject)GameObject.Instantiate(Resources.Load(
+                                                        ResourcesPathManager.Instance.Vision(
+                                                            GameVariables.Instance.Difficulty.Key)));
         vision.transform.parent = transform;
         if (vision.renderer)
             vision.renderer.enabled = false;
