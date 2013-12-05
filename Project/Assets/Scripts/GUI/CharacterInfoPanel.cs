@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
 
     #region Gui constants
-    private const int MAIN_X = 350, MAIN_HEIGHT = 125, MAIN_WIDTH = 300;
+    private const int MAIN_X = 350, MAIN_HEIGHT = 50, MAIN_WIDTH = 200;
 #endregion
 
     #region Model attributes
@@ -26,7 +26,7 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
 
 	void Start () {
         playerCharModel = GameManager.Instance.MyCharacterModel;
-        layoutRect = new Rect(Screen.width/2 - MAIN_WIDTH/2, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
+        layoutRect = new Rect((Screen.width-MAIN_WIDTH)/2, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
 
         skillButtonPressed = new Dictionary<CharacterSkillSlot, bool>() {
             { CharacterSkillSlot.Q, false },

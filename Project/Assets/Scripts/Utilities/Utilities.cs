@@ -50,5 +50,12 @@ public class Utilities {
                 SetGameObjectLayer(child.gameObject, l);
     }
 
-    public readonly float TOGGLE_KEY_DELAY = 0.25f;
+    public PlayerCharacterModel GetPlayerCharacterModel(Transform obj) {
+        if (obj == null)
+            return null;
+        else if (obj.GetComponent<PlayerCharacterModel>() != null)
+            return obj.GetComponent<PlayerCharacterModel>();
+
+        return GetPlayerCharacterModel(obj.transform.parent);
+    }
 }

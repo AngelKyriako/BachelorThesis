@@ -42,10 +42,22 @@ public class BaseProjectile: MonoBehaviour {
 	}
 
     public virtual void OnTriggerEnter(Collider other) {
-        if (PhotonNetwork.isMasterClient && !casterModel.name.Equals(other.name) && GameManager.Instance.IsPlayerCharacterObject(other.name)) {
-            skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>(), other.transform.position, Quaternion.identity);
-            skill.ActivateOffensiveEffects(casterModel, other.GetComponent<PlayerCharacterModel>());
-            CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
+        PlayerCharacterModel otherModel;
+        if (PhotonNetwork.isMasterClient){
+            if (other.CompareTag("Player")) {
+                otherModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
+                if (otherModel && !casterModel.name.Equals(otherModel.name)) {
+                    skill.ActivateOffensiveEffects(casterModel, other.GetComponent<PlayerCharacterModel>());
+                    Utilities.Instance.LogMessage(casterModel.name + "'s projectile collided with " + otherModel.name + ". Projectile destroyed");
+                    skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>(), other.transform.position, Quaternion.identity);
+                    CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
+                }
+            }
+            else {
+                Utilities.Instance.LogMessage(casterModel.name + "'s projectile collided with " + other.name+ "Projectile destroyed");
+                skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>(), other.transform.position, Quaternion.identity);
+                CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
+            }
         }
     }
 }

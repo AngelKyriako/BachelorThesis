@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MovementController: MonoBehaviour {
 
-    private const float groundedY = 1.5f;
+    private const float groundedY = 0;
 
     public Animator animator;
     public float baseMovementSpeed = 10;
