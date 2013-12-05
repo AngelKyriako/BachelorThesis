@@ -8,9 +8,9 @@
 /// As a note, this is made as MonoBehaviour because we need Coroutines.
 /// </summary>
 public class SingletonMono<T>: MonoBehaviour where T: MonoBehaviour {
+    //@TODO: could use another generic type (K) to substitude Monobehavior with other mono subclasses
+    private const string GAMEOBJECT_CONTAINER_NAME = "Managers";
 
-    private const string containerName = "Managers";
-    
     private static T _instance;
 
     private static object _lock = new object();
@@ -36,8 +36,8 @@ public class SingletonMono<T>: MonoBehaviour where T: MonoBehaviour {
 
                     if (_instance == null) {
                         GameObject singletonContainer;
-                        if (!(singletonContainer = GameObject.Find(containerName))) {
-                            singletonContainer = new GameObject(containerName);
+                        if (!(singletonContainer = GameObject.Find(GAMEOBJECT_CONTAINER_NAME))) {
+                            singletonContainer = new GameObject(GAMEOBJECT_CONTAINER_NAME);
                             DontDestroyOnLoad(singletonContainer);
                             singletonContainer.transform.position = Vector3.zero;
                             Debug.Log("[Singleton] GameObject " + singletonContainer.name + "was created as a container " +

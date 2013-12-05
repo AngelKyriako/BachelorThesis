@@ -26,7 +26,7 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
 
 	void Start () {
         playerCharModel = GameManager.Instance.MyCharacterModel;
-        layoutRect = new Rect(MAIN_X, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
+        layoutRect = new Rect(Screen.width/2 - MAIN_WIDTH/2, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
 
         skillButtonPressed = new Dictionary<CharacterSkillSlot, bool>() {
             { CharacterSkillSlot.Q, false },
@@ -43,7 +43,7 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
 
     void OnGUI() {
         GUILayout.BeginArea(layoutRect);
-        SkillsPanel();
+        //SkillsPanel();
         VitalsPanel();
         GUILayout.EndArea();
     }
@@ -54,6 +54,7 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
         foreach (CharacterSkillSlot _key in playerCharModel.AllSkillKeys)
             skillButtonPressed[_key] = playerCharModel.SkillExists(_key) &&
                                        GUILayout.Button(/*playerCharModel.GetSkill(i).Icon, */((int)playerCharModel.GetSkill(_key).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
+            //GUILayout.Label(/*playerCharModel.GetSkill(i).Icon, */((int)playerCharModel.GetSkill(_key).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
         GUILayout.EndHorizontal();
         GUILayout.Space(5);
     }

@@ -12,23 +12,29 @@ public struct ChatMessage {
     }
 }
 
-public class ChatWindow: Photon.MonoBehaviour {
+public class ChatWindow: SingletonMono<ChatWindow> {
 
     private const int MAX_MESSAGES_COUNT = 30;
-    private const int MAIN_X = 0, MAIN_HEIGHT = 140, MAIN_WIDTH = 300;   
+    private const int MAIN_X = 0, MAIN_HEIGHT = 140, MAIN_WIDTH = 300;
 
-    private List<ChatMessage> messages = new List<ChatMessage>();
-    private Vector2 scrollPos = Vector2.zero;
     private string chatInput = "";
+    private List<ChatMessage> messages;
+    private Vector2 scrollPos = Vector2.zero;        
     private float lastUnfocusTime = 0;
     private Rect layoutRect;
 
-    private static ChatWindow instance;
+    private GUINetController networkController;
+
+    private ChatWindow() { }
+
+    void Awake() {
+        enabled = false;
+    }
 
     void Start() {
-        instance = this;
-        enabled = false;
+        messages = new List<ChatMessage>();        
         layoutRect = new Rect(MAIN_X, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
+        networkController = GetComponent<GUINetController>();
     }
 
     void OnGUI() {
@@ -52,7 +58,7 @@ public class ChatWindow: Photon.MonoBehaviour {
 
         if (Event.current.type == EventType.keyDown && Event.current.character == '\n') {
             if (GUI.GetNameOfFocusedControl() == "ChatField") {
-                Send(PhotonTargets.All);
+                networkController.SendChatMessage(PhotonTargets.All);
                 lastUnfocusTime = Time.time;
                 GUI.FocusControl("");
                 GUI.UnfocusWindow();
@@ -68,37 +74,14 @@ public class ChatWindow: Photon.MonoBehaviour {
         GUILayout.EndArea();
     }
 
-    void OnJoinedRoom() { enabled = true; }
-    void OnCreatedRoom() { enabled = true; }
-    void OnLeftRoom() { enabled = false; }
-
-    void Send(PhotonTargets targets) {
-        if (chatInput != "") {
-            photonView.RPC("MessageSent", targets, chatInput);
-            chatInput = "";
-        }
+    public void AddMessage(ChatMessage message) {
+        messages.Add(message);
+        if (messages.Count > MAX_MESSAGES_COUNT)
+            messages.RemoveAt(0);
     }
 
-    void Send(PhotonPlayer target) {
-        if (chatInput != "") {
-            chatInput = "[PM] " + chatInput;
-            photonView.RPC("MessageSent", target, chatInput);
-            chatInput = "";
-        }
-    }
-
-    [RPC]
-    void MessageSent(string text, PhotonMessageInfo info) {
-        //info.sender.customProperties["color"];
-        if (!info.sender.isMasterClient)
-            AddMessage(new ChatMessage("[" + info.sender.name + "] " + text, Color.blue));//@TODO add color to player properties
-        else
-            AddMessage(new ChatMessage("[" + info.sender.name + "] " + text, Color.red));
-    }
-
-    public static void AddMessage(ChatMessage message) {
-        instance.messages.Add(message);
-        if (instance.messages.Count > MAX_MESSAGES_COUNT)
-            instance.messages.RemoveAt(0);
+    public string Input {
+        get { return chatInput; }
+        set { chatInput = value; }
     }
 }

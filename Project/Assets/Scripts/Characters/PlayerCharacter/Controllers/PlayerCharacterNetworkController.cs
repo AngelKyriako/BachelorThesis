@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerCharacterNetworkController: BaseNetworkController {
+public class PlayerCharacterNetworkController: SerializableNetController {
 
     #region attributes
     // references to local gameObjects

@@ -71,7 +71,6 @@ public class MovementController: MonoBehaviour {
             Vector3 targetPoint = ray.GetPoint(hitdistance);
             destination = ray.GetPoint(hitdistance);
             destination.Set(destination.x, groundedY, destination.z);
-            //Utilities.Instance.LogMessage("destination: " + destination);
             //rotate on click
             transform.rotation = Quaternion.LookRotation(targetPoint - transform.position);
         }

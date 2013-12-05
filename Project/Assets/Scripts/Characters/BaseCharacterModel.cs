@@ -230,7 +230,6 @@ public class BaseCharacterModel: MonoBehaviour  {
         return skills.ContainsKey(_key);
     }
     public BaseSkill GetSkill(CharacterSkillSlot _key) {
-        Utilities.Instance.LogMessage("temp: " + _key);
         return skills[_key];
     }
     public ICollection<CharacterSkillSlot> AllSkillKeys {

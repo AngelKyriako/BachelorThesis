@@ -25,7 +25,7 @@ public class BaseProjectile: MonoBehaviour {
     }
 
 	void Start () {
-        //@TODO: somehow transfer this to movement controller if possible
+        //@TODO: somehow transfer this to movement controller or somewhere to run localy
         casterModel.gameObject.transform.LookAt(destination);
 
         origin = casterModel.ProjectileOriginPosition;

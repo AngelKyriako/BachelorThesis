@@ -14,6 +14,8 @@ public class FPSCounter: MonoBehaviour {
     // corstartRect overall FPS even if the interval renders something like
     // 5.5 frames.
 
+    private const int WINDOW_ID = 99;
+
     public Rect startRect = new Rect(10, 10, 75, 50); // The rect the window is initially displayed at.
     public bool updateColor = true; // Do you want the color to change if the FPS gets low
     public bool allowDrag = true; // Do you want to allow the dragging of the FPS window
@@ -61,7 +63,7 @@ public class FPSCounter: MonoBehaviour {
         }
 
         GUI.color = updateColor ? color : Color.white;
-        startRect = GUI.Window(0, startRect, DoMyWindow, "");
+        startRect = GUI.Window(WINDOW_ID, startRect, DoMyWindow, "");
     }
 
     void DoMyWindow(int windowID) {
