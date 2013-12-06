@@ -4,7 +4,15 @@ using System.Collections;
 public enum PlayerTeam{
     None,
     Team1,
-    Team2
+    Team2,
+    Team3,
+    Team4,
+    Team5,
+    Team6,
+    Team7,
+    Team8,
+    Team9,
+    Team10,
 }
 
 public enum PlayerColor{
