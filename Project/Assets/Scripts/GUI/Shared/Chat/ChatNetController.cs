@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GUINetController: BaseNetController {
+public class ChatNetController: BaseNetController {
 
     private ChatWindow chat;
 
@@ -10,7 +10,6 @@ public class GUINetController: BaseNetController {
         chat = GetComponent<ChatWindow>();
     }
 
-    #region Chat
     public void SendChatMessage(PhotonTargets _targets) {
         if (!chat.Input.Equals(string.Empty)) {
             photonView.RPC("ChatMessageSent", _targets, chat.Input);
@@ -34,5 +33,4 @@ public class GUINetController: BaseNetController {
         else
             chat.AddMessage(new ChatMessage("[" + info.sender.name + "] " + text, Color.red));
     }
-    #endregion
 }

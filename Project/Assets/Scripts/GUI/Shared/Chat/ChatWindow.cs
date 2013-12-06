@@ -23,7 +23,7 @@ public class ChatWindow: SingletonMono<ChatWindow> {
     private float lastUnfocusTime = 0;
     private Rect layoutRect;
 
-    private GUINetController networkController;
+    private ChatNetController networkController;
 
     private ChatWindow() { }
 
@@ -34,7 +34,7 @@ public class ChatWindow: SingletonMono<ChatWindow> {
     void Start() {
         messages = new List<ChatMessage>();        
         layoutRect = new Rect(MAIN_X, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
-        networkController = GetComponent<GUINetController>();
+        networkController = GetComponent<ChatNetController>();
     }
 
     void OnGUI() {
