@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class GUIUtilities {    
+public class GUIUtilities {
+
+    private Rect fullScreenRect;    
 
     private static GUIUtilities instance = new GUIUtilities();
     public static GUIUtilities Instance {
         get { return instance; }
     }
 
-    private GUIUtilities() { }
+    private GUIUtilities() {
+        fullScreenRect = new Rect(0, 0, Screen.width, Screen.height);
+    }
 
 
     public KeyValuePair<string, T> ButtonOptions<T, K>(ref K editingField, K targetedState, KeyValuePair<string, T> selectedPair,
@@ -42,5 +46,9 @@ public class GUIUtilities {
         r.x = Mathf.Clamp(r.x, 0, Screen.width - r.width);
         r.y = Mathf.Clamp(r.y, 0, Screen.height - r.height);
         return r;
+    }
+
+    public Rect FullScreenRect {
+        get { return fullScreenRect; }
     }
 }

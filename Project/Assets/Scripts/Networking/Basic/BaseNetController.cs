@@ -13,4 +13,7 @@
     public bool IsLocalClient {
         get { return photonView.isMine; }
     }
+        public bool IsMasterClient {
+        get { return PhotonNetwork.isMasterClient; }
+    }
 }

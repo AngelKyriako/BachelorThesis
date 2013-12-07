@@ -28,7 +28,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
             InitGUIScripts();
     }
 
-    void OnJoinedRoom() {
+    void OnJoinedRoom() {//@TODO: Create all instances here with only PhotonPlayer objects
         Vector3 spawnPoint;
         if (!PhotonNetwork.isMasterClient)
             spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
@@ -41,6 +41,10 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     void OnLeaveRoom() {
     }
 
+    private void StartGame() {//@TODO: photon Instantiate local Playercharacter objects and set all game objects to the maps
+                              //       Maybe use a local Player object instead of the PhotonPlayer instance.
+    }
+
     private void InitGUIScripts() {
         //gui.GetComponent<MouseCursor>().enabled = true;        
         gui.GetComponent<GameVariablesWindow>().enabled = true;
@@ -51,9 +55,9 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         gui.GetComponent<PlayersInfoWindow>().enabled = true;
     }
 
-    public void RequestConnectedPlayerCharacters() {
-        Utilities.Instance.LogMessage("Requesting for Connected players from master client");
-        photonView.RPC("SendPlayerCharacters", PhotonNetwork.masterClient);
+    public void MasterClientRequestConnectedPlayers() {
+        if(!PhotonNetwork.isMasterClient)
+            photonView.RPC("RequestForPlayerCharacters", PhotonNetwork.masterClient);
     }
     public void RemovePlayerCharacter(string _name) {
         if (all.ContainsKey(_name))
@@ -68,12 +72,11 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
     [RPC]
     private void SetMasterClient(string _name) {
-        //while (!all.ContainsKey(_name));
         masterClient = all[_name];
     }
     [RPC]
-    private void SendPlayerCharacters(PhotonMessageInfo info) {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "[RPC]SendPlayerCharacters", "This RPC is only available for the master client.");
+    private void RequestForPlayerCharacters(PhotonMessageInfo info) {
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "[RPC]MasterClientRequestForPlayerCharacters", "This RPC is only available for the master client.");
         foreach (string _name in all.Keys) {
             photonView.RPC("AddPlayerCharacter", info.sender, _name, all[_name].Player);
         }
@@ -120,6 +123,16 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public PhotonPlayer GetPlayer(string _name) {
         return all[_name].Player;
     }
+    public string GetPlayerName(string _name) {
+        return all[_name].Player.name;
+    }
+    public PlayerTeam GetPlayerTeam(string _name) {
+        return (PlayerTeam)all[_name].Player.customProperties["Team"];
+    }
+    public PlayerColor GetPlayerColor(string _name) {
+        return (PlayerColor)all[_name].Player.customProperties["Color"];
+    }
+
     public GameObject GetCharacter(string _name) {
         return all[_name].Character;
     }

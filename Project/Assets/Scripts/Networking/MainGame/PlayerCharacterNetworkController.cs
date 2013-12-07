@@ -30,7 +30,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
             GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
             Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));
             if (!PhotonNetwork.isMasterClient)
-                GameManager.Instance.RequestConnectedPlayerCharacters();
+                GameManager.Instance.MasterClientRequestConnectedPlayers();
             else
                 GameManager.Instance.MasterClient = new PlayerCharacterPair(photonView.owner, gameObject);
         }
