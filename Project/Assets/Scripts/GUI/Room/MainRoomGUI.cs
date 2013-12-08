@@ -16,7 +16,7 @@ public class MainRoomGUI: MonoBehaviour {
     private string readyText = "Ready";
     private VariableType editingPreferencesField;
     private bool teamSelecting;
-
+    
     private RoomNetController networkController;
 
 	void Awake () {
@@ -133,40 +133,48 @@ public class MainRoomGUI: MonoBehaviour {
         }
         else {
             playerSlotRect.x = playerSlotRect.width;
-        }        
+        }
 
         string slotName = MainRoomModel.Instance.GetPlayerNameInSlot(_slotNum);        
 
         GUILayout.BeginArea(playerSlotRect);
         GUILayout.BeginHorizontal();
-        ClearButton(_slotNum);
+        if (networkController.IsMasterClient)
+            KickButton(_slotNum);
         MainSlot(_slotNum);
         TeamButton(_slotNum);
         GUILayout.EndHorizontal();
         GUILayout.EndArea();
     }
 
-    private void ClearButton(int _slotNum) {
-        if (IsMySlot(_slotNum) && GUILayout.Button("Clear"))
-            networkController.MasterClientClearSlot(_slotNum, GameManager.Instance.MyPlayer);
+    private void KickButton(int _slotNum) {
+        if (!IsEmptySlot(_slotNum) && !IsMySlot(_slotNum) && GUILayout.Button("Kick", GUILayout.Width(40)))
+            networkController.MasterClientKickPlayerInSlot(_slotNum, GameManager.Instance.MyPlayer);
     }
 
     private void MainSlot(int _slotNum) {
-        if (GUILayout.Button(MainRoomModel.Instance.GetSlotColor(_slotNum) + " [ " + MainRoomModel.Instance.GetPlayerNameInSlot(_slotNum) + " ]") &&
-            IsEmptySlot(_slotNum)) {
-            networkController.MasterClientClearSlot((int)MainRoomModel.Instance.MySlot, GameManager.Instance.MyPlayer);
-            networkController.MasterClientPlayerToSlot(_slotNum, GameManager.Instance.MyPlayer);
-        }
+        if (GUILayout.Button(MainRoomModel.Instance.GetSlotColor(_slotNum) + " [ " + MainRoomModel.Instance.GetPlayerNameInSlot(_slotNum) + " ]"))
+            if(IsEmptySlot(_slotNum)) {
+                networkController.MasterClientClearSlot((int)MainRoomModel.Instance.MySlot, GameManager.Instance.MyPlayer);
+                networkController.MasterClientPlayerToSlot(_slotNum, GameManager.Instance.MyPlayer);
+            }
+            else if(IsMySlot(_slotNum))
+                networkController.MasterClientClearSlot(_slotNum, GameManager.Instance.MyPlayer);
     }
 
     private void TeamButton(int _slotNum) {
         GUILayout.BeginVertical();
-        if (IsMySlot(_slotNum))
+        if (IsMySlot(_slotNum)) {            
             GameManager.Instance.MyPlayer.customProperties["Team"] = GUIUtilities.Instance.ButtonOptions<PlayerTeam, bool>(ref teamSelecting, true,
                                                                      (PlayerTeam)GameManager.Instance.MyPlayer.customProperties["Team"],
                                                                      MainRoomModel.Instance.AvailableTeams, 60);
-        else
-            ;//@TODO: FUCK, need more RPCs in order to have the Teams too
+            if (!MainRoomModel.Instance.MyTeam.Equals((PlayerTeam)GameManager.Instance.MyPlayer.customProperties["Team"])) {
+                MainRoomModel.Instance.MyTeam = (PlayerTeam)GameManager.Instance.MyPlayer.customProperties["Team"];
+                GameManager.Instance.UpdatePlayerTeamProperty();
+            }
+        }
+        else if (MainRoomModel.Instance.GetPlayerInSlot(_slotNum) != null)
+            GUILayout.Button(((PlayerTeam)MainRoomModel.Instance.GetPlayerInSlot(_slotNum).customProperties["Team"]).ToString(), GUILayout.Width(60));
         GUILayout.EndVertical();        
     }
 
@@ -208,14 +216,18 @@ public class MainRoomGUI: MonoBehaviour {
     private void ReadyButton() {
         if ((bool)GameManager.Instance.MyPlayer.customProperties["IsReady"]) {
             if (GUILayout.Button("Ready"))
-                if (MainRoomModel.Instance.LocalClientOwnsSlot)
+                if (MainRoomModel.Instance.LocalClientOwnsSlot){
                     GameManager.Instance.MyPlayer.customProperties["IsReady"] = false;
+                    GameManager.Instance.UpdatePlayerIsReadyProperty();
+                }
                 else
                     ;//@TODO message down of button
         }
         else
-            if (GUILayout.Button("Not Ready"))
+            if (GUILayout.Button("Not Ready")) {
                 GameManager.Instance.MyPlayer.customProperties["IsReady"] = true;
+                GameManager.Instance.UpdatePlayerIsReadyProperty();
+            }
 
     }
 

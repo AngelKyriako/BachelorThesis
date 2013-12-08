@@ -41,6 +41,7 @@ public struct RoomSlot {
 public class MainRoomModel {
 
     private PlayerColor mySlot;
+    private PlayerTeam myTeam;
     private RoomSlot[] playerSlots;
     private PlayerTeam[] availableTeams;
 
@@ -50,8 +51,8 @@ public class MainRoomModel {
     }
 
     private MainRoomModel() {
-        mySlot = default(PlayerColor);
-
+        mySlot = PlayerColor.None;
+        myTeam = default(PlayerTeam);
         playerSlots = new RoomSlot[PlayerSlotsCount - 1];
         for (int i = 0; i < PlayerSlotsLength; ++i)
             playerSlots[i] = new RoomSlot((PlayerColor)i, null);
@@ -70,11 +71,16 @@ public class MainRoomModel {
     }
 
     #region Accessors
-    //slots
+    //Mine
     public PlayerColor MySlot {
         get { return mySlot; }
         set { mySlot = value; }
     }
+    public PlayerTeam MyTeam {
+        get { return myTeam; }
+        set { myTeam = value; }
+    }
+    //slots
     public void SetPlayerInSlot(int _index, PhotonPlayer _player) {
         playerSlots[_index].Player = _player;
     }

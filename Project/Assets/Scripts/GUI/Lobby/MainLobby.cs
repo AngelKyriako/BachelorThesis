@@ -46,18 +46,17 @@ public class MainLobby: MonoBehaviour {
                Screen.width - (west.x + west.width + 50), south.y - (north.y + north.height));
 
         PhotonNetwork.playerName = PlayerPrefs.GetString("name");
+        PhotonNetwork.player.customProperties["IsReady"] = false;
+        PhotonNetwork.player.customProperties["Team"] = PlayerTeam.Team1;
+        PhotonNetwork.player.customProperties["Color"] = PlayerColor.None;
+
         joinRoomName = "";
         createRoomName = PhotonNetwork.playerName.EndsWith("s") ? PhotonNetwork.playerName + "' room"
                                                                 : PhotonNetwork.playerName + "'s room";
         GameVariables.Instance.Title = createRoomName;
-        GameVariables.Instance.Host = PhotonNetwork.playerName;
 
         buttonPressedLast = default(LobbyAction);
         editingField = default(VariableType);
-
-        PhotonNetwork.player.customProperties["IsReady"] = false;
-        PhotonNetwork.player.customProperties["Team"] = PlayerTeam.Team1;
-        PhotonNetwork.player.customProperties["Color"] = PlayerColor.None;
     }
 
     void OnGUI() {

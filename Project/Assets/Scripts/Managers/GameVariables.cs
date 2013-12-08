@@ -16,8 +16,8 @@ public enum GameDifficulty {
 
 public class GameVariables {
 
-#region attributes
-    private string title, host;
+    #region attributes
+    private string title;
     private KeyValuePair<string, GameMode> mode;
     private KeyValuePair<string, GameDifficulty> difficulty;
     private KeyValuePair<string, int> maxPlayers, targetKills;
@@ -27,7 +27,7 @@ public class GameVariables {
     private Dictionary<string, GameDifficulty> availableDifficulties;
     private Dictionary<string, int> availableMaxPlayers, availableTargetKills;
     private Dictionary<string, double> availableTimers;
-#endregion
+    #endregion
 
     private static GameVariables instance = new GameVariables();
     public static GameVariables Instance {
@@ -36,7 +36,6 @@ public class GameVariables {
 
     private GameVariables() {
         title = string.Empty;
-        host = string.Empty;
         mode = new KeyValuePair<string, GameMode>(Enum.GetName(typeof(GameMode), GameMode.BattleRoyal), GameMode.BattleRoyal);
         availableModes = new Dictionary<string, GameMode>(){ {Enum.GetName(typeof(GameMode), GameMode.BattleRoyal), GameMode.BattleRoyal},
                                                              {Enum.GetName(typeof(GameMode), GameMode.Conquerors), GameMode.Conquerors},
@@ -61,7 +60,7 @@ public class GameVariables {
                                                           };
     }
 
-#region setters & getters
+    #region Accessors
     public string Title {
         get { return title; }
         set {
@@ -69,10 +68,6 @@ public class GameVariables {
             if (trimStr.Length > 0 && trimStr.Length < 128)
                 title = value;
         }
-    }
-    public string Host {
-        get { return host; }
-        set { host = value; }
     }
     public KeyValuePair<string, GameMode> Mode {
         get { return mode; }
@@ -110,5 +105,5 @@ public class GameVariables {
     public Dictionary<string, double> AvailableTimers {
         get { return availableTimers; }
     }
-#endregion
+    #endregion
 }

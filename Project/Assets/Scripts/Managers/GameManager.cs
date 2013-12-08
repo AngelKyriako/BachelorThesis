@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using ExitGames.Client.Photon;
 using System.Collections.Generic;
 
 public struct PlayerCharacterPair {
@@ -76,9 +76,11 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     public bool AllPlayersReady() {
         foreach (PhotonPlayer player in PhotonNetwork.playerList) {
-            Utilities.Instance.LogMessage("---------- "+player.ID+" ----------");
-            Utilities.Instance.LogMessage("isReady" + (bool)player.customProperties["IsReady"]);
+            Utilities.Instance.LogMessage("---------- " + player.ID + " ----------");
             Utilities.Instance.LogMessage("Has Slot" + MainRoomModel.Instance.SlotOwnedByPlayer((int)player.customProperties["Color"], player));
+            Utilities.Instance.LogMessage("Player IsReady" + (bool)player.customProperties["IsReady"]);            
+            Utilities.Instance.LogMessage("Player Color: " + (PlayerColor)player.customProperties["Color"]);
+            Utilities.Instance.LogMessage("Player Team: " + (PlayerTeam)player.customProperties["Team"]);            
             if (!(bool)player.customProperties["IsReady"] ||
                 !MainRoomModel.Instance.SlotOwnedByPlayer((int)player.customProperties["Color"], player))
                 return false;
@@ -86,6 +88,22 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         return true;
     }
 
+    #region Player properties Updates
+    public void UpdatePlayerTeamProperty() {
+        MyPlayer.SetCustomProperties(
+            new Hashtable() { { "Team", (PlayerTeam)GameManager.Instance.MyPlayer.customProperties["Team"] } });
+    }
+
+    public void UpdatePlayerColorProperty() {
+        MyPlayer.SetCustomProperties(
+            new Hashtable() { { "Color", (PlayerColor)GameManager.Instance.MyPlayer.customProperties["Color"] } });
+    }
+
+    public void UpdatePlayerIsReadyProperty() {
+        MyPlayer.SetCustomProperties(
+            new Hashtable() { { "IsReady", (bool)GameManager.Instance.MyPlayer.customProperties["IsReady"] } });
+    }
+    #endregion
     #region RPCs
     [RPC]
     public void AddPlayerCharacter(string _name, PhotonPlayer _player) {
