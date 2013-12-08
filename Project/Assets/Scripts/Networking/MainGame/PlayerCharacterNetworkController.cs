@@ -14,9 +14,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
 #endregion
 
     public override void Awake() {
-        base.Awake();        
-        transform.parent = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath).transform;
-        
+        base.Awake();
         GameManager.Instance.AddPlayerCharacter(photonView.name, photonView.owner);
         if (IsLocalClient && !PhotonNetwork.isMasterClient) {
             GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
@@ -24,10 +22,13 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         }
         else if (IsLocalClient && PhotonNetwork.isMasterClient)
             GameManager.Instance.MasterClient = GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
-        enabled = false;
+
+        enabled = false;        
     }
 
     public void SetUp() {
+        transform.parent = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath).transform;
+
         model = gameObject.GetComponent<PlayerCharacterModel>();
         model.enabled = true;
 
@@ -71,15 +72,15 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     }
 
     public override void SendData(PhotonStream _stream) {
-        base.SendData(_stream);
-        _stream.SendNext(rigidbody.velocity);
-        _stream.SendNext(movementController.AnimatorMovementSpeed);
+        //base.SendData(_stream);
+        //_stream.SendNext(rigidbody.velocity);
+        //_stream.SendNext(movementController.AnimatorMovementSpeed);
     }
 
     public override void ReceiveData(PhotonStream _stream) {
-        base.ReceiveData(_stream);
-        rigidbody.velocity = (Vector3)_stream.ReceiveNext();
-        movementController.AnimatorMovementSpeed = (float)_stream.ReceiveNext();
+        //base.ReceiveData(_stream);
+        //rigidbody.velocity = (Vector3)_stream.ReceiveNext();
+        //movementController.AnimatorMovementSpeed = (float)_stream.ReceiveNext();
     }
 
     private void SendCharacterStats() {

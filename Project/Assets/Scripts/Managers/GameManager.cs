@@ -30,11 +30,11 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     void OnJoinedRoom() {
-        Vector3 spawnPoint;
-        if (!PhotonNetwork.isMasterClient)
-            spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
-        else
-            spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
+        //Vector3 spawnPoint;
+        //if (!PhotonNetwork.isMasterClient)
+        //    spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
+        //else
+        //    spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
         PhotonNetwork.Instantiate(ResourcesPathManager.Instance.PlayerCharacterPath, Vector3.zero, Quaternion.identity, 0);
         InitRoomScripts();
     }

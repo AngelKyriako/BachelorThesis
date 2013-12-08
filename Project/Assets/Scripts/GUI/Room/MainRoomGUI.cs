@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class MainRoomGUI: MonoBehaviour {
 
-    private const int SOUTH_HEIGHT = 200, SOUTH_BUTTONS_WIDTH = 500,
+    private const int SOUTH_HEIGHT = 100, SOUTH_BUTTONS_WIDTH = 200,
                       PREFERENCES_WIDTH = 400;
 
     public Texture2D background;
@@ -18,8 +18,9 @@ public class MainRoomGUI: MonoBehaviour {
     private RoomNetController networkController;
 
 	void Awake () {
+        enabled = false;
         networkController = GetComponent<RoomNetController>();
-        networkController.MasterClientRequestForRoomState();
+        networkController.MasterClientRequestForRoomState();        
 	}
 
     void Start() {
@@ -104,6 +105,8 @@ public class MainRoomGUI: MonoBehaviour {
     #region Player slots
     private void EastPlayerSlots() {
         GUILayout.BeginArea(eastSlotsRect);
+        for (int i = 0; i < MainRoomModel.Instance.PlayerSlotsLength; ++i)
+            PlayerSlot(i);
         GUILayout.EndArea();
     }
 
@@ -128,18 +131,20 @@ public class MainRoomGUI: MonoBehaviour {
 
     private void MainSlot(int _slotNum) {
         if (GUILayout.Button(MainRoomModel.Instance.GetSlotColor(_slotNum) + " [ " + MainRoomModel.Instance.GetPlayerNameInSlot(_slotNum) + " ]") &&
-            IsEmptySlot(_slotNum))
+            IsEmptySlot(_slotNum)) {
+            networkController.MasterClientClearSlot((int)MainRoomModel.Instance.MySlot, myName);
             networkController.MasterClientPlayerToSlot(_slotNum, myName);
+        }
     }
 
     private void TeamButton(int _slotNum) {//@TODO: ????
         string state = default(string);
 
         GUILayout.BeginVertical();        
-        if(IsMySlot(_slotNum))
-            GameManager.Instance.MyPlayer.customProperties["Team"] = GUIUtilities.Instance.ButtonOptions<PlayerTeam, string>(ref state, state,
-                                                                 (PlayerTeam)GameManager.Instance.MyPlayer.customProperties["Team"],
-                                                                 MainRoomModel.Instance.AvailableTeams, 40);
+        //if(IsMySlot(_slotNum))
+        //    GameManager.Instance.MyPlayer.customProperties["Team"] = GUIUtilities.Instance.ButtonOptions<PlayerTeam, string>(ref state, state,
+        //                                                         (PlayerTeam)GameManager.Instance.MyPlayer.customProperties["Team"],
+        //                                                         MainRoomModel.Instance.AvailableTeams, 40);
         GUILayout.EndVertical();        
     }
 

@@ -29,6 +29,7 @@ public enum PlayerColor {
 
 public class MainRoomModel {
 
+    private PlayerColor mySlot;
     private Pair<PlayerColor, string>[] playerSlots;
     private PlayerTeam[] availableTeams;
 
@@ -38,6 +39,8 @@ public class MainRoomModel {
     }
 
     private MainRoomModel() {
+        mySlot = default(PlayerColor);
+
         playerSlots = new Pair<PlayerColor, string>[PlayerSlotsCount];
         for (int i = 0; i < PlayerSlotsLength; ++i)
             playerSlots[i] = new Pair<PlayerColor, string>((PlayerColor)i, string.Empty);
@@ -57,6 +60,10 @@ public class MainRoomModel {
 
     #region Accessors
     //slots
+    public PlayerColor MySlot {
+        get { return mySlot; }
+        set { mySlot = value; }
+    }
     public void SetPlayerNameInSlot(int _index, string playerName) {
         playerSlots[_index].Second = playerName;
     }
@@ -67,7 +74,7 @@ public class MainRoomModel {
         playerSlots[_index].Second = string.Empty;
     }
     public bool IsSlotEmpty(int _index) {
-        return playerSlots[_index].Equals(string.Empty);
+        return playerSlots[_index].Second.Equals(string.Empty);
     }
     public PlayerColor GetSlotColor(int _index) {
         return playerSlots[_index].First;
