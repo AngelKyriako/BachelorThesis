@@ -11,10 +11,10 @@ public enum PlayerTeam {
     Team7,
     Team8,
     Team9,
-    Team10,
+    Team10
 }
 
-public enum PlayerColor {
+public enum PlayerColor {    
     Red,
     Blue,
     Green,
@@ -24,13 +24,24 @@ public enum PlayerColor {
     Orange,
     Brown,
     Gray,
-    Black
+    Black,
+    None
+}
+
+public struct RoomSlot {
+    public PlayerColor Color;
+    public PhotonPlayer Player;
+
+    public RoomSlot(PlayerColor _color, PhotonPlayer _player) {
+        Color = _color;
+        Player = _player;
+    }
 }
 
 public class MainRoomModel {
 
     private PlayerColor mySlot;
-    private Pair<PlayerColor, string>[] playerSlots;
+    private RoomSlot[] playerSlots;
     private PlayerTeam[] availableTeams;
 
     private static MainRoomModel instance = new MainRoomModel();
@@ -41,9 +52,9 @@ public class MainRoomModel {
     private MainRoomModel() {
         mySlot = default(PlayerColor);
 
-        playerSlots = new Pair<PlayerColor, string>[PlayerSlotsCount];
+        playerSlots = new RoomSlot[PlayerSlotsCount - 1];
         for (int i = 0; i < PlayerSlotsLength; ++i)
-            playerSlots[i] = new Pair<PlayerColor, string>((PlayerColor)i, string.Empty);
+            playerSlots[i] = new RoomSlot((PlayerColor)i, null);
 
         availableTeams = new PlayerTeam[TeamsCount];
         for (int i = 0; i < availableTeams.Length; ++i)
@@ -64,20 +75,26 @@ public class MainRoomModel {
         get { return mySlot; }
         set { mySlot = value; }
     }
-    public void SetPlayerNameInSlot(int _index, string playerName) {
-        playerSlots[_index].Second = playerName;
+    public void SetPlayerInSlot(int _index, PhotonPlayer _player) {
+        playerSlots[_index].Player = _player;
+    }
+    public PhotonPlayer GetPlayerInSlot(int _index) {
+        return playerSlots[_index].Player;
     }
     public string GetPlayerNameInSlot(int _index) {
-        return playerSlots[_index].Second;
+        return (playerSlots[_index].Player != null) ? playerSlots[_index].Player.name : string.Empty;
+    }
+    public int GetPlayerPhotonViewIdInSlot(int _index) {
+        return playerSlots[_index].Player.ID;
     }
     public void EmptySlot(int _index) {
-        playerSlots[_index].Second = string.Empty;
+        playerSlots[_index].Player = null;
     }
     public bool IsSlotEmpty(int _index) {
-        return playerSlots[_index].Second.Equals(string.Empty);
+        return playerSlots[_index].Player == null;
     }
     public PlayerColor GetSlotColor(int _index) {
-        return playerSlots[_index].First;
+        return playerSlots[_index].Color;
     }
     public int PlayerSlotsLength {
         get { return playerSlots.Length; }
@@ -92,9 +109,12 @@ public class MainRoomModel {
     public int AvailableTeamsLength {
         get { return availableTeams.Length; }
     }
-    
-    public bool SlotOwnedByPlayer(int _slotNum, string _playerName) {
-        return GetPlayerNameInSlot(_slotNum).Equals(_playerName);
+
+    public bool SlotOwnedByPlayer(int _slotNum, PhotonPlayer _player) {
+        return _slotNum != (int)PlayerColor.None && _player.Equals(GetPlayerInSlot(_slotNum));
+    }
+    public bool LocalClientOwnsSlot {
+        get { return !mySlot.Equals(PlayerColor.None); }
     }
     #endregion
 }

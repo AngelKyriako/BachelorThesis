@@ -32,13 +32,12 @@ public class MainLobby: MonoBehaviour {
     private VariableType editingField;
     private string createRoomName, joinRoomName;
     private Vector2 scrollPos = Vector2.zero;
-    private Rect fullscreen, north, south, west, east;
+    private Rect north, south, west, east;
 
     void Awake() {
         if(!PhotonNetwork.connected)
             PhotonNetwork.ConnectUsingSettings("v1.0");
 
-        fullscreen = new Rect(0, 0, Screen.width, Screen.height);
         north = new Rect(0, 0, Screen.width, northHeight);
         south = new Rect(Screen.width, Screen.height, 0, 0);
         west = new Rect(0, north.y + north.height,
@@ -55,15 +54,17 @@ public class MainLobby: MonoBehaviour {
 
         buttonPressedLast = default(LobbyAction);
         editingField = default(VariableType);
+
+        PhotonNetwork.player.customProperties["IsReady"] = false;
+        PhotonNetwork.player.customProperties["Team"] = PlayerTeam.Team1;
+        PhotonNetwork.player.customProperties["Color"] = PlayerColor.None;
     }
 
     void OnGUI() {
-        if (!PhotonNetwork.connected) {
-            GUI.DrawTexture(fullscreen, background, ScaleMode.StretchToFill);
+        GUI.DrawTexture(GUIUtilities.Instance.FullScreenRect, background, ScaleMode.StretchToFill);
+        if (!PhotonNetwork.connected)
             ConnectingGUI();
-        }
         else if (PhotonNetwork.room == null) {
-            GUI.DrawTexture(fullscreen, background, ScaleMode.StretchToFill);
             NorthGUI();
             SouthGUI();
             WestGUI();
@@ -208,9 +209,7 @@ public class MainLobby: MonoBehaviour {
                                                         {"Timer", GameVariables.Instance.Timer.Value} },
                                      GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)?roomPropsInLobbyBR:roomPropsInLobby);
 
-            PhotonNetwork.player.customProperties["IsReady"] = false;
-            PhotonNetwork.player.customProperties["Team"] = "Team"+PhotonNetwork.player.ID.ToString();
-
+            PhotonNetwork.player.customProperties["IsReady"] = true;
             PhotonNetwork.LoadLevel("Room");
         }
         GUILayout.EndHorizontal();
@@ -235,5 +234,7 @@ public class MainLobby: MonoBehaviour {
         }
         GUILayout.EndHorizontal();
     }
+
+
 #endregion
 }

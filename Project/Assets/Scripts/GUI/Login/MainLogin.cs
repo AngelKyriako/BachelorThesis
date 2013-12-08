@@ -14,13 +14,12 @@ public class MainLogin: MonoBehaviour {
     private void Awake() {
         playerName = "Guest" + Random.Range(1, 9999).ToString();
         PlayerPrefs.SetString("name", playerName);
-        fullscreen = new Rect(0, 0, Screen.width, Screen.height);
         layoutRect = new Rect((Screen.width - layoutRect.width) / 2, (Screen.height - layoutRect.height) / 2,
                                layoutRect.width, layoutRect.height);
     }
 
     private void OnGUI() {
-        GUI.DrawTexture(fullscreen, background, ScaleMode.StretchToFill);
+        GUI.DrawTexture(GUIUtilities.Instance.FullScreenRect, background, ScaleMode.StretchToFill);
 
         GUILayout.BeginArea(layoutRect);
 

@@ -52,18 +52,18 @@ public class RoomNetController: BaseNetController {
             photonView.RPC("RequestForRoomState", PhotonNetwork.masterClient);
     }
 
-    public void MasterClientPlayerToSlot(int _slotNum, string _playerName) {
+    public void MasterClientPlayerToSlot(int _slotNum, PhotonPlayer _player) {
         if (IsMasterClient)
-            BroadCastPlayerToSlot(_slotNum, _playerName);
+            BroadCastPlayerToSlot(_slotNum, _player);
         else
-            photonView.RPC("BroadCastPlayerToSlot", PhotonNetwork.masterClient, _slotNum, _playerName);
+            photonView.RPC("BroadCastPlayerToSlot", PhotonNetwork.masterClient, _slotNum, _player);
     }
 
-    public void MasterClientClearSlot(int _slotNum, string _playerName) {
+    public void MasterClientClearSlot(int _slotNum, PhotonPlayer _player) {
         if (IsMasterClient)
-            BroadCastClearSlot(_slotNum, _playerName);
+            BroadCastClearSlot(_slotNum, _player);
         else
-            photonView.RPC("BroadCastClearSlot", PhotonNetwork.masterClient, _slotNum, _playerName);
+            photonView.RPC("BroadCastClearSlot", PhotonNetwork.masterClient, _slotNum, _player);
     }
 
     #region RPCs
@@ -76,35 +76,36 @@ public class RoomNetController: BaseNetController {
     }
     //player in slot
     [RPC]
-    private void BroadCastPlayerToSlot(int _slotNum, string _playerName) {
+    private void BroadCastPlayerToSlot(int _slotNum, PhotonPlayer _player) {
         Utilities.Instance.PreCondition(IsMasterClient, "RoomNetController", "[RPC]BroadCastPlayerToSlot", "This RPC is only available for the master client.");
         if (MainRoomModel.Instance.IsSlotEmpty(_slotNum)) {
-            SetPlayerToSlot(_slotNum, _playerName);
-            photonView.RPC("SetPlayerToSlot", PhotonTargets.Others, _slotNum, _playerName);
+            SetPlayerToSlot(_slotNum, _player);
+            photonView.RPC("SetPlayerToSlot", PhotonTargets.Others, _slotNum, _player);
         }
     }
 
     [RPC]
-    private void SetPlayerToSlot(int _slotNum, string _playerName) {        
-        MainRoomModel.Instance.SetPlayerNameInSlot(_slotNum, _playerName);
-        if (GameManager.Instance.MyPlayer.name.Equals(_playerName))
+    private void SetPlayerToSlot(int _slotNum, PhotonPlayer _player) {
+        MainRoomModel.Instance.SetPlayerInSlot(_slotNum, _player);
+        if (GameManager.Instance.MyPlayer.Equals(_player)) {
             MainRoomModel.Instance.MySlot = (PlayerColor)_slotNum;
+            _player.customProperties["Color"] = (PlayerColor)_slotNum;
+        }
     }
     //clear slot
     [RPC]
-    private void BroadCastClearSlot(int _slotNum, string _playerName) {
+    private void BroadCastClearSlot(int _slotNum, PhotonPlayer _player) {
         Utilities.Instance.PreCondition(IsMasterClient, "RoomNetController", "[RPC]BroadCastClearSlot", "This RPC is only available for the master client.");
-        Utilities.Instance.LogMessage("SlotOwnedByPlayer: " + MainRoomModel.Instance.SlotOwnedByPlayer(_slotNum, _playerName));
-        Utilities.Instance.LogMessage("GetPlayerNameInSlot: " + MainRoomModel.Instance.GetPlayerNameInSlot(_slotNum));
-
-        if (MainRoomModel.Instance.SlotOwnedByPlayer(_slotNum, _playerName)) {
-            ClearSlot(_slotNum);
-            photonView.RPC("ClearSlot", PhotonTargets.Others, _slotNum);
+        if (_slotNum != (int)PlayerColor.None && MainRoomModel.Instance.SlotOwnedByPlayer(_slotNum, _player)) {
+            ClearSlot(_slotNum, _player);
+            photonView.RPC("ClearSlot", PhotonTargets.Others, _slotNum, _player);
         }
     }
 
     [RPC]
-    private void ClearSlot(int _slotNum) {
+    private void ClearSlot(int _slotNum, PhotonPlayer _player) {
+        if (GameManager.Instance.MyPlayer.Equals(_player))
+            _player.customProperties["Color"] = MainRoomModel.Instance.MySlot = PlayerColor.None;
         MainRoomModel.Instance.EmptySlot(_slotNum);        
     }
     #endregion

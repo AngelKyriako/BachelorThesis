@@ -13,17 +13,16 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     private float statSyncDelay = 1.5f, statSyncTimer = 0f;
 #endregion
 
-    public override void Awake() {
+    public override void Awake() {        
         base.Awake();
         GameManager.Instance.AddPlayerCharacter(photonView.name, photonView.owner);
         if (IsLocalClient && !PhotonNetwork.isMasterClient) {
             GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
-            GameManager.Instance.MasterClientRequestConnectedPlayers();
+            GameManager.Instance.MasterClientRequestConnectedPlayers();            
         }
         else if (IsLocalClient && PhotonNetwork.isMasterClient)
             GameManager.Instance.MasterClient = GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
-
-        enabled = false;        
+        enabled = false;
     }
 
     public void SetUp() {
@@ -47,7 +46,6 @@ public class PlayerCharacterNetworkController: SerializableNetController {
             Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("HiddenEnemies"));
             visionController.enabled = false;
         }
-
         enabled = true;
     }
 
@@ -72,15 +70,19 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     }
 
     public override void SendData(PhotonStream _stream) {
-        //base.SendData(_stream);
-        //_stream.SendNext(rigidbody.velocity);
-        //_stream.SendNext(movementController.AnimatorMovementSpeed);
+        if (enabled) {
+            base.SendData(_stream);
+            _stream.SendNext(rigidbody.velocity);
+            _stream.SendNext(movementController.AnimatorMovementSpeed);
+        }
     }
 
     public override void ReceiveData(PhotonStream _stream) {
-        //base.ReceiveData(_stream);
-        //rigidbody.velocity = (Vector3)_stream.ReceiveNext();
-        //movementController.AnimatorMovementSpeed = (float)_stream.ReceiveNext();
+        if (enabled) {
+            base.ReceiveData(_stream);
+            rigidbody.velocity = (Vector3)_stream.ReceiveNext();
+            movementController.AnimatorMovementSpeed = (float)_stream.ReceiveNext();
+        }
     }
 
     private void SendCharacterStats() {

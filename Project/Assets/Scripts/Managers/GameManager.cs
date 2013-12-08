@@ -75,9 +75,14 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     public bool AllPlayersReady() {
-        foreach (PhotonPlayer player in PhotonNetwork.playerList)
-            if (!(bool)player.customProperties["IsReady"])
+        foreach (PhotonPlayer player in PhotonNetwork.playerList) {
+            Utilities.Instance.LogMessage("---------- "+player.ID+" ----------");
+            Utilities.Instance.LogMessage("isReady" + (bool)player.customProperties["IsReady"]);
+            Utilities.Instance.LogMessage("Has Slot" + MainRoomModel.Instance.SlotOwnedByPlayer((int)player.customProperties["Color"], player));
+            if (!(bool)player.customProperties["IsReady"] ||
+                !MainRoomModel.Instance.SlotOwnedByPlayer((int)player.customProperties["Color"], player))
                 return false;
+        }
         return true;
     }
 
@@ -85,7 +90,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     [RPC]
     public void AddPlayerCharacter(string _name, PhotonPlayer _player) {
         if (!all.ContainsKey(_name))
-            all.Add(_name, new PlayerCharacterPair(_player, GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath +"/"+_name)));            
+            all.Add(_name, new PlayerCharacterPair(_player, GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath +"/"+_name)));
     }
     [RPC]
     private void SetMasterClient(string _name) {
@@ -93,11 +98,11 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
     [RPC]
     private void RequestForPlayerCharacters(PhotonMessageInfo info) {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "[RPC]MasterClientRequestForPlayerCharacters", "This RPC is only available for the master client.");
-        foreach (string _name in all.Keys) {
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "[RPC]RequestForPlayerCharacters", "This RPC is only available for the master client.");
+        foreach (string _name in all.Keys)
             photonView.RPC("AddPlayerCharacter", info.sender, _name, all[_name].Player);
-        }
-        photonView.RPC("SetMasterClient", info.sender, photonView.name);
+        Utilities.Instance.LogMessage("Sending name: " + MyPhotonView.name);
+        photonView.RPC("SetMasterClient", info.sender, MyPhotonView.name);
     }
 #endregion
 
