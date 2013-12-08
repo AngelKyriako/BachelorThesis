@@ -8,6 +8,10 @@ public enum GameMode {
     Survival
 };
 
+public enum GameMap {
+    MeetingPoint,
+}
+
 public enum GameDifficulty {
     Easy,
     Medium,
@@ -19,11 +23,13 @@ public class GameVariables {
     #region attributes
     private string title;
     private KeyValuePair<string, GameMode> mode;
+    private KeyValuePair<string, GameMap> map;
     private KeyValuePair<string, GameDifficulty> difficulty;
     private KeyValuePair<string, int> maxPlayers, targetKills;
     private KeyValuePair<string, double> timer;
 
     private Dictionary<string, GameMode> availableModes;
+    private Dictionary<string, GameMap> availableMaps;
     private Dictionary<string, GameDifficulty> availableDifficulties;
     private Dictionary<string, int> availableMaxPlayers, availableTargetKills;
     private Dictionary<string, double> availableTimers;
@@ -36,10 +42,12 @@ public class GameVariables {
 
     private GameVariables() {
         title = string.Empty;
-        mode = new KeyValuePair<string, GameMode>(Enum.GetName(typeof(GameMode), GameMode.BattleRoyal), GameMode.BattleRoyal);
+        mode = new KeyValuePair<string, GameMode>(Enum.GetName(typeof(GameMode), GameMode.BattleRoyal), GameMode.BattleRoyal);        
         availableModes = new Dictionary<string, GameMode>(){ {Enum.GetName(typeof(GameMode), GameMode.BattleRoyal), GameMode.BattleRoyal},
-                                                             {Enum.GetName(typeof(GameMode), GameMode.Conquerors), GameMode.Conquerors},
-                                                             {Enum.GetName(typeof(GameMode), GameMode.CaptureTheFlag), GameMode.CaptureTheFlag}
+                                                             {Enum.GetName(typeof(GameMode), GameMode.Conquerors), GameMode.Conquerors}
+                                                           };
+        map = new KeyValuePair<string, GameMap>(Enum.GetName(typeof(GameMap), GameMap.MeetingPoint), GameMap.MeetingPoint);
+        availableMaps = new Dictionary<string, GameMap>(){ {Enum.GetName(typeof(GameMap), GameMap.MeetingPoint), GameMap.MeetingPoint}
                                                            };
         difficulty = new KeyValuePair<string, GameDifficulty>(Enum.GetName(typeof(GameDifficulty), GameDifficulty.Medium), GameDifficulty.Medium);
         availableDifficulties = new Dictionary<string, GameDifficulty>(){ {Enum.GetName(typeof(GameDifficulty), GameDifficulty.Easy), GameDifficulty.Easy},
@@ -73,6 +81,10 @@ public class GameVariables {
         get { return mode; }
         set { mode = value; }
     }
+    public KeyValuePair<string, GameMap> Map {
+        get { return map; }
+        set { map = value; }
+    }
     public KeyValuePair<string, GameDifficulty> Difficulty {
         get { return difficulty; }
         set { difficulty = value; }
@@ -92,6 +104,9 @@ public class GameVariables {
 
     public Dictionary<string, GameMode> AvailableModes {
         get { return availableModes; }
+    }
+    public Dictionary<string, GameMap> AvailableMaps {
+        get { return availableMaps; }
     }
     public Dictionary<string, GameDifficulty> AvailableDifficulties {
         get { return availableDifficulties; }

@@ -6,6 +6,7 @@ public enum VariableType {
     None,
     Title,
     Mode,
+    Map,
     Difficulty,
     MaxPlayers,
     targetKills,
@@ -165,10 +166,22 @@ public class MainLobby: MonoBehaviour {
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Mode:", propertyLabel);
+        GUILayout.BeginVertical();
         GameVariables.Instance.Mode = GUIUtilities.Instance.ButtonOptions<GameMode, VariableType>(ref editingField, VariableType.Mode,
                                                                GameVariables.Instance.Mode,
                                                                GameVariables.Instance.AvailableModes, 110);
+        GUILayout.EndVertical();
         GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Map:", propertyLabel);
+        GUILayout.BeginVertical();
+        GameVariables.Instance.Map = GUIUtilities.Instance.ButtonOptions<GameMap, VariableType>(ref editingField, VariableType.Map,
+                                                               GameVariables.Instance.Map,
+                                                               GameVariables.Instance.AvailableMaps, 110);
+        GUILayout.EndVertical();
+        GUILayout.EndHorizontal();
+
         if (GameVariables.Instance.Mode.Value == GameMode.BattleRoyal) {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Target kills:", propertyLabel);
@@ -185,15 +198,19 @@ public class MainLobby: MonoBehaviour {
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         GUILayout.Label("Difficulty:", propertyLabel);
+        GUILayout.BeginVertical();
         GameVariables.Instance.Difficulty = GUIUtilities.Instance.ButtonOptions<GameDifficulty, VariableType>(ref editingField, VariableType.Difficulty,
                                                                  GameVariables.Instance.Difficulty,
                                                                  GameVariables.Instance.AvailableDifficulties, 60);
+        GUILayout.EndVertical();
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         GUILayout.Label("Timer:", propertyLabel);
+        GUILayout.BeginVertical();
         GameVariables.Instance.Timer = GUIUtilities.Instance.ButtonOptions<double, VariableType>(ref editingField, VariableType.Timer,
                                                              GameVariables.Instance.Timer,
                                                              GameVariables.Instance.AvailableTimers, 39);
+        GUILayout.EndVertical();
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Go", goButtonStyle)) {

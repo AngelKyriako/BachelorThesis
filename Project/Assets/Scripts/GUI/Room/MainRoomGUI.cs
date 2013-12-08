@@ -22,7 +22,6 @@ public class MainRoomGUI: MonoBehaviour {
 	void Awake () {
         enabled = false;
         networkController = GetComponent<RoomNetController>();
-        networkController.MasterClientRequestForRoomState();        
 	}
 
     void Start() {
@@ -50,6 +49,7 @@ public class MainRoomGUI: MonoBehaviour {
         SouthChat();
         SouthButtons();
     }
+
     #region Preferences
     private void WestGamePreferencesEditable() {
         GUILayout.BeginArea(westPreferencesRect);
@@ -66,6 +66,16 @@ public class MainRoomGUI: MonoBehaviour {
                                                                GameVariables.Instance.AvailableModes, 110);
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Map:");
+        GUILayout.BeginVertical();
+        GameVariables.Instance.Map = GUIUtilities.Instance.ButtonOptions<GameMap, VariableType>(ref editingPreferencesField, VariableType.Map,
+                                                               GameVariables.Instance.Map,
+                                                               GameVariables.Instance.AvailableMaps, 110);
+        GUILayout.EndVertical();
+        GUILayout.EndHorizontal();
+
         if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)) {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Max kills:");
@@ -107,6 +117,7 @@ public class MainRoomGUI: MonoBehaviour {
         GUILayout.BeginArea(westPreferencesRect);
         GUILayout.Label("Room: " + GameVariables.Instance.Title, GUILayout.MaxWidth(300));
         GUILayout.Label("Mode: " + GameVariables.Instance.Mode.Key);
+        GUILayout.Label("Map: " + GameVariables.Instance.Map.Key);
         if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal))
             GUILayout.Label("Target kills: " + GameVariables.Instance.TargetKills.Key);
         GUILayout.Label("Max players: " + GameVariables.Instance.MaxPlayers.Key);

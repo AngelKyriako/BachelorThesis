@@ -40,6 +40,7 @@ public class GamePreferencesWindow: Photon.MonoBehaviour {
     private void GameVariablesViewGUI() {
         GUILayout.Label("Room: " + GameVariables.Instance.Title, GUILayout.MaxWidth(300));
         GUILayout.Label("Mode: " + GameVariables.Instance.Mode.Key);
+        GUILayout.Label("Map: " + GameVariables.Instance.Map.Key);
         if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal))
             GUILayout.Label("Target kills: "+GameVariables.Instance.TargetKills.Key);
         GUILayout.Label("Max players: "+GameVariables.Instance.MaxPlayers.Key);

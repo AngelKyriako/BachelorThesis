@@ -42,8 +42,8 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     void OnLeaveRoom() {
     }
 
-    public void StartGame() {//@TODO: Maybe use a local Player object instead of the PhotonPlayer instance.
-        PhotonNetwork.LoadLevel(GameVariables.Instance.Mode.Key);//@TODO Put map in game variables
+    public void StartGame() {
+        PhotonNetwork.LoadLevel(GameVariables.Instance.Map.Key);
         foreach (string _name in AllPlayerKeys)
             GetPlayerNetController(_name).SetUp();
         //@TODO: Set my position to the map
@@ -52,7 +52,8 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     private void InitRoomScripts() {
-        roomScripts.GetComponent<MainRoomGUI>().enabled = true;
+        roomScripts.GetComponent<RoomNetController>().enabled = true;
+        roomScripts.GetComponent<MainRoomGUI>().enabled = true;        
     }
 
     private void InitGUIScripts() {
@@ -76,11 +77,11 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     public bool AllPlayersReady() {
         foreach (PhotonPlayer player in PhotonNetwork.playerList) {
-            Utilities.Instance.LogMessage("---------- " + player.ID + " ----------");
-            Utilities.Instance.LogMessage("Has Slot" + MainRoomModel.Instance.SlotOwnedByPlayer((int)player.customProperties["Color"], player));
-            Utilities.Instance.LogMessage("Player IsReady" + (bool)player.customProperties["IsReady"]);            
-            Utilities.Instance.LogMessage("Player Color: " + (PlayerColor)player.customProperties["Color"]);
-            Utilities.Instance.LogMessage("Player Team: " + (PlayerTeam)player.customProperties["Team"]);            
+            //Utilities.Instance.LogMessage("---------- " + player.ID + " ----------");
+            //Utilities.Instance.LogMessage("Has Slot" + MainRoomModel.Instance.SlotOwnedByPlayer((int)player.customProperties["Color"], player));
+            //Utilities.Instance.LogMessage("Player IsReady" + (bool)player.customProperties["IsReady"]);            
+            //Utilities.Instance.LogMessage("Player Color: " + (PlayerColor)player.customProperties["Color"]);
+            //Utilities.Instance.LogMessage("Player Team: " + (PlayerTeam)player.customProperties["Team"]);            
             if (!(bool)player.customProperties["IsReady"] ||
                 !MainRoomModel.Instance.SlotOwnedByPlayer((int)player.customProperties["Color"], player))
                 return false;
@@ -88,7 +89,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         return true;
     }
 
-    #region Player properties Updates
+    #region Player properties updates
     public void UpdatePlayerTeamProperty() {
         MyPlayer.SetCustomProperties(
             new Hashtable() { { "Team", (PlayerTeam)GameManager.Instance.MyPlayer.customProperties["Team"] } });
@@ -104,6 +105,19 @@ public class GameManager: SingletonPhotonMono<GameManager> {
             new Hashtable() { { "IsReady", (bool)GameManager.Instance.MyPlayer.customProperties["IsReady"] } });
     }
     #endregion
+
+    #region Room properties updates
+    public void UpdateRoomProperties() {
+        //PhotonNetwork.room.SetCustomProperties(new Hashtable() { 
+        //    {"Mode", (GameMode)PhotonNetwork.room.customProperties["Mode"]},
+        //    {"Map", (GameMap)PhotonNetwork.room.customProperties["Map"]},
+        //    {"Difficulty", (GameDifficulty)PhotonNetwork.room.customProperties["Difficulty"]},
+        //    {"TargetKills", (int)PhotonNetwork.room.customProperties["TargetKills"]},
+        //    {"Timer", (double)PhotonNetwork.room.customProperties["Timer"]}
+        //});
+    }
+    #endregion
+
     #region RPCs
     [RPC]
     public void AddPlayerCharacter(string _name, PhotonPlayer _player) {
@@ -119,7 +133,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "[RPC]RequestForPlayerCharacters", "This RPC is only available for the master client.");
         foreach (string _name in all.Keys)
             photonView.RPC("AddPlayerCharacter", info.sender, _name, all[_name].Player);
-        Utilities.Instance.LogMessage("Sending name: " + MyPhotonView.name);
         photonView.RPC("SetMasterClient", info.sender, MyPhotonView.name);
     }
 #endregion

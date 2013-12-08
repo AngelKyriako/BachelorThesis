@@ -3,41 +3,50 @@ using System.Collections.Generic;
 
 public class RoomNetController: BaseNetController {
 
-    private const float RPC_COOLDOWN_TIME = 1.0f;
+    private const float RPC_COOLDOWN_TIME = 2.0f;
 
-    private float lastRPCTime;
+    private float lastPropertySyncTime;
     
     public override void Awake() {
         base.Awake();
-        lastRPCTime = Time.time;
+        enabled = false;
+    }
+
+    void Start() {
+        RequestForRoomState(GameManager.Instance.MyPlayer);
+        lastPropertySyncTime = Time.time;        
     }
 
     void Update() {
-        if (IsMasterClient && (Time.time - lastRPCTime > RPC_COOLDOWN_TIME)) {
+        if (IsMasterClient && (Time.time - lastPropertySyncTime > RPC_COOLDOWN_TIME)) {
             SyncGameVariables();
-            lastRPCTime = Time.time;
+            lastPropertySyncTime = Time.time;
         }
     }
 
     #region Game preferences
     public void SyncGameVariables() {
         Utilities.Instance.PreCondition(IsMasterClient, "RoomNetController", "SyncGameVariables", "This function is only available for the master client.");
-        photonView.RPC("SetGameVariables", PhotonTargets.Others, GameVariables.Instance.Title, GameVariables.Instance.Mode.Key, GameVariables.Instance.Difficulty.Key,
-                        GameVariables.Instance.MaxPlayers.Key, GameVariables.Instance.TargetKills.Key, GameVariables.Instance.Timer.Key);
+        photonView.RPC("SetGameVariables", PhotonTargets.Others, GameVariables.Instance.Title, GameVariables.Instance.Mode.Key,
+                        GameVariables.Instance.Map.Key, GameVariables.Instance.Difficulty.Key, GameVariables.Instance.MaxPlayers.Key,
+                        GameVariables.Instance.TargetKills.Key, GameVariables.Instance.Timer.Key);
 
         PhotonNetwork.room.name = GameVariables.Instance.Title;
         PhotonNetwork.room.maxPlayers = GameVariables.Instance.MaxPlayers.Value;
         PhotonNetwork.room.customProperties["Mode"] = GameVariables.Instance.Mode.Value;
+        PhotonNetwork.room.customProperties["Map"] = GameVariables.Instance.Map.Value;
         PhotonNetwork.room.customProperties["Difficulty"] = GameVariables.Instance.Difficulty.Value;
         PhotonNetwork.room.customProperties["Target kills"] = GameVariables.Instance.TargetKills.Value;
         PhotonNetwork.room.customProperties["Timer"] = GameVariables.Instance.Timer.Value;
+        GameManager.Instance.UpdateRoomProperties();
     }
 
     #region RPCs
     [RPC]
-    private void SetGameVariables(string _title, string _mode, string _difficulty, string _maxPlayers, string _targetKills, string _timer) {
+    private void SetGameVariables(string _title, string _mode, string _map, string _difficulty, string _maxPlayers, string _targetKills, string _timer) {
         GameVariables.Instance.Title = _title;
         GameVariables.Instance.Mode = new KeyValuePair<string, GameMode>(_mode, GameVariables.Instance.AvailableModes[_mode]);
+        GameVariables.Instance.Map = new KeyValuePair<string, GameMap>(_map, GameVariables.Instance.AvailableMaps[_map]);
         GameVariables.Instance.Difficulty = new KeyValuePair<string, GameDifficulty>(_difficulty, GameVariables.Instance.AvailableDifficulties[_difficulty]);
         GameVariables.Instance.MaxPlayers = new KeyValuePair<string, int>(_maxPlayers, GameVariables.Instance.AvailableMaxPlayers[_maxPlayers]);
         GameVariables.Instance.TargetKills = new KeyValuePair<string, int>(_targetKills, GameVariables.Instance.AvailableTargetKills[_targetKills]);
@@ -47,9 +56,9 @@ public class RoomNetController: BaseNetController {
     #endregion
 
     #region Player Slots
-    public void MasterClientRequestForRoomState() {
+    private void RequestForRoomState(PhotonPlayer _playerRequested) {
         if (!IsMasterClient)
-            photonView.RPC("RequestForRoomState", PhotonNetwork.masterClient);
+            photonView.RPC("MasterClientRequestForRoomState", PhotonNetwork.masterClient, _playerRequested);
     }
 
     public void MasterClientPlayerToSlot(int _slotNum, PhotonPlayer _player) {
@@ -74,17 +83,18 @@ public class RoomNetController: BaseNetController {
     #region RPCs
     //all room slots
     [RPC]
-    private void RequestForRoomState(PhotonMessageInfo info) {
+    private void MasterClientRequestForRoomState(PhotonPlayer _playerRequested) {
         Utilities.Instance.PreCondition(IsMasterClient, "RoomNetController", "[RPC]MasterClientRequestForRoomState", "This RPC is only available for the master client.");
-        for (int i = 0; i < MainRoomModel.Instance.PlayerSlotsLength; ++i )
-            photonView.RPC("SetPlayerToSlot", info.sender, i, MainRoomModel.Instance.GetPlayerInSlot(i));
+        for (int i = 0; i < MainRoomModel.Instance.PlayerSlotsLength; ++i) {
+            photonView.RPC("SetPlayerToSlot", _playerRequested, i, MainRoomModel.Instance.GetPlayerInSlot(i));
+            Utilities.Instance.LogMessage("" + i);
+        }
     }
     //player in slot
     [RPC]
     private void BroadCastPlayerToSlot(int _slotNum, PhotonPlayer _player) {
         Utilities.Instance.PreCondition(IsMasterClient, "RoomNetController", "[RPC]BroadCastPlayerToSlot", "This RPC is only available for the master client.");
         if (MainRoomModel.Instance.IsSlotEmpty(_slotNum)) {
-            Utilities.Instance.LogMessage("Entered BroadcastPlayerToSlot");
             SetPlayerToSlot(_slotNum, _player);
             photonView.RPC("SetPlayerToSlot", PhotonTargets.Others, _slotNum, _player);
         }
