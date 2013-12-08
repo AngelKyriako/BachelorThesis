@@ -9,7 +9,6 @@ public class RoomNetController: BaseNetController {
     
     public override void Awake() {
         base.Awake();
-        enabled = false;
         lastRPCTime = Time.time;
     }
 
@@ -88,11 +87,16 @@ public class RoomNetController: BaseNetController {
     [RPC]
     private void SetPlayerToSlot(int _slotNum, string _playerName) {        
         MainRoomModel.Instance.SetPlayerNameInSlot(_slotNum, _playerName);
+        if (GameManager.Instance.MyPlayer.name.Equals(_playerName))
+            MainRoomModel.Instance.MySlot = (PlayerColor)_slotNum;
     }
     //clear slot
     [RPC]
     private void BroadCastClearSlot(int _slotNum, string _playerName) {
         Utilities.Instance.PreCondition(IsMasterClient, "RoomNetController", "[RPC]BroadCastClearSlot", "This RPC is only available for the master client.");
+        Utilities.Instance.LogMessage("SlotOwnedByPlayer: " + MainRoomModel.Instance.SlotOwnedByPlayer(_slotNum, _playerName));
+        Utilities.Instance.LogMessage("GetPlayerNameInSlot: " + MainRoomModel.Instance.GetPlayerNameInSlot(_slotNum));
+
         if (MainRoomModel.Instance.SlotOwnedByPlayer(_slotNum, _playerName)) {
             ClearSlot(_slotNum);
             photonView.RPC("ClearSlot", PhotonTargets.Others, _slotNum);
