@@ -216,7 +216,7 @@ public class MainRoomGUI: MonoBehaviour {
         if (GUILayout.Button("Start Game")) {
             networkController.SyncGameVariables();
             if (GameManager.Instance.AllPlayersReady())
-                GameManager.Instance.StartGame();
+                GameManager.Instance.LoadMainStage();
             else
                 ;//@TODO: message not all players are ready
         }
@@ -232,7 +232,7 @@ public class MainRoomGUI: MonoBehaviour {
                     GameManager.Instance.UpdatePlayerIsReadyProperty();
                 }
                 else
-                    ;//@TODO message down of button
+                    ;//@TODO message down of button, you are not ready
         }
         else
             if (GUILayout.Button("Not Ready")) {

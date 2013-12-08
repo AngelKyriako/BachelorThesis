@@ -25,7 +25,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         enabled = false;
     }
 
-    public void SetUp() {
+    public void SetUp() {        
         transform.parent = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath).transform;
 
         model = gameObject.GetComponent<PlayerCharacterModel>();
@@ -38,7 +38,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         movementController.enabled = true;
 
         visionController = gameObject.GetComponent<VisionController>();               
-        if (IsLocalClient) {//@TODO or are allies with Me
+        if (CombatManager.Instance.IsAlly(name)) {
             Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));
             visionController.enabled = true;
         }

@@ -21,8 +21,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     private GameManager() { }
 
-    void Awake() {
-        gui = GameObject.Find("GUIScripts");
+    void Awake() {        
         roomScripts = GameObject.Find("RoomScripts");
         all = new Dictionary<string, PlayerCharacterPair>();
         if (PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected))
@@ -30,11 +29,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     void OnJoinedRoom() {
-        //Vector3 spawnPoint;
-        //if (!PhotonNetwork.isMasterClient)
-        //    spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
-        //else
-        //    spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
         PhotonNetwork.Instantiate(ResourcesPathManager.Instance.PlayerCharacterPath, Vector3.zero, Quaternion.identity, 0);
         InitRoomScripts();
     }
@@ -42,12 +36,21 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     void OnLeaveRoom() {
     }
 
-    public void StartGame() {
-        PhotonNetwork.LoadLevel(GameVariables.Instance.Map.Key);
-        foreach (string _name in AllPlayerKeys)
-            GetPlayerNetController(_name).SetUp();
-        //@TODO: Set my position to the map
+    public void LoadMainStage() {
+        PhotonNetwork.LoadLevel(GameVariables.Instance.Map.Key);        
+    }
+
+    public void InitMainStage() {
+        Vector3 spawnPoint;
         gameObject.AddComponent<CombatManager>();
+        foreach (string _name in AllPlayerKeys)
+            GetPlayerNetController(_name).SetUp();//@TODO: bug fix
+
+        if (!PhotonNetwork.isMasterClient)
+            spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
+        else
+            spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
+        GameManager.Instance.MyCharacter.transform.position = spawnPoint;
         InitGUIScripts();
     }
 
@@ -57,13 +60,15 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     private void InitGUIScripts() {
+        gui = GameObject.Find("GUIScripts");
+        Utilities.Instance.LogMessage("GUI: "+gui);
         //gui.GetComponent<MouseCursor>().enabled = true;        
-        gui.GetComponent<GamePreferencesWindow>().enabled = true;
-        gui.GetComponent<ChatWindow>().enabled = true;
-        gui.GetComponent<CharacterWindow>().enabled = true;
-        gui.GetComponent<CharacterInfoPanel>().enabled = true;
-        gui.GetComponent<TerrainMap>().enabled = true;
-        gui.GetComponent<PlayersInfoWindow>().enabled = true;
+        //gui.GetComponent<GamePreferencesWindow>().enabled = true;
+        //gui.GetComponent<ChatWindow>().enabled = true;
+        //gui.GetComponent<CharacterWindow>().enabled = true;
+        //gui.GetComponent<CharacterInfoPanel>().enabled = true;
+        //gui.GetComponent<TerrainMap>().enabled = true;
+        //gui.GetComponent<PlayersInfoWindow>().enabled = true;
     }
 
     public void MasterClientRequestConnectedPlayers() {
