@@ -56,6 +56,7 @@ public class MainRoomModel {
     }
 
     #region Accessors
+    //slots
     public void SetPlayerNameInSlot(int _index, string playerName) {
         playerSlots[_index].Second = playerName;
     }
@@ -68,13 +69,25 @@ public class MainRoomModel {
     public bool IsSlotEmpty(int _index) {
         return playerSlots[_index].Equals(string.Empty);
     }
-
     public PlayerColor GetSlotColor(int _index) {
         return playerSlots[_index].First;
     }
-
     public int PlayerSlotsLength {
         get { return playerSlots.Length; }
+    }
+    //teams
+    public PlayerTeam[] AvailableTeams {
+        get { return availableTeams; }
+    }
+    public PlayerTeam GetAvailableTeam(int _index) {
+        return availableTeams[_index];
+    }
+    public int AvailableTeamsLength {
+        get { return availableTeams.Length; }
+    }
+    
+    public bool SlotOwnedByPlayer(int _slotNum, string _playerName) {
+        return GetPlayerNameInSlot(_slotNum).Equals(_playerName);
     }
     #endregion
 }

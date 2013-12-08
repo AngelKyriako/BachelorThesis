@@ -14,7 +14,7 @@ public struct PlayerCharacterPair {
 
 public class GameManager: SingletonPhotonMono<GameManager> {
 
-    private GameObject gui;
+    private GameObject gui, roomScripts;
     private PlayerCharacterPair me;
     private PlayerCharacterPair masterClient;
     private Dictionary<string, PlayerCharacterPair> all;
@@ -23,31 +23,41 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     void Awake() {
         gui = GameObject.Find("GUIScripts");
+        roomScripts = GameObject.Find("RoomScripts");
         all = new Dictionary<string, PlayerCharacterPair>();
         if (PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected))
             InitGUIScripts();
     }
 
-    void OnJoinedRoom() {//@TODO: Create all instances here with only PhotonPlayer objects
+    void OnJoinedRoom() {
         Vector3 spawnPoint;
         if (!PhotonNetwork.isMasterClient)
             spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
         else
             spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
-        PhotonNetwork.Instantiate(ResourcesPathManager.Instance.PlayerCharacterPath, spawnPoint, Quaternion.identity, 0);
-        InitGUIScripts();
+        PhotonNetwork.Instantiate(ResourcesPathManager.Instance.PlayerCharacterPath, Vector3.zero, Quaternion.identity, 0);
+        InitRoomScripts();
     }
 
     void OnLeaveRoom() {
     }
 
-    private void StartGame() {//@TODO: photon Instantiate local Playercharacter objects and set all game objects to the maps
-                              //       Maybe use a local Player object instead of the PhotonPlayer instance.
+    public void StartGame() {//@TODO: Maybe use a local Player object instead of the PhotonPlayer instance.
+        PhotonNetwork.LoadLevel(GameVariables.Instance.Mode.Key);//@TODO Put map in game variables
+        foreach (string _name in AllPlayerKeys)
+            GetPlayerNetController(_name).SetUp();
+        //@TODO: Set my position to the map
+        gameObject.AddComponent<CombatManager>();
+        InitGUIScripts();
+    }
+
+    private void InitRoomScripts() {
+        roomScripts.GetComponent<MainRoomGUI>().enabled = true;
     }
 
     private void InitGUIScripts() {
         //gui.GetComponent<MouseCursor>().enabled = true;        
-        gui.GetComponent<GameVariablesWindow>().enabled = true;
+        gui.GetComponent<GamePreferencesWindow>().enabled = true;
         gui.GetComponent<ChatWindow>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
         gui.GetComponent<CharacterInfoPanel>().enabled = true;
@@ -62,6 +72,13 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public void RemovePlayerCharacter(string _name) {
         if (all.ContainsKey(_name))
             all.Remove(_name);
+    }
+
+    public bool AllPlayersReady() {
+        foreach (PhotonPlayer player in PhotonNetwork.playerList)
+            if (!(bool)player.customProperties["IsReady"])
+                return false;
+        return true;
     }
 
     #region RPCs
@@ -88,7 +105,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public GameObject Gui {
         get { return gui; }
     }
-
+    // me
     public PlayerCharacterPair Me {
         get { return me; }
         set { me = value; }
@@ -105,7 +122,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public PhotonView MyPhotonView{
         get { return me.Character.GetComponent<PlayerCharacterNetworkController>().photonView; }
     }
-
+    // master client
     public PlayerCharacterPair MasterClient {
         get { return masterClient; }
         set { masterClient = value; }
@@ -116,7 +133,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public PhotonView MasterClientPhotonView {
         get { return masterClient.Character.GetComponent<PlayerCharacterNetworkController>().photonView; }
     }
-
+    // player
     public ICollection<string> AllPlayerKeys {
         get { return all.Keys; }
     }
@@ -132,12 +149,15 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public PlayerColor GetPlayerColor(string _name) {
         return (PlayerColor)all[_name].Player.customProperties["Color"];
     }
-
+    // character game object
     public GameObject GetCharacter(string _name) {
         return all[_name].Character;
     }
     public PlayerCharacterModel GetPlayerModel(string _name) {
         return all[_name].Character.GetComponent<PlayerCharacterModel>();
+    }
+    public PlayerCharacterNetworkController GetPlayerNetController(string _name) {
+        return all[_name].Character.GetComponent<PlayerCharacterNetworkController>();
     }
     public PhotonView GetPlayerPhotonView(string _name) {
         return all[_name].Character.GetComponent<PlayerCharacterNetworkController>().photonView;

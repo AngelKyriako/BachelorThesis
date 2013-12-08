@@ -134,10 +134,10 @@ public class MainLobby: MonoBehaviour {
         joinRoomName = GUILayout.TextField(joinRoomName, GUILayout.MaxWidth(180));
         GUILayout.Space(space / 2);
         if (GUILayout.Button("Join", westButtonStyle, GUILayout.Width(90))) {
-            PhotonNetwork.LoadLevel("MeetingPoint");
+            PhotonNetwork.LoadLevel("Room");
             PhotonNetwork.JoinRoom(joinRoomName);
             if (GUILayout.Button("Go", goButtonStyle)) {
-                PhotonNetwork.LoadLevel("MeetingPoint");
+                PhotonNetwork.LoadLevel("Room");
                 PhotonNetwork.JoinRoom(joinRoomName);
             }
         }
@@ -211,7 +211,7 @@ public class MainLobby: MonoBehaviour {
             PhotonNetwork.player.customProperties["IsReady"] = false;
             PhotonNetwork.player.customProperties["Team"] = "Team"+PhotonNetwork.player.ID.ToString();
 
-            PhotonNetwork.LoadLevel("MeetingPoint");
+            PhotonNetwork.LoadLevel("Room");
         }
         GUILayout.EndHorizontal();
     }
@@ -220,7 +220,7 @@ public class MainLobby: MonoBehaviour {
         GUILayout.BeginHorizontal();
         //@TODO: Game properties here
         if (GUILayout.Button("Go", goButtonStyle)) {
-            PhotonNetwork.LoadLevel("MeetingPoint");
+            PhotonNetwork.LoadLevel("Room");
             PhotonNetwork.JoinRoom(joinRoomName);
         }
         GUILayout.EndHorizontal();
@@ -230,7 +230,7 @@ public class MainLobby: MonoBehaviour {
         //@TODO: Game properties here
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Go", goButtonStyle)) {
-            PhotonNetwork.LoadLevel("MeetingPoint");
+            PhotonNetwork.LoadLevel("Room");
             PhotonNetwork.JoinRandomRoom();
         }
         GUILayout.EndHorizontal();

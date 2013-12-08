@@ -14,29 +14,40 @@ public class PlayerCharacterNetworkController: SerializableNetController {
 #endregion
 
     public override void Awake() {
-        base.Awake();
+        base.Awake();        
         transform.parent = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath).transform;
-
-        model = gameObject.GetComponent<PlayerCharacterModel>();
-        cameraController = gameObject.GetComponent<CameraController>();
-        movementController = gameObject.GetComponent<MovementController>();
-        visionController = gameObject.GetComponent<VisionController>();
-        cameraController.enabled = IsLocalClient;
-        movementController.enabled = true;
-        visionController.enabled = IsLocalClient;//@TODO: for team play this should be only for enemies
-
+        
         GameManager.Instance.AddPlayerCharacter(photonView.name, photonView.owner);
-        if (IsLocalClient) {
+        if (IsLocalClient && !PhotonNetwork.isMasterClient) {
             GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
+            GameManager.Instance.MasterClientRequestConnectedPlayers();
+        }
+        else if (IsLocalClient && PhotonNetwork.isMasterClient)
+            GameManager.Instance.MasterClient = GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
+        enabled = false;
+    }
+
+    public void SetUp() {
+        model = gameObject.GetComponent<PlayerCharacterModel>();
+        model.enabled = true;
+
+        cameraController = gameObject.GetComponent<CameraController>();
+        cameraController.enabled = IsLocalClient;
+
+        movementController = gameObject.GetComponent<MovementController>();
+        movementController.enabled = true;
+
+        visionController = gameObject.GetComponent<VisionController>();               
+        if (IsLocalClient) {//@TODO or are allies with Me
             Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));
-            if (!PhotonNetwork.isMasterClient)
-                GameManager.Instance.MasterClientRequestConnectedPlayers();
-            else
-                GameManager.Instance.MasterClient = new PlayerCharacterPair(photonView.owner, gameObject);
+            visionController.enabled = true;
         }
         else {
-            Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("HiddenEnemies"));//@TODO Must be called when game starts when everyone is connected
+            Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("HiddenEnemies"));
+            visionController.enabled = false;
         }
+
+        enabled = true;
     }
 
     public override void Start() {

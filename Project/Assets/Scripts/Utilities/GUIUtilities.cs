@@ -32,6 +32,22 @@ public class GUIUtilities {
         return selectedPair;
     }
 
+    public T ButtonOptions<T, K>(ref K editingField, K targetedState, T selectedValue, T[] availableValues, int width) {
+
+        if (!editingField.Equals(targetedState) &&
+            GUILayout.Button(selectedValue.ToString(), GUILayout.Width(width)))
+            editingField = targetedState;
+
+        if (editingField.Equals(targetedState))
+            foreach (T _val in availableValues) {
+                if (GUILayout.Button(_val.ToString(), GUILayout.Width(width))) {
+                    editingField = default(K);
+                    selectedValue = _val;
+                }
+            }
+        return selectedValue;
+    }
+
     public string ToggleTextButton(string _current, string _first, string _second) {
         if (GUILayout.Button(_current)) {
             if (_current.Equals(_first))
