@@ -25,9 +25,9 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         }
         else if (IsLocalClient && PhotonNetwork.isMasterClient)
             GameManager.Instance.MasterClient = GameManager.Instance.Me = GameManager.Instance.GetPlayerCharacterPair(name);
-        Utilities.Instance.LogMessage("me: " + GameManager.Instance.Me);
-        Utilities.Instance.LogMessage("my player: " + GameManager.Instance.MyPlayer.name);
-        Utilities.Instance.LogMessage("my object: " + GameManager.Instance.MyCharacter.name);
+        //Utilities.Instance.LogMessage("me: " + GameManager.Instance.Me);
+        //Utilities.Instance.LogMessage("my player: " + GameManager.Instance.MyPlayer.name);
+        //Utilities.Instance.LogMessage("my object: " + GameManager.Instance.MyCharacter.name);
         //Utilities.Instance.LogMessage("my model: " + GameManager.Instance.MyCharacterModel.GetVital(0).Name);
         enabled = false;
     }
@@ -75,19 +75,17 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     }
 
     public override void SendData(PhotonStream _stream) {
-        if (enabled) {
-            base.SendData(_stream);
-            _stream.SendNext(rigidbody.velocity);
-            _stream.SendNext(movementController.AnimatorMovementSpeed);
-        }
+        base.SendData(_stream);
+        _stream.SendNext(rigidbody.velocity);
+        _stream.SendNext(movementController.AnimatorMovementSpeed);
+        Utilities.Instance.LogMessage("Sending Data");
     }
 
     public override void ReceiveData(PhotonStream _stream) {
-        if (enabled) {
-            base.ReceiveData(_stream);
-            rigidbody.velocity = (Vector3)_stream.ReceiveNext();
-            movementController.AnimatorMovementSpeed = (float)_stream.ReceiveNext();
-        }
+        base.ReceiveData(_stream);
+        rigidbody.velocity = (Vector3)_stream.ReceiveNext();
+        movementController.AnimatorMovementSpeed = (float)_stream.ReceiveNext();
+        Utilities.Instance.LogMessage("Receiving Data");
     }
 
     private void SendCharacterStats() {

@@ -85,10 +85,8 @@ public class RoomNetController: BaseNetController {
     [RPC]
     private void MasterClientRequestForRoomState(PhotonPlayer _playerRequested) {
         Utilities.Instance.PreCondition(IsMasterClient, "RoomNetController", "[RPC]MasterClientRequestForRoomState", "This RPC is only available for the master client.");
-        for (int i = 0; i < MainRoomModel.Instance.PlayerSlotsLength; ++i) {
+        for (int i = 0; i < MainRoomModel.Instance.PlayerSlotsLength; ++i)
             photonView.RPC("SetPlayerToSlot", _playerRequested, i, MainRoomModel.Instance.GetPlayerInSlot(i));
-            Utilities.Instance.LogMessage("" + i);
-        }
     }
     //player in slot
     [RPC]

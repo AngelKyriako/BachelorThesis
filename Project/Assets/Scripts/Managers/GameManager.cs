@@ -29,7 +29,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     void OnJoinedRoom() {
-        PhotonNetwork.Instantiate(ResourcesPathManager.Instance.PlayerCharacterPath, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Instantiate(ResourcesPathManager.Instance.PlayerCharacterPath, new Vector3(50,0,50), Quaternion.identity, 0);
         InitRoomScripts();
     }
 
