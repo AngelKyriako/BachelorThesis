@@ -10,6 +10,7 @@ public class BaseProjectile: MonoBehaviour {
     private BaseSkill skill;
     private BaseCharacterModel casterModel;
     private Vector3 origin, destination;
+    private bool isTriggered;
 
     void Awake() {
         enabled = false;
@@ -21,12 +22,13 @@ public class BaseProjectile: MonoBehaviour {
         destination = _direction.normalized;
         destination.x *= directionMultiplier;
         destination.z *= directionMultiplier;
+        isTriggered = false;
         enabled = true;
     }
 
 	void Start () {
         //@TODO: somehow transfer this to movement controller or somewhere to run localy
-        casterModel.gameObject.transform.LookAt(destination);
+        //casterModel.gameObject.transform.LookAt(destination);
 
         origin = casterModel.ProjectileOriginPosition;
         transform.position = origin;
@@ -43,19 +45,21 @@ public class BaseProjectile: MonoBehaviour {
 
     public virtual void OnTriggerEnter(Collider other) {
         PlayerCharacterModel otherModel;
-        if (PhotonNetwork.isMasterClient){
+        if (PhotonNetwork.isMasterClient && !isTriggered){
             if (other.CompareTag("Player")) {
                 otherModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
-                if (otherModel && !CombatManager.Instance.IsAlly(otherModel.name)) {
-                    skill.ActivateOffensiveEffects(casterModel, other.GetComponent<PlayerCharacterModel>());
-                    Utilities.Instance.LogMessage(casterModel.name + "'s projectile collided with " + otherModel.name + ". Projectile destroyed");
-                    skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>(), other.transform.position, Quaternion.identity);
+                Utilities.Instance.LogMessage(casterModel.name + "'s projectile collided with " + otherModel.name);
+                if (otherModel && !CombatManager.Instance.AreAllies(casterModel.name, otherModel.name)) {
+                    isTriggered = true;
+                    skill.ActivateOffensiveEffects(casterModel, otherModel);
+                    Utilities.Instance.LogMessage(otherModel.name + " is an opponent. Skill Triggered.");
+                    skill.Trigger(other.transform.position, Quaternion.identity);
                     CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
                 }
             }
             else {
                 Utilities.Instance.LogMessage(casterModel.name + "'s projectile collided with " + other.name+ ". Projectile destroyed");
-                skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>(), other.transform.position, Quaternion.identity);
+                skill.Trigger(other.transform.position, Quaternion.identity);
                 CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
             }
         }

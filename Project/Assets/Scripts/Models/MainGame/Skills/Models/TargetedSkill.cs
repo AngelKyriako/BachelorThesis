@@ -17,8 +17,10 @@ public class TargetedSkill: BaseSkill {
     public override void Pressed() {
         if (!isSelected && IsUsable)
             Select();
-        else if (isSelected)
-            Cast(currentCursor.Direction);        
+        else if (isSelected) {
+            Cast(currentCursor.Direction);
+            Owner.gameObject.transform.LookAt(currentCursor.Direction*1000);
+        }
     }
 
     public override void Unpressed() {

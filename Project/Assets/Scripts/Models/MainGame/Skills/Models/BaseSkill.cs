@@ -12,7 +12,7 @@ public class BaseSkill {
                                            supportEffects,
                                            passiveEffects;
     private Requirements requirements;
-    private BaseCharacterModel owner;    
+    private BaseCharacterModel owner;
     private CharacterSkillSlot slot;
 
     private string castEffect, projectile, triggerEffect;
@@ -64,7 +64,8 @@ public class BaseSkill {
 
     public virtual void Cast(Vector3 _direction) {
         owner.GetVital((int)VitalType.Mana).CurrentValue -= manaCost;
-        coolDownTimer = coolDownTime - (coolDownTime * owner.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
+        RefreshCooldown();
+
         if (castEffect != null && !castEffect.Equals(string.Empty))
             CombatManager.Instance.MasterClientInstantiateSceneObject(castEffect, owner.transform.position, Quaternion.identity);
 
@@ -74,7 +75,7 @@ public class BaseSkill {
         ActivatePassiveEffects(owner, owner);
     }
 
-    public virtual void Trigger(BaseCharacterModel _caster, BaseCharacterModel _receiver, Vector3 _position, Quaternion _rotation) {
+    public virtual void Trigger(Vector3 _position, Quaternion _rotation) {
         if (triggerEffect != null && !triggerEffect.Equals(string.Empty))
             CombatManager.Instance.MasterClientInstantiateSceneObject(triggerEffect, _position, _rotation);
     }
@@ -102,6 +103,10 @@ public class BaseSkill {
                 _caster.NetworkController.AttachEffect(_caster.name, _receiver.name, effectTitle);
     }
 
+    private void RefreshCooldown() {
+        CoolDownTimer = coolDownTime - (coolDownTime * owner.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
+    }
+
     #region Accessors
     public string Title {
         get { return title; }
@@ -119,7 +124,6 @@ public class BaseSkill {
         get { return coolDownTimer; }
         set { coolDownTimer = value > 0 ? value : 0; }
     }
-
     public virtual bool IsUsable {
         get { return (coolDownTimer == 0f) && (owner.GetVital((int)VitalType.Mana).CurrentValue >= manaCost) && RequirementsFulfilled(); }
     }
@@ -191,7 +195,6 @@ public class BaseSkill {
 
     public BaseCharacterModel Owner {
         get { return owner; }
-        set { owner = value; }
     }
     public CharacterSkillSlot Slot {
         get { return slot; }

@@ -46,10 +46,8 @@ public class CameraController: MonoBehaviour {
 
         if (lockedOnTarget)
             movement = ReceiveMovementToTarget();
-        else {
-            movement = ReceiveMovementInput();
-            movement = Camera.main.transform.TransformDirection(movement);
-        }
+        else
+            movement = Camera.main.transform.TransformDirection(ReceiveMovementInput());
         movement = ZoomMovement(movement);
 
         originPosition = Camera.main.transform.position;
