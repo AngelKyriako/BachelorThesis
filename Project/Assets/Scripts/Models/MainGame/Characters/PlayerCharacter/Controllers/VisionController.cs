@@ -3,14 +3,15 @@ using System.Collections.Generic;
 
 public class VisionController: MonoBehaviour {
 
-    private const float UPDATE_FREQUENCY = 1.5f;
+    private const float DISTANCE_FROM_GROUND = 3.0f, UPDATE_FREQUENCY = 1.5f;
     private const int EASY_RADIUS = 30, MEDIUM_RADIUS = 15, HARD_RADIUS = 10;
     private readonly Dictionary<GameDifficulty, int> DIFFICULTY_TO_RADIUS = new Dictionary<GameDifficulty, int> (){ { GameDifficulty.Easy, EASY_RADIUS },
                                                                                                                     { GameDifficulty.Medium, MEDIUM_RADIUS },
                                                                                                                     { GameDifficulty.Hard, HARD_RADIUS }
                                                                                                                   };
 
-    public Vector3 visionPosition = Vector3.zero;
+    public Vector3 visionLocalPosition = Vector3.zero,
+                   visionLocalRotation = Vector3.zero;
     public string visibleLayer = "",
                   hiddenLayer = "";
     public LayerMask ignoredLayers;
@@ -41,7 +42,8 @@ public class VisionController: MonoBehaviour {
         visionCollider = vision.GetComponent<SphereCollider>();
         if (vision.renderer)
             vision.renderer.enabled = false;
-        vision.transform.localPosition = visionPosition;
+        vision.transform.localPosition = visionLocalPosition;
+        vision.transform.localEulerAngles = visionLocalRotation;
 
         blockedVisionBy = new RaycastHit();
         lastUpdateTime = Time.time;
@@ -53,7 +55,7 @@ public class VisionController: MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer(hiddenLayer)) {
+        if (other.gameObject.layer.Equals(LayerMask.NameToLayer(hiddenLayer))) {
             Utilities.Instance.SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(visibleLayer));
         }
         //if (Physics.Raycast(transform.position, transform.position - other.transform.position, out blockedVisionBy, ignoredLayers)) {
@@ -61,13 +63,13 @@ public class VisionController: MonoBehaviour {
     }
 
     void OnTriggerStay(Collider other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer(hiddenLayer)) {
+        if (other.gameObject.layer.Equals(LayerMask.NameToLayer(hiddenLayer))) {
             Utilities.Instance.SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(visibleLayer));
         }
     }
 
     void OnTriggerExit(Collider other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer(visibleLayer)) {
+        if (other.gameObject.layer.Equals(LayerMask.NameToLayer(visibleLayer))) {
             Utilities.Instance.SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(hiddenLayer));
         }
     }

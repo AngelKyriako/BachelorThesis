@@ -34,7 +34,7 @@ public class CameraController: MonoBehaviour {
     }
 
     void Start() {
-        transform.Rotate(defaultRotation);
+        transform.eulerAngles = defaultRotation;
         
         lockedOnTarget = true;
     }
