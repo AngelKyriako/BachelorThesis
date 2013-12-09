@@ -30,13 +30,13 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     }
 
     public bool IsAlly(string _name) {
-        return ((PlayerTeam)GameManager.Instance.MyPlayer.customProperties["team"]).Equals(
-                (PlayerTeam)GameManager.Instance.GetPlayer(_name).customProperties["team"]);
+        return ((PlayerTeam)GameManager.Instance.MyPlayer.customProperties["Team"]).Equals(
+                (PlayerTeam)GameManager.Instance.GetPlayer(_name).customProperties["Team"]);
     }
 
     public bool AreAllies(string _name1, string _name2) {
-        return ((PlayerTeam)GameManager.Instance.GetPlayer(_name1).customProperties["team"]).Equals(
-                (PlayerTeam)GameManager.Instance.GetPlayer(_name2).customProperties["team"]);
+        return ((PlayerTeam)GameManager.Instance.GetPlayer(_name1).customProperties["Team"]).Equals(
+                (PlayerTeam)GameManager.Instance.GetPlayer(_name2).customProperties["Team"]);
     }
 
     #region RPCs (To be sent only to master client)

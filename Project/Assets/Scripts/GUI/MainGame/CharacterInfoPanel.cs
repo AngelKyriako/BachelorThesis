@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
 
     #region Gui constants
-    private const int MAIN_X = 350, MAIN_HEIGHT = 50, MAIN_WIDTH = 200;
+    private const int MAIN_X = 350, MAIN_HEIGHT = 50, MAIN_WIDTH = 250;
 #endregion
 
     #region Model attributes
@@ -36,15 +36,11 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
         };
 
 	}
-	
-	void Update () {
-        
-	}
 
     void OnGUI() {
         GUILayout.BeginArea(layoutRect);
-        //SkillsPanel();
-        VitalsPanel();
+        //VitalsPanel();
+        SkillsPanel();        
         GUILayout.EndArea();
     }
 

@@ -9,6 +9,7 @@ public class PlayersInfoWindow: DraggableWindow {
     private const KeyCode TOGGLE_BUTTON = KeyCode.P;
 
     private Rect characterTabRect;
+
     void Start() {
         SetUpGUI(TITLE, ID, Screen.width, 0, WIDTH, HEIGHT, true, TOGGLE_BUTTON);
         characterTabRect = new Rect(5, 5, WIDTH - 10, HEIGHT/10);

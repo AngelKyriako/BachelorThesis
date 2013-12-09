@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ChatWindow: SingletonMono<ChatWindow> {
     
-    private const int MAIN_X = 0, MAIN_HEIGHT = 140, MAIN_WIDTH = 300;
+    private const int MAIN_X = 0, MAIN_HEIGHT = 150, MAIN_WIDTH = 400;
 
     private string chatInput = "";
     private Vector2 scrollPos = Vector2.zero;        
@@ -14,10 +14,6 @@ public class ChatWindow: SingletonMono<ChatWindow> {
     private ChatNetController networkController;
 
     private ChatWindow() { }
-
-    void Awake() {
-        enabled = false;
-    }
 
     void Start() {
         layoutRect = new Rect(MAIN_X, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);

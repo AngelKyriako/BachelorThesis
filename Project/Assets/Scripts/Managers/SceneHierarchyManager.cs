@@ -11,7 +11,7 @@ public class SceneHierarchyManager {
     private SceneHierarchyManager() { }
 
     public string PlayerCharacterPath {
-        get { return MergeToPath("Characters", "BabyDragons"); }
+        get { return MergeToPath("Characters", "PlayerCharacters"); }
     }
 
     public string PlayerCharacterProjectileSpawnerPath(string playerCharacterName) {

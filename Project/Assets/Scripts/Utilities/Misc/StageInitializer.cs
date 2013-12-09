@@ -7,5 +7,4 @@ public class StageInitializer: MonoBehaviour {
         GameManager.Instance.InitMainStage();
         MonoBehaviour.Destroy(this);
 	}
-
 }

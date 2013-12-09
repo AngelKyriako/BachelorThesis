@@ -15,19 +15,24 @@ public class PlayerCharacterNetworkController: SerializableNetController {
 
     public override void Awake() {        
         base.Awake();
-        GameManager.Instance.AddPlayerCharacter(photonView.name, photonView.owner);
+
+        transform.parent = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath).transform;
+
+        GameManager.Instance.AddPlayerCharacter(name, photonView.owner);
         if (IsLocalClient && !PhotonNetwork.isMasterClient) {
-            GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
+            GameManager.Instance.Me = GameManager.Instance.GetPlayerCharacterPair(name);
             GameManager.Instance.MasterClientRequestConnectedPlayers();            
         }
         else if (IsLocalClient && PhotonNetwork.isMasterClient)
-            GameManager.Instance.MasterClient = GameManager.Instance.Me = new PlayerCharacterPair(photonView.owner, gameObject);
+            GameManager.Instance.MasterClient = GameManager.Instance.Me = GameManager.Instance.GetPlayerCharacterPair(name);
+        Utilities.Instance.LogMessage("me: " + GameManager.Instance.Me);
+        Utilities.Instance.LogMessage("my player: " + GameManager.Instance.MyPlayer.name);
+        Utilities.Instance.LogMessage("my object: " + GameManager.Instance.MyCharacter.name);
+        //Utilities.Instance.LogMessage("my model: " + GameManager.Instance.MyCharacterModel.GetVital(0).Name);
         enabled = false;
     }
 
-    public void SetUp() {        
-        transform.parent = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath).transform;
-
+    public void SetUp() {
         model = gameObject.GetComponent<PlayerCharacterModel>();
         model.enabled = true;
 
