@@ -33,6 +33,8 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     }
 
     public void SetUp() {
+        gameObject.GetComponent<ColorPicker>().enabled = true;
+
         model = gameObject.GetComponent<PlayerCharacterModel>();
         model.enabled = true;
 
@@ -42,22 +44,13 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         movementController = gameObject.GetComponent<MovementController>();
         movementController.enabled = true;
 
-        visionController = gameObject.GetComponent<VisionController>();               
-        if (CombatManager.Instance.IsAlly(name)) {
-            Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));
-            visionController.enabled = true;
-        }
-        else {
-            Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("HiddenEnemies"));
-            visionController.enabled = false;
-        }
-        enabled = true;
-    }
+        visionController = gameObject.GetComponent<VisionController>();
+        visionController.SetUp(CombatManager.Instance.IsAlly(name), GameVariables.Instance.Difficulty.Value);
 
-    public override void Start() {
-        base.Start();
-        if(IsLocalClient)
+        if (IsLocalClient)
             model.AddListeners();
+
+        enabled = true;
     }
 
     public void OnDestroy() {
@@ -66,7 +59,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
 
     public override void Update() {
         base.Update();
-        if (IsLocalClient && statSyncTimer > statSyncDelay) {
+        if (IsLocalClient && model && statSyncTimer > statSyncDelay) {
             SendCharacterStats();
             SendCharacterAttributes();
             statSyncTimer = 0;
@@ -75,17 +68,19 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     }
 
     public override void SendData(PhotonStream _stream) {
-        base.SendData(_stream);
-        _stream.SendNext(rigidbody.velocity);
-        _stream.SendNext(movementController.AnimatorMovementSpeed);
-        Utilities.Instance.LogMessage("Sending Data");
+        if (enabled) {
+            base.SendData(_stream);
+            _stream.SendNext(rigidbody.velocity);
+            _stream.SendNext(movementController.AnimatorMovementSpeed);
+        }
     }
 
     public override void ReceiveData(PhotonStream _stream) {
-        base.ReceiveData(_stream);
-        rigidbody.velocity = (Vector3)_stream.ReceiveNext();
-        movementController.AnimatorMovementSpeed = (float)_stream.ReceiveNext();
-        Utilities.Instance.LogMessage("Receiving Data");
+        if (enabled) {
+            base.ReceiveData(_stream);
+            rigidbody.velocity = (Vector3)_stream.ReceiveNext();
+            movementController.AnimatorMovementSpeed = (float)_stream.ReceiveNext();
+        }
     }
 
     private void SendCharacterStats() {

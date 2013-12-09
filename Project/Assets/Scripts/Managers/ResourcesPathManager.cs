@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-public class ResourcesPathManager {
+﻿public class ResourcesPathManager {
 
     private static ResourcesPathManager instance = new ResourcesPathManager();
     public static ResourcesPathManager Instance {
@@ -8,16 +6,22 @@ public class ResourcesPathManager {
     }
 
     private ResourcesPathManager() { }
+
     #region characters
-    public string PlayerCharacterPath {
-        get { return MergeToPath("Characters", "BabyDragon"); }
+    public string PlayerCharacterPrefabPath {
+        get { return MergeToPath("Characters", "Prefabs", "BabyDragon"); }
+    }
+    public string PlayerCharacterMaterialPath(string _color) {
+        return MergeToPath("Characters", "Materials", _color);
     }
     #endregion
+
     #region misc
-    public string Vision(string _difficulty) {
-        return MergeToPath("Misc", "Vision", _difficulty);
+    public string Vision {
+        get { return MergeToPath("Characters", "Prefabs", "Vision"); }
     }
     #endregion
+
     #region skills
     //casting
     public string TargetCursorPath(string _targetCursor) {

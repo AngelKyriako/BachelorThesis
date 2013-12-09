@@ -49,7 +49,7 @@ public class CharacterWindow: MonoBehaviour {
     private bool isVisible;
     
 #endregion
-
+    //@TODO: Add it dynamically to the scripts (need to not have GUILayout paramaters)
     void Awake() {
         enabled = false;
     }

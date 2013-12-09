@@ -15,8 +15,10 @@ public class SceneHierarchyManager {
     }
 
     public string PlayerCharacterProjectileSpawnerPath(string playerCharacterName) {
-        Utilities.Instance.LogMessage(MergeToPath(PlayerCharacterPath, playerCharacterName, "ProjectileSpawner"));
         return MergeToPath(PlayerCharacterPath, playerCharacterName, "ProjectileSpawner");
+    }
+    public string PlayerCharacterMesh(string playerCharacterName) {
+        return MergeToPath(PlayerCharacterPath, playerCharacterName, "Sphere_002");
     }
 
     private string MergeToPath (params string[] nodes){

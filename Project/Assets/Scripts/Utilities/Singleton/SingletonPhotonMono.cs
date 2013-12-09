@@ -51,8 +51,7 @@ public class SingletonPhotonMono<T>: Photon.MonoBehaviour where T: Photon.MonoBe
                     }
                     else {
                         DontDestroyOnLoad(_instance.gameObject);
-                        Debug.Log("[Singleton] Using instance already created: " +
-                            _instance.gameObject.name);
+                        Debug.Log("[Singleton] Container object " + _instance.gameObject.name + "has already been created.");
                     }
                 }
 

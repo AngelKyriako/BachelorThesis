@@ -21,7 +21,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     private GameManager() { }
 
-    void Awake() {        
+    void Awake() {
         gui = GameObject.Find("GUIScripts");
         all = new Dictionary<string, PlayerCharacterPair>();
         if (PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected))
@@ -29,57 +29,14 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     void OnJoinedRoom() {
-        PhotonNetwork.Instantiate(ResourcesPathManager.Instance.PlayerCharacterPath, new Vector3(50,0,50), Quaternion.identity, 0);
+        PhotonNetwork.Instantiate(ResourcesPathManager.Instance.PlayerCharacterPrefabPath, Vector3.zero, Quaternion.identity, 0);
         InitRoomScripts();
-    }
-
-    void OnLeaveRoom() {
-    }
-
-    public void MasterClientLoadMainStage() {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "MasterClientLoadMainStage", "This function is only available for the master client.");
-        PhotonNetwork.LoadLevel(GameVariables.Instance.Map.Key);
-        photonView.RPC("LoadMainStage", PhotonTargets.Others, GameVariables.Instance.Map.Key);
-    }
-
-    public void InitMainStage() {
-        Vector3 spawnPoint;
-        gameObject.AddComponent<CombatManager>();
-        foreach (string _name in AllPlayerKeys)
-            GetPlayerNetController(_name).SetUp();
-
-        //@TODO: Put character to its team's base !!!
-        if (!PhotonNetwork.isMasterClient)
-            spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
-        else
-            spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
-        GameManager.Instance.MyCharacter.transform.position = spawnPoint;
-
-        InitGUIScripts();
     }
 
     private void InitRoomScripts() {
         GameObject roomScripts = GameObject.Find("RoomScripts");
         roomScripts.GetComponent<RoomNetController>().enabled = true;
         roomScripts.GetComponent<MainRoomGUI>().enabled = true;        
-    }
-
-    private void InitGUIScripts() {
-        //gui.AddComponent<MouseCursor>().enabled = true;     
-        gui.AddComponent<GamePreferencesWindow>().enabled = true;
-        gui.GetComponent<CharacterWindow>().enabled = true;
-        gui.AddComponent<CharacterInfoPanel>().enabled = true;
-        gui.AddComponent<TerrainMap>().enabled = true;
-        gui.AddComponent<PlayersInfoWindow>().enabled = true;
-    }
-
-    public void MasterClientRequestConnectedPlayers() {
-        if(!PhotonNetwork.isMasterClient)
-            photonView.RPC("RequestForPlayerCharacters", PhotonNetwork.masterClient);
-    }
-    public void RemovePlayerCharacter(string _name) {
-        if (all.ContainsKey(_name))
-            all.Remove(_name);
     }
 
     public bool AllPlayersReady() {
@@ -94,6 +51,51 @@ public class GameManager: SingletonPhotonMono<GameManager> {
                 return false;
         }
         return true;
+    }
+
+    public void MasterClientLoadMainStage() {
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "MasterClientLoadMainStage", "This function is only available for the master client.");
+        LoadMainStage(GameVariables.Instance.Map.Key);
+        photonView.RPC("LoadMainStage", PhotonTargets.Others, GameVariables.Instance.Map.Key);
+    }
+
+    public void InitMainStage() {
+        Vector3 spawnPoint;
+        gameObject.AddComponent<CombatManager>();        
+        foreach (string _name in AllPlayerKeys)
+            GetPlayerNetController(_name).SetUp();
+
+        //@TODO: Put character to its team's base !!!
+        if (!PhotonNetwork.isMasterClient)
+            spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
+        else
+            spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
+        GameManager.Instance.MyCharacter.transform.position = spawnPoint;
+        GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
+
+        InitGUIScripts();
+    }
+
+    private void InitGUIScripts() {
+        //gui.AddComponent<MouseCursor>().enabled = true;     
+        gui.AddComponent<GamePreferencesWindow>().enabled = true;
+        gui.GetComponent<CharacterWindow>().enabled = true;
+        gui.AddComponent<CharacterInfoPanel>().enabled = true;
+        gui.AddComponent<TerrainMap>().enabled = true;
+        gui.AddComponent<PlayersInfoWindow>().enabled = true;
+        gui.AddComponent<FPSCounter>().enabled = true;
+    }
+
+    public void MasterClientRequestConnectedPlayers() {
+        if(!PhotonNetwork.isMasterClient)
+            photonView.RPC("RequestForPlayerCharacters", PhotonNetwork.masterClient);
+    }
+    public void RemovePlayerCharacter(string _name) {
+        if (all.ContainsKey(_name))
+            all.Remove(_name);
+    }
+
+    void OnLeaveRoom() {
     }
 
     #region Player properties updates

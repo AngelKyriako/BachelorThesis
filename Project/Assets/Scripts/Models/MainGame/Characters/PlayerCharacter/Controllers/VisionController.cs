@@ -1,8 +1,14 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class VisionController: MonoBehaviour {
 
     private const float UPDATE_FREQUENCY = 1.5f;
+    private const int EASY_RADIUS = 30, MEDIUM_RADIUS = 15, HARD_RADIUS = 10;
+    private readonly Dictionary<GameDifficulty, int> DIFFICULTY_TO_RADIUS = new Dictionary<GameDifficulty, int> (){ { GameDifficulty.Easy, EASY_RADIUS },
+                                                                                                                    { GameDifficulty.Medium, MEDIUM_RADIUS },
+                                                                                                                    { GameDifficulty.Hard, HARD_RADIUS }
+                                                                                                                  };
 
     public Vector3 visionPosition = Vector3.zero;
     public string visibleLayer = "",
@@ -18,23 +24,27 @@ public class VisionController: MonoBehaviour {
 
     void Awake() {
         Utilities.Instance.Assert(visibleLayer.Length != 0 && hiddenLayer.Length != 0, "VisionController", "Awake", "Invalid layers");
+
+        vision = (GameObject)GameObject.Instantiate(Resources.Load(ResourcesPathManager.Instance.Vision));
+        vision.transform.parent = transform;
+        visionCollider = vision.GetComponent<SphereCollider>();
+        if (vision.renderer)
+            vision.renderer.enabled = false;
+        vision.transform.localPosition = visionPosition;
+
         model = gameObject.GetComponent<BaseCharacterModel>();
+        enabled = false;
+    }
+
+    public void SetUp(bool isAlly, GameDifficulty _difficulty) {
+        Utilities.Instance.SetGameObjectLayer(gameObject, isAlly ? LayerMask.NameToLayer("Allies") : LayerMask.NameToLayer("HiddenEnemies"));
+        baseRadius = DIFFICULTY_TO_RADIUS[_difficulty];
+        enabled = isAlly;
     }
 
     void Start() {
-        vision = (GameObject)GameObject.Instantiate(Resources.Load(
-                                                        ResourcesPathManager.Instance.Vision(
-                                                            GameVariables.Instance.Difficulty.Key)));
-        vision.transform.parent = transform;
-        if (vision.renderer)
-            vision.renderer.enabled = false;
-
-        visionCollider = vision.GetComponent<SphereCollider>();
-        baseRadius = visionCollider.radius;
-        vision.transform.localPosition = visionPosition;
-
         blockedVisionBy = new RaycastHit();
-        lastUpdateTime = 0f;
+        lastUpdateTime = Time.time;
     }
 
     void Update() {

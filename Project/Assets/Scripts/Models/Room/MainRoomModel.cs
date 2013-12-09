@@ -14,17 +14,17 @@ public enum PlayerTeam {
     Team10
 }
 
-public enum PlayerColor {    
-    Red,
+public enum PlayerColor {
     Blue,
-    Green,
+    Teal,
+    Red,
     Purple,
-    Yellow,
     Pink,
+    Green,
+    LightGreen,
+    Yellow,
+    Brown,    
     Orange,
-    Brown,
-    Gray,
-    Black,
     None
 }
 

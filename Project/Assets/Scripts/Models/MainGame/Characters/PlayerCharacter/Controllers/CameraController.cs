@@ -24,9 +24,9 @@ public class CameraController: MonoBehaviour {
                  //rotateInputWeight = 35,
                  //rotateSpeed = 35;
 
-    public float minCameraX = 10f, maxCameraX = 80f,
-                 minCameraY = 10f, maxCameraY = 20f,
-                 minCameraZ = 10f, maxCameraZ = 80f;
+    public float minCameraX = 30f, maxCameraX = 70f,
+                 minCameraY = 20f, maxCameraY = 25f,
+                 minCameraZ = 10f, maxCameraZ = 70f;
 
 
     void Awake() {
@@ -34,7 +34,8 @@ public class CameraController: MonoBehaviour {
     }
 
     void Start() {
-        transform.rotation = Quaternion.Euler(defaultRotation);
+        transform.Rotate(defaultRotation);
+        
         lockedOnTarget = true;
     }
 
