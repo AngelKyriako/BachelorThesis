@@ -11,7 +11,7 @@ public class ColorPicker: MonoBehaviour {
 
     void Start() {
         GameObject mesh = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterMesh(name));
-        string playerColorName = ((PlayerColor)GameManager.Instance.MyPlayer.customProperties["Color"]).ToString();
+        string playerColorName = ((PlayerColor)GameManager.Instance.GetPlayer(name).customProperties["Color"]).ToString();
 
         mesh.renderer.material = (Material)Resources.Load(ResourcesPathManager.Instance.PlayerCharacterMaterialPath(playerColorName));
 

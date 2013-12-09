@@ -25,13 +25,6 @@ public class VisionController: MonoBehaviour {
     void Awake() {
         Utilities.Instance.Assert(visibleLayer.Length != 0 && hiddenLayer.Length != 0, "VisionController", "Awake", "Invalid layers");
 
-        vision = (GameObject)GameObject.Instantiate(Resources.Load(ResourcesPathManager.Instance.Vision));
-        vision.transform.parent = transform;
-        visionCollider = vision.GetComponent<SphereCollider>();
-        if (vision.renderer)
-            vision.renderer.enabled = false;
-        vision.transform.localPosition = visionPosition;
-
         model = gameObject.GetComponent<BaseCharacterModel>();
         enabled = false;
     }
@@ -43,6 +36,13 @@ public class VisionController: MonoBehaviour {
     }
 
     void Start() {
+        vision = (GameObject)GameObject.Instantiate(Resources.Load(ResourcesPathManager.Instance.Vision));
+        vision.transform.parent = transform;
+        visionCollider = vision.GetComponent<SphereCollider>();
+        if (vision.renderer)
+            vision.renderer.enabled = false;
+        vision.transform.localPosition = visionPosition;
+
         blockedVisionBy = new RaycastHit();
         lastUpdateTime = Time.time;
     }

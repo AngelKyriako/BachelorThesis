@@ -35,9 +35,9 @@ public class TerrainMap: DraggableWindow {
             pointY = ((Terrain.activeTerrain.terrainData.size.z - GameManager.Instance.GetCharacter(_name).transform.position.z)
                       / terrainMapHeightScale) - MAP_POINT_SIZE / 2;
 
-            if (GameManager.Instance.Me.Character.name.Equals(_name))
-                GUI.Label(new Rect(pointX, pointY, MAP_POINT_SIZE, MAP_POINT_SIZE), _name);
-            else if (GameManager.Instance.GetCharacter(_name).layer.Equals(VISIBLE_ENEMY_LAYER))
+            if (GameManager.Instance.MyCharacter.name.Equals(_name))
+                GUI.Label(new Rect(pointX, pointY, MAP_POINT_SIZE, MAP_POINT_SIZE), "me");
+            else if (CombatManager.Instance.IsAlly(_name) || GameManager.Instance.GetCharacter(_name).layer.Equals(VISIBLE_ENEMY_LAYER))
                 GUI.Label(new Rect(pointX, pointY, MAP_POINT_SIZE, MAP_POINT_SIZE), _name);
         }        
     }

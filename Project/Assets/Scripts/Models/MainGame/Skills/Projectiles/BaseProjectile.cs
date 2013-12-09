@@ -46,7 +46,7 @@ public class BaseProjectile: MonoBehaviour {
         if (PhotonNetwork.isMasterClient){
             if (other.CompareTag("Player")) {
                 otherModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
-                if (otherModel && !casterModel.name.Equals(otherModel.name)) {
+                if (otherModel && !CombatManager.Instance.IsAlly(otherModel.name)) {
                     skill.ActivateOffensiveEffects(casterModel, other.GetComponent<PlayerCharacterModel>());
                     Utilities.Instance.LogMessage(casterModel.name + "'s projectile collided with " + otherModel.name + ". Projectile destroyed");
                     skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>(), other.transform.position, Quaternion.identity);
@@ -54,7 +54,7 @@ public class BaseProjectile: MonoBehaviour {
                 }
             }
             else {
-                Utilities.Instance.LogMessage(casterModel.name + "'s projectile collided with " + other.name+ "Projectile destroyed");
+                Utilities.Instance.LogMessage(casterModel.name + "'s projectile collided with " + other.name+ ". Projectile destroyed");
                 skill.Trigger(casterModel, other.GetComponent<PlayerCharacterModel>(), other.transform.position, Quaternion.identity);
                 CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
             }
