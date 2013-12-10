@@ -27,9 +27,6 @@ public class BaseProjectile: MonoBehaviour {
     }
 
 	void Start () {
-        //@TODO: somehow transfer this to movement controller or somewhere to run localy
-        //casterModel.gameObject.transform.LookAt(destination);
-
         origin = casterModel.ProjectileOriginPosition;
         transform.position = origin;
         transform.LookAt(destination);
@@ -44,8 +41,9 @@ public class BaseProjectile: MonoBehaviour {
 	}
 
     public virtual void OnTriggerEnter(Collider other) {
+        Utilities.Instance.LogMessage("OnTriggedEnter with: "+other.name);
         PlayerCharacterModel otherModel;
-        if (PhotonNetwork.isMasterClient && !isTriggered){
+        if (PhotonNetwork.isMasterClient && !other.gameObject.layer.Equals(LayerMask.NameToLayer("Void")) && !isTriggered){
             if (other.CompareTag("Player")) {
                 otherModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
                 Utilities.Instance.LogMessage(casterModel.name + "'s projectile collided with " + otherModel.name);

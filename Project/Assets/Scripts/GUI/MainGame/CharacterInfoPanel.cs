@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
@@ -24,9 +23,9 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
         enabled = false;
     }
 
-	void Start () {
+    void Start() {
         playerCharModel = GameManager.Instance.MyCharacterModel;
-        layoutRect = new Rect((Screen.width-MAIN_WIDTH)/2, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
+        layoutRect = new Rect((Screen.width - MAIN_WIDTH) / 2, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
 
         skillButtonPressed = new Dictionary<CharacterSkillSlot, bool>() {
             { CharacterSkillSlot.Q, false },
@@ -35,7 +34,7 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
             { CharacterSkillSlot.R, false },
         };
 
-	}
+    }
 
     void OnGUI() {
         GUILayout.BeginArea(layoutRect);

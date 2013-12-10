@@ -34,8 +34,7 @@ public class CameraController: MonoBehaviour {
     }
 
     void Start() {
-        transform.eulerAngles = defaultRotation;
-        
+        transform.rotation = Quaternion.LookRotation(defaultRotation);
         lockedOnTarget = true;
     }
 

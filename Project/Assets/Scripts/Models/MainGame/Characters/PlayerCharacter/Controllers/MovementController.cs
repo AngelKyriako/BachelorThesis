@@ -3,8 +3,6 @@ using System.Collections;
 
 public class MovementController: MonoBehaviour {
 
-    private const float groundedY = 0;
-
     public Animator animator;
     public float baseMovementSpeed = 10;
 
@@ -21,7 +19,7 @@ public class MovementController: MonoBehaviour {
     void Start() {
         model = gameObject.GetComponent<PlayerCharacterModel>();
         networkController = gameObject.GetComponent<PlayerCharacterNetworkController>();
-        //animator.enabled = false;
+
         destination = transform.position;
         currentSpeed = 0f;
         if (networkController.IsLocalClient)
@@ -71,7 +69,7 @@ public class MovementController: MonoBehaviour {
         if (new Plane(Vector3.up, transform.position).Raycast(ray, out hitdistance) && !model.IsStunned) {
             Vector3 targetPoint = ray.GetPoint(hitdistance);
             destination = ray.GetPoint(hitdistance);
-            destination.Set(destination.x, groundedY, destination.z);
+            //destination.Set(destination.x, groundedY, destination.z);
             //rotate on click
             transform.rotation = Quaternion.LookRotation(targetPoint - transform.position);
         }
