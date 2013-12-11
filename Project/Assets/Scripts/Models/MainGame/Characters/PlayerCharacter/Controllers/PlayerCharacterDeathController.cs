@@ -6,6 +6,7 @@ public class PlayerCharacterDeathController: MonoBehaviour {
     public Vector3 deathSpawnPoint;
 
     private PlayerCharacterModel model;
+    private CameraController camera;
 
     void Awake() {
         Utilities.Instance.Assert(deathSpawnPoint != null, "PlayerCharacterDeathController", "Awake", "Death spawn point must have a value");
@@ -13,8 +14,10 @@ public class PlayerCharacterDeathController: MonoBehaviour {
     }
 
     public void Setup(bool isLocalPlayer) {
-        if (isLocalPlayer)
+        if (isLocalPlayer) {
             model = GameManager.Instance.MyCharacterModel;
+            camera = gameObject.GetComponent<CameraController>();
+        }
     }
 
     void Update() {
@@ -27,6 +30,7 @@ public class PlayerCharacterDeathController: MonoBehaviour {
         model.Died();
         ClearEffects();
         TeleportToAfterLife();
+        camera.transform.position.Set(50, 115, 30);
         enabled = true;
     }
 
