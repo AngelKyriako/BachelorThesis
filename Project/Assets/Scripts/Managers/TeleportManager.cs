@@ -26,13 +26,13 @@ public class TeleportManager {
     public void TeleportMeToHeaven() {
         GameManager.Instance.MyCharacter.transform.position = heavenSpawnPoint;
         GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
-        Camera.main.transform.position.Set(Camera.main.transform.position.x, Camera.main.transform.position.y + distanceToHeaven, Camera.main.transform.position.z);
+        GameManager.Instance.MyCameraController.EnterHeavenMode();
     }
 
     public void TeleportMeToStage() {
         GameManager.Instance.MyCharacter.transform.position = stageSpawnPoint;
         GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
-        Camera.main.transform.position.Set(Camera.main.transform.position.x, Camera.main.transform.position.y - distanceToHeaven, Camera.main.transform.position.z);
+        GameManager.Instance.MyCameraController.EnterStageMode();
     }
 
     //public Vector3 HeavenSpawnPoint {

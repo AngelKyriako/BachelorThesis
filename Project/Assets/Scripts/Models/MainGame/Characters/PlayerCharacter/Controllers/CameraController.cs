@@ -8,11 +8,11 @@ using System.Collections;
 /// </summary>
 public class CameraController: MonoBehaviour {
 
-    private Vector3 originPosition;
-    //private Vector3 originRotation;
-    private bool lockedOnTarget;
+    public enum CameraMode {
+        Heaven,
+        Stage
+    }
 
-    public Transform target;
     public Vector3 defaultRotation;
     public float targetOffsetX = 0f,
                  targetOffsetZ = -15f,
@@ -21,27 +21,59 @@ public class CameraController: MonoBehaviour {
     public int scrollOffset = 100;
     public float movementInputWeight = 35,
                  minMovementSpeed = 25, maxMovementSpeed = 100;
-                 //rotateInputWeight = 35,
-                 //rotateSpeed = 35;
 
     public float minCameraX = 30f, maxCameraX = 70f,
-                 minCameraY = 20f, maxCameraY = 25f,
+                 minStageCameraY = 25f, maxStageCameraY = 30f,
+                 minHeavenCameraY = 115f, maxHeavenCameraY = 160f,
                  minCameraZ = 10f, maxCameraZ = 70f;
 
+    private Vector3 originPosition;
+    private bool lockedOnTarget;
+
+    private CameraMode mode;
+    private DispatchTable<CameraMode, Vector3, Vector3> HeightValidationDispatcher;
 
     void Awake() {
-        Utilities.Instance.Assert(target, "CameraController", "Start", "target transform is not defined");
+        HeightValidationDispatcher = new DispatchTable<CameraMode, Vector3, Vector3>();
+        HeightValidationDispatcher.AddAction(CameraMode.Heaven, delegate(Vector3 _destination) {            
+            if (_destination.y > maxHeavenCameraY)
+                _destination.y = maxHeavenCameraY;
+            else if (_destination.y < minHeavenCameraY)
+                _destination.y = minHeavenCameraY;
+
+            return _destination;
+        });
+
+        HeightValidationDispatcher.AddAction(CameraMode.Stage, delegate(Vector3 _destination) {
+            if (_destination.y > maxStageCameraY)
+                _destination.y = maxStageCameraY;
+            else if (_destination.y < minStageCameraY)
+                _destination.y = minStageCameraY;
+
+            return _destination;
+        });
     }
 
     void Start() {
-        transform.rotation = Quaternion.LookRotation(defaultRotation);
+        Camera.main.transform.rotation = Quaternion.LookRotation(defaultRotation);
+        mode = default(CameraMode);
         lockedOnTarget = true;
     }
 
     void Update() {
-        Vector3 movement;
-        
         ToggleCameraLock();
+        Move();
+    }
+
+    //////////////////////////////////  Locking  //////////////////////////////////
+    private void ToggleCameraLock() {
+        if (Input.GetKeyUp(KeyCode.L))
+            lockedOnTarget = !lockedOnTarget;
+    }
+
+    ////////////////////////////////// Movement  //////////////////////////////////
+    private void Move() {
+        Vector3 movement;
 
         if (lockedOnTarget)
             movement = ReceiveMovementToTarget();
@@ -51,19 +83,11 @@ public class CameraController: MonoBehaviour {
 
         originPosition = Camera.main.transform.position;
         ApplyMovement(ValidateMovementDestination(GetMovementDestination(movement)));
-        //originRotation = Camera.main.transform.eulerAngles;
-        //ApplyRotation(ValidateRotationDestination(GetRotationDestination(ReceiveRotationInput())));
-    }
-
-    ////////////////////////////////// Movement  //////////////////////////////////
-    private void ToggleCameraLock() {
-        if (Input.GetKeyUp(KeyCode.L))
-            lockedOnTarget = !lockedOnTarget;
     }
 
     private Vector3 ReceiveMovementToTarget() {
-        float movementX = ((target.position.x - Camera.main.transform.position.x + targetOffsetX));
-        float movementZ = ((target.position.z - Camera.main.transform.position.z + targetOffsetZ));
+        float movementX = ((transform.position.x - Camera.main.transform.position.x + targetOffsetX));
+        float movementZ = ((transform.position.z - Camera.main.transform.position.z + targetOffsetZ));
         return new Vector3(movementX, 0, movementZ);
     }
 
@@ -108,24 +132,21 @@ public class CameraController: MonoBehaviour {
         return origin += movement;
     }
 
-    private Vector3 ValidateMovementDestination(Vector3 destination) {
-        if (destination != originPosition) {
-            if (destination.x > maxCameraX)
-                destination.x = maxCameraX;
-            else if (destination.x < minCameraX)
-                destination.x = minCameraX;
+    private Vector3 ValidateMovementDestination(Vector3 _destination) {
+        if (_destination != originPosition) {
+            if (_destination.x > maxCameraX)
+                _destination.x = maxCameraX;
+            else if (_destination.x < minCameraX)
+                _destination.x = minCameraX;
+            
+            if (_destination.z > maxCameraZ)
+                _destination.z = maxCameraZ;
+            else if (_destination.z < minCameraZ)
+                _destination.z = minCameraZ;
 
-            if (destination.y > maxCameraY)
-                destination.y = maxCameraY;
-            else if (destination.y < minCameraY)
-                destination.y = minCameraY;
-
-            if (destination.z > maxCameraZ)
-                destination.z = maxCameraZ;
-            else if (destination.z < minCameraZ)
-                destination.z = minCameraZ;
+            _destination = HeightValidationDispatcher.Dispatch(mode, _destination);
         }
-        return destination;
+        return _destination;
     }
 
     private void ApplyMovement(Vector3 destination) {
@@ -133,28 +154,13 @@ public class CameraController: MonoBehaviour {
             Camera.main.transform.position = Vector3.MoveTowards(originPosition, destination, Time.deltaTime * minMovementSpeed);
     }
 
-    //////////////////////////////////// Rotation  //////////////////////////////////
-    //private Vector3 ReceiveRotationInput() {
-    //    Vector3 rotation = new Vector3(0, 0, 0);
+    public void EnterHeavenMode() {
+        mode = CameraMode.Heaven;
+        Camera.main.transform.position = new Vector3(transform.position.x, minHeavenCameraY, transform.position.z);
+    }
 
-    //    if ((Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && Input.GetMouseButton(1)) {
-    //        rotation.x = -Input.GetAxis("Mouse Y") * rotateInputWeight;
-    //        rotation.y = Input.GetAxis("Mouse X") * rotateInputWeight;
-    //    }
-    //    return rotation;
-    //}
-
-    //private Vector3 GetRotationDestination(Vector3 rotation) {
-    //    Vector3 origin = originRotation;
-    //    return origin += rotation;
-    //}
-
-    //private Vector3 ValidateRotationDestination(Vector3 destination) {
-    //    return destination;
-    //}
-    
-    //private void ApplyRotation(Vector3 destination) {
-    //    if (destination != originRotation)
-    //        Camera.main.transform.eulerAngles = Vector3.MoveTowards(originRotation, destination, Time.deltaTime * rotateSpeed);
-    //}
+    public void EnterStageMode() {
+        mode = CameraMode.Stage;
+        Camera.main.transform.position = new Vector3(transform.position.x, minStageCameraY, transform.position.z);
+    }
 }

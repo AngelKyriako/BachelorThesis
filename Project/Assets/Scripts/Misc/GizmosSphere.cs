@@ -3,8 +3,10 @@ using System.Collections;
 
 public class GizmosSphere: MonoBehaviour {
 
+    public Color color;
+
     private void OnDrawGizmos() {
-        Gizmos.color = Color.red;
+        Gizmos.color = color;
         Gizmos.DrawSphere(transform.position, 1f);
     }
 }

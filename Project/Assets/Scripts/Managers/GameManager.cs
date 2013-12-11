@@ -64,7 +64,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         foreach (string _name in AllPlayerKeys)
             GetPlayerNetController(_name).SetUp();
 
-        TeleportManager.Instance.TeleportMeToHeaven();
+        TeleportManager.Instance.TeleportMeToStage();
         InitGUIScripts();
     }
 
@@ -163,6 +163,9 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
     public PlayerCharacterDeathController MyDeathController {
         get { return me.Character.GetComponent<PlayerCharacterDeathController>(); }
+    }
+    public CameraController MyCameraController {
+        get { return me.Character.GetComponent<CameraController>(); }
     }
     public PhotonView MyPhotonView{
         get { return me.Character.GetComponent<PlayerCharacterNetworkController>().photonView; }
