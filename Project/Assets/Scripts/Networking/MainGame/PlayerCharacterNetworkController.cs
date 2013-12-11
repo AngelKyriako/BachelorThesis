@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerCharacterNetworkController: SerializableNetController {
 
     #region attributes
-    // references to local gameObjects
+    // references to local components
     private PlayerCharacterModel model;
     private CameraController cameraController;
     private MovementController movementController;
@@ -117,13 +117,14 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     }
     [RPC]
     void PrintShit(string _str, PhotonMessageInfo info) {
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "[RPC]PrintShit", "This RPC is only available for the master client.");
         Utilities.Instance.LogMessage(info.sender.name +" sent: "+ _str);
     }
 
     #region Effects RPCs
     [RPC]
     public void AttachEffect(string _casterName, string _receiverName, string _effectTitle) {
-        LogMessageToMasterClient(_receiverName + " just attached to themselves the effect" + _effectTitle + ", of caster" + _casterName);
+        LogMessageToMasterClient(_receiverName + " just attached to themself the effect" + _effectTitle + ", of caster" + _casterName);
         BaseEffect effectToAttach = EffectBook.Instance.GetEffect(_effectTitle);
         BaseEffect tempEffect = (BaseEffect)GameManager.Instance.GetCharacter(_receiverName).AddComponent(effectToAttach.GetType());
         tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), effectToAttach);
@@ -155,7 +156,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     }
     #endregion
 
-    #region Accessors    
+    #region Accessors
     public PlayerCharacterModel Model {
         get { return model; }
     }

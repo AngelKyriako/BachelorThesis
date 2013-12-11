@@ -20,6 +20,9 @@
     public string Vision {
         get { return MergeToPath("Characters", "Prefabs", "Vision"); }
     }
+    public string ExpRadiusSphere {
+        get { return MergeToPath("Characters", "Prefabs", "ExpSphere"); }
+    }
     #endregion
 
     #region skills

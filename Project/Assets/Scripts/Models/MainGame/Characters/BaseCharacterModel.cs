@@ -20,7 +20,7 @@ public struct AttachedEffect {
     }
 }
 
-public class BaseCharacterModel: MonoBehaviour  {
+public abstract class BaseCharacterModel: MonoBehaviour  {
 
     #region constants
     public const uint STARTING_LEVEL = 1;
@@ -135,9 +135,8 @@ public class BaseCharacterModel: MonoBehaviour  {
         SetupSkillsManaCost();
     }
 
-    public virtual void Death() {
-        //@TODO shit
-    }
+    public abstract void Died();
+    public abstract void KilledEnemy(BaseCharacterModel _enemy);
 
 #region Setup
     private void SetupStats() {

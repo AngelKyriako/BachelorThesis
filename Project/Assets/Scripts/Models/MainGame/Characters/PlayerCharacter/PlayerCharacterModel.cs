@@ -43,15 +43,6 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void Update() {
         base.Update();
-        RespawnTimer -= Time.deltaTime;
-    }
-
-    private void ModifyExp(uint exp) {
-        if (Level != MAX_LEVEL) {
-            currentExp += exp;
-            while (currentExp >= expToLevel)
-                LevelUp();
-        }
     }
 
     public override void LevelUp() {
@@ -60,11 +51,27 @@ public class PlayerCharacterModel: BaseCharacterModel {
         expToLevel = (uint)(expToLevel * expModifier);
     }
 
-    public override void Death() {
-        if (deathCount != 0)
-            RespawnTimer = Level * ((killsCount / 2) / (deathCount * 2));
-        else
-            RespawnTimer = Level * (killsCount / 2);
+    public void GainExp(uint _exp) {
+        if (Level != MAX_LEVEL) {
+            currentExp += _exp;
+            while (currentExp >= expToLevel)
+                LevelUp();
+        }
+    }
+
+    private void LoseExp(uint _exp) {
+        currentExp -= _exp;
+    }
+
+    public override void Died() {
+        RespawnTimer = Level * ((killsCount / 2)/
+                                (++deathCount * 2));
+        LoseExp(expToLevel/10);
+        
+    }
+
+    public override void KilledEnemy(BaseCharacterModel _enemy) {
+        ++killsCount;
     }
 
     private void SkillSelect(CharacterSkillSlot _slotPressed) {
@@ -108,6 +115,9 @@ public class PlayerCharacterModel: BaseCharacterModel {
     public float RespawnTimer {
         get { return respawnTimer; }
         set { respawnTimer = (value < 0) ? 0 : value; }
+    }
+    public bool IsDead {
+        get { return RespawnTimer == 0; }
     }
 
     public override Vector3 ProjectileOriginPosition {

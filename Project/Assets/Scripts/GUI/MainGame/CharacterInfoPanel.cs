@@ -46,10 +46,12 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
     private void SkillsPanel() {
         GUILayout.BeginHorizontal();
         GUILayout.Space(5);
-        foreach (CharacterSkillSlot _key in playerCharModel.AllSkillKeys)
+        CharacterSkillSlot _key = CharacterSkillSlot.Q;
+        for (int i = 1; i < playerCharModel.SkillSlotsLength; _key = (CharacterSkillSlot)(++i)) {
             skillButtonPressed[_key] = playerCharModel.SkillExists(_key) &&
-                                       GUILayout.Button(/*playerCharModel.GetSkill(i).Icon, */((int)playerCharModel.GetSkill(_key).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
-            //GUILayout.Label(/*playerCharModel.GetSkill(i).Icon, */((int)playerCharModel.GetSkill(_key).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
+                                       GUILayout.Button(/*playerCharModel.GetSkill(_key).Icon, */((int)playerCharModel.GetSkill(_key).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
+            //GUILayout.Label(/*playerCharModel.GetSkill(_key).Icon, */((int)playerCharModel.GetSkill(_key).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
+        }
         GUILayout.EndHorizontal();
         GUILayout.Space(5);
     }
@@ -63,5 +65,4 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
     public bool IsSkillButtonPressed(CharacterSkillSlot _key) {
         return skillButtonPressed[_key];
     }
-
 }

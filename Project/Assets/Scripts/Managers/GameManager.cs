@@ -65,11 +65,8 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         foreach (string _name in AllPlayerKeys)
             GetPlayerNetController(_name).SetUp();
 
-        //@TODO: Put character to its team's base !!!
-        if (!PhotonNetwork.isMasterClient)
-            spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(2, 10)).transform.position;
-        else
-            spawnPoint = GameObject.Find("SpawnPoint1").transform.position;
+        //@TODO: Utilize this piece of code. we are gonna use it many times
+        spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(1, 10)).transform.position;
         GameManager.Instance.MyCharacter.transform.position = spawnPoint;
         GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
 
@@ -168,6 +165,9 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
     public PlayerCharacterModel MyCharacterModel {
         get { return me.Character.GetComponent<PlayerCharacterModel>(); }
+    }
+    public PlayerCharacterDeathController MyDeathController {
+        get { return me.Character.GetComponent<PlayerCharacterDeathController>(); }
     }
     public PhotonView MyPhotonView{
         get { return me.Character.GetComponent<PlayerCharacterNetworkController>().photonView; }
