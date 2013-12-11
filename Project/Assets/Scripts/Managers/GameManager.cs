@@ -60,16 +60,11 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     public void InitMainStage() {
-        Vector3 spawnPoint;
         gameObject.AddComponent<CombatManager>();        
         foreach (string _name in AllPlayerKeys)
             GetPlayerNetController(_name).SetUp();
 
-        //@TODO: Utilize this piece of code. we are gonna use it many times
-        spawnPoint = GameObject.Find("SpawnPoint" + Random.Range(1, 10)).transform.position;
-        GameManager.Instance.MyCharacter.transform.position = spawnPoint;
-        GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
-
+        TeleportManager.Instance.TeleportMeToHeaven();
         InitGUIScripts();
     }
 

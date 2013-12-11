@@ -3,13 +3,10 @@ using System.Collections;
 
 public class PlayerCharacterDeathController: MonoBehaviour {
 
-    public Vector3 deathSpawnPoint;
-
     private PlayerCharacterModel model;
     private CameraController camera;
 
     void Awake() {
-        Utilities.Instance.Assert(deathSpawnPoint != null, "PlayerCharacterDeathController", "Awake", "Death spawn point must have a value");
         enabled = false;
     }
 
@@ -29,8 +26,6 @@ public class PlayerCharacterDeathController: MonoBehaviour {
     public void Enable() {
         model.Died();
         ClearEffects();
-        TeleportToAfterLife();
-        camera.transform.position.Set(50, 115, 30);
         enabled = true;
     }
 
@@ -38,9 +33,5 @@ public class PlayerCharacterDeathController: MonoBehaviour {
         BaseEffect[] effects = gameObject.GetComponents<BaseEffect>();
         for (int i = 0; i < effects.Length; ++i)
             effects[i].Deactivate();
-    }
-
-    private void TeleportToAfterLife() {
-        transform.position = deathSpawnPoint;
     }
 }
