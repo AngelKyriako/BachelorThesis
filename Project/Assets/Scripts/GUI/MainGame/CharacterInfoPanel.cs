@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
 
     #region Gui constants
-    private const int MAIN_X = 350, MAIN_HEIGHT = 50, MAIN_WIDTH = 250;
+    private const int MAIN_X = 350, MAIN_HEIGHT = 150, MAIN_WIDTH = 250;
 #endregion
 
     #region Model attributes
@@ -38,9 +38,16 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
 
     void OnGUI() {
         GUILayout.BeginArea(layoutRect);
-        //VitalsPanel();
-        SkillsPanel();        
+        SkillsPanel();
+        VitalsPanel();
+        LevelBarPanel();
         GUILayout.EndArea();
+    }
+
+    private void VitalsPanel() {
+        for (int i = 0; i < playerCharModel.VitalsLength; ++i)
+            GUILayout.Label(playerCharModel.GetVital(i).Name + " (" + playerCharModel.GetVital(i).CurrentValue + "/" +
+                                                                      playerCharModel.GetVital(i).FinalValue + ")");
     }
 
     private void SkillsPanel() {
@@ -56,10 +63,11 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
         GUILayout.Space(5);
     }
 
-    private void VitalsPanel() {
-        for (int i = 0; i < playerCharModel.VitalsLength; ++i)
-            GUILayout.Label(playerCharModel.GetVital(i).Name + " (" + playerCharModel.GetVital(i).CurrentValue + "/" +
-                                                                      playerCharModel.GetVital(i).FinalValue + ")", vitalBar);
+    private void LevelBarPanel() {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Level: "+playerCharModel.Level + " ");
+        GUILayout.Label("(" + playerCharModel.CurrentExp + "/" + playerCharModel.ExpToLevel + ")");
+        GUILayout.EndHorizontal();
     }
 
     public bool IsSkillButtonPressed(CharacterSkillSlot _key) {

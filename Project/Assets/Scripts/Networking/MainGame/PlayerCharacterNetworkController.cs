@@ -25,10 +25,6 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         }
         else if (IsLocalClient && PhotonNetwork.isMasterClient)
             GameManager.Instance.MasterClient = GameManager.Instance.Me = GameManager.Instance.GetPlayerCharacterPair(name);
-        //Utilities.Instance.LogMessage("me: " + GameManager.Instance.Me);
-        //Utilities.Instance.LogMessage("my player: " + GameManager.Instance.MyPlayer.name);
-        //Utilities.Instance.LogMessage("my object: " + GameManager.Instance.MyCharacter.name);
-        //Utilities.Instance.LogMessage("my model: " + GameManager.Instance.MyCharacterModel.GetVital(0).Name);
         enabled = false;
     }
 
@@ -46,6 +42,8 @@ public class PlayerCharacterNetworkController: SerializableNetController {
 
         visionController = gameObject.GetComponent<VisionController>();
         visionController.SetUp(CombatManager.Instance.IsAlly(name), GameVariables.Instance.Difficulty.Value);
+
+        gameObject.GetComponent<PlayerCharacterDeathController>().Setup(IsLocalClient);
 
         if (IsLocalClient)
             model.AddListeners();

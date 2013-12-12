@@ -4,17 +4,14 @@ using System.Collections;
 public class PlayerCharacterDeathController: MonoBehaviour {
 
     private PlayerCharacterModel model;
-    private CameraController camera;
 
     void Awake() {
         enabled = false;
     }
 
     public void Setup(bool isLocalPlayer) {
-        if (isLocalPlayer) {
+        if (isLocalPlayer)
             model = GameManager.Instance.MyCharacterModel;
-            camera = gameObject.GetComponent<CameraController>();
-        }
     }
 
     void Update() {
@@ -24,7 +21,7 @@ public class PlayerCharacterDeathController: MonoBehaviour {
     }
 
     void OnGUI() {
-        //@TODO: respawn time counter !!!
+        GUI.Label(new Rect((Screen.width / 2)-30, 0, 60, 30), model.RespawnTimer.ToString());
     }
 
     public void Enable() {

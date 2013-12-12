@@ -63,14 +63,24 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     #region Messages to all
 
     public void KillHappened(string _killerName, string _deadName, Vector3 _position) {
-        MasterClientInstantiateSceneObject(ResourcesPathManager.Instance.ExpRadiusSphere, _position, Quaternion.identity);
-        photonView.RPC("KilledEnemyPlayer", GameManager.Instance.GetPlayer(_killerName), _deadName);
+        Utilities.Instance.PreCondition(GameManager.Instance.MyCharacter.name.Equals(_deadName), "CombatManager", "KillHappened", "This method is only available for the Dead player.");
+
+        //MasterClientInstantiateSceneObject(ResourcesPathManager.Instance.ExpRadiusSphere, _position, Quaternion.identity);// In case I change my mind
+        InstantianteLocalObject(ResourcesPathManager.Instance.ExpRadiusSphere, _position, Quaternion.identity);
+        photonView.RPC("InstantianteLocalObject", PhotonTargets.Others, ResourcesPathManager.Instance.ExpRadiusSphere, _position, Quaternion.identity);
+        photonView.RPC("KilledPlayer", GameManager.Instance.GetPlayer(_killerName), _deadName);
     }
 
     #region RPCs
     [RPC]
-    private void KilledEnemyPlayer(string _killedEnemyName) {
-        GameManager.Instance.MyCharacterModel.KilledEnemy(GameManager.Instance.GetPlayerModel(_killedEnemyName));
+    private void KilledPlayer(string _killedPlayerName) {
+        if (!IsAlly(_killedPlayerName))
+            GameManager.Instance.MyCharacterModel.KilledEnemy(GameManager.Instance.GetPlayerModel(_killedPlayerName));
+    }
+
+    [RPC]
+    private void InstantianteLocalObject(string _path, Vector3 _position, Quaternion _rotation) {
+        GameObject.Instantiate((GameObject)Resources.Load(_path), _position, _rotation);
     }
     #endregion
     #endregion

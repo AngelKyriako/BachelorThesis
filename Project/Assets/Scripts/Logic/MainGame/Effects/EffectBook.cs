@@ -44,6 +44,17 @@ public class EffectBook {
         ((StunEffect)tempEffect).SetUpEffect("Stun", "Stun description", null, 15, 1, 4f);
         AddEffect(tempEffect);
 
+        #region Testing effect helpers
+        tempEffect = NewDamageEffect(effectsHolder);
+        ((DamageEffect)tempEffect).SetUpEffect("OneHitKO", "damage effect description", null, 13, 1, new EffectMod(0f, 1f));
+        AddEffect(tempEffect);
+
+
+        tempEffect = NewAttributeBuff(effectsHolder);
+        ((AttributeBuff)tempEffect).SetUpEffect("20Immobilize", "20Immobilize description", null, 20, 1, 20f, new EffectMod(0f, -1.0f), AttributeType.MovementSpeed);
+        AddEffect(tempEffect);
+        #endregion
+
         GameObject.Destroy(effectsHolder);
     }
     //direct vital effects

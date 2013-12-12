@@ -47,31 +47,41 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void LevelUp() {
         base.LevelUp();
-        currentExp -= expToLevel;
+        CurrentExp -= expToLevel;
         expToLevel = (uint)(expToLevel * expModifier);
+        RefreshVitals();
     }
 
     public void GainExp(uint _exp) {
         if (Level != MAX_LEVEL) {
-            currentExp += _exp;
-            while (currentExp >= expToLevel)
+            CurrentExp += _exp;
+            while (CurrentExp >= expToLevel)
                 LevelUp();
         }
+        Utilities.Instance.LogMessage("Gained EXP !!");
     }
 
     private void LoseExp(uint _exp) {
-        currentExp -= _exp;
+        CurrentExp -= _exp;
+        Utilities.Instance.LogMessage("Lost EXP !!");
     }
 
     public override void Died() {
         RespawnTimer = Level * ((killsCount / 2)/
-                                (++deathCount * 2));
+                                (++deathCount * 2)) + 2;
+        RefreshVitals();
         LoseExp(expToLevel/10);
         
     }
 
+    private void RefreshVitals(){
+        for (int i = 0; i < VitalsLength; ++i)
+            GetVital(i).CurrentValue = GetVital(i).FinalValue;
+    }
+
     public override void KilledEnemy(BaseCharacterModel _enemy) {
         ++killsCount;
+        GainExp(_enemy.ExpWorth);
     }
 
     private void SkillSelect(CharacterSkillSlot _slotPressed) {
@@ -90,7 +100,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
     #region Accessors
     public uint CurrentExp {
         get { return currentExp; }
-        set { currentExp = value; }
+        set { currentExp = (value > 0) ? value : 0; }
     }
     public uint ExpToLevel {
         get { return expToLevel; }

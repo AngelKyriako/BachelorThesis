@@ -38,17 +38,32 @@ public class SkillBook{
         AddSkill(tempSkill);
         //3
         tempSkill = new TargetedSkill("Mud shot", "skill 3 description", (Texture2D)Resources.Load(ResourcesPathManager.Instance.SkillIcon48x48("52")),
-                                      7f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
+                                      5f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect("Damage"));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect("Immobilize"));
         AddSkill(tempSkill);
         //4
         tempSkill = new BaseSkill("Heal", "Heal description", (Texture2D)Resources.Load(ResourcesPathManager.Instance.SkillIcon48x48("6")),
-                                  10f, string.Empty, null, string.Empty);
+                                  5f, string.Empty, null, string.Empty);
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect("Health Heal"));
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect("Mana Heal"));
         AddSkill(tempSkill);
+
+        #region Testing skill helpers
+        tempSkill = new TargetedSkill("Fuck up Ball", "skill 3 description", (Texture2D)Resources.Load(ResourcesPathManager.Instance.SkillIcon48x48("45")),
+                                      1f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect("OneHitKO"));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect("20Immobilize"));
+        AddSkill(tempSkill);
+
+        tempSkill = new BaseSkill("FuckMeUp", "KillMe description", (Texture2D)Resources.Load(ResourcesPathManager.Instance.SkillIcon48x48("107")),
+                                   1f, string.Empty, null, string.Empty);
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect("OneHitKO"));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect("20Immobilize"));
+        AddSkill(tempSkill);
+        #endregion
     }
     
     #region Accesors
