@@ -24,22 +24,18 @@ public class TeleportManager {
     }
 
     public void TeleportMeToHeaven() {
-        GameManager.Instance.MyCharacter.transform.position = heavenSpawnPoint;
-        GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
+        TeleportMe(heavenSpawnPoint);
         GameManager.Instance.MyCameraController.EnterHeavenMode();
     }
 
-    public void TeleportMeToStage() {
-        GameManager.Instance.MyCharacter.transform.position = stageSpawnPoint;
-        GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
-        GameManager.Instance.MyCameraController.EnterStageMode();
+    public void TeleportMeToMainStage() {
+        TeleportMe(stageSpawnPoint);
+        GameManager.Instance.MyCameraController.EnterMainStageMode();
     }
 
-    //public Vector3 HeavenSpawnPoint {
-    //    get { return heavenSpawnPoint; }
-    //}
-    
-    //public Vector3 StageSpawnPoint {
-    //    get { return stageSpawnPoint; }
-    //}
+    private void TeleportMe(Vector3 _spawnPoint) {
+        GameManager.Instance.MyCharacter.transform.position = _spawnPoint;
+        GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
+        GameManager.Instance.MyMovementController.StandStillBitch();
+    }
 }

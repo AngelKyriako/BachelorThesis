@@ -64,7 +64,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         foreach (string _name in AllPlayerKeys)
             GetPlayerNetController(_name).SetUp();
 
-        TeleportManager.Instance.TeleportMeToStage();
+        TeleportManager.Instance.TeleportMeToHeaven();
         InitGUIScripts();
     }
 
@@ -158,17 +158,23 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public GameObject MyCharacter {
         get { return me.Character; }
     }
+    public PlayerCharacterNetworkController MyNetworkController {
+        get { return me.Character.GetComponent<PlayerCharacterNetworkController>(); }
+    }
+    public PhotonView MyPhotonView {
+        get { return MyNetworkController.photonView; }
+    }
     public PlayerCharacterModel MyCharacterModel {
         get { return me.Character.GetComponent<PlayerCharacterModel>(); }
-    }
-    public PlayerCharacterDeathController MyDeathController {
-        get { return me.Character.GetComponent<PlayerCharacterDeathController>(); }
     }
     public CameraController MyCameraController {
         get { return me.Character.GetComponent<CameraController>(); }
     }
-    public PhotonView MyPhotonView{
-        get { return me.Character.GetComponent<PlayerCharacterNetworkController>().photonView; }
+    public MovementController MyMovementController {
+        get { return me.Character.GetComponent<MovementController>(); }
+    }
+    public PlayerCharacterDeathController MyDeathController {
+        get { return me.Character.GetComponent<PlayerCharacterDeathController>(); }
     }
     // master client
     public PlayerCharacterPair MasterClient {

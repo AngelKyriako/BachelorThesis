@@ -86,4 +86,8 @@ public class MovementController: MonoBehaviour {
     public float CurrentSpeed {        
         get { return currentSpeed; }
     }
+
+    public void StandStillBitch() {//@TODO: Bouncing bug fix
+        destination = transform.position;
+    }
 }

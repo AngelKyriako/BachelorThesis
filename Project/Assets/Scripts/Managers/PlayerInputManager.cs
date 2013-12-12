@@ -25,6 +25,7 @@ public class PlayerInputManager: SingletonPhotonMono<PlayerInputManager> {
             SkillRightClick(CharacterSkillSlot.None);
         }
         //Skill select, casting
+        //@TODO: Prevent this part of input if in Heaven
         if (Input.GetKeyUp(KeyCode.Q)){// || CharacterInfoPanel.Instance.IsSkillButtonPressed(CharacterSkillSlot.Q)) {
             SkillQWERorLeftClick(CharacterSkillSlot.Q);
         }

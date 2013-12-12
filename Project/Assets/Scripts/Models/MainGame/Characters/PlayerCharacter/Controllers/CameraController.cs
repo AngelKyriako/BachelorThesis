@@ -10,12 +10,12 @@ public class CameraController: MonoBehaviour {
 
     public enum CameraMode {
         Heaven,
-        Stage
+        MainStage
     }
 
-    public Vector3 defaultRotation;
+    public Vector3 defaultPosition, defaultRotation;
     public float targetOffsetX = 0f,
-                 targetOffsetZ = -15f,
+                 targetOffsetZ = -8f,
                  smoothLockOn = 5f;
 
     public int scrollOffset = 100;
@@ -24,10 +24,11 @@ public class CameraController: MonoBehaviour {
 
     public float minCameraX = 30f, maxCameraX = 70f,
                  minStageCameraY = 25f, maxStageCameraY = 30f,
-                 minHeavenCameraY = 115f, maxHeavenCameraY = 160f,
+                 minHeavenCameraY = 65f, maxHeavenCameraY = 80f,
                  minCameraZ = 10f, maxCameraZ = 70f;
 
-    private Vector3 originPosition;
+    private float lastMainStageY;
+    private Vector3 originPosition, destination;
     private bool lockedOnTarget;
 
     private CameraMode mode;
@@ -44,7 +45,7 @@ public class CameraController: MonoBehaviour {
             return _destination;
         });
 
-        HeightValidationDispatcher.AddAction(CameraMode.Stage, delegate(Vector3 _destination) {
+        HeightValidationDispatcher.AddAction(CameraMode.MainStage, delegate(Vector3 _destination) {
             if (_destination.y > maxStageCameraY)
                 _destination.y = maxStageCameraY;
             else if (_destination.y < minStageCameraY)
@@ -55,7 +56,10 @@ public class CameraController: MonoBehaviour {
     }
 
     void Start() {
-        Camera.main.transform.rotation = Quaternion.LookRotation(defaultRotation);
+        Camera.main.transform.position = destination = defaultPosition;
+        Camera.main.transform.rotation = Quaternion.Euler(defaultRotation);
+
+        lastMainStageY = maxStageCameraY;
         mode = default(CameraMode);
         lockedOnTarget = true;
     }
@@ -82,13 +86,20 @@ public class CameraController: MonoBehaviour {
         movement = ZoomMovement(movement);
 
         originPosition = Camera.main.transform.position;
-        ApplyMovement(ValidateMovementDestination(GetMovementDestination(movement)));
+        destination = originPosition + movement;
+
+        ValidateDestination();
+        ApplyMovement();
     }
 
     private Vector3 ReceiveMovementToTarget() {
-        float movementX = ((transform.position.x - Camera.main.transform.position.x + targetOffsetX));
-        float movementZ = ((transform.position.z - Camera.main.transform.position.z + targetOffsetZ));
-        return new Vector3(movementX, 0, movementZ);
+        return new Vector3(MovementInAxisX, 0, MovementInAxisZ);
+    }
+    private float MovementInAxisX {
+        get { return transform.position.x - Camera.main.transform.position.x + targetOffsetX; }
+    }
+    private float MovementInAxisZ {
+        get { return transform.position.z - Camera.main.transform.position.z + targetOffsetZ; }
     }
 
     private Vector3 HorizontalMovement(Vector3 move) {
@@ -114,8 +125,9 @@ public class CameraController: MonoBehaviour {
     }
 
     private Vector3 ZoomMovement(Vector3 move) {
-        float input = Input.GetAxis("Mouse ScrollWheel");
-        move.y = -(movementInputWeight * input);
+        move.y = -(movementInputWeight * Input.GetAxis("Mouse ScrollWheel"));
+        if (mode.Equals(CameraMode.MainStage))
+            lastMainStageY = Camera.main.transform.position.y + move.y;
         return move;
     }
 
@@ -127,40 +139,42 @@ public class CameraController: MonoBehaviour {
         return movement;
     }
 
-    private Vector3 GetMovementDestination(Vector3 movement) {
-        Vector3 origin = originPosition;
-        return origin += movement;
-    }
+    private void ValidateDestination() {
+        if (destination != originPosition) {
+            if (destination.x > maxCameraX)
+                destination.x = maxCameraX;
+            else if (destination.x < minCameraX)
+                destination.x = minCameraX;
 
-    private Vector3 ValidateMovementDestination(Vector3 _destination) {
-        if (_destination != originPosition) {
-            if (_destination.x > maxCameraX)
-                _destination.x = maxCameraX;
-            else if (_destination.x < minCameraX)
-                _destination.x = minCameraX;
-            
-            if (_destination.z > maxCameraZ)
-                _destination.z = maxCameraZ;
-            else if (_destination.z < minCameraZ)
-                _destination.z = minCameraZ;
+            if (destination.z > maxCameraZ)
+                destination.z = maxCameraZ;
+            else if (destination.z < minCameraZ)
+                destination.z = minCameraZ;
 
-            _destination = HeightValidationDispatcher.Dispatch(mode, _destination);
+            destination = HeightValidationDispatcher.Dispatch(mode, destination);
         }
-        return _destination;
     }
 
-    private void ApplyMovement(Vector3 destination) {
+    private void ApplyMovement() {
         if (destination != originPosition)
             Camera.main.transform.position = Vector3.MoveTowards(originPosition, destination, Time.deltaTime * minMovementSpeed);
     }
 
+    //@TODO: Change temporarity the speed of the camera to make an awesome follow the character effect
     public void EnterHeavenMode() {
         mode = CameraMode.Heaven;
-        Camera.main.transform.position = new Vector3(transform.position.x, minHeavenCameraY, transform.position.z);
+        destination = new Vector3(PositioningInAxisX, minHeavenCameraY, PositioningInAxisZ);
     }
 
-    public void EnterStageMode() {
-        mode = CameraMode.Stage;
-        Camera.main.transform.position = new Vector3(transform.position.x, minStageCameraY, transform.position.z);
+    public void EnterMainStageMode() {
+        mode = CameraMode.MainStage;
+        destination = new Vector3(PositioningInAxisX, lastMainStageY, PositioningInAxisZ);
+    }
+
+    private float PositioningInAxisX {
+        get { return transform.position.x + targetOffsetX; }
+    }
+    private float PositioningInAxisZ {
+        get { return transform.position.z + targetOffsetZ; }
     }
 }

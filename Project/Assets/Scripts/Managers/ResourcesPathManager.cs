@@ -9,46 +9,46 @@
 
     #region characters
     public string PlayerCharacterPrefabPath {
-        get { return MergeToPath("Characters", "Prefabs", "BabyDragon"); }
+        get { return MergeToPath("Prefabs", "Characters", "BabyDragon"); }
+    }
+    public string Vision {
+        get { return MergeToPath("Prefabs", "Characters", "Vision"); }
     }
     public string PlayerCharacterMaterialPath(string _color) {
-        return MergeToPath("Characters", "Materials", _color);
+        return MergeToPath("Materials", "PlayerCharacter", _color);
     }
     #endregion
 
     #region misc
-    public string Vision {
-        get { return MergeToPath("Characters", "Prefabs", "Vision"); }
-    }
     public string ExpRadiusSphere {
-        get { return MergeToPath("Characters", "Prefabs", "ExpSphere"); }
+        get { return MergeToPath("Prefabs", "Misc", "ExpSphere"); }
     }
     #endregion
 
     #region skills
     //casting
     public string TargetCursorPath(string _targetCursor) {
-        return MergeToPath("Skills", "TargetCursors", _targetCursor);
+        return MergeToPath("Prefabs", "Skills", "TargetCursors", _targetCursor);
     }
 
     public string CastEffectPath(string _castEffect) {
-        return MergeToPath("Skills", "CastEffects", _castEffect);
+        return MergeToPath("Prefabs", "Skills", "CastEffects", _castEffect);
     }
 
     public string TriggerEffectPath(string _triggerEffect) {
-        return MergeToPath("Skills", "TriggerEffects", _triggerEffect);
+        return MergeToPath("Prefabs", "Skills", "TriggerEffects", _triggerEffect);
     }
 
     public string ProjectilePath(string _projectile) {
-        return MergeToPath("Skills", "Projectiles", _projectile);
+        return MergeToPath("Prefabs", "Skills", "Projectiles", _projectile);
     }
     //icons
     public string SkillIcon48x48(string _iconName) {
-        return MergeToPath("Skills", "Icons", "48x48", _iconName);
+        return MergeToPath("Textures", "SkillIcons", "48x48", _iconName);
     }
 
     public string SkillIcon512x512(string _iconName) {
-        return MergeToPath("Skills", "Icons", "512x512", _iconName);
+        return MergeToPath("Textures", "SkillIcons", "512x512", _iconName);
     }
 
     private string MergeToPath (params string[] nodes){

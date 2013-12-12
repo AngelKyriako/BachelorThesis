@@ -23,6 +23,10 @@ public class PlayerCharacterDeathController: MonoBehaviour {
             enabled = false;
     }
 
+    void OnGUI() {
+        //@TODO: respawn time counter !!!
+    }
+
     public void Enable() {
         model.Died();
         ClearEffects();
