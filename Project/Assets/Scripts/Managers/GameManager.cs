@@ -64,7 +64,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         foreach (string _name in AllPlayerKeys)
             GetPlayerNetController(_name).SetUp();
 
-        TeleportManager.Instance.TeleportMeToHeaven();
+        TeleportManager.Instance.StandardTeleportation(false);
         InitGUIScripts();
     }
 

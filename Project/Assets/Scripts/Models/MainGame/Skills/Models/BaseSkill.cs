@@ -15,10 +15,10 @@ public class BaseSkill {
     private BaseCharacterModel owner;
     private CharacterSkillSlot slot;
 
-    private string castEffect, projectile, triggerEffect;
+    private string castEffect, mainObject, triggerEffect;
     #endregion
 
-    public BaseSkill(string _title, string _desc, Texture2D _icon, float _cd, string _castEff, string _projectile, string _triggerEff) {
+    public BaseSkill(string _title, string _desc, Texture2D _icon, float _cd, string _castEff, string _mainObject, string _triggerEff) {
         title = _title;
         description = _desc;
         icon = _icon;
@@ -29,7 +29,7 @@ public class BaseSkill {
         supportEffects = new Dictionary<string, BaseEffect>();
         passiveEffects = new Dictionary<string, BaseEffect>();
         castEffect = _castEff;
-        projectile = _projectile;
+        mainObject = _mainObject;
         triggerEffect = _triggerEff;
     }
 
@@ -69,8 +69,8 @@ public class BaseSkill {
         if (castEffect != null && !castEffect.Equals(string.Empty))
             CombatManager.Instance.MasterClientInstantiateSceneObject(castEffect, owner.transform.position, Quaternion.identity);
 
-        if (projectile != null && !projectile.Equals(string.Empty))
-            CombatManager.Instance.MasterClientInstantiateSceneProjectile(projectile, owner.ProjectileOriginPosition, Quaternion.identity, title, owner.name, _direction);
+        if (mainObject != null && !mainObject.Equals(string.Empty))
+            CombatManager.Instance.MasterClientInstantiateSceneSkill(mainObject, owner.ProjectileOriginPosition, Quaternion.identity, title, owner.name, _direction);
 
         ActivatePassiveEffects(owner, owner);
     }

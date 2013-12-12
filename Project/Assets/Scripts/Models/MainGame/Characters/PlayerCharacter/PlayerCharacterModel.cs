@@ -117,7 +117,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
         set { respawnTimer = (value < 0) ? 0 : value; }
     }
     public bool IsDead {
-        get { return RespawnTimer == 0; }
+        get { return RespawnTimer != 0; }
     }
 
     public override Vector3 ProjectileOriginPosition {

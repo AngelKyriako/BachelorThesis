@@ -7,8 +7,8 @@ public class TargetedSkill: BaseSkill {
     private BaseTargetCursor currentCursor;
     private bool isSelected;
 
-    public TargetedSkill(string _title, string _desc, Texture2D _icon, float _cd, string _castEff, string _projectile, string _triggerEff, GameObject _targetCursor)
-        : base(_title, _desc, _icon, _cd, _castEff, _projectile, _triggerEff) {
+    public TargetedSkill(string _title, string _desc, Texture2D _icon, float _cd, string _castEff, string _mainObject, string _triggerEff, GameObject _targetCursor)
+        : base(_title, _desc, _icon, _cd, _castEff, _mainObject, _triggerEff) {
         targetCursor = _targetCursor;
         currentCursor = null;
         isSelected = false;
@@ -18,8 +18,8 @@ public class TargetedSkill: BaseSkill {
         if (!isSelected && IsUsable)
             Select();
         else if (isSelected) {
+            Owner.gameObject.transform.LookAt(currentCursor.Direction * 1000);
             Cast(currentCursor.Direction);
-            Owner.gameObject.transform.LookAt(currentCursor.Direction*1000);
         }
     }
 

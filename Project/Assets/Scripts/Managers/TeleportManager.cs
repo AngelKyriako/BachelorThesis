@@ -23,19 +23,26 @@ public class TeleportManager {
         distanceToHeaven = heavenSpawnPoint.y - stageSpawnPoint.y;
     }
 
-    public void TeleportMeToHeaven() {
-        TeleportMe(heavenSpawnPoint);
-        GameManager.Instance.MyCameraController.EnterHeavenMode();
-    }
-
-    public void TeleportMeToMainStage() {
-        TeleportMe(stageSpawnPoint);
-        GameManager.Instance.MyCameraController.EnterMainStageMode();
-    }
-
-    private void TeleportMe(Vector3 _spawnPoint) {
+    public void TeleportToPoint(Vector3 _spawnPoint) {
         GameManager.Instance.MyCharacter.transform.position = _spawnPoint;
         GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
         GameManager.Instance.MyMovementController.StandStillBitch();
+    }
+
+    public void StandardTeleportation(bool teleportToStage) {
+        if (teleportToStage)
+            TeleportMeToMainStage();
+        else
+            TeleportMeToHeaven();
+    }
+
+    private void TeleportMeToHeaven() {
+        TeleportToPoint(heavenSpawnPoint);
+        GameManager.Instance.MyCameraController.EnterHeavenMode();
+    }
+
+    private void TeleportMeToMainStage() {
+        TeleportToPoint(stageSpawnPoint);
+        GameManager.Instance.MyCameraController.EnterMainStageMode();
     }
 }

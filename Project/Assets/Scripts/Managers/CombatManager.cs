@@ -26,13 +26,13 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
                                                    _obj, _position, _rotation);
     }
 
-    public void MasterClientInstantiateSceneProjectile(string _obj, Vector3 _position, Quaternion _rotation,
-                                               string _skillName, string _casterName, Vector3 _direction) {
+    public void MasterClientInstantiateSceneSkill(string _obj, Vector3 _position, Quaternion _rotation,
+                                                  string _skillName, string _casterName, Vector3 _destination) {
         if (PhotonNetwork.isMasterClient)
-            InstantiateSceneProjectile(_obj, _position, _rotation, _skillName, _casterName, _direction);
-        else 
-            photonView.RPC("InstantiateSceneProjectile", PhotonNetwork.masterClient,
-                                                   _obj, _position, _rotation, _skillName, _casterName, _direction);
+            InstantiateSceneSkill(_obj, _position, _rotation, _skillName, _casterName, _destination);
+        else
+            photonView.RPC("InstantiateSceneSkill", PhotonNetwork.masterClient,
+                                                   _obj, _position, _rotation, _skillName, _casterName, _destination);
     }
 
     public void MasterClientDestroySceneObject(GameObject _obj) {
@@ -49,14 +49,13 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     }
 
     [RPC]
-    private void InstantiateSceneProjectile(string _obj, Vector3 _position, Quaternion _rotation,
-                                            string _skillName, string _casterName, Vector3 _direction) {
-        //Utilities.Instance.LogMessage(GameManager.Instance.MyPhotonView.name + " is instantiating scene projectile !");
+    private void InstantiateSceneSkill(string _obj, Vector3 _position, Quaternion _rotation,
+                                       string _skillName, string _casterName, Vector3 _destination) {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneObject", "This RPC is only available for the master client.");
         GameObject obj = PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
-        obj.GetComponent<BaseProjectile>().SetUpProjectile(SkillBook.Instance.GetSkill(_skillName),
-                                                           GameManager.Instance.GetPlayerModel(_casterName),
-                                                           _direction);
+        obj.GetComponent<BaseSkillController>().SetUp(SkillBook.Instance.GetSkill(_skillName),
+                                                      GameManager.Instance.GetPlayerModel(_casterName),
+                                                      _destination);
     }
     #endregion
     #endregion

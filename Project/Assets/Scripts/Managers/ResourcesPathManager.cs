@@ -39,8 +39,11 @@
         return MergeToPath("Prefabs", "Skills", "TriggerEffects", _triggerEffect);
     }
 
+    public string SkillObjectPath(string skillObject) {
+        return MergeToPath("Prefabs", "Skills", "MainObjects", skillObject);
+    }
     public string ProjectilePath(string _projectile) {
-        return MergeToPath("Prefabs", "Skills", "Projectiles", _projectile);
+        return MergeToPath("Prefabs", "Skills", "MainObjects", "Projectiles", _projectile);
     }
     //icons
     public string SkillIcon48x48(string _iconName) {
