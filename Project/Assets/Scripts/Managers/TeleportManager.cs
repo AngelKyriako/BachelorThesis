@@ -36,11 +36,11 @@ public class TeleportManager {
 
     private void TeleportMeToHeaven() {
         TeleportToPoint(heavenSpawnPoint);
-        GameManager.Instance.MyCameraController.EnterHeavenMode();
+        CameraManager.Instance.EnterHeavenMode();
     }
 
     private void TeleportMeToMainStage() {
         TeleportToPoint(stageSpawnPoint);
-        GameManager.Instance.MyCameraController.EnterMainStageMode();
+        CameraManager.Instance.EnterMainStageMode();
     }
 }

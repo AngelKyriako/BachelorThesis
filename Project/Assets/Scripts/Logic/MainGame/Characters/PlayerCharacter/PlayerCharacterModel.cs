@@ -58,7 +58,6 @@ public class PlayerCharacterModel: BaseCharacterModel {
             while (currentExp >= expToLevel)
                 LevelUp();
         }
-        Utilities.Instance.LogMessage("Gained EXP !!");
     }
 
     private void LoseExp(uint _exp) {
@@ -70,6 +69,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
                                 (++deathCount * 2)) + 2;
         uint ExpLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE);
         LoseExp(ExpLoss > CurrentExp ? CurrentExp : ExpLoss);
+        GainExp(2000);
     }
 
     public void RefreshVitals(){

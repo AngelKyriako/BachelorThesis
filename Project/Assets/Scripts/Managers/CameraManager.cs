@@ -1,18 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-/// <summary>
-/// A camera controller that gives an RTS view perspective.
-/// Locks on the target character when it is in a lock state. (hit 'L' to lock and unlock).
-/// Drag and drop the character you wish to target.
-/// </summary>
-public class CameraController: MonoBehaviour {
+public class CameraManager: SingletonMono<CameraManager> {
 
     public enum CameraMode {
         Heaven,
         MainStage
     }
 
+    #region editable attributes
     public Vector3 defaultPosition, defaultRotation;
     public float targetOffsetX = 0f,
                  targetOffsetZ = -8f,
@@ -24,15 +19,23 @@ public class CameraController: MonoBehaviour {
 
     public float minCameraX = 30f, maxCameraX = 70f,
                  minStageCameraY = 25f, maxStageCameraY = 30f,
-                 minHeavenCameraY = 65f, maxHeavenCameraY = 80f,
+                 minHeavenCameraY = 75f, maxHeavenCameraY = 85f,
                  minCameraZ = 10f, maxCameraZ = 70f;
+    #endregion
 
+    #region attributes
     private float lastMainStageY;
     private Vector3 originPosition, destination;
+    
+    private GameObject target;
     private bool lockedOnTarget;
 
     private CameraMode mode;
+
     private DispatchTable<CameraMode, Vector3, Vector3> HeightValidationDispatcher;
+    #endregion
+
+    private CameraManager() { }
 
     void Awake() {
         HeightValidationDispatcher = new DispatchTable<CameraMode, Vector3, Vector3>();
@@ -53,9 +56,17 @@ public class CameraController: MonoBehaviour {
 
             return _destination;
         });
+
+        enabled = false;
+    }
+
+    public void SetUp() {
+        target = GameManager.Instance.MyCharacter;
+        enabled = true;
     }
 
     void Start() {
+        Utilities.Instance.Assert(target!=null, "CameraManager", "Start", "Invalid target value, a gameobject must be assigned to this variable.");
         Camera.main.transform.position = destination = defaultPosition;
         Camera.main.transform.rotation = Quaternion.Euler(defaultRotation);
 
@@ -96,10 +107,10 @@ public class CameraController: MonoBehaviour {
         return new Vector3(MovementInAxisX, 0, MovementInAxisZ);
     }
     private float MovementInAxisX {
-        get { return transform.position.x - Camera.main.transform.position.x + targetOffsetX; }
+        get { return target.transform.position.x - Camera.main.transform.position.x + targetOffsetX; }
     }
     private float MovementInAxisZ {
-        get { return transform.position.z - Camera.main.transform.position.z + targetOffsetZ; }
+        get { return target.transform.position.z - Camera.main.transform.position.z + targetOffsetZ; }
     }
 
     private Vector3 HorizontalMovement(Vector3 move) {
@@ -126,8 +137,6 @@ public class CameraController: MonoBehaviour {
 
     private Vector3 ZoomMovement(Vector3 move) {
         move.y = -(movementInputWeight * Input.GetAxis("Mouse ScrollWheel"));
-        if (mode.Equals(CameraMode.MainStage))
-            lastMainStageY = Camera.main.transform.position.y + move.y;
         return move;
     }
 
@@ -162,19 +171,20 @@ public class CameraController: MonoBehaviour {
 
     //@TODO: Change temporarity the speed of the camera to make an awesome follow the character effect
     public void EnterHeavenMode() {
+        lastMainStageY = Camera.main.transform.position.y;
         mode = CameraMode.Heaven;
         destination = new Vector3(PositioningInAxisX, minHeavenCameraY, PositioningInAxisZ);
     }
 
     public void EnterMainStageMode() {
         mode = CameraMode.MainStage;
-        destination = new Vector3(PositioningInAxisX, lastMainStageY, PositioningInAxisZ);
+        Camera.main.transform.position = new Vector3(PositioningInAxisX, lastMainStageY, PositioningInAxisZ);
     }
 
     private float PositioningInAxisX {
-        get { return transform.position.x + targetOffsetX; }
+        get { return target.transform.position.x + targetOffsetX; }
     }
     private float PositioningInAxisZ {
-        get { return transform.position.z + targetOffsetZ; }
+        get { return target.transform.position.z + targetOffsetZ; }
     }
 }

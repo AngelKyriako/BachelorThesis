@@ -54,7 +54,8 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     public void InitMainStage() {
-        gameObject.AddComponent<CombatManager>();        
+        CameraManager.Instance.SetUp();
+        gameObject.AddComponent<CombatManager>();
         foreach (string _name in AllPlayerKeys)
             GetPlayerNetController(_name).SetUp();
 
@@ -160,9 +161,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
     public PlayerCharacterModel MyCharacterModel {
         get { return me.Character.GetComponent<PlayerCharacterModel>(); }
-    }
-    public CameraController MyCameraController {
-        get { return me.Character.GetComponent<CameraController>(); }
     }
     public MovementController MyMovementController {
         get { return me.Character.GetComponent<MovementController>(); }

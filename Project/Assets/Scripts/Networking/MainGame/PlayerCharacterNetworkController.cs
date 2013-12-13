@@ -6,7 +6,6 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     #region attributes
     // references to local components
     private PlayerCharacterModel model;
-    private CameraController cameraController;
     private MovementController movementController;
     private VisionController visionController;
     // stat sync delay
@@ -33,9 +32,6 @@ public class PlayerCharacterNetworkController: SerializableNetController {
 
         model = gameObject.GetComponent<PlayerCharacterModel>();
         model.enabled = true;
-
-        cameraController = gameObject.GetComponent<CameraController>();
-        cameraController.enabled = IsLocalClient;
 
         movementController = gameObject.GetComponent<MovementController>();
         movementController.enabled = true;
@@ -157,9 +153,6 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     #region Accessors
     public PlayerCharacterModel Model {
         get { return model; }
-    }
-    public CameraController CameraController {
-        get { return cameraController; }
     }
     public MovementController MovementController {
         get { return movementController; }
