@@ -63,18 +63,16 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     private void LoseExp(uint _exp) {
         CurrentExp -= _exp;
-        Utilities.Instance.LogMessage("Lost EXP !!");
     }
 
     public override void Died() {
         RespawnTimer = Level * ((killsCount / 2)/
                                 (++deathCount * 2)) + 2;
-        RefreshVitals();
         LoseExp(expToLevel/10);
         
     }
 
-    private void RefreshVitals(){
+    public void RefreshVitals(){
         for (int i = 0; i < VitalsLength; ++i)
             GetVital(i).CurrentValue = GetVital(i).FinalValue;
     }

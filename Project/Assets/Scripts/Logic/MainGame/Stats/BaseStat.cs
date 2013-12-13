@@ -30,4 +30,12 @@
         get { return buffValue; }
         set { buffValue = value; }
     }
+
+    public virtual string DisplayFinalValue {
+        get { return FinalValue.ToString(); }
+    }
+
+    public override string ToString() {
+        return name + " " + DisplayFinalValue;
+    }
 }

@@ -16,12 +16,14 @@ public class PlayerCharacterDeathController: MonoBehaviour {
 
     void Update() {
         model.RespawnTimer -= Time.deltaTime;
-        if (model.RespawnTimer == 0)
+        if (model.RespawnTimer == 0) {
+            model.RefreshVitals();
             enabled = false;
+        }
     }
 
     void OnGUI() {
-        GUI.Label(new Rect((Screen.width / 2)-30, 0, 60, 30), model.RespawnTimer.ToString());
+        GUI.Label(new Rect((Screen.width / 2) - 30, 0, 60, 30), Utilities.Instance.TimeCounterDisplay(model.RespawnTimer));
     }
 
     public void Enable() {

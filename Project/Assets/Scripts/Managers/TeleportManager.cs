@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class TeleportManager {
 
     private Vector3 stageSpawnPoint, heavenSpawnPoint;
-    private float distanceToHeaven;
 
     private static TeleportManager instance;
     public static TeleportManager Instance {
@@ -20,7 +19,6 @@ public class TeleportManager {
         PlayerTeam myTeam = (PlayerTeam)GameManager.Instance.MyPlayer.customProperties["Team"];
         heavenSpawnPoint = GameObject.Find("Heaven/SpawnPointArea/SpawnPoint" + (int)myTeam).transform.position;
         stageSpawnPoint = GameObject.Find("Terrain/SpawnPointArea/SpawnPoint" + (int)myTeam).transform.position;
-        distanceToHeaven = heavenSpawnPoint.y - stageSpawnPoint.y;
     }
 
     public void TeleportToPoint(Vector3 _spawnPoint) {

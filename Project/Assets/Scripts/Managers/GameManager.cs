@@ -40,16 +40,10 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     public bool AllPlayersReady() {
-        foreach (PhotonPlayer player in PhotonNetwork.playerList) {
-            //Utilities.Instance.LogMessage("---------- " + player.ID + " ----------");
-            //Utilities.Instance.LogMessage("Has Slot" + MainRoomModel.Instance.SlotOwnedByPlayer((int)player.customProperties["Color"], player));
-            //Utilities.Instance.LogMessage("Player IsReady" + (bool)player.customProperties["IsReady"]);            
-            //Utilities.Instance.LogMessage("Player Color: " + (PlayerColor)player.customProperties["Color"]);
-            //Utilities.Instance.LogMessage("Player Team: " + (PlayerTeam)player.customProperties["Team"]);            
+        foreach (PhotonPlayer player in PhotonNetwork.playerList)           
             if (!(bool)player.customProperties["IsReady"] ||
                 !MainRoomModel.Instance.SlotOwnedByPlayer((int)player.customProperties["Color"], player))
                 return false;
-        }
         return true;
     }
 
@@ -69,9 +63,9 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     private void InitGUIScripts() {
-        //gui.AddComponent<MouseCursor>().enabled = true;     
-        gui.AddComponent<GamePreferencesWindow>().enabled = true;
+        //gui.AddComponent<MouseCursor>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
+        gui.AddComponent<GamePreferencesWindow>().enabled = true;
         gui.AddComponent<CharacterInfoPanel>().enabled = true;
         gui.AddComponent<TerrainMap>().enabled = true;
         gui.AddComponent<PlayersInfoWindow>().enabled = true;

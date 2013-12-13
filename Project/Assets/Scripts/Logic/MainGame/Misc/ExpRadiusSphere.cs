@@ -9,4 +9,7 @@ public class ExpRadiusSphere: MonoBehaviour {
 
     void Update() {
     }
+
+    void OnTriggerEnter(Collider _collider) {
+    }
 }

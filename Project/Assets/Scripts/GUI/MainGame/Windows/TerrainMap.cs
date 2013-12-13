@@ -17,7 +17,7 @@ public class TerrainMap: DraggableWindow {
         SetUpGUI(TITLE, ID, Screen.width, Screen.height, MAP_SIZE, MAP_SIZE, true, TOGGLE_BUTTON);
     }
 
-    public void SetUpGUI(string _winTitle, int _winID, int _x, int _y, int _width, int _height, bool _isVisible, KeyCode _toggleButton) {
+    public new void SetUpGUI(string _winTitle, int _winID, int _x, int _y, int _width, int _height, bool _isVisible, KeyCode _toggleButton) {
         base.SetUpGUI(_winTitle, _winID, _x, _y, _width, _height, _isVisible, _toggleButton);
 
         terrainMapWidthScale = Terrain.activeTerrain.terrainData.size.x / _width;

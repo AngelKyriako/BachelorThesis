@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class MainRoomGUI: MonoBehaviour {
 
     private const int PLAYER_SLOT_HEIGHT = 50,
-                      SOUTH_CHAT_HEIGHT = 100, SOUTH_BUTTONS_WIDTH = 100, SOUTH_BUTTONS_HEIGHT = 50,
+                      SOUTH_CHAT_HEIGHT = 100, SOUTH_BUTTONS_WIDTH = 150, SOUTH_BUTTONS_HEIGHT = 50,
                       PREFERENCES_WIDTH = 250;
 
     public Texture2D background;
@@ -13,9 +13,8 @@ public class MainRoomGUI: MonoBehaviour {
                  eastSlotsRect, playerSlotRect,
                  southChatRect, southButtonRect;
     
-    private string readyText = "Ready";
     private VariableType editingPreferencesField;
-    private bool teamSelecting;
+    private bool teamSelecting, allPlayersReady;
     
     private RoomNetController networkController;
 
@@ -37,6 +36,7 @@ public class MainRoomGUI: MonoBehaviour {
 
         editingPreferencesField = default(VariableType);
         teamSelecting = false;
+        allPlayersReady = true;
     }
 
     void OnGUI() {
@@ -146,8 +146,6 @@ public class MainRoomGUI: MonoBehaviour {
             playerSlotRect.x = playerSlotRect.width;
         }
 
-        string slotName = MainRoomModel.Instance.GetPlayerNameInSlot(_slotNum);        
-
         GUILayout.BeginArea(playerSlotRect);
         GUILayout.BeginHorizontal();
         if (networkController.IsMasterClient)
@@ -212,27 +210,24 @@ public class MainRoomGUI: MonoBehaviour {
     }
 
     private void StartGameButton() {
-        GUILayout.BeginHorizontal();
         if (GUILayout.Button("Start Game")) {
             networkController.SyncGameVariables();
-            if (GameManager.Instance.AllPlayersReady())
+            if (allPlayersReady = GameManager.Instance.AllPlayersReady())
                 GameManager.Instance.MasterClientLoadMainStage();
-            else
-                ;//@TODO: message not all players are ready
         }
-        GUILayout.EndHorizontal();
-
+        if(!MainRoomModel.Instance.LocalClientOwnsSlot)
+            GUILayout.Label("Please choose a color.");
+        else if (!allPlayersReady)
+            GUILayout.Label("Not everyone ready yet.");
     }
 
     private void ReadyButton() {
         if ((bool)GameManager.Instance.MyPlayer.customProperties["IsReady"]) {
             if (GUILayout.Button("Ready"))
-                if (MainRoomModel.Instance.LocalClientOwnsSlot){
+                if (MainRoomModel.Instance.LocalClientOwnsSlot) {
                     GameManager.Instance.MyPlayer.customProperties["IsReady"] = false;
                     GameManager.Instance.UpdatePlayerIsReadyProperty();
                 }
-                else
-                    ;//@TODO message down of button, you are not ready
         }
         else
             if (GUILayout.Button("Not Ready")) {
@@ -240,11 +235,7 @@ public class MainRoomGUI: MonoBehaviour {
                 GameManager.Instance.UpdatePlayerIsReadyProperty();
             }
 
+        if (!MainRoomModel.Instance.LocalClientOwnsSlot)
+            GUILayout.Label("Please choose a color.");
     }
-
-    //private void ReadyToggleButton() {
-    //    readyText = GUIUtilities.Instance.ToggleTextButton(readyText, "Ready", "Not ready");
-    //    if (!((bool)GameManager.Instance.MyPlayer.customProperties["IsReady"]).Equals(readyText.Equals("Ready")))
-    //        GameManager.Instance.MyPlayer.customProperties["IsReady"] = readyText.Equals("Ready");
-    //}
 }

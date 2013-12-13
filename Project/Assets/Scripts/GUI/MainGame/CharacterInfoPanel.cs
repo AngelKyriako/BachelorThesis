@@ -46,8 +46,7 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
 
     private void VitalsPanel() {
         for (int i = 0; i < playerCharModel.VitalsLength; ++i)
-            GUILayout.Label(playerCharModel.GetVital(i).Name + " (" + playerCharModel.GetVital(i).CurrentValue + "/" +
-                                                                      playerCharModel.GetVital(i).FinalValue + ")");
+            GUILayout.Label(playerCharModel.GetVital(i).ToString());
     }
 
     private void SkillsPanel() {
@@ -56,7 +55,7 @@ public class CharacterInfoPanel: SingletonMono<CharacterInfoPanel> {
         CharacterSkillSlot _key = CharacterSkillSlot.Q;
         for (int i = 1; i < playerCharModel.SkillSlotsLength; _key = (CharacterSkillSlot)(++i)) {
             skillButtonPressed[_key] = playerCharModel.SkillExists(_key) &&
-                                       GUILayout.Button(/*playerCharModel.GetSkill(_key).Icon, */((int)playerCharModel.GetSkill(_key).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
+                                       GUILayout.Button(/*playerCharModel.GetSkill(_key).Icon, */Utilities.Instance.TimeCounterDisplay(playerCharModel.GetSkill(_key).CoolDownTimer), GUILayout.Width(48), GUILayout.Height(48));
             //GUILayout.Label(/*playerCharModel.GetSkill(_key).Icon, */((int)playerCharModel.GetSkill(_key).CoolDownTimer).ToString(), GUILayout.Width(48), GUILayout.Height(48));
         }
         GUILayout.EndHorizontal();

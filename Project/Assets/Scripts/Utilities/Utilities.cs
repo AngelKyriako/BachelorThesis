@@ -11,7 +11,7 @@ public class Utilities {
         get { return instance; }
     }
 
-#region debugging
+    #region debugging
     public void Assert(bool b, string s) {
         if (!b) {
             Debug.LogError(s);
@@ -39,7 +39,18 @@ public class Utilities {
     public void LogMessage(string s) {
         Debug.Log(s);
     }
-#endregion
+    #endregion
+
+    #region Stat values display
+    public string VitalDisplay(float _value) {
+        int intVal = (int)_value;
+        return (intVal != _value)?(intVal + 1).ToString():intVal.ToString();
+    }
+
+    public string TimeCounterDisplay(float _time) {
+        return System.Math.Round(_time, 1).ToString();
+    }
+    #endregion
 
     public void SetGameObjectLayer(GameObject obj, int l) {
         if (obj == null)

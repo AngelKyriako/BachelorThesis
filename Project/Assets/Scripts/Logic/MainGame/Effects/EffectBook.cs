@@ -25,7 +25,7 @@ public class EffectBook {
         AddEffect(tempEffect);
 
         tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect("Damage", "damage effect description", null, 13, 1, new EffectMod(20f, 0f));
+        ((DamageEffect)tempEffect).SetUpEffect("Damage", "damage effect description", null, 13, 1, new EffectMod(100f, 0f));
         AddEffect(tempEffect);
 
         tempEffect = NewManaBurnEffect(effectsHolder);
@@ -48,7 +48,6 @@ public class EffectBook {
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect("OneHitKO", "damage effect description", null, 13, 1, new EffectMod(0f, 1f));
         AddEffect(tempEffect);
-
 
         tempEffect = NewAttributeBuff(effectsHolder);
         ((AttributeBuff)tempEffect).SetUpEffect("20Immobilize", "20Immobilize description", null, 20, 1, 20f, new EffectMod(0f, -1.0f), AttributeType.MovementSpeed);

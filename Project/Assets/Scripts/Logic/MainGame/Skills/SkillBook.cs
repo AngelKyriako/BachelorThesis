@@ -58,10 +58,15 @@ public class SkillBook{
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect("20Immobilize"));
         AddSkill(tempSkill);
 
-        tempSkill = new BaseSkill("FuckMeUp", "KillMe description", (Texture2D)Resources.Load(ResourcesPathManager.Instance.SkillIcon48x48("107")),
+        tempSkill = new BaseSkill("KillMe", "KillMe description", (Texture2D)Resources.Load(ResourcesPathManager.Instance.SkillIcon48x48("107")),
                                    1f, string.Empty, null, string.Empty);
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect("OneHitKO"));
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect("20Immobilize"));
+        AddSkill(tempSkill);
+
+        tempSkill = new BaseSkill("DamageMe", "DamageMe description", (Texture2D)Resources.Load(ResourcesPathManager.Instance.SkillIcon48x48("87")),
+                                   1f, string.Empty, null, string.Empty);
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect("Damage"));
         AddSkill(tempSkill);
         #endregion
     }

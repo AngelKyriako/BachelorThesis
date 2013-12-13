@@ -5,7 +5,7 @@ public class TeleportationToPoint: BaseSkillController {
 
     private Vector3 spawnPointToTeleport;
 
-    void OnTriggerEnter(Collider other) {
+    public override void OnTriggerEnter(Collider other) {
         if (!other.gameObject.layer.Equals(LayerMask.NameToLayer("Void"))) {
             PlayerCharacterModel playerModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
             Teleport(playerModel);

@@ -49,4 +49,8 @@ public class Attribute: BaseStat {
     public override float FinalValue {
         get { return base.FinalValue + statBonusValue; }
     }
+
+    public override string DisplayFinalValue {//@TODO: Call Map or dispatcher table that contains the string based on the Attribute type
+        get { return FinalValue.ToString(); }
+    }
 }

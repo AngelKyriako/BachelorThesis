@@ -18,11 +18,19 @@ public class Vital: Attribute {
     }
 
     public float CurrentValue {
-        get { return (uint)currentValue; }
+        get { return currentValue; }
         set { currentValue = (value < 0) ? 0 : ((value > base.FinalValue) ? base.FinalValue : value); }
     }
 
-    public override float FinalValue {
-        get { return (uint)base.FinalValue; }
+    public override string DisplayFinalValue {
+        get { return Utilities.Instance.VitalDisplay(FinalValue); }
+    }
+
+    public string DisplayCurrentValue {
+        get { return Utilities.Instance.VitalDisplay(currentValue); }
+    }
+
+    public override string ToString() {
+        return "(" + DisplayCurrentValue + "/" + DisplayFinalValue + ")";
     }
 }
