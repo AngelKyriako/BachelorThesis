@@ -5,7 +5,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     #region constants
     public const uint STARTING_EXP_TO_LEVEL = 50;
-    public const float STARTING_EXP_MODIFIER = 1.1f;
+    public const float STARTING_EXP_MODIFIER = 1.1f, EXP_LOSS_PERCENTAGE = 0.2f;
     public readonly uint MAX_TRAINING_POINTS = 20;
 #endregion
 
@@ -47,29 +47,29 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void LevelUp() {
         base.LevelUp();
-        CurrentExp -= expToLevel;
+        currentExp -= expToLevel;
         expToLevel = (uint)(expToLevel * expModifier);
         RefreshVitals();
     }
 
     public void GainExp(uint _exp) {
-        if (Level != MAX_LEVEL) {
-            CurrentExp += _exp;
-            while (CurrentExp >= expToLevel)
+        if (Level < MAX_LEVEL) {
+            currentExp += _exp;
+            while (currentExp >= expToLevel)
                 LevelUp();
         }
         Utilities.Instance.LogMessage("Gained EXP !!");
     }
 
     private void LoseExp(uint _exp) {
-        CurrentExp -= _exp;
+        currentExp -= _exp;
     }
 
     public override void Died() {
         RespawnTimer = Level * ((killsCount / 2)/
                                 (++deathCount * 2)) + 2;
-        LoseExp(expToLevel/10);
-        
+        uint ExpLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE);
+        LoseExp(ExpLoss > CurrentExp ? CurrentExp : ExpLoss);
     }
 
     public void RefreshVitals(){
@@ -98,7 +98,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
     #region Accessors
     public uint CurrentExp {
         get { return currentExp; }
-        set { currentExp = (value > 0) ? value : 0; }
+        set { currentExp = value; }
     }
     public uint ExpToLevel {
         get { return expToLevel; }
