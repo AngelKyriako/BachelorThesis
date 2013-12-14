@@ -22,9 +22,11 @@ public class TeleportManager {
     }
 
     public void TeleportToPoint(Vector3 _spawnPoint) {
+        GameManager.Instance.MyCharacterModel.IsStunned = true;
         GameManager.Instance.MyCharacter.transform.position = _spawnPoint;
         GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
         GameManager.Instance.MyMovementController.StandStillBitch();
+        GameManager.Instance.MyCharacterModel.IsStunned = false;
     }
 
     public void StandardTeleportation(bool teleportToStage) {

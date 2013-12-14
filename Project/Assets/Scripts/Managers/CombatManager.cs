@@ -65,23 +65,32 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     public void KillHappened(string _killerName, string _deadName, Vector3 _position) {
         Utilities.Instance.PreCondition(GameManager.Instance.MyCharacter.name.Equals(_deadName), "CombatManager", "KillHappened", "This method is only available for the Dead player.");
 
-        //MasterClientInstantiateSceneObject(ResourcesPathManager.Instance.ExpRadiusSphere, _position, Quaternion.identity);// In case I change my mind
-        InstantianteLocalObject(ResourcesPathManager.Instance.ExpRadiusSphere, _position, Quaternion.identity);
-        photonView.RPC("InstantianteLocalObject", PhotonTargets.Others, ResourcesPathManager.Instance.ExpRadiusSphere, _position, Quaternion.identity);
-        photonView.RPC("KilledPlayer", GameManager.Instance.GetPlayer(_killerName), _deadName);
+        InstantianteLocalExpSphere(_position, GameManager.Instance.MyCharacterModel.ExpWorth);
+        photonView.RPC("InstantianteLocalExpSphere", PhotonTargets.Others, _position, GameManager.Instance.MyCharacterModel.ExpWorth);
+
+        KilledPlayer(_killerName, _deadName);
+        photonView.RPC("KilledPlayer", PhotonTargets.Others, _killerName, _deadName);
     }
 
     #region RPCs
     [RPC]
-    private void KilledPlayer(string _killedPlayerName) {
-        if (!IsAlly(_killedPlayerName))
-            GameManager.Instance.MyCharacterModel.KilledEnemy(GameManager.Instance.GetPlayerModel(_killedPlayerName));
+    private void KilledPlayer(string _killerName, string _deadName) {
+        if (!AreAllies(_killerName, _deadName)) {
+            if (!GameManager.Instance.MyCharacter.name.Equals(_killerName))
+                ++GameManager.Instance.GetPlayerModel(_killerName).Kills;
+            else
+                GameManager.Instance.MyCharacterModel.KilledEnemy(GameManager.Instance.GetPlayerModel(_deadName));
+        }
     }
 
     [RPC]
-    private void InstantianteLocalObject(string _path, Vector3 _position, Quaternion _rotation) {
-        GameObject.Instantiate((GameObject)Resources.Load(_path), _position, _rotation);
+    private void InstantianteLocalExpSphere(Vector3 _position, int _expWorth) {
+        GameObject expSphere = (GameObject)GameObject.Instantiate((GameObject)Resources.Load(ResourcesPathManager.Instance.ExpRadiusSphere),
+                                                                  _position,
+                                                                  Quaternion.identity);
+        expSphere.GetComponent<ExpRadiusSphere>().SetUp((uint)_expWorth);
     }
+
     #endregion
     #endregion
 }

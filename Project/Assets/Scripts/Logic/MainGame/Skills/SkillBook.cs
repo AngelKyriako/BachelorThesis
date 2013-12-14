@@ -68,6 +68,11 @@ public class SkillBook{
                                    1f, string.Empty, null, string.Empty);
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect("Damage"));
         AddSkill(tempSkill);
+
+        tempSkill = new BaseSkill("StunMe", "DamageMe description", (Texture2D)Resources.Load(ResourcesPathManager.Instance.SkillIcon48x48("80")),
+                           1f, string.Empty, null, string.Empty);
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect("Stun"));
+        AddSkill(tempSkill);
         #endregion
     }
     

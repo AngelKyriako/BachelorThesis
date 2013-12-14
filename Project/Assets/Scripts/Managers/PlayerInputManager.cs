@@ -20,7 +20,7 @@ public class PlayerInputManager: SingletonPhotonMono<PlayerInputManager> {
 
 	void Update () {
         //Character movement input and skill unselect
-        if (Input.GetMouseButtonDown(RIGHT_CLICK)) {
+        if (Input.GetMouseButtonDown(RIGHT_CLICK) && !GameManager.Instance.MyCharacterModel.IsStunned) {
             OnCharacterMovementInput(Camera.main.ScreenPointToRay(Input.mousePosition));
             SkillRightClick(CharacterSkillSlot.None);
         }

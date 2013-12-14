@@ -69,7 +69,6 @@ public class PlayerCharacterModel: BaseCharacterModel {
                                 (++deathCount * 2)) + 2;
         uint ExpLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE);
         LoseExp(ExpLoss > CurrentExp ? CurrentExp : ExpLoss);
-        GainExp(2000);
     }
 
     public void RefreshVitals(){
@@ -79,7 +78,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void KilledEnemy(BaseCharacterModel _enemy) {
         ++killsCount;
-        GainExp(_enemy.ExpWorth);
+        GainExp((uint)_enemy.ExpWorth/2);
     }
 
     private void SkillSelect(CharacterSkillSlot _slotPressed) {
@@ -104,8 +103,8 @@ public class PlayerCharacterModel: BaseCharacterModel {
         get { return expToLevel; }
         set { expToLevel = value; }
     }
-    public override uint ExpWorth {
-        get { return (uint)(expToLevel * 0.33); }
+    public override int ExpWorth {
+        get { return (int)(expToLevel * 0.33); }
     }
 
     public uint TrainingPoints {
@@ -116,7 +115,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
         get { return killsCount; }
         set { killsCount = value; }
     }
-    public uint DeathCount {
+    public uint Deaths {
         get { return deathCount; }
         set { deathCount = value; }
     }

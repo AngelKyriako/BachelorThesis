@@ -53,7 +53,7 @@ public class BaseSkill {
     }
 
     public virtual void Pressed() {
-        if (IsUsable)
+        if (IsUsable && !owner.IsStunned)
             Cast(owner.transform.forward);
     }
 

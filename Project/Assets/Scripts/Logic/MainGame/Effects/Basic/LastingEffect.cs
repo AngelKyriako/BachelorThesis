@@ -20,7 +20,7 @@ public class LastingEffect : BaseEffect {
 
     public override void SetUpEffect(BaseCharacterModel _caster, BaseEffect _effect) {
         base.SetUpEffect(_caster, _effect);
-        durationTimer = ((BuffEffect)_effect).DurationTimer;
+        durationTimer = ((LastingEffect)_effect).DurationTimer;
     }
 
     public override void Update() {

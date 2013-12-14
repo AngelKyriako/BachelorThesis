@@ -177,8 +177,8 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
         get { return level; }
         set { level = value; }
     }
-    public virtual uint ExpWorth {
-        get { return level * 10; }
+    public virtual int ExpWorth {
+        get { return (int)level * 10; }
     }
 
     public Stat GetStat(int _index) {

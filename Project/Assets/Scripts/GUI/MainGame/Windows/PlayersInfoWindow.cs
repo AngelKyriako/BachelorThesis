@@ -12,18 +12,18 @@ public class PlayersInfoWindow: DraggableWindow {
 
     void Start() {
         SetUpGUI(TITLE, ID, Screen.width, 0, WIDTH, SINGLE_SLOT_HEIGHT * GameManager.Instance.AllPlayerKeys.Count, true, TOGGLE_BUTTON);
-        characterTabRect = new Rect(5, 5, WIDTH - 10, SINGLE_SLOT_HEIGHT);
+        characterTabRect = new Rect(5, 0, WIDTH - 10, SINGLE_SLOT_HEIGHT);
     }
 
     public override void MainWindow(int windowID) {
         base.MainWindow(windowID);
+        characterTabRect.y = 0;
         foreach (string _name in GameManager.Instance.AllPlayerKeys) {
             GUI.Label(characterTabRect,
-                      GameManager.Instance.MyPlayer.name.Equals(_name)?"Me":GameManager.Instance.GetPlayer(_name).name + " "+
+                      GameManager.Instance.GetPlayer(_name).name + " "+
                       ((PlayerColor)GameManager.Instance.GetPlayer(_name).customProperties["Color"]).ToString() +
-                      "(" + GameManager.Instance.GetPlayerModel(_name).GetVital((int)VitalType.Health).CurrentValue + " / " +
-                      GameManager.Instance.GetPlayerModel(_name).GetVital((int)VitalType.Health).FinalValue +
-                      ") Kills: " + GameManager.Instance.GetPlayerModel(_name).Kills+", "+
+                      "(" + GameManager.Instance.GetPlayerModel(_name).GetVital((int)VitalType.Health).ToString()+ " " +
+                      "Kills: " + GameManager.Instance.GetPlayerModel(_name).Kills+", "+
                       ((PlayerTeam)GameManager.Instance.GetPlayer(_name).customProperties["Team"]).ToString());
 
             characterTabRect.y += SINGLE_SLOT_HEIGHT;
