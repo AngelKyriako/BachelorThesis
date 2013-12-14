@@ -20,8 +20,21 @@ public class RoomNetController: BaseNetController {
     void Update() {
         if (IsMasterClient && (Time.time - lastPropertySyncTime > RPC_COOLDOWN_TIME)) {
             SyncGameVariables();
+            for (int i = 0; i < MainRoomModel.Instance.PlayerSlotsLength; ++i) {
+                //@TODO: FIX THAT SHIT
+                //if (!MainRoomModel.Instance.IsSlotEmpty(i) && !GameManager.Instance.PlayerExists(MainRoomModel.Instance.GetPlayerInSlot(i).ID.ToString())) {
+                //    Utilities.Instance.LogMessage("Yo its: " + MainRoomModel.Instance.GetPlayerInSlot(i).ID +" and I am gonna leave now");
+                //    Utilities.Instance.LogMessage("Because " + (PlayerColor)i + " is not empty");
+                //    MasterClientClearSlot(i, MainRoomModel.Instance.GetPlayerInSlot(i));
+                //}
+            }
             lastPropertySyncTime = Time.time;
         }
+    }
+
+    void OnLeftRoom() {
+        if(PhotonNetwork.connected)
+            MasterClientClearSlot((int)MainRoomModel.Instance.MySlot, GameManager.Instance.MyPlayer);
     }
 
     #region Game preferences
@@ -116,6 +129,16 @@ public class RoomNetController: BaseNetController {
             photonView.RPC("ClearSlot", PhotonTargets.Others, _slotNum, _player);
         }
     }
+
+    [RPC]
+    private void ClearSlot(int _slotNum, PhotonPlayer _player) {
+        if (GameManager.Instance.MyPlayer.Equals(_player)) {
+            MainRoomModel.Instance.MySlot = PlayerColor.None;
+            _player.customProperties["Color"] = MainRoomModel.Instance.MySlot;
+        }
+        MainRoomModel.Instance.EmptySlot(_slotNum);
+    }
+
     //kick player
     [RPC]
     private void BroadCastKickPlayer(int _slotNum, PhotonPlayer _player) {
@@ -124,17 +147,16 @@ public class RoomNetController: BaseNetController {
         if (_slotNum != (int)PlayerColor.None) {
             ClearSlot(_slotNum, _player);
             photonView.RPC("ClearSlot", PhotonTargets.Others, _slotNum, _player);
-            //@TODO disconnect player
-            
+            photonView.RPC("LeaveRoom", _player);
         }
     }
 
     [RPC]
-    private void ClearSlot(int _slotNum, PhotonPlayer _player) {
-        if (GameManager.Instance.MyPlayer.Equals(_player))
-            _player.customProperties["Color"] = MainRoomModel.Instance.MySlot = PlayerColor.None;
-        MainRoomModel.Instance.EmptySlot(_slotNum);        
+    private void LeaveRoom(){
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel("Lobby");
     }
+
     #endregion
     #endregion
 }

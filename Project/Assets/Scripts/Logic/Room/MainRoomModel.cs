@@ -16,15 +16,15 @@ public enum PlayerTeam {
 
 public enum PlayerColor {
     Blue,
-    Purple,
     Red,
-    Orange,
-    Pink,
     Green,
     Yellow,
+    Purple,
+    Orange,
+    Pink,
+    Teal,
     Gray,
     White,
-    Black,
     None
 }
 

@@ -7,8 +7,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
 
     #region Local methods
     public bool IsAlly(string _name) {
-        return ((PlayerTeam)GameManager.Instance.MyPlayer.customProperties["Team"]).Equals(
-                (PlayerTeam)GameManager.Instance.GetPlayer(_name).customProperties["Team"]);
+        return GameManager.Instance.IsAlly(_name);
     }
 
     public bool AreAllies(string _name1, string _name2) {
@@ -80,6 +79,11 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
                 ++GameManager.Instance.GetPlayerModel(_killerName).Kills;
             else
                 GameManager.Instance.MyCharacterModel.KilledEnemy(GameManager.Instance.GetPlayerModel(_deadName));
+
+            GameManager.Instance.RaiseKillsOfPlayersTeam(_killerName);
+
+            if (PhotonNetwork.isMasterClient)
+                GameManager.Instance.CheckWinningConditions(_killerName);
         }
     }
 

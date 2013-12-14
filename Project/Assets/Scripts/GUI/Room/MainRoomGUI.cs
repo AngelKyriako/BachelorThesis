@@ -158,7 +158,7 @@ public class MainRoomGUI: MonoBehaviour {
 
     private void KickButton(int _slotNum) {
         if (!IsEmptySlot(_slotNum) && !IsMySlot(_slotNum) && GUILayout.Button("Kick", GUILayout.Width(40)))
-            networkController.MasterClientKickPlayerInSlot(_slotNum, GameManager.Instance.MyPlayer);
+            networkController.MasterClientKickPlayerInSlot(_slotNum, MainRoomModel.Instance.GetPlayerInSlot(_slotNum));
     }
 
     private void MainSlot(int _slotNum) {

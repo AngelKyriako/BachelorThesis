@@ -15,6 +15,8 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     public override void Awake() {        
         base.Awake();
 
+        name = PhotonNetwork.player.ID.ToString();
+
         transform.parent = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath).transform;
 
         GameManager.Instance.AddPlayerCharacter(name, photonView.owner);
