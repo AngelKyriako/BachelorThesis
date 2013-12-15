@@ -62,12 +62,16 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     public void InitMainStage() {
+        RegisterAllies();
+
         CameraManager.Instance.SetUp();
         gameObject.AddComponent<CombatManager>();
-        foreach (string _name in AllPlayerKeys)
-            GetPlayerNetController(_name).SetUp();
 
-        RegisterAllies();
+        foreach (string _name in AllPlayerKeys) {
+            Utilities.Instance.LogMessage("Player "+_name +" setup");
+            GetPlayerNetController(_name).SetUp();
+        }
+
         InitGUIScripts();
         TeleportManager.Instance.StandardTeleportation(false);
     }
@@ -100,7 +104,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     public void CheckWinningConditions(string _killerName) {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "CheckWinningConditions", "This method is only available for the master client.");
-        if (TeamKills(_killerName) >= GameVariables.Instance.TargetKills.Value) {
+        if (PlayersTeamKills(_killerName) >= GameVariables.Instance.TargetKills.Value) {
             Utilities.Instance.LogMessage(GetPlayerTeam(_killerName) + " has won the game !!!");
             GameOver((int)GetPlayerTeam(_killerName));
             photonView.RPC("GameOver", PhotonTargets.Others, (int)GetPlayerTeam(_killerName));
@@ -108,8 +112,8 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     void OnLeaveRoom() {
-        Destroy(gameObject);
         Destroy(gui);
+        Destroy(gameObject);
     }
 
     #region Player properties updates
@@ -150,7 +154,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     [RPC]
     public void AddPlayerCharacter(string _name, PhotonPlayer _player) {
         if (!all.ContainsKey(_name))
-            all.Add(_name, new PlayerCharacterPair(_player, GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath +"/"+_name)));
+            all.Add(_name, new PlayerCharacterPair(_player, GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath + "/" + _name)));
     }
     [RPC]
     private void SetMasterClient(string _name) {
@@ -159,7 +163,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     [RPC]
     private void RequestForPlayerCharacters(PhotonMessageInfo info) {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "[RPC]RequestForPlayerCharacters", "This RPC is only available for the master client.");
-        foreach (string _name in all.Keys)
+        foreach (string _name in AllPlayerKeys)
             photonView.RPC("AddPlayerCharacter", info.sender, _name, all[_name].Player);
         photonView.RPC("SetMasterClient", info.sender, MyPlayer.ID.ToString());
     }
@@ -257,8 +261,14 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public void RaiseKillsOfPlayersTeam(string _name) {
         ++teamKills[(int)GetPlayerTeam(_name)];
     }
-    public int TeamKills(string _name) {
+    public int PlayersTeamKills(string _name) {
         return teamKills[(int)GetPlayerTeam(_name)];
+    }
+    public int TeamKills(int _teamIndex) {
+        return teamKills[_teamIndex];
+    }
+    public int TeamsCount {
+        get { return teamKills.Length; }
     }
 #endregion
 }

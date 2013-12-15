@@ -3,19 +3,23 @@ using System.Collections;
 
 public class PlayerCharacterNetworkController: SerializableNetController {
 
+    #region constants
+    private const float STAT_SYNC_DELAY = 10f, ATTRIBUTES_SYNC_DELAY = 1.5f;
+    #endregion
+
     #region attributes
     // references to local components
     private PlayerCharacterModel model;
     private MovementController movementController;
     private VisionController visionController;
     // stat sync delay
-    private float statSyncDelay = 1.5f, statSyncTimer = 0f;
+    private float statSyncTimer, attributeSyncTimer;
 #endregion
 
     public override void Awake() {        
         base.Awake();
 
-        name = PhotonNetwork.player.ID.ToString();
+        name = photonView.owner.ID.ToString();
 
         transform.parent = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterPath).transform;
 
@@ -49,18 +53,30 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         enabled = true;
     }
 
+    public override void Start() {
+        base.Start();
+        statSyncTimer = 0f;
+        attributeSyncTimer = 0f;
+    }
+
     public void OnDestroy() {
         GameManager.Instance.RemovePlayerCharacter(name);
     }
 
     public override void Update() {
         base.Update();
-        if (IsLocalClient && model && statSyncTimer > statSyncDelay) {
-            SendCharacterStats();
-            SendCharacterAttributes();
-            statSyncTimer = 0;
+        if (IsLocalClient) {
+            if(statSyncTimer > STAT_SYNC_DELAY) {
+                SendCharacterStats();
+                statSyncTimer = 0f;
+            }
+            if (attributeSyncTimer > ATTRIBUTES_SYNC_DELAY) {
+                SendCharacterAttributes();
+                attributeSyncTimer = 0f;
+            }
+            statSyncTimer += Time.deltaTime;
+            attributeSyncTimer += Time.deltaTime;
         }
-        statSyncTimer += Time.deltaTime;
     }
 
     public override void SendData(PhotonStream _stream) {
@@ -83,12 +99,14 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         for (int i = 0; i < model.StatsLength; ++i)
             photonView.RPC("SyncCharacterStat", PhotonTargets.Others,
                             i, model.GetStat(i).BaseValue, model.GetStat(i).BuffValue);
+
         photonView.RPC("SyncAttributesBonusStatValues", PhotonTargets.Others);
     }
     private void SendCharacterAttributes() {
         for (int i = 0; i < model.AttributesLength; ++i)
             photonView.RPC("SyncCharacterAttribute", PhotonTargets.Others,
                             i, model.GetAttribute(i).BaseValue, model.GetAttribute(i).BuffValue);
+
         for (int i = 0; i < model.VitalsLength; ++i)
             photonView.RPC("SyncCharacterVital", PhotonTargets.Others,
                            i, model.GetVital(i).BaseValue, model.GetVital(i).BuffValue, model.GetVital(i).CurrentValue);
@@ -117,17 +135,6 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         Utilities.Instance.LogMessage(info.sender.name +" sent: "+ _str);
     }
 
-    #region Effects RPCs
-    [RPC]
-    public void AttachEffect(string _casterName, string _receiverName, string _effectTitle) {
-        LogMessageToMasterClient(_receiverName + " just attached to themself the effect" + _effectTitle + ", of caster" + _casterName);
-        BaseEffect effectToAttach = EffectBook.Instance.GetEffect(_effectTitle);
-        BaseEffect tempEffect = (BaseEffect)GameManager.Instance.GetCharacter(_receiverName).AddComponent(effectToAttach.GetType());
-        tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), effectToAttach);
-    }
-
-    #endregion
-
     #region Stats RPCs
     [RPC]
     private void SyncCharacterStat(int _index, float _baseValue, float _buffValue) {
@@ -149,6 +156,16 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     private void SyncAttributesBonusStatValues() {
         model.UpdateAttributesBasedOnStats();
         model.UpdateVitalsBasedOnStats();
+    }
+    #endregion
+
+    #region Effects RPCs
+    [RPC]
+    public void AttachEffect(string _casterName, string _receiverName, string _effectTitle) {
+        LogMessageToMasterClient(_receiverName + " just attached to themself the effect" + _effectTitle + ", of caster" + _casterName);
+        BaseEffect effectToAttach = EffectBook.Instance.GetEffect(_effectTitle);
+        BaseEffect tempEffect = (BaseEffect)GameManager.Instance.GetCharacter(_receiverName).AddComponent(effectToAttach.GetType());
+        tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), effectToAttach);
     }
     #endregion
 

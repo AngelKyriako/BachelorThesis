@@ -20,6 +20,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void Awake() {
         base.Awake();
+        enabled = false;
     }
 
     public override void Start() {

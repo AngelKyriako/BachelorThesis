@@ -22,7 +22,7 @@ public class PlayersInfoWindow: DraggableWindow {
             GUI.Label(characterTabRect,
                       GameManager.Instance.GetPlayer(_name).name + " "+
                       ((PlayerColor)GameManager.Instance.GetPlayer(_name).customProperties["Color"]).ToString() +
-                      "(" + GameManager.Instance.GetPlayerModel(_name).GetVital((int)VitalType.Health).ToString()+ " " +
+                      GameManager.Instance.GetPlayerModel(_name).GetVital((int)VitalType.Health).ToString()+ " " +
                       "Kills: " + GameManager.Instance.GetPlayerModel(_name).Kills+", "+
                       ((PlayerTeam)GameManager.Instance.GetPlayer(_name).customProperties["Team"]).ToString());
 

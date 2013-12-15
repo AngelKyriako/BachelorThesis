@@ -14,6 +14,7 @@ public class MovementController: MonoBehaviour {
     void Awake() {
         Utilities.Instance.Assert(animator, "CharacterController", "Awake", "animator not defined");
         animator.enabled = true;
+        enabled = false;
     }
 
     void Start() {

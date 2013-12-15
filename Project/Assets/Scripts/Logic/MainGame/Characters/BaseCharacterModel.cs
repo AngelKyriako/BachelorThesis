@@ -74,7 +74,8 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
 #endregion
 
     #region attributes
-    private PlayerCharacterNetworkController networkController;
+    private PlayerCharacterNetworkController networkController;//@TODO: this should be the super class of itself (CharacterNetworkController)
+                                                               //       and ovveridable from player character model
     private uint level;
     private List<AttachedEffect> effectsAttached;
     private Stat[] stats;
