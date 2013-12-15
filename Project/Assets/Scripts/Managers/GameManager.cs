@@ -67,10 +67,8 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         CameraManager.Instance.SetUp();
         gameObject.AddComponent<CombatManager>();
 
-        foreach (string _name in AllPlayerKeys) {
-            Utilities.Instance.LogMessage("Player "+_name +" setup");
+        foreach (string _name in AllPlayerKeys)
             GetPlayerNetController(_name).SetUp();
-        }
 
         InitGUIScripts();
         TeleportManager.Instance.StandardTeleportation(false);
@@ -105,7 +103,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public void CheckWinningConditions(string _killerName) {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "CheckWinningConditions", "This method is only available for the master client.");
         if (PlayersTeamKills(_killerName) >= GameVariables.Instance.TargetKills.Value) {
-            Utilities.Instance.LogMessage(GetPlayerTeam(_killerName) + " has won the game !!!");
             GameOver((int)GetPlayerTeam(_killerName));
             photonView.RPC("GameOver", PhotonTargets.Others, (int)GetPlayerTeam(_killerName));
         }
