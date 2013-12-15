@@ -12,7 +12,7 @@ public class BaseSkill {
                                            supportEffects,
                                            passiveEffects;
     private Requirements requirements;
-    private BaseCharacterModel owner;
+    private BaseCharacterModel ownerModel;
     private CharacterSkillSlot slot;
 
     private string castEffect, mainObject, triggerEffect;
@@ -34,7 +34,7 @@ public class BaseSkill {
     }
 
     public void SetUpSkill(BaseCharacterModel _owner, CharacterSkillSlot _slot){
-        owner = _owner;
+        ownerModel = _owner;
         slot = _slot;
     }
 
@@ -53,8 +53,8 @@ public class BaseSkill {
     }
 
     public virtual void Pressed() {
-        if (IsUsable && !owner.IsStunned)
-            Cast(owner.transform.forward);
+        if (IsUsable && !ownerModel.IsStunned)
+            Cast(ownerModel.transform.forward);
     }
 
     public virtual void Unpressed() { }
@@ -63,16 +63,16 @@ public class BaseSkill {
     public virtual void Unselect() { }
 
     public virtual void Cast(Vector3 _direction) {
-        owner.GetVital((int)VitalType.Mana).CurrentValue -= manaCost;
+        ownerModel.GetVital((int)VitalType.Mana).CurrentValue -= manaCost;
         RefreshCooldown();
 
         if (castEffect != null && !castEffect.Equals(string.Empty))
-            CombatManager.Instance.MasterClientInstantiateSceneObject(castEffect, owner.transform.position, Quaternion.identity);
+            CombatManager.Instance.MasterClientInstantiateSceneObject(castEffect, ownerModel.transform.position, Quaternion.identity);
 
         if (mainObject != null && !mainObject.Equals(string.Empty))
-            CombatManager.Instance.MasterClientInstantiateSceneSkill(mainObject, owner.ProjectileOriginPosition, Quaternion.identity, title, owner.name, _direction);
+            CombatManager.Instance.MasterClientInstantiateSceneSkill(mainObject, ownerModel.ProjectileOriginPosition, Quaternion.identity, title, ownerModel.name, _direction);
 
-        ActivatePassiveEffects(owner, owner);
+        ActivatePassiveEffects(ownerModel, ownerModel);
     }
 
     public virtual void Trigger(Vector3 _position, Quaternion _rotation) {
@@ -104,7 +104,7 @@ public class BaseSkill {
     }
 
     private void RefreshCooldown() {
-        CoolDownTimer = coolDownTime - (coolDownTime * owner.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
+        CoolDownTimer = coolDownTime - (coolDownTime * ownerModel.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
     }
 
     #region Accessors
@@ -125,7 +125,7 @@ public class BaseSkill {
         set { coolDownTimer = value > 0 ? value : 0; }
     }
     public virtual bool IsUsable {
-        get { return (coolDownTimer == 0f) && (owner.GetVital((int)VitalType.Mana).CurrentValue >= manaCost) && RequirementsFulfilled(); }
+        get { return (coolDownTimer == 0f) && (ownerModel.GetVital((int)VitalType.Mana).CurrentValue >= manaCost) && RequirementsFulfilled(); }
     }
 
     public virtual bool IsSelected {
@@ -142,10 +142,10 @@ public class BaseSkill {
     }
     public bool RequirementsFulfilled() {
         for (int i = 0; i < requirements.Minimum.Count; ++i)
-            if (owner.GetStat(requirements.Minimum[i].First).FinalValue < requirements.Minimum[i].Second)
+            if (ownerModel.GetStat(requirements.Minimum[i].First).FinalValue < requirements.Minimum[i].Second)
                 return false;
         for (int i = 0; i < requirements.Maximum.Count; ++i)
-            if (owner.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
+            if (ownerModel.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
                 return false;
         return true;
     }
@@ -193,8 +193,8 @@ public class BaseSkill {
     }
     #endregion
 
-    public BaseCharacterModel Owner {
-        get { return owner; }
+    public BaseCharacterModel OwnerModel {
+        get { return ownerModel; }
     }
     public CharacterSkillSlot Slot {
         get { return slot; }

@@ -31,7 +31,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
         if (PhotonNetwork.isMasterClient)
             InstantiateSceneSkill(_obj, _position, _rotation, _skillName, _casterName, _destination);
         else {
-            Utilities.Instance.LogMessage("WTF BRO?");
+            Utilities.Instance.LogMessage("WTF BRO(InstantiateSceneSkill)?");
             photonView.RPC("InstantiateSceneSkill", PhotonNetwork.masterClient,
                                                    _obj, _position, _rotation, _skillName, _casterName, _destination);
         }
@@ -68,6 +68,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
         Utilities.Instance.PreCondition(GameManager.Instance.MyCharacter.name.Equals(_deadName), "CombatManager", "KillHappened", "This method is only available for the Dead player.");
 
         InstantianteLocalExpSphere(_position, GameManager.Instance.MyCharacterModel.ExpWorth);
+        Utilities.Instance.LogMessage("WTF BRO(InstantianteLocalExpSphere)?");
         photonView.RPC("InstantianteLocalExpSphere", PhotonTargets.Others, _position, GameManager.Instance.MyCharacterModel.ExpWorth);
 
         KilledPlayer(_killerName, _deadName);

@@ -36,7 +36,7 @@ public class BaseTargetCursor: MonoBehaviour {
 
         if (mousePos.y < Screen.height / 2)//@TODO: Modify this mpakalia !!!(Need to restrict the target cursor to a minimum distance from the player object)
             worldMousePos.z -= (Screen.height / 2 - mousePos.y)/100;
-        transform.position = new Vector3(worldMousePos.x, skill.Owner.ProjectileOriginPosition.y, worldMousePos.z);
+        transform.position = new Vector3(worldMousePos.x, skill.OwnerModel.ProjectileOriginPosition.y, worldMousePos.z);
 	}
 
     public void DestroyTargetCursor() {
@@ -44,6 +44,6 @@ public class BaseTargetCursor: MonoBehaviour {
     }
 
     public virtual Vector3 Direction {
-        get { return transform.position - skill.Owner.transform.position; }
+        get { return transform.position - skill.OwnerModel.transform.position; }
     }
 }

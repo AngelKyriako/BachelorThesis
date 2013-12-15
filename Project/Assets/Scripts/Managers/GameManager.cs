@@ -165,7 +165,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "[RPC]RequestForPlayerCharacters", "This RPC is only available for the master client.");
         foreach (string _name in AllPlayerKeys)
             photonView.RPC("AddPlayerCharacter", info.sender, _name, all[_name].Player);
-        photonView.RPC("SetMasterClient", info.sender, MyPlayer.ID.ToString());
+        photonView.RPC("SetMasterClient", info.sender, MyCharacter.name);
     }
     [RPC]
     private void GameOver(int winnerTeam) {

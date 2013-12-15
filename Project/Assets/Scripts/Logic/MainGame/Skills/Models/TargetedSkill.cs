@@ -17,8 +17,8 @@ public class TargetedSkill: BaseSkill {
     public override void Pressed() {
         if (!isSelected && IsUsable)
             Select();
-        else if (isSelected && !Owner.IsStunned) {
-            Owner.gameObject.transform.LookAt(currentCursor.Direction * 1000);
+        else if (isSelected && !OwnerModel.IsStunned) {
+            OwnerModel.transform.LookAt(currentCursor.Direction * 1000);
             Cast(currentCursor.Direction);
         }
     }
