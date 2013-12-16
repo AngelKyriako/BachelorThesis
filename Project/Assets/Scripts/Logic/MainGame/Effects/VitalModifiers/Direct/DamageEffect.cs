@@ -14,7 +14,7 @@ public class DamageEffect: VitalEffect {
             
             GameManager.Instance.MyDeathController.Enable();
             if (!Caster.name.Equals(Receiver.name)) {
-                Utilities.Instance.LogMessage("kill happened bitch");
+                Utilities.Instance.LogMessageToChat("kill happened bitch");
                 CombatManager.Instance.KillHappened(Caster.name, Receiver.name, Receiver.transform.position);
             }
             TeleportManager.Instance.StandardTeleportation(false);

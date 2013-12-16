@@ -5,8 +5,6 @@ public class ColorPicker: MonoBehaviour {
 
 	void Awake () {
         enabled = false;
-        Utilities.Instance.LogMessage(ResourcesPathManager.Instance.PlayerCharacterMaterialPath(((PlayerColor)GameManager.Instance.MyPlayer.customProperties["Color"]).ToString()));
-
 	}
 
     void Start() {

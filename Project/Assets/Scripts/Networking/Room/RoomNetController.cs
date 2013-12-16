@@ -23,8 +23,8 @@ public class RoomNetController: BaseNetController {
             for (int i = 0; i < MainRoomModel.Instance.PlayerSlotsLength; ++i) {
                 //@TODO: FIX THAT SHIT
                 //if (!MainRoomModel.Instance.IsSlotEmpty(i) && !GameManager.Instance.PlayerExists(MainRoomModel.Instance.GetPlayerInSlot(i).ID.ToString())) {
-                //    Utilities.Instance.LogMessage("Yo its: " + MainRoomModel.Instance.GetPlayerInSlot(i).ID +" and I am gonna leave now");
-                //    Utilities.Instance.LogMessage("Because " + (PlayerColor)i + " is not empty");
+                //    Utilities.Instance.LogMessageToChat("Yo its: " + MainRoomModel.Instance.GetPlayerInSlot(i).ID +" and I am gonna leave now");
+                //    Utilities.Instance.LogMessageToChat("Because " + (PlayerColor)i + " is not empty");
                 //    MasterClientClearSlot(i, MainRoomModel.Instance.GetPlayerInSlot(i));
                 //}
             }

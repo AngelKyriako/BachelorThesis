@@ -30,22 +30,22 @@ public class BaseProjectileController: BaseSkillController {
 	}
 
     public override void OnTriggerEnter(Collider other) {
-        Utilities.Instance.LogMessage("OnTriggedEnter with: "+other.name);
+        Utilities.Instance.LogMessageToChat("OnTriggedEnter with: "+other.name);
         PlayerCharacterModel otherModel;
         if (PhotonNetwork.isMasterClient && !other.gameObject.layer.Equals(LayerMask.NameToLayer("Void")) && !isTriggered){
             if (other.CompareTag("Player")) {
                 otherModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
-                Utilities.Instance.LogMessage(CasterModel.name + "'s projectile collided with " + otherModel.name);
+                Utilities.Instance.LogMessageToChat(CasterModel.name + "'s projectile collided with " + otherModel.name);
                 if (otherModel && !CombatManager.Instance.AreAllies(CasterModel.name, otherModel.name)) {
                     isTriggered = true;
                     Skill.ActivateOffensiveEffects(CasterModel, otherModel);
-                    Utilities.Instance.LogMessage(otherModel.name + " is an opponent. Skill Triggered.");
+                    Utilities.Instance.LogMessageToChat(otherModel.name + " is an opponent. Skill Triggered.");
                     Skill.Trigger(other.transform.position, Quaternion.identity);
                     CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
                 }
             }
             else {
-                Utilities.Instance.LogMessage(CasterModel.name + "'s projectile collided with " + other.name+ ". Projectile destroyed");
+                Utilities.Instance.LogMessageToChat(CasterModel.name + "'s projectile collided with " + other.name+ ". Projectile destroyed");
                 Skill.Trigger(other.transform.position, Quaternion.identity);
                 CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
             }

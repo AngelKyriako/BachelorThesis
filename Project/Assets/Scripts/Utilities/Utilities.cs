@@ -36,8 +36,12 @@ public class Utilities {
             Application.Quit();
         }
     }
-    public void LogMessage(string s) {
-        Debug.Log(s);
+    public void LogMessageToChat(string _str) {
+        ChatHolder.Instance.AddChatMessage(new ChatMessage(_str, Color.blue));
+    }
+
+    public void LogMessageToChatToChat(string _str, Color _color) {
+        ChatHolder.Instance.AddChatMessage(new ChatMessage(_str, _color));
     }
     #endregion
 

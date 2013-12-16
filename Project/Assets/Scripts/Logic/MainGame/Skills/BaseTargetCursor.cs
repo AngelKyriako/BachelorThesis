@@ -22,12 +22,12 @@ public class BaseTargetCursor: MonoBehaviour {
         //if (Physics.Raycast(cameraToMouseRay, out hitInfo)) {
         //    ScreenDepth = Vector3.Distance(Camera.main.transform.position, hitInfo.point);
         //    Debug.DrawLine(Camera.main.transform.position, hitInfo.point, Color.blue);
-        //    Utilities.Instance.LogMessage("Camera distance from point(ray): " + ScreenDepth);
+        //    Utilities.Instance.LogMessageToChat("Camera distance from point(ray): " + ScreenDepth);
         //}
         //if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo)) {
         //    ScreenDepth = Vector3.Distance(Camera.main.transform.position, hitInfo.point);
         //    Debug.DrawLine(Camera.main.transform.position, hitInfo.point, Color.red);
-        //    Utilities.Instance.LogMessage("Camera distance from point(forward): " + ScreenDepth);
+        //    Utilities.Instance.LogMessageToChat("Camera distance from point(forward): " + ScreenDepth);
         //}
         Vector3 mousePos = PlayerInputManager.Instance.MousePosition;
         mousePos.z = Camera.main.transform.position.y;

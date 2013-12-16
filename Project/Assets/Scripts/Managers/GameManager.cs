@@ -59,6 +59,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "MasterClientLoadMainStage", "This method is only available for the master client.");
         LoadMainStage(GameVariables.Instance.Map.Key);
         photonView.RPC("LoadMainStage", PhotonTargets.Others, GameVariables.Instance.Map.Key);
+        LogMessageToMasterClient("I am master client, I sent RPC to all !!");
     }
 
     public void InitMainStage() {
@@ -145,7 +146,9 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     #region RPCs
     [RPC]
     public void LoadMainStage(string _stage) {
+        LogMessageToMasterClient("I am a joined client, I am loading the main stage !!");
         PhotonNetwork.LoadLevel(_stage);
+        LogMessageToMasterClient("I am a joined client, I loaded the main stage !!");
     }
 
     [RPC]
@@ -170,6 +173,17 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         Destroy(gui);
     }
 #endregion
+
+    #region debug
+    public void LogMessageToMasterClient(string _str) {
+        photonView.RPC("PrintShit", PhotonNetwork.masterClient, _str);
+    }
+    [RPC]
+    private void PrintShit(string _str, PhotonMessageInfo info) {
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "[RPC]PrintShit", "This RPC is only available for the master client.");
+        Utilities.Instance.LogMessageToChat(info.sender.name + " sent: " + _str);
+    }
+    #endregion
 
     #region Accessors
     public GameObject Gui {

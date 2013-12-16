@@ -27,7 +27,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
 
     public void MasterClientInstantiateSceneSkill(string _obj, Vector3 _position, Quaternion _rotation,
                                                   string _skillName, string _casterName, Vector3 _destination) {
-        Utilities.Instance.LogMessage("In InstantiateSceneSkill, caster: " + _casterName);
+        Utilities.Instance.LogMessageToChat("In InstantiateSceneSkill, caster: " + _casterName);
         if (PhotonNetwork.isMasterClient)
             InstantiateSceneSkill(_obj, _position, _rotation, _skillName, _casterName, _destination);
         else 
@@ -43,7 +43,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     #region RPCs
     [RPC]
     private void InstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
-        //Utilities.Instance.LogMessage(GameManager.Instance.MyPhotonView.name + " is instantiating scene object !");
+        //Utilities.Instance.LogMessageToChat(GameManager.Instance.MyPhotonView.name + " is instantiating scene object !");
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneObject", "This RPC is only available for the master client.");
         PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
     }

@@ -82,7 +82,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     public override void SendData(PhotonStream _stream) {
         if (enabled) {
             base.SendData(_stream);
-            _stream.SendNext(rigidbody.velocity);
+            //_stream.SendNext(rigidbody.velocity);
             _stream.SendNext(movementController.AnimatorMovementSpeed);
         }
     }
@@ -90,7 +90,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     public override void ReceiveData(PhotonStream _stream) {
         if (enabled) {
             base.ReceiveData(_stream);
-            rigidbody.velocity = (Vector3)_stream.ReceiveNext();
+            //rigidbody.velocity = (Vector3)_stream.ReceiveNext();
             movementController.AnimatorMovementSpeed = (float)_stream.ReceiveNext();
         }
     }
@@ -114,25 +114,16 @@ public class PlayerCharacterNetworkController: SerializableNetController {
 
     public void AttachEffectToPlayer(PlayerCharacterNetworkController _caster, PlayerCharacterNetworkController _receiver, string _effectTitle) {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "AttachEffectToPlayer", "This method is only available for the master client.");
-        //Utilities.Instance.LogMessage("local client is: " + photonView.name);
-        //Utilities.Instance.LogMessage("local client owner is: " + photonView.owner.name);
+        //Utilities.Instance.LogMessageToChat("local client is: " + photonView.name);
+        //Utilities.Instance.LogMessageToChat("local client owner is: " + photonView.owner.name);
         if (photonView.Equals(_receiver.photonView))
             _receiver.AttachEffect(_caster.name, _receiver.name, _effectTitle);
         else {
-            //Utilities.Instance.LogMessage("Send RPC TO !!!");
-            //Utilities.Instance.LogMessage("remote client is: " + _receiver.photonView.name);
-            //Utilities.Instance.LogMessage("remote client owner is: " + _receiver.photonView.owner.name);
+            //Utilities.Instance.LogMessageToChat("Send RPC TO !!!");
+            //Utilities.Instance.LogMessageToChat("remote client is: " + _receiver.photonView.name);
+            //Utilities.Instance.LogMessageToChat("remote client owner is: " + _receiver.photonView.owner.name);
             photonView.RPC("AttachEffect", _receiver.photonView.owner, _caster.name, _receiver.name, _effectTitle);
         }
-    }
-    
-    public void LogMessageToMasterClient(string _str){
-        photonView.RPC("PrintShit", PhotonNetwork.masterClient, _str);
-    }
-    [RPC]
-    void PrintShit(string _str, PhotonMessageInfo info) {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "[RPC]PrintShit", "This RPC is only available for the master client.");
-        Utilities.Instance.LogMessage(info.sender.name +" sent: "+ _str);
     }
 
     #region Stats RPCs
@@ -162,7 +153,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     #region Effects RPCs
     [RPC]
     public void AttachEffect(string _casterName, string _receiverName, string _effectTitle) {
-        LogMessageToMasterClient(_receiverName + " just attached to themself the effect" + _effectTitle + ", of caster" + _casterName);
+        GameManager.Instance.LogMessageToMasterClient(_receiverName + ": just attached to himself the effect " + _effectTitle + ", of caster: " + _casterName);
         BaseEffect effectToAttach = EffectBook.Instance.GetEffect(_effectTitle);
         BaseEffect tempEffect = (BaseEffect)GameManager.Instance.GetCharacter(_receiverName).AddComponent(effectToAttach.GetType());
         tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), effectToAttach);

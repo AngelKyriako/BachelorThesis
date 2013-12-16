@@ -29,7 +29,7 @@ public class BaseSkillController: MonoBehaviour {
     }
 
     public virtual void OnTriggerEnter(Collider other) {
-        Utilities.Instance.LogMessage("OnTriggedEnter with: " + other.name);
+        Utilities.Instance.LogMessageToChat("OnTriggedEnter with: " + other.name);
     }
 
     #region Accessors
