@@ -19,7 +19,7 @@ public class CameraManager: SingletonMono<CameraManager> {
     public float movementInputWeight = 35,
                  minMovementSpeed = 25, maxMovementSpeed = 100;
 
-    public float minCameraX = 27f, maxCameraX = 73f,
+    public float minCameraX = 27f, maxCameraX = 71.6f,
                  minStageCameraY = 20f, maxStageCameraY = 25f,
                  minHeavenCameraY = 75f, maxHeavenCameraY = 85f,
                  minCameraZ = 10f, maxCameraZ = 79f;

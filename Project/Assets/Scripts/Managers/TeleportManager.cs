@@ -22,7 +22,6 @@ public class TeleportManager {
     }
 
     public void TeleportToPoint(Vector3 _spawnPoint) {
-        GameManager.Instance.MyCharacter.rigidbody.Sleep();
         GameManager.Instance.MyCharacter.transform.rotation = Quaternion.identity;
         GameManager.Instance.MyCharacter.transform.position = _spawnPoint;
         GameManager.Instance.MyMovementController.Destination = _spawnPoint;

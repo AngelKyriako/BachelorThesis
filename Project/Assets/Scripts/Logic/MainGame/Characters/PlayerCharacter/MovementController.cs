@@ -8,12 +8,14 @@ public class MovementController: MonoBehaviour {
 
     private PlayerCharacterModel model;
     private PlayerCharacterNetworkController networkController;
+    private CharacterController charController;
     private float currentSpeed;
     private Vector3 destination;
 
     void Awake() {
         Utilities.Instance.Assert(animator, "CharacterController", "Awake", "animator not defined");
         animator.enabled = true;
+        charController = GetComponent<CharacterController>();
         enabled = false;
     }
 
@@ -34,7 +36,7 @@ public class MovementController: MonoBehaviour {
             //move to destination
             if (Vector3.Distance(destination, transform.position) > 0.5f && animator.enabled) {
                 UpdateCurrentSpeed();
-                transform.position = Vector3.MoveTowards(transform.position, destination, currentSpeed * Time.deltaTime);
+                charController.Move((destination - transform.position).normalized * currentSpeed * Time.deltaTime);
             }
             else
                 currentSpeed = 0f;
