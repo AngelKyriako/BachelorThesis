@@ -62,11 +62,11 @@ public class VisionController: MonoBehaviour {
         //}
     }
 
-    void OnTriggerStay(Collider other) {
-        if (other.gameObject.layer.Equals(LayerMask.NameToLayer(hiddenLayer))) {
-            Utilities.Instance.SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(visibleLayer));
-        }
-    }
+    //void OnTriggerStay(Collider other) {
+    //    if (other.gameObject.layer.Equals(LayerMask.NameToLayer(hiddenLayer))) {
+    //        Utilities.Instance.SetGameObjectLayer(other.gameObject, LayerMask.NameToLayer(visibleLayer));
+    //    }
+    //}
 
     void OnTriggerExit(Collider other) {
         if (other.gameObject.layer.Equals(LayerMask.NameToLayer(visibleLayer))) {

@@ -27,7 +27,6 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
 
     public void MasterClientInstantiateSceneSkill(string _obj, Vector3 _position, Quaternion _rotation,
                                                   string _skillName, string _casterName, Vector3 _destination) {
-        Utilities.Instance.LogMessageToChat("In InstantiateSceneSkill, caster: " + _casterName);
         if (PhotonNetwork.isMasterClient)
             InstantiateSceneSkill(_obj, _position, _rotation, _skillName, _casterName, _destination);
         else 
@@ -76,6 +75,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     [RPC]
     private void KilledPlayer(string _killerName, string _deadName) {
         if (!AreAllies(_killerName, _deadName)) {
+
             if (!GameManager.Instance.MyCharacter.name.Equals(_killerName))
                 ++GameManager.Instance.GetPlayerModel(_killerName).Kills;
             else
@@ -94,6 +94,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
                                                                   _position,
                                                                   Quaternion.identity);
         expSphere.GetComponent<ExpRadiusSphere>().SetUp((uint)_expWorth);
+        GameManager.Instance.LogMessageToMasterClient("\nInstantiating an EXP sphere in my client\n");
     }
 
     #endregion

@@ -5,7 +5,7 @@ public class PlayersInfoWindow: DraggableWindow {
 
     private const string TITLE = "";
     private const int ID = 8;
-    private const int WIDTH = 300, SINGLE_SLOT_HEIGHT = 50;
+    private const int WIDTH = 350, SINGLE_SLOT_HEIGHT = 50;
     private const KeyCode TOGGLE_BUTTON = KeyCode.P;
 
     private Rect characterTabRect;
@@ -24,6 +24,7 @@ public class PlayersInfoWindow: DraggableWindow {
                       ((PlayerColor)GameManager.Instance.GetPlayer(_name).customProperties["Color"]).ToString() +
                       GameManager.Instance.GetPlayerModel(_name).GetVital((int)VitalType.Health).ToString()+ " " +
                       "Kills: " + GameManager.Instance.GetPlayerModel(_name).Kills+", "+
+                      "Deaths: " + GameManager.Instance.GetPlayerModel(_name).Deaths + ", " +
                       ((PlayerTeam)GameManager.Instance.GetPlayer(_name).customProperties["Team"]).ToString());
 
             characterTabRect.y += SINGLE_SLOT_HEIGHT;

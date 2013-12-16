@@ -30,12 +30,14 @@ public class BaseProjectileController: BaseSkillController {
 	}
 
     public override void OnTriggerEnter(Collider other) {
-        Utilities.Instance.LogMessageToChat("OnTriggedEnter with: "+other.name);
         PlayerCharacterModel otherModel;
         if (PhotonNetwork.isMasterClient && !other.gameObject.layer.Equals(LayerMask.NameToLayer("Void")) && !isTriggered){
             if (other.CompareTag("Player")) {
                 otherModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
+
                 Utilities.Instance.LogMessageToChat(CasterModel.name + "'s projectile collided with " + otherModel.name);
+                Utilities.Instance.LogMessageToChat("Are allies: " + CombatManager.Instance.AreAllies(CasterModel.name, otherModel.name));
+                
                 if (otherModel && !CombatManager.Instance.AreAllies(CasterModel.name, otherModel.name)) {
                     isTriggered = true;
                     Skill.ActivateOffensiveEffects(CasterModel, otherModel);

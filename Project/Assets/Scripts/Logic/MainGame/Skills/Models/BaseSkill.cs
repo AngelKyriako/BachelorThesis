@@ -70,8 +70,8 @@ public class BaseSkill {
             CombatManager.Instance.MasterClientInstantiateSceneObject(castEffect, ownerModel.transform.position, Quaternion.identity);
 
         if (mainObject != null && !mainObject.Equals(string.Empty))
-            CombatManager.Instance.MasterClientInstantiateSceneSkill(mainObject, ownerModel.ProjectileOriginPosition, Quaternion.identity, title, ownerModel.name, _direction);
-
+            CombatManager.Instance.MasterClientInstantiateSceneSkill(mainObject, ownerModel.ProjectileOriginPosition,
+                                                                     Quaternion.identity, title, ownerModel.name, _direction);
         ActivatePassiveEffects(ownerModel, ownerModel);
     }
 

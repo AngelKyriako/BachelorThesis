@@ -59,7 +59,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "MasterClientLoadMainStage", "This method is only available for the master client.");
         LoadMainStage(GameVariables.Instance.Map.Key);
         photonView.RPC("LoadMainStage", PhotonTargets.Others, GameVariables.Instance.Map.Key);
-        LogMessageToMasterClient("I am master client, I sent RPC to all !!");
     }
 
     public void InitMainStage() {
@@ -146,9 +145,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     #region RPCs
     [RPC]
     public void LoadMainStage(string _stage) {
-        LogMessageToMasterClient("I am a joined client, I am loading the main stage !!");
         PhotonNetwork.LoadLevel(_stage);
-        LogMessageToMasterClient("I am a joined client, I loaded the main stage !!");
     }
 
     [RPC]
