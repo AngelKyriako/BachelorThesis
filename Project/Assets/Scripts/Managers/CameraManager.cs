@@ -8,19 +8,21 @@ public class CameraManager: SingletonMono<CameraManager> {
     }
 
     #region editable attributes
-    public Vector3 defaultPosition, defaultRotation;
-    public float targetOffsetX = 0f,
-                 targetOffsetZ = -8f,
+    public Vector3 defaultPosition;
+
+    public float defaultRotationX = 80f,
+                 targetOffsetX = 0f,
+                 targetOffsetZ = -5f,
                  smoothLockOn = 5f;
 
     public int scrollOffset = 100;
     public float movementInputWeight = 35,
                  minMovementSpeed = 25, maxMovementSpeed = 100;
 
-    public float minCameraX = 30f, maxCameraX = 70f,
-                 minStageCameraY = 25f, maxStageCameraY = 30f,
+    public float minCameraX = 27f, maxCameraX = 73f,
+                 minStageCameraY = 20f, maxStageCameraY = 25f,
                  minHeavenCameraY = 75f, maxHeavenCameraY = 85f,
-                 minCameraZ = 10f, maxCameraZ = 70f;
+                 minCameraZ = 10f, maxCameraZ = 79f;
     #endregion
 
     #region attributes
@@ -68,7 +70,7 @@ public class CameraManager: SingletonMono<CameraManager> {
     void Start() {
         Utilities.Instance.Assert(target!=null, "CameraManager", "Start", "Invalid target value, a gameobject must be assigned to this variable.");
         Camera.main.transform.position = destination = defaultPosition;
-        Camera.main.transform.rotation = Quaternion.Euler(defaultRotation);
+        Camera.main.transform.rotation = Quaternion.Euler(new Vector3(defaultRotationX, 0, 0));
 
         lastMainStageY = maxStageCameraY;
         mode = default(CameraMode);
@@ -169,7 +171,6 @@ public class CameraManager: SingletonMono<CameraManager> {
             Camera.main.transform.position = Vector3.MoveTowards(originPosition, destination, Time.deltaTime * minMovementSpeed);
     }
 
-    //@TODO: Change temporarity the speed of the camera to make an awesome follow the character effect
     public void EnterHeavenMode() {
         lastMainStageY = Camera.main.transform.position.y;
         mode = CameraMode.Heaven;
@@ -178,7 +179,9 @@ public class CameraManager: SingletonMono<CameraManager> {
 
     public void EnterMainStageMode() {
         mode = CameraMode.MainStage;
-        Camera.main.transform.position = new Vector3(PositioningInAxisX, lastMainStageY, PositioningInAxisZ);
+        destination.Set(PositioningInAxisX, lastMainStageY, PositioningInAxisZ);
+        ValidateDestination();
+        Camera.main.transform.position = destination;
     }
 
     private float PositioningInAxisX {

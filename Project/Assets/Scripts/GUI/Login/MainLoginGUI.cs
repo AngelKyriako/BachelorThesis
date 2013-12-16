@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MainLogin: MonoBehaviour {
+public class MainLoginGUI: MonoBehaviour {
 
     private string playerName;
     private Rect fullscreen;

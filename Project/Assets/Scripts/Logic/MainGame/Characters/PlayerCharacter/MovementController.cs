@@ -88,7 +88,8 @@ public class MovementController: MonoBehaviour {
         get { return currentSpeed; }
     }
 
-    public void StandStillBitch() {//@TODO: Bouncing bug fix
-        destination = transform.position;
+    public Vector3 Destination {
+        get { return destination; }
+        set { destination = value; }
     }
 }

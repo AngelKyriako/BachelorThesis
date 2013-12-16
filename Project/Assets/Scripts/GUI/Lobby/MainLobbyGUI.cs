@@ -20,7 +20,7 @@ public enum LobbyAction {
     MatchMaking
 };
 
-public class MainLobby: MonoBehaviour {
+public class MainLobbyGUI: MonoBehaviour {
 
     public int northHeight;
     public int westWidth;
