@@ -4,13 +4,13 @@ using System.Collections.Generic;
 public class BaseSkill {
 
     #region attributes
+    private int id;
     private string title, description;
-    private Texture2D icon;
     private float coolDownTimer, coolDownTime;
     private uint manaCost;
-    private Dictionary<string, BaseEffect> offensiveEffects,
-                                           supportEffects,
-                                           passiveEffects;
+    private Dictionary<int, BaseEffect> offensiveEffects,
+                                        supportEffects,
+                                        passiveEffects;
     private Requirements requirements;
     private BaseCharacterModel ownerModel;
     private CharacterSkillSlot slot;
@@ -18,16 +18,16 @@ public class BaseSkill {
     private string castEffect, mainObject, triggerEffect;
     #endregion
 
-    public BaseSkill(string _title, string _desc, Texture2D _icon, float _cd, string _castEff, string _mainObject, string _triggerEff) {
+    public BaseSkill( int _id, string _title, string _desc, float _cd, string _castEff, string _mainObject, string _triggerEff) {
+        id = _id;
         title = _title;
         description = _desc;
-        icon = _icon;
         coolDownTimer = coolDownTime = _cd;
         manaCost = 0;
         requirements = new Requirements();
-        offensiveEffects = new Dictionary<string, BaseEffect>();
-        supportEffects = new Dictionary<string, BaseEffect>();
-        passiveEffects = new Dictionary<string, BaseEffect>();
+        offensiveEffects = new Dictionary<int, BaseEffect>();
+        supportEffects = new Dictionary<int, BaseEffect>();
+        passiveEffects = new Dictionary<int, BaseEffect>();
         castEffect = _castEff;
         mainObject = _mainObject;
         triggerEffect = _triggerEff;
@@ -44,12 +44,12 @@ public class BaseSkill {
 
     public void UpdateManaCost(BaseCharacterModel _characterModel) {
         manaCost = 0;
-        foreach (string title in offensiveEffects.Keys)
-            if (offensiveEffects[title].RequirementsFulfilled(_characterModel))
-                manaCost += offensiveEffects[title].ManaCost;
-        foreach (string title in supportEffects.Keys)
-            if (offensiveEffects[title].RequirementsFulfilled(_characterModel))
-                manaCost += offensiveEffects[title].ManaCost;
+        foreach (int _id in offensiveEffects.Keys)
+            if (offensiveEffects[_id].RequirementsFulfilled(_characterModel))
+                manaCost += offensiveEffects[_id].ManaCost;
+        foreach (int _id in supportEffects.Keys)
+            if (offensiveEffects[_id].RequirementsFulfilled(_characterModel))
+                manaCost += offensiveEffects[_id].ManaCost;
     }
 
     public virtual void Pressed() {
@@ -71,7 +71,7 @@ public class BaseSkill {
 
         if (mainObject != null && !mainObject.Equals(string.Empty))
             CombatManager.Instance.MasterClientInstantiateSceneSkill(mainObject, ownerModel.ProjectileOriginPosition,
-                                                                     Quaternion.identity, title, ownerModel.name, _direction);
+                                                                     Quaternion.identity, id, ownerModel.name, _direction);
         ActivatePassiveEffects(ownerModel, ownerModel);
     }
 
@@ -82,25 +82,25 @@ public class BaseSkill {
 
     public virtual void ActivateOffensiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         if (_receiver)
-            foreach (string effectTitle in OffensiveEffectKeys)
-                if (GetOffensiveEffect(effectTitle).RequirementsFulfilled(_caster))
+            foreach (int _effectId in OffensiveEffectKeys)
+                if (GetOffensiveEffect(_effectId).RequirementsFulfilled(_caster))
                     GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
                                                                                             _receiver.NetworkController,
-                                                                                            effectTitle);
+                                                                                            _effectId);
     }
 
     public virtual void ActivateSupportEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
-        foreach (string effectTitle in SupportEffectKeys)
-            if (GetSupportEffect(effectTitle).RequirementsFulfilled(_caster))
+        foreach (int _effectId in SupportEffectKeys)
+            if (GetSupportEffect(_effectId).RequirementsFulfilled(_caster))
                 GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
                                                                                         _receiver.NetworkController,
-                                                                                        effectTitle);
+                                                                                        _effectId);
     }
 
     public virtual void ActivatePassiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
-        foreach (string effectTitle in PassiveEffectKeys)
-            if (GetPassiveEffect(effectTitle).RequirementsFulfilled(_caster))
-                _caster.NetworkController.AttachEffect(_caster.name, _receiver.name, effectTitle);
+        foreach (int _effectId in PassiveEffectKeys)
+            if (GetPassiveEffect(_effectId).RequirementsFulfilled(_caster))
+                _caster.NetworkController.AttachEffect(_caster.name, _receiver.name, _effectId);
     }
 
     private void RefreshCooldown() {
@@ -108,6 +108,10 @@ public class BaseSkill {
     }
 
     #region Accessors
+    public int Id {
+        get { return id; }
+        set { id = value; }
+    }
     public string Title {
         get { return title; }
         set { title = value; }
@@ -115,10 +119,6 @@ public class BaseSkill {
     public string Description {
         get { return description; }
         set { description = value; }
-    }
-    public Texture2D Icon {
-        get { return icon; }
-        set { icon = value; }
     }
     public float CoolDownTimer {
         get { return coolDownTimer; }
@@ -154,41 +154,41 @@ public class BaseSkill {
     #region Effects
     //offensive
     public void AddOffensiveEffect(BaseEffect _effect) {
-        offensiveEffects.Add(_effect.Title, _effect);
+        offensiveEffects.Add(_effect.Id, _effect);
     }
     public void RemoveOffensiveEffect(BaseEffect _effect) {
-        offensiveEffects.Remove(_effect.Title);
+        offensiveEffects.Remove(_effect.Id);
     }
-    public BaseEffect GetOffensiveEffect(string key) {
+    public BaseEffect GetOffensiveEffect(int key) {
         return offensiveEffects[key];
     }
-    public ICollection<string> OffensiveEffectKeys {
+    public ICollection<int> OffensiveEffectKeys {
         get { return offensiveEffects.Keys; }
     }
     //support
     public void AddSupportEffect(BaseEffect _effect) {
-        supportEffects.Add(_effect.Title, _effect);
+        supportEffects.Add(_effect.Id, _effect);
     }
     public void RemoveSupportEffect(BaseEffect _effect) {
-        supportEffects.Remove(_effect.Title);
+        supportEffects.Remove(_effect.Id);
     }
-    public BaseEffect GetSupportEffect(string key) {
+    public BaseEffect GetSupportEffect(int key) {
         return supportEffects[key];
     }
-    public ICollection<string> SupportEffectKeys {
+    public ICollection<int> SupportEffectKeys {
         get { return supportEffects.Keys; }
     }
     //passive
     public void AddPassiveEffect(BaseEffect _effect) {
-        passiveEffects.Add(_effect.Title, _effect);
+        passiveEffects.Add(_effect.Id, _effect);
     }
     public void RemovePassiveEffect(BaseEffect _effect) {
-        passiveEffects.Remove(_effect.Title);
+        passiveEffects.Remove(_effect.Id);
     }
-    public BaseEffect GetPassiveEffect(string key) {
+    public BaseEffect GetPassiveEffect(int key) {
         return passiveEffects[key];
     }
-    public ICollection<string> PassiveEffectKeys {
+    public ICollection<int> PassiveEffectKeys {
         get { return passiveEffects.Keys; }
     }
     #endregion

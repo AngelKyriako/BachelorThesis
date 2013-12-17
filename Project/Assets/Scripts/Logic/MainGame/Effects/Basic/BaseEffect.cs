@@ -16,25 +16,25 @@ public abstract class BaseEffect: MonoBehaviour {
 
     #region attributes
     private BaseCharacterModel caster;
+    private int id;
     private string title, description;
-    private Texture2D icon;
     private uint manaCost, levelRequirement;
-#endregion
+    #endregion
 
     public virtual void Awake() {
         caster = null;
         title = string.Empty;
         description = string.Empty;
-        icon = null;
+        id = 0;
         enabled = false;
         manaCost = 0;
         levelRequirement = 0;
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, uint _manaCost, uint _minLevelReq) {
+    public void SetUpEffect(int _id, string _title, string _descr, uint _manaCost, uint _minLevelReq) {
+        id = _id;
         title = _title;
         description = _descr;
-        icon = _icon;
         manaCost = _manaCost;
         levelRequirement = _minLevelReq;
     }
@@ -43,7 +43,7 @@ public abstract class BaseEffect: MonoBehaviour {
         caster = _caster;
         title = _effect.Title;
         description = _effect.Description;
-        icon = _effect.Icon;
+        id = _effect.Id;
         manaCost = _effect.ManaCost;
         levelRequirement = _effect.levelRequirement;
         enabled = true;
@@ -72,8 +72,8 @@ public abstract class BaseEffect: MonoBehaviour {
     public string Description {
         get { return description; }
     }
-    public Texture2D Icon {
-        get { return icon; }
+    public int Id {
+        get { return id; }
     }
     public uint ManaCost {
         get { return manaCost; }

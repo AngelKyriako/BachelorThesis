@@ -3,10 +3,10 @@ using System.Collections;
 
 public class StageInitializer: MonoBehaviour {
 
-    public bool buildingStage = true;
+    public bool testingMode = true;
 
     void Awake() {
-        if(!buildingStage)
+        if (!testingMode)
             GameManager.Instance.InitMainStage();
         MonoBehaviour.Destroy(this);
 	}

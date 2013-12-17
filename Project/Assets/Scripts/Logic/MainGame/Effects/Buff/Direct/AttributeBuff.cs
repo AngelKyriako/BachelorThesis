@@ -10,11 +10,11 @@ public class AttributeBuff: BuffEffect {
         base.Awake();
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, uint _manaCost, uint _minLevelReq,//base
-                            float _duration,                                                                 //lasting
-                            EffectMod _modifier,                                                             //buff
+    public void SetUpEffect(int _id, string _title, string _descr, uint _manaCost, uint _minLevelReq,//base
+                            float _duration,                                                         //lasting
+                            EffectMod _modifier,                                                     //buff
                             AttributeType _attribute) {
-        base.SetUpEffect(_title, _descr, _icon, _manaCost, _minLevelReq, _duration, _modifier);
+        base.SetUpEffect(_id, _title, _descr, _manaCost, _minLevelReq, _duration, _modifier);
         attributeType = _attribute;
     }
 

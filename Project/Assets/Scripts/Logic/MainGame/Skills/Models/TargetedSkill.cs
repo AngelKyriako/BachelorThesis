@@ -7,8 +7,8 @@ public class TargetedSkill: BaseSkill {
     private BaseTargetCursor currentCursor;
     private bool isSelected;
 
-    public TargetedSkill(string _title, string _desc, Texture2D _icon, float _cd, string _castEff, string _mainObject, string _triggerEff, GameObject _targetCursor)
-        : base(_title, _desc, _icon, _cd, _castEff, _mainObject, _triggerEff) {
+    public TargetedSkill(int _id, string _title, string _desc, float _cd, string _castEff, string _mainObject, string _triggerEff, GameObject _targetCursor)
+        : base(_id, _title, _desc, _cd, _castEff, _mainObject, _triggerEff) {
         targetCursor = _targetCursor;
         currentCursor = null;
         isSelected = false;

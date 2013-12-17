@@ -112,17 +112,17 @@ public class PlayerCharacterNetworkController: SerializableNetController {
                            i, model.GetVital(i).BaseValue, model.GetVital(i).BuffValue, model.GetVital(i).CurrentValue);
     }
 
-    public void AttachEffectToPlayer(PlayerCharacterNetworkController _caster, PlayerCharacterNetworkController _receiver, string _effectTitle) {
+    public void AttachEffectToPlayer(PlayerCharacterNetworkController _caster, PlayerCharacterNetworkController _receiver, int _effectId) {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "AttachEffectToPlayer", "This method is only available for the master client.");
         //Utilities.Instance.LogMessageToChat("local client is: " + photonView.name);
         //Utilities.Instance.LogMessageToChat("local client owner is: " + photonView.owner.name);
         if (photonView.Equals(_receiver.photonView))
-            _receiver.AttachEffect(_caster.name, _receiver.name, _effectTitle);
+            _receiver.AttachEffect(_caster.name, _receiver.name, _effectId);
         else {
             //Utilities.Instance.LogMessageToChat("Send RPC TO !!!");
             //Utilities.Instance.LogMessageToChat("remote client is: " + _receiver.photonView.name);
             //Utilities.Instance.LogMessageToChat("remote client owner is: " + _receiver.photonView.owner.name);
-            photonView.RPC("AttachEffect", _receiver.photonView.owner, _caster.name, _receiver.name, _effectTitle);
+            photonView.RPC("AttachEffect", _receiver.photonView.owner, _caster.name, _receiver.name, _effectId);
         }
     }
 
@@ -152,9 +152,9 @@ public class PlayerCharacterNetworkController: SerializableNetController {
 
     #region Effects RPCs
     [RPC]
-    public void AttachEffect(string _casterName, string _receiverName, string _effectTitle) {
-        GameManager.Instance.LogMessageToMasterClient(_receiverName + ": just attached to himself the effect " + _effectTitle + ", of caster: " + _casterName);
-        BaseEffect effectToAttach = EffectBook.Instance.GetEffect(_effectTitle);
+    public void AttachEffect(string _casterName, string _receiverName, int _effectId) {
+        GameManager.Instance.LogMessageToMasterClient(_receiverName + ": just attached to himself the effect with id: " + _effectId + ", of caster: " + _casterName);
+        BaseEffect effectToAttach = EffectBook.Instance.GetEffect(_effectId);
         BaseEffect tempEffect = (BaseEffect)GameManager.Instance.GetCharacter(_receiverName).AddComponent(effectToAttach.GetType());
         tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), effectToAttach);
     }

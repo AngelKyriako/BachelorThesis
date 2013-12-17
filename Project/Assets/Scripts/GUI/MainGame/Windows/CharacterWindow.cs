@@ -215,9 +215,9 @@ public class CharacterWindow: MonoBehaviour {
         GUILayout.BeginArea(availableSkillsRect);
         availableSkillScrollPos = GUILayout.BeginScrollView(availableSkillScrollPos);
         GUILayout.BeginHorizontal();
-        foreach (string title in SkillBook.Instance.AllSkillsKeys) {
-            if (SkillBook.Instance.IsSkillAvailable(title) && GUILayout.Button(SkillBook.Instance.GetSkill(title).Icon, GUILayout.Width(48), GUILayout.Height(48)))
-                lastSelectedSkill = SkillBook.Instance.GetSkill(title);
+        foreach (int _id in SkillBook.Instance.AllSkillsKeys) {
+            if (SkillBook.Instance.IsSkillAvailable(_id) && GUILayout.Button(SkillBook.Instance.GetSkill(_id).Title, GUILayout.Width(48), GUILayout.Height(48)))
+                lastSelectedSkill = SkillBook.Instance.GetSkill(_id);
 
             if (++count % 5 == 0) {
                 GUILayout.EndHorizontal();
@@ -236,7 +236,7 @@ public class CharacterWindow: MonoBehaviour {
         for (int i = 1; i < playerCharModel.SkillSlotsLength; ++i ) {
             _tempSlot = (CharacterSkillSlot)i;            
             if (playerCharModel.SkillExists(_tempSlot)) {
-                if (GUILayout.Button(playerCharModel.GetSkill(_tempSlot).Icon, GUILayout.Width(48), GUILayout.Height(48))) {
+                if (GUILayout.Button(playerCharModel.GetSkill(_tempSlot).Title, GUILayout.Width(48), GUILayout.Height(48))) {
                     if (lastSelectedSkill != null) {
                         SkillBook.Instance.SetSkillAvailable(playerCharModel.GetSkill(_tempSlot), true);
                         playerCharModel.RemoveSkill(_tempSlot);

@@ -14,9 +14,8 @@ public class GameOverManager: MonoBehaviour {
 	}
 
     void SetUp(string _winnerId) {
-        foreach (string _id in GameManager.Instance.AllPlayerKeys)
-            if (CombatManager.Instance.IsAlly(_winnerId))
-                TeleportManager.Instance.TeleportToPoint(winnerSpot);
+        if (CombatManager.Instance.IsAlly(_winnerId))
+            TeleportManager.Instance.TeleportToPoint(winnerSpot);
         enabled = true;
     }
 

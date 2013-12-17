@@ -26,12 +26,12 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     }
 
     public void MasterClientInstantiateSceneSkill(string _obj, Vector3 _position, Quaternion _rotation,
-                                                  string _skillName, string _casterName, Vector3 _destination) {
+                                                  int _skillId, string _casterName, Vector3 _destination) {
         if (PhotonNetwork.isMasterClient)
-            InstantiateSceneSkill(_obj, _position, _rotation, _skillName, _casterName, _destination);
+            InstantiateSceneSkill(_obj, _position, _rotation, _skillId, _casterName, _destination);
         else 
             photonView.RPC("InstantiateSceneSkill", PhotonNetwork.masterClient,
-                                                   _obj, _position, _rotation, _skillName, _casterName, _destination);
+                                                   _obj, _position, _rotation, _skillId, _casterName, _destination);
     }
 
     public void MasterClientDestroySceneObject(GameObject _obj) {
@@ -49,10 +49,10 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
 
     [RPC]
     private void InstantiateSceneSkill(string _obj, Vector3 _position, Quaternion _rotation,
-                                       string _skillName, string _casterName, Vector3 _destination) {
+                                       int _skillId, string _casterName, Vector3 _destination) {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneSkill", "This RPC is only available for the master client.");
         GameObject obj = PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
-        obj.GetComponent<BaseSkillController>().SetUp(SkillBook.Instance.GetSkill(_skillName),
+        obj.GetComponent<BaseSkillController>().SetUp(SkillBook.Instance.GetSkill(_skillId),
                                                       GameManager.Instance.GetPlayerModel(_casterName),
                                                       _destination);
     }

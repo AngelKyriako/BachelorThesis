@@ -10,11 +10,11 @@ public class OverTimeBuffEffect: OverTimeEffect {
         modifier = default(EffectMod);
     }
 
-    public void SetUpEffect(string _title, string _descr, Texture2D _icon, uint _manaCost, uint _minLevelReq,//base
-                            float _duration,                                                                 //lasting
-                            float _overTimeDuration, float _freq,                                            //overtime
+    public void SetUpEffect(int _id, string _title, string _descr, uint _manaCost, uint _minLevelReq,//base
+                            float _duration,                                                         //lasting
+                            float _overTimeDuration, float _freq,                                    //overtime
                             EffectMod _modifier) {
-        base.SetUpEffect(_title, _descr, _icon, _manaCost, _minLevelReq, _duration, _overTimeDuration, _freq);
+        base.SetUpEffect(_id, _title, _descr, _manaCost, _minLevelReq, _duration, _overTimeDuration, _freq);
         modifier = _modifier;
         buffValue = 0;
     }
