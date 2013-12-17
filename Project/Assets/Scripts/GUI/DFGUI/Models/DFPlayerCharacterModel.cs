@@ -33,4 +33,34 @@ public class DFPlayerCharacterModel: MonoBehaviour {
         get { return myModel ? myModel.ExpToLevel : DEFAULT_VITAL; }
     }
     #endregion
+
+    #region Skills
+    public BaseSkill QSkill {
+        get { return myModel.GetSkill(CharacterSkillSlot.Q); }
+    }
+    public string QIcon {
+        get { return SkillBook.Instance.GetIcon(myModel.GetSkill(CharacterSkillSlot.Q).Id); }
+    }
+
+    public BaseSkill WSkill {
+        get { return myModel.GetSkill(CharacterSkillSlot.W); }
+    }
+    public string WIcon {
+        get { return SkillBook.Instance.GetIcon(myModel.GetSkill(CharacterSkillSlot.W).Id); }
+    }
+
+    public BaseSkill ESkill {
+        get { return myModel.GetSkill(CharacterSkillSlot.E); }
+    }
+    public string EIcon {
+        get { return SkillBook.Instance.GetIcon(myModel.GetSkill(CharacterSkillSlot.E).Id); }
+    }
+
+    public BaseSkill RSkill {
+        get { return myModel.GetSkill(CharacterSkillSlot.R); }
+    }
+    public string RIcon {
+        get { return SkillBook.Instance.GetIcon(myModel.GetSkill(CharacterSkillSlot.R).Id); }
+    }
+    #endregion
 }

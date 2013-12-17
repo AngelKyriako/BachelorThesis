@@ -3,13 +3,23 @@ using System.Collections;
 
 public class DFSkillBookModel : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    void Awake() {
+        
+    }
+
+    public string FireBallIcon {
+        get { return SkillBook.Instance.GetIcon(0); }
+    }
+
+    public string WaterGunIcon {
+        get { return SkillBook.Instance.GetIcon(0); }
+    }
+
+    public string MudShotIcon {
+        get { return SkillBook.Instance.GetIcon(0); }
+    }
+
+    public string WIcon {
+        get { return SkillBook.Instance.GetIcon(0); }
+    }
 }
