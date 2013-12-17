@@ -21,7 +21,6 @@ public class CharacterWindow: MonoBehaviour {
 #endregion
 
     #region Gui attributes
-    public GUISkin characterWindowSkin;
     //Layout rects
     public int spaceOffset = 5, mainWidth = 600, mainHeight = 400,
                menuHeight = 50,
@@ -49,7 +48,7 @@ public class CharacterWindow: MonoBehaviour {
     private bool isVisible;
     
 #endregion
-    //@TODO: Add it dynamically to the scripts (need to not have GUILayout paramaters)
+
     void Awake() {
         enabled = false;
     }
@@ -117,10 +116,8 @@ public class CharacterWindow: MonoBehaviour {
     }
 
     void OnGUI(){
-        GUI.skin = characterWindowSkin;
         if(isVisible)
             windowRect = GUIUtilities.Instance.ClampToScreen(GUI.Window(CHARACTER_WINDOW_ID, windowRect, MainWindow, CHARACTER_WINDOW_TEXT));
-
     }
 
     private void MainWindow(int windowID) {

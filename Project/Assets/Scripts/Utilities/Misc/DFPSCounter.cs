@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[AddComponentMenu("Utilities/FPSCounter")]
-public class FPSCounter: MonoBehaviour {
+[AddComponentMenu("Utilities/DFPSCounter")]
+public class DFPSCounter: MonoBehaviour {
     // Attach this to any object to make a frames/second indicator.
     //
     // It calculates frames/second over each updateInterval,

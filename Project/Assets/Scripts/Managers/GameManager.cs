@@ -88,7 +88,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         gui.AddComponent<CharacterInfoPanel>().enabled = true;
         gui.AddComponent<TerrainMap>().enabled = true;
         gui.AddComponent<PlayersInfoWindow>().enabled = true;
-        gui.AddComponent<FPSCounter>().enabled = true;
+        gui.AddComponent<DFPSCounter>().enabled = true;
     }
 
     public void MasterClientRequestConnectedPlayers() {
