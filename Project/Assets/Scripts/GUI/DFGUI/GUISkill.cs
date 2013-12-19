@@ -81,18 +81,18 @@ public class GUISkill: MonoBehaviour {
     }
 
     void OnDoubleClick() {
-        if (!isSpellActive && !IsEmpty && IsActionSkill) {
+        if (!isSpellActive && !IsEmpty && isActionSlot) {
             CastSpell();
         }
     }
 
     #endregion
 
-    #region Drag and drop @TODO Modify actual game models here !!!
+    #region Drag and drop
 
     void OnDragStart(dfControl source, dfDragEventArgs args) {
 
-        if (allowDrag(args)) {
+        if (AllowDrag(args)) {
 
             if (IsEmpty) {
                 // Indicates that the drag-and-drop operation cannot be performed
@@ -124,12 +124,9 @@ public class GUISkill: MonoBehaviour {
                 // the user-defined data that will be sent to potential drop targets
                 args.State = dfDragDropState.Dragging;
                 args.Data = this;
-
             }
-
             // Do not let the OnDragStart event "bubble up" to higher-level controls
             args.Use();
-
         }
 
     }
@@ -140,8 +137,8 @@ public class GUISkill: MonoBehaviour {
 
         if (isActionSlot) {
             if (args.State == dfDragDropState.CancelledNoTarget) {
+                DFCharacterModel.ClearActionSkill(Slot, Id);
                 Id = 0;
-                slot = CharacterSkillSlot.None;
             }
             Refresh();
         }
@@ -149,40 +146,40 @@ public class GUISkill: MonoBehaviour {
 
     void OnDragDrop(dfControl source, dfDragEventArgs args) {
 
-        if (allowDrop(args)) {
-
+        if (AllowDrop(args)) {
             args.State = dfDragDropState.Dropped;
 
             var droppedSkill = args.Data as GUISkill;
 
             Id = droppedSkill.Id;
             if (droppedSkill.IsActionSlot) {
+                DFCharacterModel.ClearActionSkill(droppedSkill.Slot, droppedSkill.Id);
                 droppedSkill.Id = 0;
             }
-
+            DFCharacterModel.SetActionSkill(Slot, Id);
+            //TEST
+            for (int i = 0; i < GameManager.Instance.MyCharacterModel.SkillSlotsLength; ++i) {
+                string skillTitle = GameManager.Instance.MyCharacterModel.SkillExists((CharacterSkillSlot)i) ?
+                                     GameManager.Instance.MyCharacterModel.GetSkill((CharacterSkillSlot)i).Title : "None";
+                Utilities.Instance.LogMessageToChat((CharacterSkillSlot)i + ": " + skillTitle);
+            }
         }
-        else {
+        else
             args.State = dfDragDropState.Denied;
-        }
 
         args.Use();
-
     }
 
-    private bool allowDrag(dfDragEventArgs args) {
+    private bool AllowDrag(dfDragEventArgs args) {
         // Do not allow the user to drag and drop empty GUISkill instances
-        return !isSpellActive && !IsEmpty;
+        return !IsEmpty && !isSpellActive;
     }
 
-    private bool allowDrop(dfDragEventArgs args) {
-
-        if (isSpellActive)
-            return false;
-
+    private bool AllowDrop(dfDragEventArgs args) {
         // Only allow drop if the source is another GUISkill and
         // this GUISkill is assignable
         var slot = args.Data as GUISkill;
-        return slot != null && IsActionSlot;
+        return slot != null && !slot.IsEmpty && IsActionSlot && !isSpellActive;
 
     }
 
@@ -194,18 +191,16 @@ public class GUISkill: MonoBehaviour {
 
         isSpellActive = true;
 
-        var assignedSkill = SkillBook.Instance.GetSkill(Id);
-
         var sprite = GetComponent<dfControl>().Find("CoolDown") as dfSprite;
         sprite.IsVisible = true;
 
         var startTime = Time.realtimeSinceStartup;
-        var endTime = startTime + assignedSkill.CoolDown;
+        var endTime = startTime + DFSkillModel.Instance.Cooldown(Id, Slot);
 
         while (Time.realtimeSinceStartup < endTime) {
 
             var elapsed = Time.realtimeSinceStartup - startTime;
-            var lerp = 1f - elapsed / assignedSkill.CoolDownTimer;
+            var lerp = 1f - elapsed / DFSkillModel.Instance.CooldownTimer(Id, Slot);
 
             sprite.FillAmount = lerp;
 
@@ -236,10 +231,5 @@ public class GUISkill: MonoBehaviour {
     private bool IsEmpty {
         get { return Id == 0; }
     }
-
-    private bool IsActionSkill {
-        get { return slot.Equals(CharacterSkillSlot.None); }
-    }
-
     #endregion
 }

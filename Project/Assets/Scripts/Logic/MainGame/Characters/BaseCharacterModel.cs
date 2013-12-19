@@ -224,6 +224,7 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     public void AddSkill(CharacterSkillSlot _key, BaseSkill _skill) {
         RemoveSkill(_key);
         skills.Add(_key, _skill);
+        skills[_key].SetUpSkill(this, _key);
         skills[_key].UpdateManaCost(this);
     }
     public void RemoveSkill(CharacterSkillSlot _key) {

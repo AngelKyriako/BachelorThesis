@@ -104,8 +104,8 @@ public class SkillBook{
     public void RemoveSkill(BaseSkill _skill) {
         allSkills.Remove(_skill.Id);
     }
-    public void SetSkillAvailable(BaseSkill _skill, bool _isAvailable) {
-        allSkills[_skill.Id] = new SkillBookSkill(GetSkill(_skill.Id), GetIcon(_skill.Id), _isAvailable);
+    public void SetSkillAvailable(int _id, bool _isAvailable) {
+        allSkills[_id] = new SkillBookSkill(GetSkill(_id), GetIcon(_id), _isAvailable);
     }
     public bool SkillExists(int _id) {
         return allSkills.ContainsKey(_id);

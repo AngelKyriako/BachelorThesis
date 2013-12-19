@@ -238,10 +238,10 @@ public class CharacterWindow: MonoBehaviour {
             if (playerCharModel.SkillExists(_tempSlot)) {
                 if (GUILayout.Button(playerCharModel.GetSkill(_tempSlot).Title, GUILayout.Width(48), GUILayout.Height(48))) {
                     if (lastSelectedSkill != null) {
-                        SkillBook.Instance.SetSkillAvailable(playerCharModel.GetSkill(_tempSlot), true);
+                        SkillBook.Instance.SetSkillAvailable(playerCharModel.GetSkill(_tempSlot).Id, true);
                         playerCharModel.RemoveSkill(_tempSlot);
                         playerCharModel.AddSkill(_tempSlot, lastSelectedSkill);
-                        SkillBook.Instance.SetSkillAvailable(lastSelectedSkill, false);
+                        SkillBook.Instance.SetSkillAvailable(lastSelectedSkill.Id, false);
                         lastSelectedSkill = null;
                     }
                 }
@@ -251,7 +251,7 @@ public class CharacterWindow: MonoBehaviour {
                     if (lastSelectedSkill != null) {
                         playerCharModel.AddSkill(_tempSlot, lastSelectedSkill);
                         playerCharModel.GetSkill(_tempSlot).SetUpSkill(playerCharModel, (CharacterSkillSlot)i);
-                        SkillBook.Instance.SetSkillAvailable(lastSelectedSkill, false);
+                        SkillBook.Instance.SetSkillAvailable(lastSelectedSkill.Id, false);
                         lastSelectedSkill = null;
                     }
                 }
