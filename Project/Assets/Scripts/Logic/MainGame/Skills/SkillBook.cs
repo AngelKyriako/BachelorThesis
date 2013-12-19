@@ -7,7 +7,12 @@ public class SkillBook{
         None,
         FireBall,
         WaterGun,
-        MudShot
+        MudShot,
+        Test1,
+        Test2,
+        Test3,
+        Test4,
+        Test5
     }
 
     public struct SkillBookSkill {
@@ -33,19 +38,22 @@ public class SkillBook{
         BaseSkill tempSkill = null;
 
         allSkills = new Dictionary<int, SkillBookSkill>();
+        //0
+        AddSkill(new TargetedSkill((int)Skill.None, "Unknown", "Skill does not exist",
+                                   0f, string.Empty, string.Empty, string.Empty, null), "");
         //1
         tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description",
                                       2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect((int)Effect.Damage));
-        AddSkill(tempSkill, "130");
+        AddSkill(tempSkill, "140");
         //2
         tempSkill = new TargetedSkill((int)Skill.WaterGun, "Water gun", "skill 2 description",
                                       4f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("WaterBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect((int)Effect.Slow));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(7));
-        AddSkill(tempSkill, "131");
+        AddSkill(tempSkill, "145");
         //3
         tempSkill = new TargetedSkill((int)Skill.MudShot, "Mud shot", "skill 3 description",
                                       5f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
@@ -55,30 +63,30 @@ public class SkillBook{
         AddSkill(tempSkill, "132");
 
         #region Testing skill helpers
-        tempSkill = new TargetedSkill(99, "Fuck up Ball", "skill 3 description",
+        tempSkill = new TargetedSkill((int)Skill.Test1, "Fuck up Ball", "skill 3 description",
                                       1f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(99));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(98));
         AddSkill(tempSkill, "133");
 
-        tempSkill = new BaseSkill(98, "KillMe", "KillMe description",
+        tempSkill = new BaseSkill((int)Skill.Test2, "KillMe", "KillMe description",
                                    1f, string.Empty, null, string.Empty);
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(99));
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(98));
         AddSkill(tempSkill, "134");
 
-        tempSkill = new BaseSkill(97, "DamageMe", "DamageMe description",
+        tempSkill = new BaseSkill((int)Skill.Test3, "DamageMe", "DamageMe description",
                                    1f, string.Empty, null, string.Empty);
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect((int)Effect.Damage));
         AddSkill(tempSkill, "135");
 
-        tempSkill = new BaseSkill(96, "StunMe", "DamageMe description",
+        tempSkill = new BaseSkill((int)Skill.Test4, "StunMe", "DamageMe description",
                            1f, string.Empty, null, string.Empty);
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect((int)Effect.Stun));
         AddSkill(tempSkill, "136");
 
-        tempSkill = new BaseSkill(95, "Heal", "Heal description",
+        tempSkill = new BaseSkill((int)Skill.Test5, "Heal", "Heal description",
                           5f, string.Empty, null, string.Empty);
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(5));
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(6));
@@ -99,6 +107,9 @@ public class SkillBook{
     public void SetSkillAvailable(BaseSkill _skill, bool _isAvailable) {
         allSkills[_skill.Id] = new SkillBookSkill(GetSkill(_skill.Id), GetIcon(_skill.Id), _isAvailable);
     }
+    public bool SkillExists(int _id) {
+        return allSkills.ContainsKey(_id);
+    }
     public BaseSkill GetSkill(int _id) {
         return allSkills[_id].Skill;
     }
@@ -108,5 +119,5 @@ public class SkillBook{
     public bool IsSkillAvailable(int _id) {
         return allSkills[_id].IsAvailable;
     }
-#endregion
+    #endregion
 }

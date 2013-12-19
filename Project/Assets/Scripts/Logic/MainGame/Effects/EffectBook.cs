@@ -72,7 +72,7 @@ public class EffectBook {
         AddEffect(tempEffect, "148");
         #endregion
 
-        GameObject.Destroy(effectsHolder);
+        GameObject.DestroyImmediate(effectsHolder);//@Hint: take care, here used to be a normal Destroy (find the difference between those two)
     }
 
     #region Utility constructors

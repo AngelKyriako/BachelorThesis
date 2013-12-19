@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ActionbarsDragCursor : MonoBehaviour 
+public class GUIDragCursor : MonoBehaviour 
 {
 
 	private static dfSprite _sprite;

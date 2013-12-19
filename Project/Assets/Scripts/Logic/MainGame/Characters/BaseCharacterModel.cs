@@ -88,21 +88,23 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
 
     public virtual void Awake() {
         networkController = gameObject.GetComponent<PlayerCharacterNetworkController>();
-    }
+        
+        skills = new Dictionary<CharacterSkillSlot, BaseSkill>();
 
-    public virtual void Start() {
-        Level = STARTING_LEVEL;
         effectsAttached = new List<AttachedEffect>();
 
         stats = new Stat[StatsLength];
         attributes = new Attribute[AttributesLength];
         vitals = new Vital[VitalsLength];
+    }
+
+    public virtual void Start() {
+        Level = STARTING_LEVEL;
         SetupStats();
         SetupAttributes();
         SetupVitals();
         UpdateAttributesBasedOnStats();
         UpdateVitalsBasedOnStats();
-        skills = new Dictionary<CharacterSkillSlot, BaseSkill>();
         isStunned = false;
 
         lastRegenTime = Time.time;
@@ -220,11 +222,13 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
 
     #region skills
     public void AddSkill(CharacterSkillSlot _key, BaseSkill _skill) {
+        RemoveSkill(_key);
         skills.Add(_key, _skill);
         skills[_key].UpdateManaCost(this);
     }
     public void RemoveSkill(CharacterSkillSlot _key) {
-        skills.Remove(_key);
+        if (SkillExists(_key))
+            skills.Remove(_key);
     }
     public bool SkillExists(CharacterSkillSlot _key) {
         return skills.ContainsKey(_key);
@@ -232,8 +236,8 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     public BaseSkill GetSkill(CharacterSkillSlot _key) {
         return skills[_key];
     }
-    public ICollection<CharacterSkillSlot> AllSkillKeys {
-        get { return skills.Keys; }
+    public float GetSkillCooldown(CharacterSkillSlot _key) {
+        return skills[_key].CoolDownTimer;
     }
     public int SkillSlotsLength {
         get { return Enum.GetValues(typeof(CharacterSkillSlot)).Length; }

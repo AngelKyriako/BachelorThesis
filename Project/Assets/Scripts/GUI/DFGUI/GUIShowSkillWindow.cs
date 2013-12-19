@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ShowSpellWindow : MonoBehaviour
+public class GUIShowSkillWindow : MonoBehaviour
 {
 
 	private bool busy = false;

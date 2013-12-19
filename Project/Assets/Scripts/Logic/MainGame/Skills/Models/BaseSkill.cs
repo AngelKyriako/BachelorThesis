@@ -6,8 +6,9 @@ public class BaseSkill {
     #region attributes
     private int id;
     private string title, description;
-    private float coolDownTimer, coolDownTime;
+    private float coolDownTimer, coolDown;
     private uint manaCost;
+
     private Dictionary<int, BaseEffect> offensiveEffects,
                                         supportEffects,
                                         passiveEffects;
@@ -22,7 +23,7 @@ public class BaseSkill {
         id = _id;
         title = _title;
         description = _desc;
-        coolDownTimer = coolDownTime = _cd;
+        coolDownTimer = coolDown = _cd;
         manaCost = 0;
         requirements = new Requirements();
         offensiveEffects = new Dictionary<int, BaseEffect>();
@@ -104,7 +105,7 @@ public class BaseSkill {
     }
 
     private void RefreshCooldown() {
-        CoolDownTimer = coolDownTime - (coolDownTime * ownerModel.GetAttribute((int)AttributeType.AttackSpeed).FinalValue);
+        CoolDownTimer = CasterCoolDown;
     }
 
     #region Accessors
@@ -123,6 +124,15 @@ public class BaseSkill {
     public float CoolDownTimer {
         get { return coolDownTimer; }
         set { coolDownTimer = value > 0 ? value : 0; }
+    }
+    public float CoolDown {
+        get { return coolDown; }
+    }
+    public float CasterCoolDown {
+        get { return coolDown - coolDown * ownerModel.GetAttribute((int)AttributeType.AttackSpeed).FinalValue; ; }
+    }
+    public uint ManaCost {
+        get { return manaCost; }
     }
     public virtual bool IsUsable {
         get { return (coolDownTimer == 0f) && (ownerModel.GetVital((int)VitalType.Mana).CurrentValue >= manaCost) && RequirementsFulfilled(); }
