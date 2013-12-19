@@ -54,8 +54,14 @@ public class BaseSkill {
     }
 
     public virtual void Pressed() {
-        if (IsUsable && !ownerModel.IsStunned)
+        if (IsUsable) {
             Cast(ownerModel.transform.forward);
+            DFSkillModel.Instance.CastSkill(slot);
+        }
+        else if (!SufficientMana)
+            ;//Insufficient mana //@TODO: message
+        else if (coolDownTimer != 0f)
+            ;//in cooldown //@TODO: message
     }
 
     public virtual void Unpressed() { }
@@ -135,9 +141,11 @@ public class BaseSkill {
         get { return manaCost; }
     }
     public virtual bool IsUsable {
-        get { return (coolDownTimer == 0f) && (ownerModel.GetVital((int)VitalType.Mana).CurrentValue >= manaCost) && RequirementsFulfilled(); }
+        get { return (coolDownTimer == 0f) && !ownerModel.IsStunned && !slot.Equals(CharacterSkillSlot.None) && SufficientMana; }
     }
-
+    public bool SufficientMana {
+        get { return ownerModel.GetVital((int)VitalType.Mana).CurrentValue >= manaCost; }
+    }
     public virtual bool IsSelected {
         get { return true; }
         set { }

@@ -17,9 +17,17 @@ public class TargetedSkill: BaseSkill {
     public override void Pressed() {
         if (!isSelected && IsUsable)
             Select();
-        else if (isSelected && !OwnerModel.IsStunned) {
+        else if (isSelected && IsUsable) {
             OwnerModel.transform.LookAt(currentCursor.Direction * 1000);
             Cast(currentCursor.Direction);
+            DFSkillModel.Instance.CastSkill(Slot);
+        }
+        else{
+            //Unselect();//@TODO: Not sure if it works
+            if (!SufficientMana)
+                ;//Insufficient mana //@TODO: message
+            else if (CoolDownTimer != 0f)
+                ;//in cooldown //@TODO: message            
         }
     }
 

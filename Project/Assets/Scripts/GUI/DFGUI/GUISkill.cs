@@ -59,31 +59,13 @@ public class GUISkill: MonoBehaviour {
     void Start() {
         Refresh();
     }
-
-    void Update() {
-
-        if (IsActionSlot && Id != 0) {
-            if (Input.GetKeyDown((KeyCode)((int)slot + 48))) {
-                CastSpell();
-            }
-        }
-
-    }
     #endregion
 
     #region Event handlers
 
-    public void OnSkillActivated(BaseSkill skill) {//@TODO: check how this works
-        if (!IsEmpty) {
-            Debug.Log("Skill activated: " + DFSkillModel.Instance.Title(Id));
+    public void OnSkillActivated(int _id) {
+        if (!IsEmpty && _id == Id)
             StartCoroutine(ShowCooldown());
-        }
-    }
-
-    void OnDoubleClick() {
-        if (!isSpellActive && !IsEmpty && isActionSlot) {
-            CastSpell();
-        }
     }
 
     #endregion
@@ -157,12 +139,7 @@ public class GUISkill: MonoBehaviour {
                 droppedSkill.Id = 0;
             }
             DFCharacterModel.SetActionSkill(Slot, Id);
-            //TEST
-            for (int i = 0; i < GameManager.Instance.MyCharacterModel.SkillSlotsLength; ++i) {
-                string skillTitle = GameManager.Instance.MyCharacterModel.SkillExists((CharacterSkillSlot)i) ?
-                                     GameManager.Instance.MyCharacterModel.GetSkill((CharacterSkillSlot)i).Title : "None";
-                Utilities.Instance.LogMessageToChat((CharacterSkillSlot)i + ": " + skillTitle);
-            }
+            StartCoroutine(ShowCooldown());
         }
         else
             args.State = dfDragDropState.Denied;
@@ -182,7 +159,6 @@ public class GUISkill: MonoBehaviour {
         return slot != null && !slot.IsEmpty && IsActionSlot && !isSpellActive;
 
     }
-
     #endregion
 
     #region Private utility methods
@@ -194,29 +170,15 @@ public class GUISkill: MonoBehaviour {
         var sprite = GetComponent<dfControl>().Find("CoolDown") as dfSprite;
         sprite.IsVisible = true;
 
-        var startTime = Time.realtimeSinceStartup;
-        var endTime = startTime + DFSkillModel.Instance.Cooldown(Id, Slot);
-
+        var endTime = Time.realtimeSinceStartup + DFSkillModel.Instance.Cooldown(Id, Slot);
         while (Time.realtimeSinceStartup < endTime) {
-
-            var elapsed = Time.realtimeSinceStartup - startTime;
-            var lerp = 1f - elapsed / DFSkillModel.Instance.CooldownTimer(Id, Slot);
-
-            sprite.FillAmount = lerp;
-
+            sprite.FillAmount = 1f - DFSkillModel.Instance.CooldownTimer(Id, Slot) / DFSkillModel.Instance.Cooldown(Id, Slot);
             yield return null;
-
         }
-
         sprite.FillAmount = 1f;
         sprite.IsVisible = false;
 
         isSpellActive = false;
-
-    }
-
-    private void CastSpell() {
-        //@TODO: check if possible to Cast Skill here
     }
 
     private void Refresh() {

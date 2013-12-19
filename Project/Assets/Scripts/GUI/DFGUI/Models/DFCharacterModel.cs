@@ -10,7 +10,7 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
     private DFCharacterModel() { }
 
     void Start () {
-        //myModel = GameManager.Instance.MyCharacterModel;
+        myModel = GameManager.Instance.MyCharacterModel;
 	}
 
     #region Vitals

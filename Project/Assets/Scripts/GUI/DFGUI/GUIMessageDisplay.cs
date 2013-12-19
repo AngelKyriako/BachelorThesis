@@ -40,13 +40,8 @@ public class GUIMessageDisplay: MonoBehaviour {
 
     #endregion
 
-    public void OnSpellActivated(BaseSkill skill) {
-        AddMessage("You cast " + skill.Title);
-    }
-
-    void OnClick(dfControl sender, dfMouseEventArgs args) {
-        AddMessage("New test message added to the list at " + DateTime.Now);
-        args.Use();
+    public void OnSkillActivated(int _id) {
+        AddMessage("You cast " + DFSkillModel.Instance.Title(_id));
     }
 
     #region Unity events

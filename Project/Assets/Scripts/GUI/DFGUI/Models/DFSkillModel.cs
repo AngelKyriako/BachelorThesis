@@ -3,12 +3,15 @@ using System.Collections;
 
 public class DFSkillModel: SingletonMono<DFSkillModel> {
 
+    public delegate void SkillEventHandler(int _id);
+    public event SkillEventHandler SkillActivated;
+
     private DFSkillModel() { }
 
-    public delegate void SkillEventHandler(BaseSkill skill);
-    public event SkillEventHandler SkillActivated;
-    public event SkillEventHandler SkillDeactivated;
-
+    public void CastSkill(CharacterSkillSlot _slot) {
+        if (SkillActivated != null)
+            SkillActivated(GameManager.Instance.MyCharacterModel.GetSkill(_slot).Id);
+    }
 
     public void SetSkillAvailable(int _id, bool b) {
         SkillBook.Instance.SetSkillAvailable(_id, b);

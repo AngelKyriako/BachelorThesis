@@ -27,7 +27,7 @@ public class GUISkillInspector: Editor {
         //@TODO: fix bug here
         if (assignable) {
             var slotList = GetSlotList();
-            var assignedIndex = Array.IndexOf(slotList, control.Slot);
+            var assignedIndex = Array.IndexOf(slotList, control.Slot.ToString());
             var index = EditorGUILayout.Popup("Slot Button", assignedIndex, slotList);
             if (index != assignedIndex) {
                 dfEditorUtil.MarkUndo(control, "Assign slot");

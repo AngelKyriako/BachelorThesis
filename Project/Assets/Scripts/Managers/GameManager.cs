@@ -85,7 +85,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         //gui.AddComponent<MouseCursor>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
         gui.AddComponent<GamePreferencesWindow>().enabled = true;
-        gui.AddComponent<CharacterInfoPanel>().enabled = true;
         gui.AddComponent<TerrainMap>().enabled = true;
         gui.AddComponent<PlayersInfoWindow>().enabled = true;
         gui.AddComponent<DFPSCounter>().enabled = true;

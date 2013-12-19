@@ -232,7 +232,7 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
             skills.Remove(_key);
     }
     public bool SkillExists(CharacterSkillSlot _key) {
-        return skills.ContainsKey(_key);
+        return skills.ContainsKey(_key) && GetSkill(_key).Id != 0;
     }
     public BaseSkill GetSkill(CharacterSkillSlot _key) {
         return skills[_key];
