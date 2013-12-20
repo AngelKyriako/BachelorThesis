@@ -20,6 +20,9 @@ public class SceneHierarchyManager {
     public string PlayerCharacterMesh(string playerCharacterName) {
         return MergeToPath(PlayerCharacterPath, playerCharacterName, "Sphere_002");
     }
+    public string GUIPlayerCharacterMesh {
+        get { return MergeToPath("DFGUI", "Graphics", "CharacterWindow", "GUIPlayerCharacter", "Model", "Sphere_002"); }
+    }
 
     private string MergeToPath (params string[] nodes){
         string path = string.Empty;
