@@ -22,13 +22,12 @@ public class TargetedSkill: BaseSkill {
             Cast(currentCursor.Direction);
             DFSkillModel.Instance.CastSkill(Slot);
         }
-        else{
-            //Unselect();//@TODO: Not sure if it works
-            if (!SufficientMana)
-                ;//Insufficient mana //@TODO: message
-            else if (CoolDownTimer != 0f)
-                ;//in cooldown //@TODO: message            
-        }
+        else if (!SufficientMana)
+            GUIMessageDisplay.Instance.AddMessage("No juice");
+        else if (CoolDownTimer != 0f)
+            GUIMessageDisplay.Instance.AddMessage("Chill for a sec there");
+        else if(!RequirementsFulfilled())
+            GUIMessageDisplay.Instance.AddMessage("Skill requirements are not fulfilled");
     }
 
     public override void Unpressed() {

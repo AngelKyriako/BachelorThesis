@@ -12,25 +12,21 @@ public class GUIShowSkillWindow: MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetKeyUp(KeyCode.K)) {
-            if (!isVisible)
-                StartCoroutine(showWindow(skillBookWindow));
-            else
-                StartCoroutine(hideWindow(skillBookWindow));
-        }
+        if (Input.GetKeyUp(KeyCode.K) && !busy)
+            ToggleSkillWindow();
     }
 
     void OnClick() {
+        if (!busy)
+            ToggleSkillWindow();
+    }
 
-        if (busy)
-            return;
-
+    private void ToggleSkillWindow() {
         StopAllCoroutines();
         if (!isVisible)
             StartCoroutine(showWindow(skillBookWindow));
         else
             StartCoroutine(hideWindow(skillBookWindow));
-
     }
 
     IEnumerator hideWindow(dfControl window) {

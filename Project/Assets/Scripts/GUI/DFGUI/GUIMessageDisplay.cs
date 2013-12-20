@@ -4,13 +4,15 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class GUIMessageDisplay: MonoBehaviour {
+public class GUIMessageDisplay: SingletonMono<GUIMessageDisplay> {
 
     private const float TIME_BEFORE_FADE = 3f;
     private const float FADE_TIME = 2f;
 
     private List<MessageInfo> messages = new List<MessageInfo>();
     private dfLabel lblTemplate;
+
+    private GUIMessageDisplay() { }
 
     #region Public methods
 
@@ -39,10 +41,6 @@ public class GUIMessageDisplay: MonoBehaviour {
     }
 
     #endregion
-
-    public void OnSkillActivated(int _id) {
-        AddMessage("You cast " + DFSkillModel.Instance.Title(_id));
-    }
 
     #region Unity events
     void Start() {
@@ -83,5 +81,4 @@ public class GUIMessageDisplay: MonoBehaviour {
     }
 
     #endregion
-
 }

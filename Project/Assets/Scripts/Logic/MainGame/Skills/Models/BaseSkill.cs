@@ -59,9 +59,9 @@ public class BaseSkill {
             DFSkillModel.Instance.CastSkill(slot);
         }
         else if (!SufficientMana)
-            ;//Insufficient mana //@TODO: message
+            GUIMessageDisplay.Instance.AddMessage("No juice");
         else if (coolDownTimer != 0f)
-            ;//in cooldown //@TODO: message
+            GUIMessageDisplay.Instance.AddMessage("Chill for a sec there");
     }
 
     public virtual void Unpressed() { }
