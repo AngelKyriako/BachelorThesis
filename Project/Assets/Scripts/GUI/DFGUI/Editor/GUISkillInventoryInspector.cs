@@ -34,7 +34,7 @@ public class GUISkillInventoryInspector: Editor {
     private string[] GetSkillStringList() {
         string[] skillList = new string[SkillBook.Instance.AllSkillsKeys.Count];
         for (int i = 0; i < GetSkillList().Length; ++i) {
-            skillList[i] = DFSkillModel.Instance.Title(i);
+            skillList[i] = SkillBook.Instance.GetSkill(i).Title;
         }
         return skillList;
     }

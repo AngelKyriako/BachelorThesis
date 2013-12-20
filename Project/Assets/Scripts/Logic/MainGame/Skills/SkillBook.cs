@@ -46,21 +46,21 @@ public class SkillBook{
                                       2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect((int)Effect.Damage));
-        AddSkill(tempSkill, "140");
+        AddSkill(tempSkill, "137");
         //2
         tempSkill = new TargetedSkill((int)Skill.WaterGun, "Water gun", "skill 2 description",
                                       4f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("WaterBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect((int)Effect.Slow));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(7));
-        AddSkill(tempSkill, "145");
+        AddSkill(tempSkill, "140");
         //3
         tempSkill = new TargetedSkill((int)Skill.MudShot, "Mud shot", "skill 3 description",
                                       5f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect((int)Effect.Damage));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect((int)Effect.Immobilize));
-        AddSkill(tempSkill, "132");
+        AddSkill(tempSkill, "136");
 
         #region Testing skill helpers
         tempSkill = new TargetedSkill((int)Skill.Test1, "Fuck up Ball", "skill 3 description",
@@ -90,7 +90,7 @@ public class SkillBook{
                           5f, string.Empty, null, string.Empty);
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(5));
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(6));
-        AddSkill(tempSkill, "137");
+        AddSkill(tempSkill, "153");
         #endregion
     }
     
