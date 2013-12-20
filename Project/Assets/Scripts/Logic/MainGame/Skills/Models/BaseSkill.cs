@@ -141,7 +141,12 @@ public class BaseSkill {
         get { return manaCost; }
     }
     public virtual bool IsUsable {
-        get { return (coolDownTimer == 0f) && !ownerModel.IsStunned && !slot.Equals(CharacterSkillSlot.None) && SufficientMana; }
+        get { return (coolDownTimer == 0f) &&
+                     !ownerModel.IsStunned &&
+                     !slot.Equals(CharacterSkillSlot.None) &&
+                     SufficientMana &&
+                     RequirementsFulfilled();
+        }
     }
     public bool SufficientMana {
         get { return ownerModel.GetVital((int)VitalType.Mana).CurrentValue >= manaCost; }

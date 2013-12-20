@@ -56,7 +56,7 @@ public class GUISkillInventory: MonoBehaviour {
     #endregion
 
     #region Private utility methods @TODO: WHAT TO ASSIGN HERE !!!!!!! (WhAT SHOULD I HAVE HERE DISPLAYED AT GUY);
-
+    //@TODO: Refresh when level up or when adding stats
     private void Refresh() {
         var control = gameObject.GetComponent<dfControl>();
         var container = control.Parent as dfScrollPanel;
