@@ -1,7 +1,7 @@
 ﻿public enum StatType {
     Strength,
-    Agility,
     Stamina,
+    Agility,
     Intelligence,
     Charisma
 }

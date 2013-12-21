@@ -1,36 +1,49 @@
 using UnityEngine;
 using System.Collections;
 
-public class GUIShowSkillWindow: MonoBehaviour {
+public class GUIShowWindow: MonoBehaviour {
+
+    public string windowName = string.Empty;
+    public KeyCode key;
+    public bool isCharacterWindow = false;
 
     private bool busy = false;
     private bool isVisible = false;
-    private dfControl skillBookWindow;
+    private dfControl window;
+
     void OnEnable() {
-        skillBookWindow = GameObject.Find("SkillBookWindow").GetComponent<dfControl>();
-        skillBookWindow.IsVisible = false;
+        Utilities.Instance.PreCondition(!windowName.Equals(string.Empty), "GUIShowWindow", "OnEnable", "window is not defined");
+        Utilities.Instance.PreCondition(key!=null, "GUIShowWindow", "OnEnable", "window is not defined");
+
+        window = GameObject.Find(windowName).GetComponent<dfControl>();
+        window.IsVisible = false;
+
+        Utilities.Instance.PostCondition(window != null, "GUIShowWindow", "OnEnable", "window object not found");
     }
 
     void Update() {
-        if (Input.GetKeyUp(KeyCode.K) && !busy)
-            ToggleSkillWindow();
+        if (Input.GetKeyUp(key) && !busy) {
+            ToggleWindow();
+        }
     }
 
     void OnClick() {
         if (!busy)
-            ToggleSkillWindow();
+            ToggleWindow();
     }
 
-    private void ToggleSkillWindow() {
+    private void ToggleWindow() {
         StopAllCoroutines();
         if (!isVisible)
-            StartCoroutine(showWindow(skillBookWindow));
+            StartCoroutine(showWindow(window));
         else
-            StartCoroutine(hideWindow(skillBookWindow));
+            StartCoroutine(hideWindow(window));
     }
 
     IEnumerator hideWindow(dfControl window) {
         busy = true;
+        if (isCharacterWindow)
+            GUIModelController.Instance.Hide();
         isVisible = false;
 
         window.IsVisible = true;
@@ -63,7 +76,8 @@ public class GUIShowSkillWindow: MonoBehaviour {
         window.Opacity = 1f;
 
         busy = false;
+        if (isCharacterWindow)
+            GUIModelController.Instance.Show();
         isVisible = true;
     }
-
 }
