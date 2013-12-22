@@ -81,7 +81,7 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
             return PlayerCanUpdate ? (!currentlyUpdatingStats[_index] ? "+" : "+1") : "";
         }
 
-        private bool PlayerCanUpdate {
+        public bool PlayerCanUpdate {
             get { return updatesCount < GameManager.Instance.MyCharacterModel.Level; }
         }
     }
@@ -287,5 +287,9 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
 
     public string PlayerName {
         get { return PhotonNetwork.player.name; }
+    }
+
+    public bool StatsCanBeUpdated {
+        get { return updater != null ? updater.PlayerCanUpdate : true; }
     }
 }

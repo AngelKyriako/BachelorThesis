@@ -44,6 +44,7 @@ public class GUIShowWindow: MonoBehaviour {
         busy = true;
         if (isCharacterWindow)
             GUIModelController.Instance.Hide();
+
         isVisible = false;
 
         window.IsVisible = true;
