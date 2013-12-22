@@ -21,11 +21,8 @@ public class ChatNetController: BaseNetController {
     }
 
     [RPC]
-    private void ChatMessageSent(string text, PhotonMessageInfo info) {
-        //info.sender.customProperties["color"];
-        if (!info.sender.isMasterClient)
-            ChatHolder.Instance.AddChatMessage(new ChatMessage("[" + info.sender.name + "] " + text, Color.blue));//@TODO add color to player properties
-        else
-            ChatHolder.Instance.AddChatMessage(new ChatMessage("[" + info.sender.name + "] " + text, Color.red));
+    private void ChatMessageSent(string text, PhotonMessageInfo info) {       
+        ChatHolder.Instance.AddChatMessage(new ChatMessage("[" + info.sender.name + "] " + text,
+                                                           ChatHolder.Instance.GetChatColor((PlayerColor)info.sender.customProperties["Color"])));
     }
 }

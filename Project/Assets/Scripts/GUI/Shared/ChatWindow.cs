@@ -4,26 +4,27 @@ using System.Collections.Generic;
 
 public class ChatWindow: SingletonMono<ChatWindow> {
     
-    private const int MAIN_X = 0, MAIN_HEIGHT = 150, MAIN_WIDTH = 620;
-
+    private const int MAIN_X = 0, MAIN_HEIGHT = 150, OFFSET_Y = 120;
+    private const int INPUT_BAR_HEIGHT = 20, INPUT_BAR_WIDTH = 200;
     private string chatInput = "";
     private Vector2 scrollPos = Vector2.zero;        
     private float lastUnfocusTime = 0;
-    private Rect layoutRect;
+    private Rect messagesLayoutRect, inputLayoutRect;
 
     private ChatNetController networkController;
 
     private ChatWindow() { }
 
     void Start() {
-        layoutRect = new Rect(MAIN_X, Screen.height - MAIN_HEIGHT, MAIN_WIDTH, MAIN_HEIGHT);
+        messagesLayoutRect = new Rect(MAIN_X, Screen.height - MAIN_HEIGHT - OFFSET_Y, Screen.width, MAIN_HEIGHT);
+        inputLayoutRect = new Rect(MAIN_X, Screen.height - INPUT_BAR_HEIGHT, INPUT_BAR_WIDTH, INPUT_BAR_HEIGHT);
         networkController = GetComponent<ChatNetController>();
     }
 
     void OnGUI() {
         GUI.SetNextControlName("");
 
-        GUILayout.BeginArea(layoutRect);
+        GUILayout.BeginArea(messagesLayoutRect);
 
         //Show scroll list of chat messages
         scrollPos = GUILayout.BeginScrollView(scrollPos);
@@ -33,8 +34,10 @@ public class ChatWindow: SingletonMono<ChatWindow> {
         }
         GUILayout.EndScrollView();
         GUI.color = Color.white;
+        GUILayout.EndArea();
 
-        //Chat input
+
+        GUILayout.BeginArea(inputLayoutRect);
         GUILayout.BeginHorizontal();
         GUI.SetNextControlName("ChatField");
         chatInput = GUILayout.TextField(chatInput, GUILayout.MinWidth(200));

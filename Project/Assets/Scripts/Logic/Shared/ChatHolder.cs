@@ -14,6 +14,19 @@ public struct ChatMessage {
 public class ChatHolder{
 
     private const int MAX_MESSAGES_COUNT = 50;
+    private readonly Dictionary<PlayerColor, Color> ChatColorMap = new Dictionary<PlayerColor, Color>(){
+                                                                        {PlayerColor.None, Color.black },
+                                                                        {PlayerColor.Red, Color.red },
+                                                                        {PlayerColor.Blue, Color.blue },
+                                                                        {PlayerColor.Gray, Color.gray },
+                                                                        {PlayerColor.Orange, new Color32(255,70,0,255) },
+                                                                        {PlayerColor.Green, Color.green },
+                                                                        {PlayerColor.Pink, new Color32(240,105,180,255) },
+                                                                        {PlayerColor.Yellow, new Color32(255,180,0,255) },
+                                                                        {PlayerColor.Teal, new Color32(30,244,155,255) },
+                                                                        {PlayerColor.White, Color.white },
+                                                                        {PlayerColor.Purple, new Color32(128,0,128,255) }
+                                                                   };
 
     private List<ChatMessage> messages;
 
@@ -36,5 +49,9 @@ public class ChatHolder{
     }
     public int MessageCount {
         get { return messages.Count; }
+    }
+
+    public Color GetChatColor(PlayerColor _color) {
+        return ChatColorMap[_color];
     }
 }
