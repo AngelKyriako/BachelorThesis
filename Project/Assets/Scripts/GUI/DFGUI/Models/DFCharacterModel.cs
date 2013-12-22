@@ -15,35 +15,91 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
 	}
 
     #region Stats
+    public string StatName0 {
+        get { return GetStatName(0); }
+    }
+    public string StatValue0 {
+        get { return GetStatValue(0); }
+    }
+
+    public string StatName1 {
+        get { return GetStatName(1); }
+    }
+    public string StatValue1 {
+        get { return GetStatValue(1); }
+    }
+
+    public string StatName2 {
+        get { return GetStatName(2); }
+    }
+    public string StatValue2 {
+        get { return GetStatValue(2); }
+    }
+
+    public string StatName3 {
+        get { return GetStatName(3); }
+    }
+    public string StatValue3 {
+        get { return GetStatValue(3); }
+    }
+
+    public string StatName4 {
+        get { return GetStatName(4); }
+    }
+    public string StatValue4 {
+        get { return GetStatValue(4); }
+    }
+    private string GetStatName(int _index) {
+        return myModel != null ? myModel.GetStat(_index).Name : DEFAULT_STRING;
+    }
+    private string GetStatValue(int _index) {
+        return myModel != null ? myModel.GetStat(_index).DisplayFinalValue : DEFAULT_STRING;
+    }
     #endregion
 
     #region Vitals
+
     public float CurrentHealth {
-        get { return myModel != null ? myModel.GetVital(0).CurrentValue : DEFAULT_INT; }
+        get { return VitalCurrent(0); }
     }
     public float MaxHealth {
-        get { return myModel != null ? myModel.GetVital(0).FinalValue : DEFAULT_INT; }
+        get { return VitalFinal(0); }
     }
     public string HealthName {
-        get { return myModel != null ? myModel.GetVital(0).Name : DEFAULT_STRING; }
+        get { return VitalCurrentStr(0); }
     }
     public string HealthMaxValue {
-        get { return myModel != null ? myModel.GetVital(0).DisplayFinalValue : DEFAULT_STRING; }
+        get { return VitalFinalStr(0); }
     }
 
     public float CurrentMana {
-        get { return myModel != null ? myModel.GetVital(1).CurrentValue : DEFAULT_INT; }
+        get { return VitalCurrent(1); }
     }
     public float MaxMana {
-        get { return myModel != null ? myModel.GetVital(1).FinalValue : DEFAULT_INT; }
+        get { return VitalFinal(1); }
     }
     public string ManaName {
-        get { return myModel != null ? myModel.GetVital(1).Name : DEFAULT_STRING; }
+        get { return VitalCurrentStr(1); }
     }
     public string ManaMaxValue {
-        get { return myModel != null ? myModel.GetVital(1).DisplayFinalValue : DEFAULT_STRING; }
+        get { return VitalFinalStr(1); }
     }
 
+    private float VitalCurrent(int _index) {
+        return myModel != null ? myModel.GetVital(_index).CurrentValue : DEFAULT_INT;
+    }
+    private float VitalFinal(int _index) {
+        return myModel != null ? myModel.GetVital(_index).FinalValue : DEFAULT_INT;
+    }
+    private string VitalCurrentStr(int _index) {
+        return myModel != null ? myModel.GetVital(_index).Name : DEFAULT_STRING;
+    }
+    private string VitalFinalStr(int _index) {
+        return myModel != null ? myModel.GetVital(_index).DisplayFinalValue : DEFAULT_STRING;
+    }
+    #endregion
+
+    #region Exp
     public uint CurrentExp {
         get { return myModel != null ? myModel.CurrentExp : DEFAULT_INT; }
     }
@@ -59,88 +115,96 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
     #endregion
 
     #region Attributes
+
     public string AttributeName0 {
-        get { return myModel != null ? myModel.GetAttribute(0).Name : DEFAULT_STRING; }
+        get { return GetAttributeName(0); }
     }
     public string AttributeValue0 {
-        get { return myModel != null ? myModel.GetAttribute(0).DisplayFinalValue : DEFAULT_STRING; }
+        get { return GetAttributeValue(0); }
     }
 
     public string AttributeName1 {
-        get { return myModel.GetAttribute(1).Name; }
+        get { return GetAttributeName(1); }
     }
     public string AttributeValue1 {
-        get { return myModel.GetAttribute(1).DisplayFinalValue; }
+        get { return GetAttributeValue(1); }
     }
 
     public string AttributeName2 {
-        get { return myModel.GetAttribute(2).Name; }
+        get { return GetAttributeName(2); }
     }
     public string AttributeValue2 {
-        get { return myModel.GetAttribute(2).DisplayFinalValue; }
+        get { return GetAttributeValue(2); }
     }
 
     public string AttributeName3 {
-        get { return myModel.GetAttribute(3).Name; }
+        get { return GetAttributeName(3); }
     }
     public string AttributeValue3 {
-        get { return myModel.GetAttribute(3).DisplayFinalValue; }
+        get { return GetAttributeValue(3); }
     }
 
     public string AttributeName4 {
-        get { return myModel.GetAttribute(4).Name; }
+        get { return GetAttributeName(4); }
     }
     public string AttributeValue4 {
-        get { return myModel.GetAttribute(4).DisplayFinalValue; }
+        get { return GetAttributeValue(4); }
     }
 
     public string AttributeName5 {
-        get { return myModel.GetAttribute(5).Name; }
+        get { return GetAttributeName(5); }
     }
     public string AttributeValue5 {
-        get { return myModel.GetAttribute(5).DisplayFinalValue; }
+        get { return GetAttributeValue(5); }
     }
 
     public string AttributeName6 {
-        get { return myModel.GetAttribute(6).Name; }
+        get { return GetAttributeName(6); }
     }
     public string AttributeValue6 {
-        get { return myModel.GetAttribute(6).DisplayFinalValue; }
+        get { return GetAttributeValue(6); }
     }
 
     public string AttributeName7 {
-        get { return myModel.GetAttribute(7).Name; }
+        get { return GetAttributeName(7); }
     }
     public string AttributeValue7 {
-        get { return myModel.GetAttribute(7).DisplayFinalValue; }
+        get { return GetAttributeValue(7); }
     }
 
     public string AttributeName8 {
-        get { return myModel.GetAttribute(8).Name; }
+        get { return GetAttributeName(8); }
     }
     public string AttributeValue8 {
-        get { return myModel.GetAttribute(8).DisplayFinalValue; }
+        get { return GetAttributeValue(8); }
     }
 
     public string AttributeName9 {
-        get { return myModel.GetAttribute(9).Name; }
+        get { return GetAttributeName(9); }
     }
     public string AttributeValue9 {
-        get { return myModel.GetAttribute(9).DisplayFinalValue; }
+        get { return GetAttributeValue(9); }
     }
 
     public string AttributeName10 {
-        get { return myModel.GetAttribute(10).Name; }
+        get { return GetAttributeName(10); }
     }
     public string AttributeValue10 {
-        get { return myModel.GetAttribute(10).DisplayFinalValue; }
+        get { return GetAttributeValue(10); }
     }
 
     public string AttributeName11 {
-        get { return myModel.GetAttribute(11).Name; }
+        get { return GetAttributeName(11); }
     }
     public string AttributeValue11 {
-        get { return myModel.GetAttribute(11).DisplayFinalValue; }
+        get { return GetAttributeValue(11); }
+    }
+
+    private string GetAttributeName(int _index) {
+        return myModel != null ? myModel.GetAttribute(_index).Name : DEFAULT_STRING;
+    }
+    private string GetAttributeValue(int _index) {
+        return myModel != null ? myModel.GetAttribute(_index).DisplayFinalValue : DEFAULT_STRING;
     }
     #endregion
 

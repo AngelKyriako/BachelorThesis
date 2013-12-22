@@ -8,8 +8,6 @@ public class CameraManager: SingletonMono<CameraManager> {
     }
 
     #region editable attributes
-    public Vector3 defaultPosition;
-
     public float defaultRotationX = 80f,
                  targetOffsetX = 0f,
                  targetOffsetZ = -5f,
@@ -69,7 +67,7 @@ public class CameraManager: SingletonMono<CameraManager> {
 
     void Start() {
         Utilities.Instance.Assert(target!=null, "CameraManager", "Start", "Invalid target value, a gameobject must be assigned to this variable.");
-        Camera.main.transform.position = destination = defaultPosition;
+        destination = Camera.main.transform.position;
         Camera.main.transform.rotation = Quaternion.Euler(new Vector3(defaultRotationX, 0, 0));
 
         lastMainStageY = maxStageCameraY;

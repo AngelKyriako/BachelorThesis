@@ -36,6 +36,19 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
 
     private static readonly float[] ATTRIBUTE_BASE_VALUES = new float[12] { 10, 10, 10, 10, 0.5f, 0.5f, 1, 0, 0, 0, 1, 1 };
 
+    private static readonly string[] ATTRIBUTE_NAMES = new string[12]{  "Physical Attack",
+                                                                        "Special Attack",
+                                                                        "Physical Defence",
+                                                                        "Special Defence",
+                                                                        "Health Regeneration",
+                                                                        "Mana Regeneration",
+                                                                        "Movement Speed",
+                                                                        "Attack Speed",
+                                                                        "Critical Chance",
+                                                                        "Evasion Chance",
+                                                                        "Vision",
+                                                                        "Leadership"};
+
     private static readonly string[] ATTRIBUTE_DESCRIPTIONS = new string[12]{ "Boosts HP loss on attack attack effect",
                                                                               "Boosts HP gain on heal effect",
                                                                               "Reduces HP loss on attack effect",
@@ -144,12 +157,12 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
 #region Setup
     private void SetupStats() {
         for (int i = 0; i < stats.Length; ++i)
-            stats[i] = new Stat(Enum.GetName(typeof(StatType), i), STAT_DESCRIPTIONS[i], STAT_BASE_VALUES[i]);
+            stats[i] = new Stat(((StatType)i).ToString(), STAT_DESCRIPTIONS[i], STAT_BASE_VALUES[i]);
     }
 
     private void SetupAttributes() {
         for (int i = 0; i < attributes.Length; ++i) {
-            attributes[i] = new Attribute(Enum.GetName(typeof(AttributeType), i), ATTRIBUTE_DESCRIPTIONS[i], ATTRIBUTE_BASE_VALUES[i]);
+            attributes[i] = new Attribute(ATTRIBUTE_NAMES[i], ATTRIBUTE_DESCRIPTIONS[i], ATTRIBUTE_BASE_VALUES[i]);
             for (int j = 0; j < stats.Length; ++j)
                 if (ATTRIBUTE_RATIOS[i,j] > 0)
                     attributes[i].AddModifier(new ModifyingStat(stats[j], ATTRIBUTE_RATIOS[i,j]));
@@ -158,7 +171,7 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
 
     private void SetupVitals() {
         for (int i = 0; i < vitals.Length; ++i) {
-            vitals[i] = new Vital(Enum.GetName(typeof(VitalType), i), VITAL_DESCRIPTIONS[i], VITAL_BASE_VALUES[i]);
+            vitals[i] = new Vital(((VitalType)i).ToString(), VITAL_DESCRIPTIONS[i], VITAL_BASE_VALUES[i]);
             for (int j = 0; j < stats.Length; ++j)
                 if (VITAL_RATIOS[i,j] > 0)
                     vitals[i].AddModifier(new ModifyingStat(stats[j], VITAL_RATIOS[i, j]));

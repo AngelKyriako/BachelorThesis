@@ -1,9 +1,9 @@
 ﻿public enum StatType {
-    Strength,
-    Stamina,
-    Agility,
-    Intelligence,
-    Charisma
+    STR,
+    STA,
+    AGI,
+    INT,
+    CHA
 }
 
 public class Stat: BaseStat{
