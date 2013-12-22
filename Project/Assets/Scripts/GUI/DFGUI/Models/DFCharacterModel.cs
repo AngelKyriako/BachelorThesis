@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 public class DFCharacterModel: SingletonMono<DFCharacterModel> {
 
@@ -7,48 +7,126 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
     private const string DEFAULT_STRING = "";
 
     private PlayerCharacterModel myModel;
+    private StatsUpdater updater;
 
     private DFCharacterModel() { }
 
     void Start () {
         myModel = GameManager.Instance.MyCharacterModel;
+        updater = new StatsUpdater(myModel.StatsLength);
 	}
 
-    #region Stats
-    public string StatName0 {
-        get { return GetStatName(0); }
+    #region Set Action Skills
+    public static void SetActionSkill(CharacterSkillSlot _slot, int _id){
+        ClearActionSkill(_slot, _id);
+        GameManager.Instance.MyCharacterModel.AddSkill(_slot, SkillBook.Instance.GetSkill(_id));
+        SkillBook.Instance.SetSkillAvailable(_id, false);
     }
+
+    public static void ClearActionSkill(CharacterSkillSlot _slot, int _id) {
+        if (GameManager.Instance.MyCharacterModel.SkillExists(_slot)) {
+            SkillBook.Instance.SetSkillAvailable(GameManager.Instance.MyCharacterModel.GetSkill(_slot).Id, true);
+            GameManager.Instance.MyCharacterModel.RemoveSkill(_slot);
+        }
+    }
+    #endregion
+
+    public void UpdateStatButtonClick(int _index) {
+        updater.ToggleStatUpdatingState(_index);
+    }
+
+    public void SaveUpdatedStats() {
+        updater.SaveUpdatedStats();
+    }
+
+    public class StatsUpdater {
+
+        private int updatesCount;
+        private bool[] currentlyUpdatingStats;
+
+        public StatsUpdater(int _statsLength) {
+            updatesCount = 0;
+            currentlyUpdatingStats = new bool[_statsLength];
+            for (int i = 0; i < currentlyUpdatingStats.Length; ++i)
+                currentlyUpdatingStats[i] = false;
+        }
+
+        public void ToggleStatUpdatingState(int _index) {
+            if (!currentlyUpdatingStats[_index] && GameManager.Instance.MyCharacterModel.TrainingPoints != 0) {
+                currentlyUpdatingStats[_index] = true;
+                --GameManager.Instance.MyCharacterModel.TrainingPoints;
+            }
+            else if (currentlyUpdatingStats[_index]) {
+                currentlyUpdatingStats[_index] = false;
+                ++GameManager.Instance.MyCharacterModel.TrainingPoints;
+            }
+        }
+
+        public void SaveUpdatedStats() {
+            if (PlayerCanUpdate) {
+                for (int i = 0; i < currentlyUpdatingStats.Length; ++i)
+                    if (currentlyUpdatingStats[i]) {
+                        ++GameManager.Instance.MyCharacterModel.GetStat(i).BaseValue;
+                        currentlyUpdatingStats[i] = false;
+                    }
+                ++updatesCount;
+                GameManager.Instance.MyCharacterModel.UpdateAttributesBasedOnStats();
+                GameManager.Instance.MyCharacterModel.UpdateVitalsBasedOnStats();
+            }
+            else
+                GUIMessageDisplay.Instance.AddMessage("No more updates left");
+        }
+
+        public string StatUpdateText(int _index) {
+            return PlayerCanUpdate ? (!currentlyUpdatingStats[_index] ? "+" : "+1") : "";
+        }
+
+        private bool PlayerCanUpdate {
+            get { return updatesCount < GameManager.Instance.MyCharacterModel.Level; }
+        }
+    }
+
+    // Binding Properties
+    #region Stats
+    public string TrainingPoints {
+        get { return myModel != null && myModel.TrainingPoints != 0 ? "Training points left: " + myModel.TrainingPoints.ToString() : ""; }
+    }
+
     public string StatValue0 {
         get { return GetStatValue(0); }
     }
-
-    public string StatName1 {
-        get { return GetStatName(1); }
+    public string StatUpdateState0 {
+        get { return updater != null ? updater.StatUpdateText(0) : "+"; }
     }
+
     public string StatValue1 {
         get { return GetStatValue(1); }
     }
-
-    public string StatName2 {
-        get { return GetStatName(2); }
+    public string StatUpdateState1 {
+        get { return updater != null ? updater.StatUpdateText(1) : "+"; }
     }
+
     public string StatValue2 {
         get { return GetStatValue(2); }
     }
-
-    public string StatName3 {
-        get { return GetStatName(3); }
+    public string StatUpdateState2 {
+        get { return updater != null ? updater.StatUpdateText(2) : "+"; }
     }
+
     public string StatValue3 {
         get { return GetStatValue(3); }
     }
-
-    public string StatName4 {
-        get { return GetStatName(4); }
+    public string StatUpdateState3 {
+        get { return updater != null ? updater.StatUpdateText(3) : "+"; }
     }
+
     public string StatValue4 {
         get { return GetStatValue(4); }
     }
+    public string StatUpdateState4 {
+        get { return updater != null ? updater.StatUpdateText(4) : "+"; }
+    }
+
     private string GetStatName(int _index) {
         return myModel != null ? myModel.GetStat(_index).Name : DEFAULT_STRING;
     }
@@ -66,10 +144,10 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
         get { return VitalFinal(0); }
     }
     public string HealthName {
-        get { return VitalCurrentStr(0); }
+        get { return VitalName(0); }
     }
-    public string HealthMaxValue {
-        get { return VitalFinalStr(0); }
+    public string HealthValue {
+        get { return VitalValueStr(0); }
     }
 
     public float CurrentMana {
@@ -79,10 +157,10 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
         get { return VitalFinal(1); }
     }
     public string ManaName {
-        get { return VitalCurrentStr(1); }
+        get { return VitalName(1); }
     }
-    public string ManaMaxValue {
-        get { return VitalFinalStr(1); }
+    public string ManaValue {
+        get { return VitalValueStr(1); }
     }
 
     private float VitalCurrent(int _index) {
@@ -91,26 +169,21 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
     private float VitalFinal(int _index) {
         return myModel != null ? myModel.GetVital(_index).FinalValue : DEFAULT_INT;
     }
-    private string VitalCurrentStr(int _index) {
+    private string VitalName(int _index) {
         return myModel != null ? myModel.GetVital(_index).Name : DEFAULT_STRING;
     }
-    private string VitalFinalStr(int _index) {
-        return myModel != null ? myModel.GetVital(_index).DisplayFinalValue : DEFAULT_STRING;
+    private string VitalValueStr(int _index) {
+        return myModel != null ? myModel.GetVital(_index).ToString() : DEFAULT_STRING;
     }
-    #endregion
 
-    #region Exp
     public uint CurrentExp {
         get { return myModel != null ? myModel.CurrentExp : DEFAULT_INT; }
     }
     public uint MaxExp {
         get { return myModel != null ? myModel.ExpToLevel : DEFAULT_INT; }
     }
-    public string CurrentExpStr {
-        get { return myModel != null ? myModel.CurrentExp.ToString() : DEFAULT_STRING; }
-    }
-    public string MaxExpStr {
-        get { return myModel != null ? myModel.ExpToLevel.ToString() : DEFAULT_STRING; }
+    public string ExpStr {
+        get { return myModel != null ? myModel.CurrentExp.ToString() + "/" + myModel.ExpToLevel.ToString() : DEFAULT_STRING; }
     }
     #endregion
 
@@ -208,18 +281,11 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
     }
     #endregion
 
-    #region Set Action Skills
-    public static void SetActionSkill(CharacterSkillSlot _slot, int _id){
-        ClearActionSkill(_slot, _id);
-        GameManager.Instance.MyCharacterModel.AddSkill(_slot, SkillBook.Instance.GetSkill(_id));
-        SkillBook.Instance.SetSkillAvailable(_id, false);
+    public string LevelStr {
+        get { return myModel != null ? "level " + myModel.Level : DEFAULT_STRING; }
     }
 
-    public static void ClearActionSkill(CharacterSkillSlot _slot, int _id) {
-        if (GameManager.Instance.MyCharacterModel.SkillExists(_slot)) {
-            SkillBook.Instance.SetSkillAvailable(GameManager.Instance.MyCharacterModel.GetSkill(_slot).Id, true);
-            GameManager.Instance.MyCharacterModel.RemoveSkill(_slot);
-        }
+    public string PlayerName {
+        get { return PhotonNetwork.player.name; }
     }
-    #endregion
 }

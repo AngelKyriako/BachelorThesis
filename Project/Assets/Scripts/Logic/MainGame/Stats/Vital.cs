@@ -31,6 +31,6 @@ public class Vital: Attribute {
     }
 
     public override string ToString() {
-        return "(" + DisplayCurrentValue + "/" + DisplayFinalValue + ")";
+        return DisplayCurrentValue + "/" + DisplayFinalValue;
     }
 }

@@ -165,7 +165,7 @@ public class CharacterWindow: MonoBehaviour {
             GUILayout.Label(playerCharModel.GetStat(i).FinalValue.ToString(), valueLabel);
             if (GUILayout.RepeatButton("-", GUILayout.Width(statModifyButtonSize), GUILayout.Height(statModifyButtonSize))
                && (Time.time - lastClickTime > repeatButtonCooldown)
-               && (playerCharModel.TrainingPoints < playerCharModel.MAX_TRAINING_POINTS)) {
+               && (playerCharModel.TrainingPoints < 25)) {
                 --playerCharModel.GetStat(i).BaseValue;
                 ++playerCharModel.TrainingPoints;
                 playerCharModel.UpdateAttributesBasedOnStats();

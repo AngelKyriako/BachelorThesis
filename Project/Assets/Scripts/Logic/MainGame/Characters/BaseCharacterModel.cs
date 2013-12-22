@@ -23,8 +23,8 @@ public struct AttachedEffect {
 public abstract class BaseCharacterModel: MonoBehaviour  {
 
     #region constants
-    public const uint STARTING_LEVEL = 1;
-    public const uint MAX_LEVEL = 25;
+    public const int STARTING_LEVEL = 1;
+    public const int MAX_LEVEL = 25;
     private const uint REGEN_FREQUENCY = 1;
 
     private static readonly int[] STAT_BASE_VALUES = new int[5] { 0, 0, 0, 0, 0 };
@@ -89,7 +89,7 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     #region attributes
     private PlayerCharacterNetworkController networkController;//@TODO: this should be the super class of itself (CharacterNetworkController)
                                                                //       and ovveridable from player character model
-    private uint level;
+    private int level;
     private List<AttachedEffect> effectsAttached;
     private Stat[] stats;
     private Attribute[] attributes;
@@ -189,9 +189,15 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
         get { return networkController; }
     }
 
-    public uint Level {
+    public int Level {
         get { return level; }
         set { level = value; }
+    }
+    public int StartingLevel {
+        get { return STARTING_LEVEL; }
+    }
+    public int MaxLevel {
+        get { return MAX_LEVEL; }
     }
     public virtual int ExpWorth {
         get { return (int)level * 10; }

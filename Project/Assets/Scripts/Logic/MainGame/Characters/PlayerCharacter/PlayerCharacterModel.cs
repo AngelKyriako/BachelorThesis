@@ -6,17 +6,23 @@ public class PlayerCharacterModel: BaseCharacterModel {
     #region constants
     public const uint STARTING_EXP_TO_LEVEL = 50;
     public const float STARTING_EXP_MODIFIER = 1.1f, EXP_LOSS_PERCENTAGE = 0.2f;
-    public readonly uint MAX_TRAINING_POINTS = 20;
-#endregion
+
+    private static readonly int[] TRAINING_POINTS_PER_LEVEL = new int[MAX_LEVEL] {  5, 1, 1, 1, 1,
+                                                                                    4, 1, 1, 2, 2,
+                                                                                    3, 2, 2, 2, 2,
+                                                                                    4, 2, 2, 1, 1,
+                                                                                    5, 1, 1, 1, 1
+                                                                                 };
+    #endregion
 
     #region attributes
     private uint currentExp, expToLevel;
     private float expModifier;
-    private uint trainingPoints;
+    private int trainingPoints;
     private uint killsCount, deathCount;
     private float respawnTimer;
     private GameObject projectileSpawner;
-#endregion
+    #endregion
 
     public override void Awake() {
         base.Awake();
@@ -28,7 +34,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
         expModifier = STARTING_EXP_MODIFIER;
         expToLevel = STARTING_EXP_TO_LEVEL;
         currentExp = 0;
-        trainingPoints = MAX_TRAINING_POINTS;
+        trainingPoints = TRAINING_POINTS_PER_LEVEL[Level-1];
         killsCount = 0;
         deathCount = 0;
         respawnTimer = 0;
@@ -50,6 +56,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
         base.LevelUp();
         currentExp -= expToLevel;
         expToLevel = (uint)(expToLevel * expModifier);
+        trainingPoints += TRAINING_POINTS_PER_LEVEL[Level-1];
         RefreshVitals();
     }
 
@@ -108,9 +115,9 @@ public class PlayerCharacterModel: BaseCharacterModel {
         get { return (int)(expToLevel * 0.33); }
     }
 
-    public uint TrainingPoints {
+    public int TrainingPoints {
         get { return trainingPoints; }
-        set { trainingPoints = (value < 0) ? 0 : ((value > MAX_TRAINING_POINTS)?MAX_TRAINING_POINTS:value); }
+        set { trainingPoints = value; }
     }
     public uint Kills {
         get { return killsCount; }
