@@ -20,10 +20,10 @@ public class PlayersInfoWindow: DraggableWindow {
         characterTabRect.y = 0;
         foreach (string _name in GameManager.Instance.AllPlayerKeys) {
             GUI.Label(characterTabRect,
-                      GameManager.Instance.GetPlayer(_name).name + " "+
+                      GameManager.Instance.GetPlayer(_name).name + " " +
                       ((PlayerColor)GameManager.Instance.GetPlayer(_name).customProperties["Color"]).ToString() +
-                      GameManager.Instance.GetPlayerModel(_name).GetVital((int)VitalType.Health).ToString()+ " " +
-                      "Kills: " + GameManager.Instance.GetPlayerModel(_name).Kills+", "+
+                      GameManager.Instance.GetPlayerModel(_name).GetVital((int)VitalType.Health).ToString() + " " +
+                      "Kills: " + GameManager.Instance.GetPlayerModel(_name).Kills + ", " +
                       "Deaths: " + GameManager.Instance.GetPlayerModel(_name).Deaths + ", " +
                       ((PlayerTeam)GameManager.Instance.GetPlayer(_name).customProperties["Team"]).ToString());
 

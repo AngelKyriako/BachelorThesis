@@ -82,7 +82,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     private void InitGUIScripts() {
-        //gui.AddComponent<MouseCursor>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
         gui.AddComponent<GamePreferencesWindow>().enabled = true;
         gui.AddComponent<PlayersInfoWindow>().enabled = true;

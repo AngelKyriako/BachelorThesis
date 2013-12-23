@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class GUITerrainMap : MonoBehaviour {
+public class GUITerrainMapWindow: MonoBehaviour {
 
     public dfLabel playerIcon;
     private const int MAP_SIZE = 150;
