@@ -85,7 +85,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         //gui.AddComponent<MouseCursor>().enabled = true;
         gui.GetComponent<CharacterWindow>().enabled = true;
         gui.AddComponent<GamePreferencesWindow>().enabled = true;
-        gui.AddComponent<TerrainMap>().enabled = true;
         gui.AddComponent<PlayersInfoWindow>().enabled = true;
         gui.AddComponent<DFPSCounter>().enabled = true;
     }
@@ -241,6 +240,10 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public PlayerColor GetPlayerColor(string _name) {
         return (PlayerColor)all[_name].Player.customProperties["Color"];
     }
+    public Color GetPlayerRGBColor(string _name) {
+        return ColorHolder.Instance.GetPlayerColor(GetPlayerColor(_name));
+    }
+    
     // character game object
     public GameObject GetCharacter(string _name) {
         return all[_name].Character;

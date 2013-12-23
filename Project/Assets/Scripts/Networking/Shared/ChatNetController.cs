@@ -23,6 +23,6 @@ public class ChatNetController: BaseNetController {
     [RPC]
     private void ChatMessageSent(string text, PhotonMessageInfo info) {       
         ChatHolder.Instance.AddChatMessage(new ChatMessage("[" + info.sender.name + "] " + text,
-                                                           ChatHolder.Instance.GetChatColor((PlayerColor)info.sender.customProperties["Color"])));
+                                                           GameManager.Instance.GetPlayerRGBColor(info.sender.ID.ToString())));
     }
 }

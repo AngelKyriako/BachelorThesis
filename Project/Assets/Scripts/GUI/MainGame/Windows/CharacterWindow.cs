@@ -111,7 +111,7 @@ public class CharacterWindow: MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetKeyUp(KeyCode.C))
+        if (Input.GetKeyUp(KeyCode.P))
             isVisible = !isVisible;
     }
 

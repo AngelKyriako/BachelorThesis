@@ -8,15 +8,17 @@ public class ColorPicker: MonoBehaviour {
 	}
 
     void Start() {
-        string playerColorName = ((PlayerColor)GameManager.Instance.GetPlayer(GameManager.Instance.MyCharacter.name).customProperties["Color"]).ToString();
-        Material coloredMaterial = (Material)Resources.Load(ResourcesPathManager.Instance.PlayerCharacterMaterialPath(playerColorName));
+        string playerColor = GameManager.Instance.GetPlayerColor(name).ToString();
+        Material coloredMaterial = (Material)Resources.Load(ResourcesPathManager.Instance.PlayerCharacterMaterialPath(playerColor));
 
         GameObject mesh;
         mesh = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterMesh(name));
         mesh.renderer.material = coloredMaterial;
 
-        mesh = GameObject.Find(SceneHierarchyManager.Instance.GUIPlayerCharacterMesh);
-        mesh.renderer.material = coloredMaterial;
+        if (name.Equals(GameManager.Instance.MyCharacter.name)) {
+            mesh = GameObject.Find(SceneHierarchyManager.Instance.GUIPlayerCharacterMesh);
+            mesh.renderer.material = coloredMaterial;
+        }
 
         Destroy(this);
     }
