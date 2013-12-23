@@ -40,7 +40,7 @@ public class Utilities {
         ChatHolder.Instance.AddChatMessage(new ChatMessage(_str, Color.blue));
     }
 
-    public void LogMessageToChatToChat(string _str, Color _color) {
+    public void LogColoredMessageToChat(string _str, Color _color) {
         ChatHolder.Instance.AddChatMessage(new ChatMessage(_str, _color));
     }
     #endregion
