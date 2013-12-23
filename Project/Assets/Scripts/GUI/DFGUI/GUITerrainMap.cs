@@ -4,8 +4,8 @@ using System.Collections.Generic;
 public class GUITerrainMap : MonoBehaviour {
 
     public dfLabel playerIcon;
-    public int MAP_SIZE = 150;
-    public int OFFSET_X = -15, OFFSET_Y = 330;
+    private const int MAP_SIZE = 150;
+    private const int OFFSET_X = -4, OFFSET_Y = 322;
 
     private const KeyCode TOGGLE_BUTTON = KeyCode.M;
     private const int VISIBLE_ENEMY_LAYER = 9;
