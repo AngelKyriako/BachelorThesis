@@ -8,7 +8,7 @@ public class GUIMatchInfoSlot : MonoBehaviour {
     void Awake() {
         enabled = false;
     }
-
+    //
     public void SetUp(string _playerName) {
         playerId = _playerName;
         enabled = true;
