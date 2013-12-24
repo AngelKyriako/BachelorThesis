@@ -3,7 +3,23 @@ using System.Collections;
 
 public class CombatManager: SingletonPhotonMono<CombatManager> {
 
+    private float expRadius;
+
     private CombatManager() { }
+
+    void Start(){
+        switch (GameVariables.Instance.Difficulty.Value){
+            case GameDifficulty.Easy:
+                expRadius = 30f;
+		    break;
+            case GameDifficulty.Medium:
+                expRadius = 20f;
+		    break;
+            case GameDifficulty.Hard:
+                expRadius = 13f;
+            break;
+	    }
+    }
 
     #region Local methods
     public bool IsAlly(string _name) {
@@ -14,6 +30,11 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
         return ((PlayerTeam)GameManager.Instance.GetPlayer(_name1).customProperties["Team"]).Equals(
                 (PlayerTeam)GameManager.Instance.GetPlayer(_name2).customProperties["Team"]);
     }
+
+    public float ExpRadius {
+        get { return expRadius; }
+    }
+    
     #endregion
 
     #region Messages to Master Client

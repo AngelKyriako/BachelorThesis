@@ -210,10 +210,10 @@ public class PlayerCharacterNetworkController: SerializableNetController {
 
     [RPC]
     private void InstantianteLocalExpSphere(Vector3 _position, int _expWorth) {
-        GameObject expSphere = (GameObject)GameObject.Instantiate((GameObject)Resources.Load(ResourcesPathManager.Instance.ExpRadiusSphere),
-                                                                  _position,
-                                                                  Quaternion.identity);
-        expSphere.GetComponent<ExpRadiusSphere>().SetUp((uint)_expWorth);
+        GameObject deathPoint = (GameObject)GameObject.Instantiate((GameObject)Resources.Load(ResourcesPathManager.Instance.DeathPoint),
+                                                                   _position,
+                                                                   Quaternion.identity);
+        deathPoint.GetComponent<DeathPointController>().SetUp((uint)_expWorth);
     }
 
     #endregion

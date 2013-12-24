@@ -30,13 +30,11 @@ public class BaseProjectileController: BaseSkillController {
 	}
 
     public override void OnTriggerEnter(Collider other) {
-        PlayerCharacterModel otherModel;
         if (PhotonNetwork.isMasterClient && !other.gameObject.layer.Equals(LayerMask.NameToLayer("Void")) && !isTriggered){
             if (other.CompareTag("Player")) {
-                otherModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
+                PlayerCharacterModel otherModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
 
-                Utilities.Instance.LogMessageToChat(CasterModel.name + "'s projectile collided with " + otherModel.name);
-                Utilities.Instance.LogMessageToChat("Are allies: " + CombatManager.Instance.AreAllies(CasterModel.name, otherModel.name));
+                Utilities.Instance.LogMessageToChat(CasterModel.name + "'s projectile collided with " + otherModel.name +", is ally: "+ CombatManager.Instance.AreAllies(CasterModel.name, otherModel.name));
                 
                 if (otherModel && !CombatManager.Instance.AreAllies(CasterModel.name, otherModel.name)) {
                     isTriggered = true;
@@ -47,6 +45,7 @@ public class BaseProjectileController: BaseSkillController {
                 }
             }
             else {
+                isTriggered = true;
                 Utilities.Instance.LogMessageToChat(CasterModel.name + "'s projectile collided with " + other.name+ ". Projectile destroyed");
                 Skill.Trigger(other.transform.position, Quaternion.identity);
                 CombatManager.Instance.MasterClientDestroySceneObject(gameObject);

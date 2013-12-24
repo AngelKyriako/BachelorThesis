@@ -20,8 +20,8 @@
     #endregion
 
     #region misc
-    public string ExpRadiusSphere {
-        get { return MergeToPath("Prefabs", "Misc", "ExpSphere"); }
+    public string DeathPoint {
+        get { return MergeToPath("Prefabs", "Misc", "DeathPoint"); }
     }
     #endregion
 
