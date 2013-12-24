@@ -25,8 +25,7 @@ public class BaseSkillController: MonoBehaviour {
         transform.position = destination;
     }    
 
-    public virtual void Update() {
-    }
+    public virtual void Update() { }
 
     public virtual void OnTriggerEnter(Collider other) {
         Utilities.Instance.LogMessageToChat("OnTriggedEnter with: " + other.name);
