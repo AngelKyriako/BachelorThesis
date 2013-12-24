@@ -19,18 +19,18 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     #region Messages to Master Client
     public void MasterClientInstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
         if (PhotonNetwork.isMasterClient)
-            InstantiateSceneObject(_obj, _position, _rotation);
+            GameManager.Instance.MyNetworkController.InstantiateSceneObject(_obj, _position, _rotation);
         else
-            photonView.RPC("InstantiateSceneObject", PhotonNetwork.masterClient,
+            GameManager.Instance.MyPhotonView.RPC("InstantiateSceneObject", PhotonNetwork.masterClient,
                                                    _obj, _position, _rotation);
     }
 
     public void MasterClientInstantiateSceneSkill(string _obj, Vector3 _position, Quaternion _rotation,
                                                   int _skillId, string _casterName, Vector3 _destination) {
         if (PhotonNetwork.isMasterClient)
-            InstantiateSceneSkill(_obj, _position, _rotation, _skillId, _casterName, _destination);
-        else 
-            photonView.RPC("InstantiateSceneSkill", PhotonNetwork.masterClient,
+            GameManager.Instance.MyNetworkController.InstantiateSceneSkill(_obj, _position, _rotation, _skillId, _casterName, _destination);
+        else
+            GameManager.Instance.MyPhotonView.RPC("InstantiateSceneSkill", PhotonNetwork.masterClient,
                                                    _obj, _position, _rotation, _skillId, _casterName, _destination);
     }
 
@@ -39,64 +39,15 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
         PhotonNetwork.Destroy(_obj);
     }
 
-    #region RPCs
-    [RPC]
-    private void InstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
-        //Utilities.Instance.LogMessageToChat(GameManager.Instance.MyPhotonView.name + " is instantiating scene object !");
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneObject", "This RPC is only available for the master client.");
-        PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
+    public void DeadPlayerBroadCastKill(string _killerName, string _deadName, Vector3 _position) {
+        Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_deadName), "CombatManager", "DeadPlayerBroadCastKill", "This method is only available for the master client.");
+        GameManager.Instance.MyPhotonView.RPC("PlayerKill", GameManager.Instance.GetPlayer(_killerName), _killerName, _deadName, _position);
     }
 
-    [RPC]
-    private void InstantiateSceneSkill(string _obj, Vector3 _position, Quaternion _rotation,
-                                       int _skillId, string _casterName, Vector3 _destination) {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "[RPC]InstantiateSceneSkill", "This RPC is only available for the master client.");
-        GameObject obj = PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
-        obj.GetComponent<BaseSkillController>().SetUp(SkillBook.Instance.GetSkill(_skillId),
-                                                      GameManager.Instance.GetPlayerModel(_casterName),
-                                                      _destination);
-    }
-    #endregion
-    #endregion
-
-    #region Messages to all
-
-    public void KillHappened(string _killerName, string _deadName, Vector3 _position) {
-        Utilities.Instance.PreCondition(GameManager.Instance.MyCharacter.name.Equals(_deadName), "CombatManager", "KillHappened", "This method is only available for the Dead player.");
-
-        InstantianteLocalExpSphere(_position, GameManager.Instance.MyCharacterModel.ExpWorth);
-        photonView.RPC("InstantianteLocalExpSphere", PhotonTargets.Others, _position, GameManager.Instance.MyCharacterModel.ExpWorth);
-
-        KilledPlayer(_killerName, _deadName);
-        photonView.RPC("KilledPlayer", PhotonTargets.Others, _killerName, _deadName);
+    public void DeadPlayerBroadCastDeath(string _deadName) {
+        Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_deadName), "CombatManager", "DeadPlayerBroadCastDeath", "This method is only available for the master client.");
+        GameManager.Instance.MyPhotonView.RPC("PlayerDeath", PhotonTargets.Others, _deadName);
     }
 
-    #region RPCs
-    [RPC]
-    private void KilledPlayer(string _killerName, string _deadName) {
-        if (!AreAllies(_killerName, _deadName)) {
-
-            if (!GameManager.Instance.MyCharacter.name.Equals(_killerName))
-                ++GameManager.Instance.GetPlayerModel(_killerName).Kills;
-            else
-                GameManager.Instance.MyCharacterModel.KilledEnemy(GameManager.Instance.GetPlayerModel(_deadName));
-
-            GameManager.Instance.RaiseKillsOfPlayersTeam(_killerName);
-
-            if (PhotonNetwork.isMasterClient)
-                GameManager.Instance.CheckWinningConditions(_killerName);
-        }
-    }
-
-    [RPC]
-    private void InstantianteLocalExpSphere(Vector3 _position, int _expWorth) {
-        GameObject expSphere = (GameObject)GameObject.Instantiate((GameObject)Resources.Load(ResourcesPathManager.Instance.ExpRadiusSphere),
-                                                                  _position,
-                                                                  Quaternion.identity);
-        expSphere.GetComponent<ExpRadiusSphere>().SetUp((uint)_expWorth);
-        GameManager.Instance.LogMessageToMasterClient("\nInstantiating an EXP sphere in my client\n");
-    }
-
-    #endregion
     #endregion
 }

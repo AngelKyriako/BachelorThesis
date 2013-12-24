@@ -209,6 +209,9 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public PlayerCharacterDeathController MyDeathController {
         get { return me.Character.GetComponent<PlayerCharacterDeathController>(); }
     }
+    public bool ItsMe(string _name) {
+        return _name.Equals(MyCharacter.name);
+    }
     // master client
     public PlayerCharacterPair MasterClient {
         get { return masterClient; }

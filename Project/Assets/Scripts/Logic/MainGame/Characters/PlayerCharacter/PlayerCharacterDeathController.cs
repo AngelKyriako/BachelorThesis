@@ -3,32 +3,25 @@ using System.Collections;
 
 public class PlayerCharacterDeathController: MonoBehaviour {
 
-    private PlayerCharacterModel model;
-
     void Awake() {
         enabled = false;
     }
 
-    public void Setup(bool isLocalPlayer) {
-        if (isLocalPlayer)
-            model = GameManager.Instance.MyCharacterModel;
-    }
-
     void Update() {
-        model.RespawnTimer -= Time.deltaTime;
-        if (model.RespawnTimer == 0) {
-            model.RefreshVitals();
+        GameManager.Instance.MyCharacterModel.RespawnTimer -= Time.deltaTime;
+        if (GameManager.Instance.MyCharacterModel.RespawnTimer == 0) {
+            GameManager.Instance.MyCharacterModel.VitalsToFull();
             enabled = false;
         }
     }
 
     void OnGUI() {
-        GUI.Label(new Rect((Screen.width / 2) - 30, 0, 60, 30), Utilities.Instance.TimeCounterDisplay(model.RespawnTimer));
+        GUI.Label(new Rect((Screen.width / 2) - 30, 0, 60, 30), Utilities.Instance.TimeCounterDisplay(GameManager.Instance.MyCharacterModel.RespawnTimer));
     }
 
     public void Enable() {
-        model.Died();
         ClearEffects();
+        GameManager.Instance.MyCharacterModel.Died();
         enabled = true;
     }
 

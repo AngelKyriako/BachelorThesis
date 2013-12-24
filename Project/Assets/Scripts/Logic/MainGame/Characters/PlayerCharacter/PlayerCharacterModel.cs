@@ -7,10 +7,10 @@ public class PlayerCharacterModel: BaseCharacterModel {
     public const uint STARTING_EXP_TO_LEVEL = 50;
     public const float STARTING_EXP_MODIFIER = 1.1f, EXP_LOSS_PERCENTAGE = 0.2f;
 
-    private static readonly int[] TRAINING_POINTS_PER_LEVEL = new int[MAX_LEVEL] {  5, 1, 1, 1, 1,
-                                                                                    4, 1, 1, 2, 2,
-                                                                                    3, 2, 2, 2, 2,
-                                                                                    4, 2, 2, 1, 1,
+    private static readonly int[] TRAINING_POINTS_PER_LEVEL = new int[MAX_LEVEL] {  5, 4, 3, 2, 1,
+                                                                                    1, 1, 2, 2, 2,
+                                                                                    2, 2, 3, 3, 3,
+                                                                                    5, 4, 3, 2, 1,
                                                                                     5, 1, 1, 1, 1
                                                                                  };
     #endregion
@@ -42,10 +42,28 @@ public class PlayerCharacterModel: BaseCharacterModel {
     }
 
     public override void AddListeners() {
-        PlayerInputManager.Instance.SkillQWERorLeftClick += SkillSelect;
-        PlayerInputManager.Instance.SkillQWERorLeftClick += SkillUnselect;
+        PlayerInputManager.Instance.SkillQWERorLeftClick += delegate(CharacterSkillSlot _slotPressed) {
+            if (SkillExists(_slotPressed))
+                GetSkill(_slotPressed).Pressed();
+        };
 
-        PlayerInputManager.Instance.SkillRightClick += SkillUnselect;
+        PlayerInputManager.Instance.SkillQWERorLeftClick += delegate(CharacterSkillSlot _slotPressed) {
+            if (SkillExists(PlayerInputManager.Instance.CurrentTargetedSlot))
+                GetSkill(PlayerInputManager.Instance.CurrentTargetedSlot).Unpressed();
+
+
+            PlayerInputManager.Instance.CurrentTargetedSlot = (SkillExists(_slotPressed) &&
+                                                               !GetSkill(_slotPressed).IsSelected) ? CharacterSkillSlot.None : _slotPressed;
+        };
+
+        PlayerInputManager.Instance.SkillRightClick += delegate(CharacterSkillSlot _slotPressed) {
+            if (SkillExists(PlayerInputManager.Instance.CurrentTargetedSlot))
+                GetSkill(PlayerInputManager.Instance.CurrentTargetedSlot).Unpressed();
+
+
+            PlayerInputManager.Instance.CurrentTargetedSlot = (SkillExists(_slotPressed) &&
+                                                               !GetSkill(_slotPressed).IsSelected) ? CharacterSkillSlot.None : _slotPressed;
+        };
     }
 
     public override void Update() {
@@ -57,7 +75,22 @@ public class PlayerCharacterModel: BaseCharacterModel {
         currentExp -= expToLevel;
         expToLevel = (uint)(expToLevel * expModifier);
         trainingPoints += TRAINING_POINTS_PER_LEVEL[Level-1];
-        RefreshVitals();
+        VitalsToFull();
+    }
+
+    public override void KilledEnemy(BaseCharacterModel _enemy) {
+        ++killsCount;
+        GainExp((uint)_enemy.ExpWorth / 2);
+    }
+
+    public override void Died() {
+        ++deathCount;
+        RespawnTimer = Level * ((killsCount / 2) /
+                                (deathCount * 2)) + 2;
+
+        uint ExpLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE);
+        LoseExp(ExpLoss > CurrentExp ? CurrentExp : ExpLoss);
+        VitalsToZero();
     }
 
     public void GainExp(uint _exp) {
@@ -66,40 +99,10 @@ public class PlayerCharacterModel: BaseCharacterModel {
             while (currentExp >= expToLevel)
                 LevelUp();
         }
-    }
+    } 
 
     private void LoseExp(uint _exp) {
         currentExp -= _exp;
-    }
-
-    public override void Died() {
-        RespawnTimer = Level * ((killsCount / 2)/
-                                (++deathCount * 2)) + 2;
-        uint ExpLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE);
-        LoseExp(ExpLoss > CurrentExp ? CurrentExp : ExpLoss);
-    }
-
-    public void RefreshVitals(){
-        for (int i = 0; i < VitalsLength; ++i)
-            GetVital(i).CurrentValue = GetVital(i).FinalValue;
-    }
-
-    public override void KilledEnemy(BaseCharacterModel _enemy) {
-        ++killsCount;
-        GainExp((uint)_enemy.ExpWorth/2);
-    }
-
-    private void SkillSelect(CharacterSkillSlot _slotPressed) {
-        if (SkillExists(_slotPressed))
-            GetSkill(_slotPressed).Pressed();
-    }
-    private void SkillUnselect(CharacterSkillSlot _slotPressed) {
-        if (SkillExists(PlayerInputManager.Instance.CurrentTargetedSlot))
-            GetSkill(PlayerInputManager.Instance.CurrentTargetedSlot).Unpressed();
-
-
-        PlayerInputManager.Instance.CurrentTargetedSlot = (SkillExists(_slotPressed) &&
-                                                           !GetSkill(_slotPressed).IsSelected) ? CharacterSkillSlot.None : _slotPressed;
     }
 
     #region Accessors

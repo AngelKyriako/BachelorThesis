@@ -3,11 +3,11 @@ using System.Collections;
 
 public class ExpRadiusSphere: MonoBehaviour {
 
-    private const float TIME_TO_LIVE = 1f;
+    private const float TIME_TO_LIVE = 3f;
 
     private uint expWorth;
-    private float timeLived;
-
+    private float timeStart;
+    private bool b = true;//DELETE THIS
     void Awake() {
         enabled = false;
     }
@@ -18,11 +18,11 @@ public class ExpRadiusSphere: MonoBehaviour {
     }
 
     void Start() {
-        timeLived = 0f;
+        timeStart = Time.time;
     }
 
     void Update() {
-        if ((timeLived += Time.deltaTime) >= TIME_TO_LIVE)
+        if ((Time.time - timeStart) >= TIME_TO_LIVE)
             Destroy(gameObject);
     }
 
@@ -37,10 +37,15 @@ public class ExpRadiusSphere: MonoBehaviour {
     private void Trigger(Collider other) {
         if (!other.gameObject.layer.Equals(LayerMask.NameToLayer("Void"))) {
             PlayerCharacterModel playerModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
-            if (playerModel && GameManager.Instance.MyCharacter.name.Equals(playerModel.name) && !playerModel.IsDead) {
+            if (b) {
+                GameManager.Instance.LogMessageToMasterClient("exp collided with: " + playerModel.name + ", myname: " + GameManager.Instance.MyCharacter.name);
+                b = false;
+            }
+            if (playerModel && GameManager.Instance.ItsMe(playerModel.name) && !playerModel.IsDead) {
                 GameManager.Instance.MyCharacterModel.GainExp(expWorth);
                 Destroy(gameObject);
             }
         }
     }
+
 }

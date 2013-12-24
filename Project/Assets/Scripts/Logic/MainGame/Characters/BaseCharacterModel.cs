@@ -90,7 +90,6 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     private PlayerCharacterNetworkController networkController;//@TODO: this should be the super class of itself (CharacterNetworkController)
                                                                //       and ovveridable from player character model
     private int level;
-    private List<AttachedEffect> effectsAttached;
     private Stat[] stats;
     private Attribute[] attributes;
     private Vital[] vitals;
@@ -103,8 +102,6 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
         networkController = gameObject.GetComponent<PlayerCharacterNetworkController>();
         
         skills = new Dictionary<CharacterSkillSlot, BaseSkill>();
-
-        effectsAttached = new List<AttachedEffect>();
 
         stats = new Stat[StatsLength];
         attributes = new Attribute[AttributesLength];
@@ -153,6 +150,16 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
 
     public abstract void Died();
     public abstract void KilledEnemy(BaseCharacterModel _enemy);
+
+    public void VitalsToFull() {
+        for (int i = 0; i < VitalsLength; ++i)
+            GetVital(i).CurrentValue = GetVital(i).FinalValue;
+    }
+
+    public void VitalsToZero() {
+        GetVital((int)VitalType.Health).CurrentValue = 0;
+        GetVital((int)VitalType.Mana).CurrentValue = 0;
+    }   
 
 #region Setup
     private void SetupStats() {
@@ -223,21 +230,6 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     public int VitalsLength {
         get { return Enum.GetValues(typeof(VitalType)).Length; }
     }
-
-    #region effects
-    public void AddEffectAttached(AttachedEffect _effect) {
-        effectsAttached.Add(_effect);
-    }
-    public void RemoveEffectAttached(AttachedEffect _effect) {
-        effectsAttached.Remove(_effect);
-    }
-    public AttachedEffect GetEffectAttached(int _index) {
-        return effectsAttached[_index];
-    }
-    public int EffectAttachedCount {
-        get { return effectsAttached.Count; }
-    }
-    #endregion
 
     #region skills
     public void AddSkill(CharacterSkillSlot _key, BaseSkill _skill) {

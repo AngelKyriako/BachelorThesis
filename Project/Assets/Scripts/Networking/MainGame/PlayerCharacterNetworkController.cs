@@ -45,8 +45,6 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         visionController = gameObject.GetComponent<VisionController>();
         visionController.SetUp(CombatManager.Instance.IsAlly(name), GameVariables.Instance.Difficulty.Value);
 
-        gameObject.GetComponent<PlayerCharacterDeathController>().Setup(IsLocalClient);
-
         if (IsLocalClient)
             model.AddListeners();
 
@@ -158,6 +156,66 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         BaseEffect tempEffect = (BaseEffect)GameManager.Instance.GetCharacter(_receiverName).AddComponent(effectToAttach.GetType());
         tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), effectToAttach);
     }
+    #endregion
+
+    #region RPCs Combat Manager
+    [RPC]
+    public void InstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
+        //Utilities.Instance.LogMessageToChat(GameManager.Instance.MyPhotonView.name + " is instantiating scene object !");
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "[RPC]InstantiateSceneObject", "This RPC is only available for the master client.");
+        PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
+    }
+
+    [RPC]
+    public void InstantiateSceneSkill(string _obj, Vector3 _position, Quaternion _rotation,
+                                       int _skillId, string _casterName, Vector3 _destination) {
+                                           Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "[RPC]InstantiateSceneSkill", "This RPC is only available for the master client.");
+        GameObject obj = PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
+        obj.GetComponent<BaseSkillController>().SetUp(SkillBook.Instance.GetSkill(_skillId),
+                                                      GameManager.Instance.GetPlayerModel(_casterName),
+                                                      _destination);
+    }
+
+    [RPC]
+    public void PlayerDeath(string _deadName) {
+        ++GameManager.Instance.GetPlayerModel(_deadName).Deaths;
+    }
+
+    [RPC]
+    public void PlayerKill(string _killerName, string _deadName, Vector3 _position) {
+        Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_killerName), "PlayerCharacterNetworkController", "KillHappened", "This method is only available for the Dead player.");
+
+        InstantianteLocalExpSphere(_position, GameManager.Instance.GetPlayerModel(_deadName).ExpWorth);
+        photonView.RPC("InstantianteLocalExpSphere", PhotonTargets.Others, _position, GameManager.Instance.GetPlayerModel(_deadName).ExpWorth);
+
+        KilledPlayer(_killerName, _deadName);
+        photonView.RPC("KilledPlayer", PhotonTargets.Others, _killerName, _deadName);
+    }
+
+    [RPC]
+    private void KilledPlayer(string _killerName, string _deadName) {
+        if (!CombatManager.Instance.AreAllies(_killerName, _deadName)) {
+
+            if (GameManager.Instance.ItsMe(_killerName))
+                GameManager.Instance.MyCharacterModel.KilledEnemy(GameManager.Instance.GetPlayerModel(_deadName));
+            else
+                ++GameManager.Instance.GetPlayerModel(_killerName).Kills;
+
+            GameManager.Instance.RaiseKillsOfPlayersTeam(_killerName);
+
+            if (PhotonNetwork.isMasterClient)
+                GameManager.Instance.CheckWinningConditions(_killerName);
+        }
+    }
+
+    [RPC]
+    private void InstantianteLocalExpSphere(Vector3 _position, int _expWorth) {
+        GameObject expSphere = (GameObject)GameObject.Instantiate((GameObject)Resources.Load(ResourcesPathManager.Instance.ExpRadiusSphere),
+                                                                  _position,
+                                                                  Quaternion.identity);
+        expSphere.GetComponent<ExpRadiusSphere>().SetUp((uint)_expWorth);
+    }
+
     #endregion
 
     #region Accessors

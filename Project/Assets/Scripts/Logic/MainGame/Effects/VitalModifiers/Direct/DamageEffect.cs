@@ -13,10 +13,10 @@ public class DamageEffect: VitalEffect {
                                             (Modifier.PercentageValue * Receiver.GetVital((int)VitalType.Health).FinalValue))) <= 0) {
             
             GameManager.Instance.MyDeathController.Enable();
-            if (!Caster.name.Equals(Receiver.name)) {
-                GameManager.Instance.LogMessageToMasterClient("kill happened bitch");
-                CombatManager.Instance.KillHappened(Caster.name, Receiver.name, Receiver.transform.position);
-            }
+            CombatManager.Instance.DeadPlayerBroadCastDeath(Receiver.name);
+            if (!Caster.name.Equals(Receiver.name))
+                CombatManager.Instance.DeadPlayerBroadCastKill(Caster.name, Receiver.name, Receiver.transform.position);
+
             TeleportManager.Instance.StandardTeleportation(false);
         }
     }
