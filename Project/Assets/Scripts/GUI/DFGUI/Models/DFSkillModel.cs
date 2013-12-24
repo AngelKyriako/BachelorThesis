@@ -33,7 +33,7 @@ public class DFSkillModel: SingletonMono<DFSkillModel> {
     }
     public float Cooldown(int _id, CharacterSkillSlot _key) {
         return IsOnActionSlot(_key) ?
-               GameManager.Instance.MyCharacterModel.GetSkill(_key).CasterCoolDown : SkillBook.Instance.GetSkill(_id).CoolDown;
+               GameManager.Instance.MyCharacterModel.GetSkill(_key).CasterBasedCoolDown : SkillBook.Instance.GetSkill(_id).CoolDown;
     }
     public float CooldownTimer(int _id, CharacterSkillSlot _key) {
         return IsOnActionSlot(_key) ?

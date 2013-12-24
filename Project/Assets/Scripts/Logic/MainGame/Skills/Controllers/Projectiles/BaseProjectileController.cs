@@ -20,12 +20,14 @@ public class BaseProjectileController: BaseSkillController {
         isTriggered = false;
     }
 
-    public override void Start() { }    
+    public override void Start() { }
 
 	public override void Update () {
         transform.position = Vector3.MoveTowards(transform.position, Destination, movementSpeed * Time.deltaTime);
         if (PhotonNetwork.isMasterClient && Vector3.Distance(Origin, transform.position) > range)
             CombatManager.Instance.MasterClientDestroySceneObject(gameObject);
+        else
+            Utilities.Instance.LogColoredMessageToChat("(range has been passed) WOW it runs on all clients: ", Color.red);
 
 	}
 

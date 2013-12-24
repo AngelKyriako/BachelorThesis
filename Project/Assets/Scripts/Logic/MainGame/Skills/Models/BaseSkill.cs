@@ -68,7 +68,7 @@ public class BaseSkill {
 
     public virtual void Select() { }
     public virtual void Unselect() { }
-
+    //////////////////HERE
     public virtual void Cast(Vector3 _direction) {
         ownerModel.GetVital((int)VitalType.Mana).CurrentValue -= manaCost;
         RefreshCooldown();
@@ -109,9 +109,10 @@ public class BaseSkill {
             if (GetPassiveEffect(_effectId).RequirementsFulfilled(_caster))
                 _caster.NetworkController.AttachEffect(_caster.name, _receiver.name, _effectId);
     }
+    //////////////////END
 
     private void RefreshCooldown() {
-        CoolDownTimer = CasterCoolDown;
+        CoolDownTimer = CasterBasedCoolDown;
     }
 
     #region Accessors
@@ -134,7 +135,7 @@ public class BaseSkill {
     public float CoolDown {
         get { return coolDown; }
     }
-    public float CasterCoolDown {
+    public float CasterBasedCoolDown {
         get { return coolDown - coolDown * ownerModel.GetAttribute((int)AttributeType.AttackSpeed).FinalValue; ; }
     }
     public uint ManaCost {

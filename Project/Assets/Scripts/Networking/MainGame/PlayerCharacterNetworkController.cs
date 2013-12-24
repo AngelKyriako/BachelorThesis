@@ -147,7 +147,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         model.UpdateVitalsBasedOnStats();
     }
     #endregion
-
+    ////////////////////// HERE
     #region Effects RPCs
     [RPC]
     public void AttachEffect(string _casterName, string _receiverName, int _effectId) {
@@ -178,6 +178,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
                                                       GameManager.Instance.GetPlayerModel(_casterName),
                                                       _destination);
     }
+    ////////////////////// END
     //General
     [RPC]
     public void PlayerDeath(string _deadName) {

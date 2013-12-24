@@ -36,7 +36,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     }
     
     #endregion
-
+    ////////////////////// HERE
     #region Messages to Master Client
     public void MasterClientInstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
         if (PhotonNetwork.isMasterClient)
@@ -59,6 +59,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "CombatManager", "MasterClientDestroySceneObject", "This method is only available for the master client.");
         PhotonNetwork.Destroy(_obj);
     }
+    ////////////////////// END
 
     public void DeadPlayerBroadCastKill(string _killerName, string _deadName, Vector3 _position) {
         Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_deadName), "CombatManager", "DeadPlayerBroadCastKill", "This method is only available for the master client.");

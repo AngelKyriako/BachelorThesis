@@ -23,11 +23,11 @@ public class TargetedSkill: BaseSkill {
             DFSkillModel.Instance.CastSkill(Slot);
         }
         else if (!SufficientMana)
-            GUIMessageDisplay.Instance.AddMessage("No juice");
+            GUIMessageDisplay.Instance.AddMessage("No juice bro");
         else if (CoolDownTimer != 0f)
             GUIMessageDisplay.Instance.AddMessage("Chill for a sec there");
         else if(!RequirementsFulfilled())
-            GUIMessageDisplay.Instance.AddMessage("Skill requirements are not fulfilled");
+            GUIMessageDisplay.Instance.AddMessage("This skill is not for that ugly face of yours");
     }
 
     public override void Unpressed() {
