@@ -81,10 +81,9 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         }
     }
 
-    private void InitGUIScripts() {
+    private void InitGUIScripts() {//@TODO: all expect dfps counter will be deleted 
         gui.GetComponent<CharacterWindow>().enabled = true;
         gui.AddComponent<GamePreferencesWindow>().enabled = true;
-        gui.AddComponent<PlayersInfoWindow>().enabled = true;
         gui.AddComponent<DFPSCounter>().enabled = true;
     }
 

@@ -304,6 +304,10 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
     #endregion
 
     // Match Info Accessors
+    public Color PlayerInfoColor(string _id) {
+        return GameManager.Instance.GetPlayerRGBColor(_id);
+    }
+
     public string PlayerInfoName(string _id) {
         return GameManager.Instance.GetPlayerName(_id);
     }

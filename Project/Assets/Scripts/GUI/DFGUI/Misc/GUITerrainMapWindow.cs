@@ -5,7 +5,8 @@ public class GUITerrainMapWindow: MonoBehaviour {
 
     public dfLabel playerIcon;
     private const int MAP_SIZE = 150;
-    private const int OFFSET_X = -4, OFFSET_Y = 322;
+    private const int OFFSET_X = -4,
+                      OFFSET_Y = 435;//the more the value the more to the top it goes //Editor: 322, 800x600: 422
 
     private const KeyCode TOGGLE_BUTTON = KeyCode.M;
     private const int VISIBLE_ENEMY_LAYER = 9;

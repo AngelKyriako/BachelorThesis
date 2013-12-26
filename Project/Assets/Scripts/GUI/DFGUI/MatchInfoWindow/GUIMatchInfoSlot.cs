@@ -4,13 +4,27 @@ using System.Collections;
 public class GUIMatchInfoSlot : MonoBehaviour {
 
     private string playerId;
+    private dfLabel kdaLabel, teamLabel;
 
-    void Awake() {
+    void Awake() {        
         enabled = false;
     }
-    //
+
     public void SetUp(string _playerId) {
         playerId = _playerId;
+
+        dfControl control = gameObject.GetComponent<dfControl>();
+        control.GetComponent<dfPanel>().Color = DFCharacterModel.Instance.PlayerInfoColor(playerId);
+
+        dfLabel nameLabel = control.Find<dfLabel>("Name");
+        nameLabel.Text = DFCharacterModel.Instance.PlayerInfoName(playerId);        
+
+        kdaLabel = control.Find<dfLabel>("K_D_A");
+        kdaLabel.Text = DFCharacterModel.Instance.PlayerInfoCounters(playerId);
+
+        teamLabel = control.Find<dfLabel>("Team");
+        teamLabel.Text = DFCharacterModel.Instance.PlayerInfoTeam(playerId);
+
         enabled = true;
     }
 
@@ -19,22 +33,7 @@ public class GUIMatchInfoSlot : MonoBehaviour {
 	}
 	
 	void Update () {
-	
+        kdaLabel.Text = DFCharacterModel.Instance.PlayerInfoCounters(playerId);
+        teamLabel.Text = DFCharacterModel.Instance.PlayerInfoTeam(playerId);
 	}
 }
-
-//    public override void MainWindow(int windowID) {
-//        base.MainWindow(windowID);
-//        characterTabRect.y = 0;
-//        foreach (string _name in GameManager.Instance.AllPlayerKeys) {
-//            GUI.Label(characterTabRect,
-//                      GameManager.Instance.GetPlayer(_name).name + " "+
-//                      ((PlayerColor)GameManager.Instance.GetPlayer(_name).customProperties["Color"]).ToString() +
-//                      GameManager.Instance.GetPlayerModel(_name).GetVital((int)VitalType.Health).ToString()+ " " +
-//                      "Kills: " + GameManager.Instance.GetPlayerModel(_name).Kills+", "+
-//                      "Deaths: " + GameManager.Instance.GetPlayerModel(_name).Deaths + ", " +
-//                      ((PlayerTeam)GameManager.Instance.GetPlayer(_name).customProperties["Team"]).ToString());
-
-//            characterTabRect.y += SINGLE_SLOT_HEIGHT;
-//        }
-//    }
