@@ -87,6 +87,7 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
     }
 
     // Binding Properties
+    #region Character window
     #region Stats
     public string TrainingPoints {
         get { return myModel != null && myModel.TrainingPoints != 0 ? "Training points left: " + myModel.TrainingPoints.ToString() : ""; }
@@ -281,15 +282,40 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
     }
     #endregion
 
-    public string LevelStr {
-        get { return myModel != null ? "level " + myModel.Level : DEFAULT_STRING; }
-    }
-
     public string PlayerName {
         get { return PhotonNetwork.player.name; }
     }
-
+    public string LevelStr {
+        get { return myModel != null ? "level " + myModel.Level : DEFAULT_STRING; }
+    }
     public bool StatsCanBeUpdated {
         get { return updater != null ? updater.PlayerCanUpdate : true; }
     }
+    #endregion
+
+    #region RespawnTimer Window
+    public string RespawnTimer {
+        get { return myModel != null ? Utilities.Instance.TimeCounterDisplay(myModel.RespawnTimer) : string.Empty; }
+    }
+
+    public bool IsPlayerRespawning {
+        get { return myModel != null && myModel.RespawnTimer != 0; }
+    }
+    #endregion
+
+    // Match Info Accessors
+    public string PlayerInfoName(string _id) {
+        return GameManager.Instance.GetPlayerName(_id);
+    }
+
+    public string PlayerInfoCounters(string _id) {
+        return   "[color #00ff00]" + GameManager.Instance.GetPlayerModel(_id).Kills + "[/color]"
+               + "/ [color #ff0000]" + GameManager.Instance.GetPlayerModel(_id).Deaths + "[/color]"
+               //+ "/ [color #0000ff]" + GameManager.Instance.GetPlayerModel(_id).Assists + "[/color]"
+               ;
+    }
+
+    public string PlayerInfoTeam(string _id) {
+        return GameManager.Instance.GetPlayerTeam(_id).ToString();
+    }   
 }

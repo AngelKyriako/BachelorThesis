@@ -15,10 +15,6 @@ public class PlayerCharacterDeathController: MonoBehaviour {
         }
     }
 
-    void OnGUI() {
-        GUI.Label(new Rect((Screen.width / 2) - 30, 0, 60, 30), Utilities.Instance.TimeCounterDisplay(GameManager.Instance.MyCharacterModel.RespawnTimer));
-    }
-
     public void Enable() {
         ClearEffects();
         GameManager.Instance.MyCharacterModel.Died();

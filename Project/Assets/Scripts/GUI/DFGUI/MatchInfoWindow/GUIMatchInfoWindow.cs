@@ -17,7 +17,7 @@ public class GUIMatchInfoWindow : MonoBehaviour {
         gameObject.GetComponent<dfPanel>().AddControl(_nextSlot.GetComponent<dfPanel>());
         //Then the rest of the players
         foreach (string _name in GameManager.Instance.AllPlayerKeys)
-            if (!_name.Equals(GameManager.Instance.MyCharacter.name)) {
+            if (!GameManager.Instance.ItsMe(_name)) {
                 _nextSlot = (dfPanel)Instantiate(infoSlot);
                 _nextSlot.gameObject.GetComponent<GUIMatchInfoSlot>().SetUp(_name);
 

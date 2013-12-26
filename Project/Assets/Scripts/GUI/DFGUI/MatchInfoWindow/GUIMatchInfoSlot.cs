@@ -9,8 +9,8 @@ public class GUIMatchInfoSlot : MonoBehaviour {
         enabled = false;
     }
     //
-    public void SetUp(string _playerName) {
-        playerId = _playerName;
+    public void SetUp(string _playerId) {
+        playerId = _playerId;
         enabled = true;
     }
 
@@ -18,7 +18,6 @@ public class GUIMatchInfoSlot : MonoBehaviour {
 	    
 	}
 	
-	// Update is called once per frame
 	void Update () {
 	
 	}
