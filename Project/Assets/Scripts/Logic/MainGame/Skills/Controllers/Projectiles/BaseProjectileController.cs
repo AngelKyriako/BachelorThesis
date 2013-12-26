@@ -24,7 +24,7 @@ public class BaseProjectileController: BaseSkillController {
 
 	public override void Update () {
         transform.position = Vector3.MoveTowards(transform.position, Destination, movementSpeed * Time.deltaTime);
-        if (IsMySkill && Vector3.Distance(Origin, transform.position) > range)
+        if (IsMySkill && !isTriggered && Vector3.Distance(Origin, transform.position) > range)
             TriggerAndDestroy();
 	}
 
@@ -63,9 +63,6 @@ public class BaseProjectileController: BaseSkillController {
     private void TriggerAndDestroy() {
         isTriggered = true;
         Skill.Trigger(transform.position, Quaternion.identity);
-        if (IsMySkill)
-            CombatManager.Instance.DestroyNetworkObject(gameObject);
-        else
-            Destroy(gameObject);
+        CombatManager.Instance.DestroyNetworkObject(gameObject);
     }
 }
