@@ -48,5 +48,9 @@ public class BaseSkillController: MonoBehaviour {
     public Vector3 Destination {
         get { return destination; }
     }
+
+    public bool IsMySkill {
+        get { return casterModel && GameManager.Instance.ItsMe(casterModel.name); }
+    }
     #endregion
 }

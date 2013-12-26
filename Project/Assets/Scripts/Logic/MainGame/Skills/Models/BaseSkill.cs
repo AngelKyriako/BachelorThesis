@@ -68,48 +68,48 @@ public class BaseSkill {
 
     public virtual void Select() { }
     public virtual void Unselect() { }
-    //////////////////HERE
+
     public virtual void Cast(Vector3 _direction) {
         ownerModel.GetVital((int)VitalType.Mana).CurrentValue -= manaCost;
         RefreshCooldown();
 
         if (castEffect != null && !castEffect.Equals(string.Empty))
-            CombatManager.Instance.MasterClientInstantiateSceneObject(castEffect, ownerModel.transform.position, Quaternion.identity);
+            CombatManager.Instance.InstantiateNetworkObject(castEffect, ownerModel.transform.position, Quaternion.identity);
 
         if (mainObject != null && !mainObject.Equals(string.Empty))
-            CombatManager.Instance.MasterClientInstantiateSceneSkill(mainObject, ownerModel.ProjectileOriginPosition,
-                                                                     Quaternion.identity, id, ownerModel.name, _direction);
+            CombatManager.Instance.InstantiateNetworkSkill(mainObject, ownerModel.ProjectileOriginPosition, Quaternion.identity, id, ownerModel.name, _direction);
         ActivatePassiveEffects(ownerModel, ownerModel);
     }
 
     public virtual void Trigger(Vector3 _position, Quaternion _rotation) {
         if (triggerEffect != null && !triggerEffect.Equals(string.Empty))
-            CombatManager.Instance.MasterClientInstantiateSceneObject(triggerEffect, _position, _rotation);
+            CombatManager.Instance.InstantiateNetworkObject(triggerEffect, _position, _rotation);
     }
 
     public virtual void ActivateOffensiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         if (_receiver)
             foreach (int _effectId in OffensiveEffectKeys)
                 if (GetOffensiveEffect(_effectId).RequirementsFulfilled(_caster))
-                    GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
-                                                                                            _receiver.NetworkController,
-                                                                                            _effectId);
+                    GameManager.Instance.MyNetworkController.AttachEffectToPlayer(_caster.NetworkController,
+                                                                                  _receiver.NetworkController,
+                                                                                  _effectId);
     }
 
     public virtual void ActivateSupportEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         foreach (int _effectId in SupportEffectKeys)
             if (GetSupportEffect(_effectId).RequirementsFulfilled(_caster))
-                GameManager.Instance.MasterClientNetworkController.AttachEffectToPlayer(_caster.NetworkController,
-                                                                                        _receiver.NetworkController,
-                                                                                        _effectId);
+                GameManager.Instance.MyNetworkController.AttachEffectToPlayer(_caster.NetworkController,
+                                                                              _receiver.NetworkController,
+                                                                              _effectId);
     }
 
     public virtual void ActivatePassiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         foreach (int _effectId in PassiveEffectKeys)
             if (GetPassiveEffect(_effectId).RequirementsFulfilled(_caster))
-                _caster.NetworkController.AttachEffect(_caster.name, _receiver.name, _effectId);
+                GameManager.Instance.MyNetworkController.AttachEffectToPlayer(_caster.NetworkController,
+                                                                              _receiver.NetworkController,
+                                                                              _effectId);
     }
-    //////////////////END
 
     private void RefreshCooldown() {
         CoolDownTimer = CasterBasedCoolDown;

@@ -111,11 +111,11 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     }
 
     public void AttachEffectToPlayer(PlayerCharacterNetworkController _caster, PlayerCharacterNetworkController _receiver, int _effectId) {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "AttachEffectToPlayer", "This method is only available for the master client.");
+        Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_caster.name), "PlayerCharacterNetworkController", "AttachEffectToPlayer", "This method is only available for the skill caster.");
         //Utilities.Instance.LogMessageToChat("local client is: " + photonView.name);
         //Utilities.Instance.LogMessageToChat("local client owner is: " + photonView.owner.name);
-        if (photonView.Equals(_receiver.photonView))
-            _receiver.AttachEffect(_caster.name, _receiver.name, _effectId);
+        if (GameManager.Instance.ItsMe(_receiver.name))
+            AttachEffect(_caster.name, _receiver.name, _effectId);
         else {
             //Utilities.Instance.LogMessageToChat("Send RPC TO !!!");
             //Utilities.Instance.LogMessageToChat("remote client is: " + _receiver.photonView.name);
@@ -147,7 +147,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         model.UpdateVitalsBasedOnStats();
     }
     #endregion
-    ////////////////////// HERE
+
     #region Effects RPCs
     [RPC]
     public void AttachEffect(string _casterName, string _receiverName, int _effectId) {
@@ -160,26 +160,6 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     #endregion
 
     #region RPCs Combat Manager
-    //Master client
-    [RPC]
-    public void InstantiateSceneObject(string _obj, Vector3 _position, Quaternion _rotation) {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "[RPC]InstantiateSceneObject", "This RPC is only available for the master client.");
-
-        PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
-    }
-
-    [RPC]
-    public void InstantiateSceneSkill(string _obj, Vector3 _position, Quaternion _rotation,
-                                       int _skillId, string _casterName, Vector3 _destination) {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "[RPC]InstantiateSceneSkill", "This RPC is only available for the master client.");
-        
-        GameObject obj = PhotonNetwork.InstantiateSceneObject(_obj, _position, _rotation, 0, null);
-        obj.GetComponent<BaseSkillController>().SetUp(SkillBook.Instance.GetSkill(_skillId),
-                                                      GameManager.Instance.GetPlayerModel(_casterName),
-                                                      _destination);
-    }
-    ////////////////////// END
-    //General
     [RPC]
     public void PlayerDeath(string _deadName) {
         ++GameManager.Instance.GetPlayerModel(_deadName).Deaths;
