@@ -3,10 +3,11 @@ using System.Collections.Generic;
 
 public class MainRoomGUI: MonoBehaviour {
 
-    private const int PLAYER_SLOT_HEIGHT = 50,
+    private const int SPACE = 12, PLAYER_SLOT_HEIGHT = 50,
                       SOUTH_CHAT_HEIGHT = 100, SOUTH_BUTTONS_WIDTH = 150, SOUTH_BUTTONS_HEIGHT = 50,
                       PREFERENCES_WIDTH = 250;
 
+    public GUIStyle style;
     public Texture2D background;
 
     private Rect westPreferencesRect,
@@ -15,7 +16,7 @@ public class MainRoomGUI: MonoBehaviour {
     
     private VariableType editingPreferencesField;
     private bool teamSelecting, allPlayersReady;
-    
+    private float lastPlayersReadyUpdate;
     private RoomNetController networkController;
 
 	void Awake () {
@@ -25,7 +26,7 @@ public class MainRoomGUI: MonoBehaviour {
 
     void Start() {
         #region Init Rects
-        westPreferencesRect = new Rect(0, 0, PREFERENCES_WIDTH, Screen.height - SOUTH_CHAT_HEIGHT);
+        westPreferencesRect = new Rect(0, 0, PREFERENCES_WIDTH, Screen.height);
 
         eastSlotsRect = new Rect(westPreferencesRect.width + 10, 0, Screen.width - westPreferencesRect.width, Screen.height);
         playerSlotRect = new Rect(0, 0, eastSlotsRect.width/2, eastSlotsRect.height);
@@ -37,6 +38,7 @@ public class MainRoomGUI: MonoBehaviour {
         editingPreferencesField = default(VariableType);
         teamSelecting = false;
         allPlayersReady = true;
+        lastPlayersReadyUpdate = Time.time;
     }
 
     void OnGUI() {
@@ -50,16 +52,25 @@ public class MainRoomGUI: MonoBehaviour {
         SouthButtons();
     }
 
+    void Update() {
+        if (networkController.IsMasterClient && Time.time - lastPlayersReadyUpdate > 5) {
+            allPlayersReady = GameManager.Instance.AllPlayersReady();
+            lastPlayersReadyUpdate = Time.time;
+        }
+    }
+
     #region Preferences
     private void WestGamePreferencesEditable() {
         GUILayout.BeginArea(westPreferencesRect);
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Room: " + GameVariables.Instance.Title, GUILayout.MaxWidth(300));
+        GUILayout.Label("Room: ", style);
         GameVariables.Instance.Title = GUILayout.TextField(GameVariables.Instance.Title, GUILayout.MaxWidth(200));
         GUILayout.EndHorizontal();
-
+        
+        GUILayout.Space(SPACE);
+        
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Mode:");
+        GUILayout.Label("Mode:", style);
         GUILayout.BeginVertical();
         GameVariables.Instance.Mode = GUIUtilities.Instance.ButtonOptions<GameMode, VariableType>(ref editingPreferencesField, VariableType.Mode,
                                                                GameVariables.Instance.Mode,
@@ -67,8 +78,10 @@ public class MainRoomGUI: MonoBehaviour {
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
 
+        GUILayout.Space(SPACE);
+
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Map:");
+        GUILayout.Label("Map:", style);
         GUILayout.BeginVertical();
         GameVariables.Instance.Map = GUIUtilities.Instance.ButtonOptions<GameMap, VariableType>(ref editingPreferencesField, VariableType.Map,
                                                                GameVariables.Instance.Map,
@@ -76,34 +89,45 @@ public class MainRoomGUI: MonoBehaviour {
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
 
+        GUILayout.Space(SPACE);
+
         if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)) {
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Max kills:");
+            GUILayout.Label("Max kills:", style);
             GUILayout.BeginVertical();
             GameVariables.Instance.TargetKills = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingPreferencesField, VariableType.targetKills,
                                                               GameVariables.Instance.TargetKills,
                                                               GameVariables.Instance.AvailableTargetKills, 40);
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
-        }
+
+            GUILayout.Space(SPACE);
+        }        
+
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Max players:");
+        GUILayout.Label("Max players:", style);
         GUILayout.BeginVertical();
         GameVariables.Instance.MaxPlayers = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingPreferencesField, VariableType.MaxPlayers,
                                                           GameVariables.Instance.MaxPlayers,
                                                           GameVariables.Instance.AvailableMaxPlayers, 28);
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
+
+        GUILayout.Space(SPACE);
+
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Difficulty:");
+        GUILayout.Label("Difficulty:", style);
         GUILayout.BeginVertical();
         GameVariables.Instance.Difficulty = GUIUtilities.Instance.ButtonOptions<GameDifficulty, VariableType>(ref editingPreferencesField, VariableType.Difficulty,
                                                                  GameVariables.Instance.Difficulty,
                                                                  GameVariables.Instance.AvailableDifficulties, 60);
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
+
+        GUILayout.Space(SPACE);
+
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Timer:");
+        GUILayout.Label("Start Timer:", style);
         GUILayout.BeginVertical();
         GameVariables.Instance.Timer = GUIUtilities.Instance.ButtonOptions<double, VariableType>(ref editingPreferencesField, VariableType.Timer,
                                                              GameVariables.Instance.Timer,
@@ -115,14 +139,21 @@ public class MainRoomGUI: MonoBehaviour {
 
     private void WestGamePreferencesViewed() {
         GUILayout.BeginArea(westPreferencesRect);
-        GUILayout.Label("Room: " + GameVariables.Instance.Title, GUILayout.MaxWidth(300));
-        GUILayout.Label("Mode: " + GameVariables.Instance.Mode.Key);
-        GUILayout.Label("Map: " + GameVariables.Instance.Map.Key);
-        if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal))
-            GUILayout.Label("Target kills: " + GameVariables.Instance.TargetKills.Key);
-        GUILayout.Label("Max players: " + GameVariables.Instance.MaxPlayers.Key);
-        GUILayout.Label("Difficulty: " + GameVariables.Instance.Difficulty.Key);
-        GUILayout.Label("Timer: " + GameVariables.Instance.Timer.Key);
+        GUILayout.Label("Room: " + GameVariables.Instance.Title, style, GUILayout.MaxWidth(300));
+        GUILayout.Space(SPACE);
+        GUILayout.Label("Mode: " + GameVariables.Instance.Mode.Key, style);
+        GUILayout.Space(SPACE);
+        GUILayout.Label("Map: " + GameVariables.Instance.Map.Key, style);
+        GUILayout.Space(SPACE);
+        if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)) {
+            GUILayout.Label("Target kills: " + GameVariables.Instance.TargetKills.Key, style);
+            GUILayout.Space(SPACE);
+        }
+        GUILayout.Label("Max players: " + GameVariables.Instance.MaxPlayers.Key, style);
+        GUILayout.Space(SPACE);
+        GUILayout.Label("Difficulty: " + GameVariables.Instance.Difficulty.Key, style);
+        GUILayout.Space(SPACE);
+        GUILayout.Label("Timer: " + GameVariables.Instance.Timer.Key, style);
         GUILayout.EndArea();
     }
     #endregion
@@ -210,18 +241,21 @@ public class MainRoomGUI: MonoBehaviour {
     }
 
     private void StartGameButton() {
+        style.fontSize = 9;
         if (GUILayout.Button("Start Game")) {
             networkController.SyncGameVariables();
             if (allPlayersReady = GameManager.Instance.AllPlayersReady())
                 GameManager.Instance.MasterClientLoadMainStage();
         }
         if(!MainRoomModel.Instance.LocalClientOwnsSlot)
-            GUILayout.Label("Please choose a color.");
+            GUILayout.Label("Please choose a slot", style);
         else if (!allPlayersReady)
-            GUILayout.Label("Not everyone ready yet.");
+            GUILayout.Label("Wait for joined players", style);
+        style.fontSize = 12;
     }
 
     private void ReadyButton() {
+        style.fontSize = 9;
         if ((bool)GameManager.Instance.MyPlayer.customProperties["IsReady"]) {
             if (GUILayout.Button("Ready"))
                 if (MainRoomModel.Instance.LocalClientOwnsSlot) {
@@ -236,6 +270,7 @@ public class MainRoomGUI: MonoBehaviour {
             }
 
         if (!MainRoomModel.Instance.LocalClientOwnsSlot)
-            GUILayout.Label("Please choose a color.");
+            GUILayout.Label("Please choose a slot", style);
+        style.fontSize = 12;
     }
 }
