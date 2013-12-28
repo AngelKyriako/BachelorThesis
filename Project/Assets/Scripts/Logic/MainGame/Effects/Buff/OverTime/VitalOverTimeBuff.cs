@@ -25,14 +25,16 @@ public class VitalOverTimeBuff: OverTimeBuffEffect {
     }
 
     public override void Activate() {
-        int modyfyingValue = (int)(Modifier.RawValue + (Modifier.PercentageValue * Receiver.GetVital((int)vitalType).FinalValue));
-        BuffValue += modyfyingValue;
-        Receiver.GetVital((int)vitalType).BuffValue += modyfyingValue;
+        int modifyingValue = (int)(Modifier.RawValue + (Modifier.PercentageValue * Receiver.GetVital((int)vitalType).FinalValue));
+        BuffValue += modifyingValue;
+        Receiver.GetVital((int)vitalType).BuffValue += modifyingValue;
+        Receiver.GetVital((int)vitalType).CurrentValue += modifyingValue;
         base.Activate();
     }
 
     public override void Deactivate() {
         Receiver.GetVital((int)vitalType).BuffValue -= BuffValue;
+        Receiver.GetVital((int)vitalType).CurrentValue -= BuffValue;
         base.Deactivate();
     }
 }
