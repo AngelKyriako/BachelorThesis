@@ -59,7 +59,7 @@ public class GameVariables {
                                                              {"7", 7}, {"8", 8}, {"9", 9}, {"10", 10}
                                                            };
         targetKills = new KeyValuePair<string, int>("50", 50);
-        availableTargetKills = new Dictionary<string, int>(){ {"10", 10}, {"25", 25}, {"50", 50}, {"75", 75}, {"100", 100},
+        availableTargetKills = new Dictionary<string, int>(){ {"5", 5}, {"10", 10}, {"25", 25}, {"50", 50}, {"75", 75}, {"100", 100},
                                                               {"200", 200}, {"500", 500}, {"750", 750}, {"1000", 1000}
 	                                                        };
         timer = new KeyValuePair<string, float>("None", -1);

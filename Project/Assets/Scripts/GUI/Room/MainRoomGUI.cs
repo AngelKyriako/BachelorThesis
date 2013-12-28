@@ -93,7 +93,7 @@ public class MainRoomGUI: MonoBehaviour {
 
         if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)) {
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Max kills:", style);
+            GUILayout.Label("Target kills:", style);
             GUILayout.BeginVertical();
             GameVariables.Instance.TargetKills = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingPreferencesField, VariableType.targetKills,
                                                               GameVariables.Instance.TargetKills,

@@ -43,7 +43,7 @@ public class SkillBook{
                                    0f, string.Empty, string.Empty, string.Empty, null), "");
         //1
         tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description",
-                                      2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
+                                      2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireFlame"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(051));
@@ -62,7 +62,7 @@ public class SkillBook{
         AddSkill(tempSkill, "140");
         //3
         tempSkill = new TargetedSkill((int)Skill.MudShot, "Mud shot", "skill 3 description",
-                                      4f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
+                                      4f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudShot"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(201));

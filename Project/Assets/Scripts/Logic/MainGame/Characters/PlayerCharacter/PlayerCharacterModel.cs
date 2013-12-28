@@ -42,12 +42,12 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void AddListeners() {
         PlayerInputManager.Instance.SkillQWERorLeftClick += delegate(CharacterSkillSlot _slotPressed) {
-            if (!IsStunned && !IsSilenced && SkillExists(_slotPressed))
+            if (SkillExists(_slotPressed))
                 GetSkill(_slotPressed).Pressed();
         };
 
         PlayerInputManager.Instance.SkillQWERorLeftClick += delegate(CharacterSkillSlot _slotPressed) {
-            if (!IsStunned && !IsSilenced && SkillExists(PlayerInputManager.Instance.CurrentTargetedSlot))
+            if (SkillExists(PlayerInputManager.Instance.CurrentTargetedSlot))
                 GetSkill(PlayerInputManager.Instance.CurrentTargetedSlot).Unpressed();
 
 

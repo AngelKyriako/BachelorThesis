@@ -169,8 +169,12 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
     [RPC]
     private void GameOver(int winnerTeam) {
+        PhotonNetwork.LoadLevel("GameOver");
+
+        CameraManager.Instance.enabled = false;
+
         gameObject.AddComponent<GameOverManager>();
-        Destroy(gui);
+        GameOverManager.Instance.SetUp((PlayerTeam)winnerTeam);        
     }
 #endregion
 
@@ -195,6 +199,9 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public Color MyColor {
         get { return ColorHolder.Instance.GetPlayerColor(GetPlayerColor(me.Character.name)); }
     }
+    public PlayerTeam MyTeam {
+        get { return (PlayerTeam)me.Player.customProperties["Team"]; }
+    }
     public GameObject MyCharacter {
         get { return me.Character; }
     }
@@ -215,6 +222,9 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
     public bool ItsMe(string _name) {
         return _name.Equals(MyCharacter.name);
+    }
+    public bool IsMyTeam(PlayerTeam _team) {
+        return MyTeam.Equals(_team);
     }
     // master client
     public PlayerCharacterPair MasterClient {
