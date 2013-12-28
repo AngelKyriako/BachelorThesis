@@ -67,6 +67,8 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void Update() {
         base.Update();
+        if (Input.GetKeyUp(KeyCode.L))
+            GainExp(ExpToLevel);
     }
 
     public override void LevelUp() {

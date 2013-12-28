@@ -289,7 +289,7 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
         get { return myModel != null ? "level " + myModel.Level : DEFAULT_STRING; }
     }
     public bool StatsCanBeUpdated {
-        get { return updater != null ? updater.PlayerCanUpdate : true; }
+        get { return updater != null && myModel != null ? updater.PlayerCanUpdate && myModel.TrainingPoints > 0 : true; }
     }
     #endregion
 

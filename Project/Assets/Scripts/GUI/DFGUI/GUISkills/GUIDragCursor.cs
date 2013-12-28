@@ -43,6 +43,7 @@ public class GUIDragCursor: MonoBehaviour {
 
     public static void Hide() {
         sprite.IsVisible = false;
+        sprite.SpriteName = "";
     }
 
     private static void SetPosition(Vector2 position) {

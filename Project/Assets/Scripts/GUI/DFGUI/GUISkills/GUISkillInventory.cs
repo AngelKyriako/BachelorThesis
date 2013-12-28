@@ -80,8 +80,8 @@ public class GUISkillInventory: MonoBehaviour {
         guiSkill.Id = Id;
         lblName.Text = DFSkillModel.Instance.Title(Id);
         lblCosts.Text = string.Format("{0}/{1}/{2}", DFSkillModel.Instance.ManaCost(CharacterSkillSlot.None),//@TODO: find a way to pass slot here
-                                                        DFSkillModel.Instance.Cooldown(Id, CharacterSkillSlot.None),//@TODO: find a way to pass slot here
-                                                        DFSkillModel.Instance.IsSkillAvailable(Id));
+                                                     DFSkillModel.Instance.Cooldown(Id, CharacterSkillSlot.None),//@TODO: find a way to pass slot here
+                                                     DFSkillModel.Instance.IsSkillAvailable(Id));
         lblDescription.Text = DFSkillModel.Instance.Description(Id);
         //@TODO: Add an effects Text section here (maybe an on hover)
 
