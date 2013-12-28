@@ -5,8 +5,7 @@ public class GUITerrainMapWindow: MonoBehaviour {
 
     public dfLabel playerIcon;
     private const int MAP_SIZE = 150;
-    private const int OFFSET_X = -4,
-                      OFFSET_Y = 435;//the more the value the more to the top it goes //Editor: 322, 800x600: 422
+    private float offsetX, offsetY;//435;//the more the value the more to the top it goes //Editor: 322, 800x600: 422
 
     private const KeyCode TOGGLE_BUTTON = KeyCode.M;
     private const int VISIBLE_ENEMY_LAYER = 9;
@@ -16,10 +15,13 @@ public class GUITerrainMapWindow: MonoBehaviour {
 
 	void Start () {
         playerIcons = new List<Pair<string, dfControl>>();
-
         dfLabel _nextIcon;
         foreach (string _name in GameManager.Instance.AllPlayerKeys) {
-            _nextIcon = (dfLabel)Instantiate(playerIcon);
+            if (!GameManager.Instance.ItsMe(_name))
+                _nextIcon = (dfLabel)Instantiate(playerIcon);
+            else
+                _nextIcon = playerIcon;
+
             gameObject.GetComponent<dfPanel>().AddControl(_nextIcon);
             _nextIcon.Text = "*";
             _nextIcon.Color = GameManager.Instance.GetPlayerRGBColor(_name);
@@ -28,6 +30,9 @@ public class GUITerrainMapWindow: MonoBehaviour {
 
         terrainMapWidthScale = Terrain.activeTerrain.terrainData.size.x / MAP_SIZE;
         terrainMapHeightScale = Terrain.activeTerrain.terrainData.size.z / MAP_SIZE;
+
+        offsetX = playerIcon.Size.x / 2;
+        offsetY = Screen.height - gameObject.GetComponent<dfControl>().Size.y + playerIcon.Size.y / 2;
 	}
 	
 	void Update () {
@@ -45,9 +50,9 @@ public class GUITerrainMapWindow: MonoBehaviour {
 
     private Vector2 TranslateCoordinatesToMap(string _playerId) {
         return new Vector2( GameManager.Instance.GetCharacter(_playerId).transform.position.x
-                            / terrainMapWidthScale + OFFSET_X,
+                            / terrainMapWidthScale + offsetX,
                             GameManager.Instance.GetCharacter(_playerId).transform.position.z
-                            / terrainMapHeightScale + OFFSET_Y
+                            / terrainMapHeightScale + offsetY
                           );
     }
 

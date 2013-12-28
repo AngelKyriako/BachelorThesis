@@ -26,13 +26,13 @@ public class GameVariables {
     private KeyValuePair<string, GameMap> map;
     private KeyValuePair<string, GameDifficulty> difficulty;
     private KeyValuePair<string, int> maxPlayers, targetKills;
-    private KeyValuePair<string, double> timer;
+    private KeyValuePair<string, float> timer;
 
     private Dictionary<string, GameMode> availableModes;
     private Dictionary<string, GameMap> availableMaps;
     private Dictionary<string, GameDifficulty> availableDifficulties;
     private Dictionary<string, int> availableMaxPlayers, availableTargetKills;
-    private Dictionary<string, double> availableTimers;
+    private Dictionary<string, float> availableTimers;
     #endregion
 
     private static GameVariables instance = new GameVariables();
@@ -62,9 +62,12 @@ public class GameVariables {
         availableTargetKills = new Dictionary<string, int>(){ {"10", 10}, {"25", 25}, {"50", 50}, {"75", 75}, {"100", 100},
                                                               {"200", 200}, {"500", 500}, {"750", 750}, {"1000", 1000}
 	                                                        };
-        timer = new KeyValuePair<string, double>("None", -1);
-        availableTimers = new Dictionary<string, double>(){ {"None", -1}, {"10'", 600}, {"15'", 900}, {"20'", 1200}, {"30'", 1800},
-                                                            {"60'", 3600}, {"90'", 5400}, {"120'", 7200}, {"180'", 10800}
+        timer = new KeyValuePair<string, float>("None", -1);
+        //availableTimers = new Dictionary<string, float>(){ {"None", -1}, {"10'", 600}, {"15'", 900}, {"20'", 1200}, {"30'", 1800},
+        //                                                    {"60'", 3600}, {"90'", 5400}, {"120'", 7200}, {"180'", 10800}
+        //                                                  };
+        availableTimers = new Dictionary<string, float>(){ {"None", 0}, {"10''", 10}, {"20''", 20}, {"30''", 30},
+                                                            {"1'", 60}, {"2'", 120}, {"3'", 180}, {"5'", 300}
                                                           };
     }
 
@@ -97,7 +100,7 @@ public class GameVariables {
         get { return targetKills; }
         set { targetKills = value; }
     }
-    public KeyValuePair<string, double> Timer {
+    public KeyValuePair<string, float> Timer {
         get { return timer; }
         set { timer = value; }
     }
@@ -117,7 +120,7 @@ public class GameVariables {
     public Dictionary<string, int> AvailableTargetKills {
         get { return availableTargetKills; }
     }
-    public Dictionary<string, double> AvailableTimers {
+    public Dictionary<string, float> AvailableTimers {
         get { return availableTimers; }
     }
     #endregion

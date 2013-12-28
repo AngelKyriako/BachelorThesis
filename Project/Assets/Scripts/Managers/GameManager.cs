@@ -17,7 +17,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     private GameObject gui;
     private PlayerCharacterPair me;
     private PlayerCharacterPair masterClient;
-    private Dictionary<string, PlayerCharacterPair> allies;
+    private Dictionary<string, bool> allies;
     private Dictionary<string, PlayerCharacterPair> all;
     private int[] teamKills;
 
@@ -26,7 +26,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     void Awake() {
         gui = GameObject.Find("GUIScripts");
         all = new Dictionary<string, PlayerCharacterPair>();
-        allies = new Dictionary<string, PlayerCharacterPair>();
+        allies = new Dictionary<string, bool>();
         teamKills = new int[MainRoomModel.Instance.AvailableTeamsLength];
         for (int i = 0; i < MainRoomModel.Instance.AvailableTeamsLength; ++i)
             teamKills[i] = 0;
@@ -62,27 +62,36 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 
     public void InitMainStage() {
-        RegisterAllies();
-
         CameraManager.Instance.SetUp();
         gameObject.AddComponent<CombatManager>();
 
-        foreach (string _name in AllPlayerKeys)
-            GetPlayerNetController(_name).SetUp();
-
+        RegisterAllies();
+        InitNetworkControllers();
         InitGUIScripts();
-        TeleportManager.Instance.StandardTeleportation(false);
+        SpawnPlayerCharacter();
+        
     }
 
     private void RegisterAllies() {
         foreach (string _name in AllPlayerKeys) {
             if (CombatManager.Instance.AreAllies(_name, MyCharacter.name))
-                allies.Add(_name, all[_name]);
+                allies.Add(_name, true);
         }
+    }
+
+    private void InitNetworkControllers() {
+        foreach (string _name in AllPlayerKeys)
+            GetPlayerNetController(_name).SetUp();
     }
 
     private void InitGUIScripts() {
         gui.AddComponent<DFPSCounter>().enabled = true;
+    }
+
+    private void SpawnPlayerCharacter() {
+        MyCharacterModel.RespawnTimer = GameVariables.Instance.Timer.Value;
+        MyDeathController.enabled = true;
+        TeleportManager.Instance.StandardTeleportation(false);
     }
 
     public void MasterClientRequestConnectedPlayers() {
@@ -168,11 +177,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     #region debug
     public void LogMessageToMasterClient(string _str) {
         photonView.RPC("PrintShit", PhotonNetwork.masterClient, _str);
-    }
-    [RPC]
-    private void PrintShit(string _str, PhotonMessageInfo info) {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "PlayerCharacterNetworkController", "[RPC]PrintShit", "This RPC is only available for the master client.");
-        Utilities.Instance.LogMessageToChat(info.sender.name + " sent: " + _str);
     }
     #endregion
 

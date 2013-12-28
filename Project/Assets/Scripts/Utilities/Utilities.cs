@@ -45,14 +45,14 @@ public class Utilities {
     }
     #endregion
 
-    #region Stat values display
+    #region GUI Display
     public string VitalDisplay(float _value) {
         int intVal = (int)_value;
-        return (intVal != _value)?(intVal + 1).ToString():intVal.ToString();
+        return (intVal != _value) ? (intVal + 1).ToString() : intVal.ToString();
     }
 
     public string TimeCounterDisplay(float _time) {
-        return System.Math.Round(_time, 1).ToString();
+        return (_time > 5) ? System.Math.Round(_time, 0).ToString() : System.Math.Round(_time, 1).ToString();
     }
     #endregion
 

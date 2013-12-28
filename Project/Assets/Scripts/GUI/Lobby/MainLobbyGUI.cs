@@ -207,7 +207,7 @@ public class MainLobbyGUI: MonoBehaviour {
         GUILayout.BeginHorizontal();
         GUILayout.Label("Timer:", propertyLabel);
         GUILayout.BeginVertical();
-        GameVariables.Instance.Timer = GUIUtilities.Instance.ButtonOptions<double, VariableType>(ref editingField, VariableType.Timer,
+        GameVariables.Instance.Timer = GUIUtilities.Instance.ButtonOptions<float, VariableType>(ref editingField, VariableType.Timer,
                                                              GameVariables.Instance.Timer,
                                                              GameVariables.Instance.AvailableTimers, 39);
         GUILayout.EndVertical();

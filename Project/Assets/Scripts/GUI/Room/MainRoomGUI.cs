@@ -129,7 +129,7 @@ public class MainRoomGUI: MonoBehaviour {
         GUILayout.BeginHorizontal();
         GUILayout.Label("Start Timer:", style);
         GUILayout.BeginVertical();
-        GameVariables.Instance.Timer = GUIUtilities.Instance.ButtonOptions<double, VariableType>(ref editingPreferencesField, VariableType.Timer,
+        GameVariables.Instance.Timer = GUIUtilities.Instance.ButtonOptions<float, VariableType>(ref editingPreferencesField, VariableType.Timer,
                                                              GameVariables.Instance.Timer,
                                                              GameVariables.Instance.AvailableTimers, 39);
         GUILayout.EndVertical();

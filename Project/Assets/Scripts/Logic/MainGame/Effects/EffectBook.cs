@@ -20,7 +20,6 @@ public class EffectBook {
         }
     }
 
-
     private Dictionary<int, EffectBookEffect> allEffects;
 
     private static EffectBook instance = new EffectBook();
@@ -72,7 +71,7 @@ public class EffectBook {
         AddEffect(tempEffect, "148");
         #endregion
 
-        GameObject.DestroyImmediate(effectsHolder);//@Hint: take care, here used to be a normal Destroy (find the difference between those two)
+        GameObject.DestroyImmediate(effectsHolder);
     }
 
     #region Utility constructors
@@ -86,15 +85,39 @@ public class EffectBook {
     private HealingEffect NewHealingEffect(GameObject _effectsHolder) {
         return _effectsHolder.AddComponent<HealingEffect>();
     }
-    //buff & debuffs
+    //direct buff & debuffs
     private VitalBuff NewVitalBuff(GameObject _effectsHolder) {
         return _effectsHolder.AddComponent<VitalBuff>();
     }
     private AttributeBuff NewAttributeBuff(GameObject _effectsHolder) {
         return _effectsHolder.AddComponent<AttributeBuff>();
     }
+    //over time vital effects
+    private DamageOverTimeEffect NewDamageOverTimeEffect(GameObject _effectsHolder) {
+        return _effectsHolder.AddComponent<DamageOverTimeEffect>();
+    }
+    private ManaBurnOverTimeEffect NewManaBurnOverTimeEffect(GameObject _effectsHolder) {
+        return _effectsHolder.AddComponent<ManaBurnOverTimeEffect>();
+    }
+    private HealingOverTimeEffect NewHealingOverTimeEffect(GameObject _effectsHolder) {
+        return _effectsHolder.AddComponent<HealingOverTimeEffect>();
+    }
+    //over time buff & debuffs
+    private VitalOverTimeBuff NewVitalOverTimeBuff(GameObject _effectsHolder) {
+        return _effectsHolder.AddComponent<VitalOverTimeBuff>();
+    }
+    private AttributeOverTimeBuff NewAttributeOverTimeBuff(GameObject _effectsHolder) {
+        return _effectsHolder.AddComponent<AttributeOverTimeBuff>();
+    }
+    //special
     private StunEffect NewStunEffect(GameObject _effectsHolder) {
         return _effectsHolder.AddComponent<StunEffect>();
+    }
+    private SilenceEffect NewSilenceEffect(GameObject _effectsHolder) {
+        return _effectsHolder.AddComponent<SilenceEffect>();
+    }
+    private CleanseEffect NewCleanseEffect(GameObject _effectsHolder) {
+        return _effectsHolder.AddComponent<CleanseEffect>();
     }
     #endregion
 

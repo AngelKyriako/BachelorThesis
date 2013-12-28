@@ -63,7 +63,7 @@ public class RoomNetController: BaseNetController {
         GameVariables.Instance.Difficulty = new KeyValuePair<string, GameDifficulty>(_difficulty, GameVariables.Instance.AvailableDifficulties[_difficulty]);
         GameVariables.Instance.MaxPlayers = new KeyValuePair<string, int>(_maxPlayers, GameVariables.Instance.AvailableMaxPlayers[_maxPlayers]);
         GameVariables.Instance.TargetKills = new KeyValuePair<string, int>(_targetKills, GameVariables.Instance.AvailableTargetKills[_targetKills]);
-        GameVariables.Instance.Timer = new KeyValuePair<string, double>(_timer, GameVariables.Instance.AvailableTimers[_timer]);
+        GameVariables.Instance.Timer = new KeyValuePair<string, float>(_timer, GameVariables.Instance.AvailableTimers[_timer]);
     }
     #endregion
     #endregion

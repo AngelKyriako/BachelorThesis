@@ -26,18 +26,17 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void Awake() {
         base.Awake();
+        expModifier = STARTING_EXP_MODIFIER;
+        expToLevel = STARTING_EXP_TO_LEVEL;
+        currentExp = 0;
+        killsCount = deathCount = 0;
+        respawnTimer = 0;
         enabled = false;
     }
 
     public override void Start() {
-        base.Start();
-        expModifier = STARTING_EXP_MODIFIER;
-        expToLevel = STARTING_EXP_TO_LEVEL;
-        currentExp = 0;
+        base.Start();        
         trainingPoints = TRAINING_POINTS_PER_LEVEL[Level-1];
-        killsCount = 0;
-        deathCount = 0;
-        respawnTimer = 0;
         projectileSpawner = GameObject.Find(SceneHierarchyManager.Instance.PlayerCharacterProjectileSpawnerPath(name));
     }
 
