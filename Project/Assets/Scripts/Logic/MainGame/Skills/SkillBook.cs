@@ -86,6 +86,7 @@ public class SkillBook{
                           5f, string.Empty, null, string.Empty);
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(053));
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(004));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(203));
         AddSkill(tempSkill, "153");
         #endregion
     }
