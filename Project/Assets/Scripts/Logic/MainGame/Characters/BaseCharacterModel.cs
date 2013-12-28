@@ -95,7 +95,7 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     private Vital[] vitals;
     private Dictionary<CharacterSkillSlot, BaseSkill> skills;
     private float lastRegenTime;
-    private bool isStunned;
+    private bool isStunned, isSilenced;
 #endregion
 
     public virtual void Awake() {
@@ -259,6 +259,10 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     public bool IsStunned {
         get { return isStunned; }
         set { isStunned = value; }
+    }
+    public bool IsSilenced {
+        get { return isSilenced; }
+        set { isSilenced = value; }
     }
 
     public virtual Vector3 ProjectileOriginPosition {

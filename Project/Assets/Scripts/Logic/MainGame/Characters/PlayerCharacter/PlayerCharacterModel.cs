@@ -43,12 +43,12 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void AddListeners() {
         PlayerInputManager.Instance.SkillQWERorLeftClick += delegate(CharacterSkillSlot _slotPressed) {
-            if (SkillExists(_slotPressed))
+            if (!IsStunned && !IsSilenced && SkillExists(_slotPressed))
                 GetSkill(_slotPressed).Pressed();
         };
 
         PlayerInputManager.Instance.SkillQWERorLeftClick += delegate(CharacterSkillSlot _slotPressed) {
-            if (SkillExists(PlayerInputManager.Instance.CurrentTargetedSlot))
+            if (!IsStunned && !IsSilenced && SkillExists(PlayerInputManager.Instance.CurrentTargetedSlot))
                 GetSkill(PlayerInputManager.Instance.CurrentTargetedSlot).Unpressed();
 
 
@@ -91,6 +91,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
         uint ExpLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE);
         LoseExp(ExpLoss > CurrentExp ? CurrentExp : ExpLoss);
         VitalsToZero();
+        IsSilenced = true;
     }
 
     public void GainExp(uint _exp) {
