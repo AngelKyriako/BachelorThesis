@@ -13,7 +13,7 @@ public class OverTimeEffect : LastingEffect {
     }
 
     public void SetUpEffect(int _id, string _title, string _descr, uint _manaCost, uint _minLevelReq,//base
-                            float _duration,                                                                 //lasting
+                            float _duration,                                                         //lasting
                             float _overTimeDuration, float _freq) {
         base.SetUpEffect(_id, _title, _descr, _manaCost, _minLevelReq, _duration);
         overTimeCountdownTimer = _overTimeDuration;

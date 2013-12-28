@@ -13,7 +13,7 @@ public class BuffEffect: LastingEffect {
     }
 
     public void SetUpEffect(int _id, string _title, string _descr, uint _manaCost, uint _minLevelReq, //base
-                            float _duration,                                                                  //lasting
+                            float _duration,                                                          //lasting
                             EffectMod _modifier) {
         base.SetUpEffect(_id, _title, _descr, _manaCost, _minLevelReq, _duration);
         modifier = _modifier;
