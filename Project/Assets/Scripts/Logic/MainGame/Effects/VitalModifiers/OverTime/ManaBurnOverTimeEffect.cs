@@ -11,5 +11,6 @@ public class ManaBurnOverTimeEffect: VitalOverTimeEffect {
                                                                                 +
                                             (Modifier.PercentageValue * Receiver.GetVital((int)VitalType.Mana).FinalValue)
                                           );
+        base.Activate();
     }
 }

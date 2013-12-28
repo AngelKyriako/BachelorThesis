@@ -1,14 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public enum Effect {
-    None,
-    Damage,
-    Slow,
-    Immobilize,
-    Stun
-}
-
 public class EffectBook {
 
     public struct EffectBookEffect {
@@ -33,42 +25,81 @@ public class EffectBook {
         GameObject effectsHolder = new GameObject("EffectHolder");
         BaseEffect tempEffect = null;
 
-        tempEffect = NewAttributeBuff(effectsHolder);
-        ((AttributeBuff)tempEffect).SetUpEffect((int)Effect.Immobilize, "Immobilize", "Immobilize description", 20, 1, 3f, new EffectMod(0f, -1.0f), AttributeType.MovementSpeed);
-        AddEffect(tempEffect, "140");
-
-        tempEffect = NewAttributeBuff(effectsHolder);
-        ((AttributeBuff)tempEffect).SetUpEffect((int)Effect.Slow, "Slow", "Slow description", 15, 1, 10f, new EffectMod(0f, -0.5f), AttributeType.MovementSpeed);
-        AddEffect(tempEffect, "141");
-
+        //Effect Templates
+        #region Vital modifiers
+        #region Direct  (id - title - description - mana - req - modifier)
         tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect((int)Effect.Damage, "Damage", "damage effect description", 13, 1, new EffectMod(100f, 0f));
-        AddEffect(tempEffect, "142");
+        ((DamageEffect)tempEffect).SetUpEffect(001, "Damage75", "", 25, 1, new EffectMod(75f, 0f));
+        AddEffect(tempEffect, "001");
 
         tempEffect = NewManaBurnEffect(effectsHolder);
-        ((ManaBurnEffect)tempEffect).SetUpEffect(7, "Mana burn", "mana burn effect description", 10, 1, new EffectMod(0f, 0.2f));
-        AddEffect(tempEffect, "143");
+        ((ManaBurnEffect)tempEffect).SetUpEffect(002, "ManaBurn30", "", 10, 1, new EffectMod(30f, 0.2f));
+        AddEffect(tempEffect, "002");
 
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect(5, "Health Heal", "Health Heal effect description", 15, 1, new EffectMod(20f, 0.3f), VitalType.Health);
-        AddEffect(tempEffect, "144");
+        ((HealingEffect)tempEffect).SetUpEffect(003, "HealthHeal20_30%", "", 15, 1, new EffectMod(20f, 0.3f), VitalType.Health);
+        AddEffect(tempEffect, "003");
 
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect(6, "Mana Heal", "Mana Heal effect description", 10, 1, new EffectMod(20f, 0.4f), VitalType.Mana);
-        AddEffect(tempEffect, "145");
+        ((HealingEffect)tempEffect).SetUpEffect(004, "ManaHeal20_30%", "", 15, 1, new EffectMod(20f, 0.3f), VitalType.Mana);
+        AddEffect(tempEffect, "004");
+        #endregion
 
-        tempEffect = NewStunEffect(effectsHolder);
-        ((StunEffect)tempEffect).SetUpEffect((int)Effect.Stun, "Stun", "Stun description", 15, 1, 4f);
-        AddEffect(tempEffect, "146");
+        #region Over time  (id - title - description - mana - req - dur - overtime dur - freq - modifier)
+        tempEffect = NewDamageOverTimeEffect(effectsHolder);
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(051, "DamageoT15", "", 15, 1, 10f, 10f, 2f, new EffectMod(15f, 0f));
+        AddEffect(tempEffect, "051");
 
-        #region Testing effect helpers
-        tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect(99, "OneHitKO", "damage effect description", 13, 1, new EffectMod(0f, 1f));
-        AddEffect(tempEffect, "147");
+        tempEffect = NewManaBurnOverTimeEffect(effectsHolder);
+        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(052, "ManaBurnoT15", "", 15, 1, 10f, 10f, 2f, new EffectMod(15f, 0f));
+        AddEffect(tempEffect, "052");
+
+        tempEffect = NewHealingOverTimeEffect(effectsHolder);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(053, "HealthHealoT15", "", 15, 1, 10f, 10f, 2f, new EffectMod(15f, 0f), VitalType.Health);
+        AddEffect(tempEffect, "053");
+
+        tempEffect = NewHealingOverTimeEffect(effectsHolder);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(054, "ManaHealoT15", "", 15, 1, 10f, 10f, 2f, new EffectMod(15f, 0f), VitalType.Mana);
+        AddEffect(tempEffect, "054");
+        #endregion
+        #endregion
+
+        #region Buffs & Debuffs
+        #region Direct  (id - title - description - mana - req - dur - modifier - Type)
+        tempEffect = NewVitalBuff(effectsHolder);
+        ((VitalBuff)tempEffect).SetUpEffect(101, "HealthBuff50%", "", 15, 1, 3f, new EffectMod(0f, 0.5f), VitalType.Health);
+        AddEffect(tempEffect, "101");
 
         tempEffect = NewAttributeBuff(effectsHolder);
-        ((AttributeBuff)tempEffect).SetUpEffect(98, "20Immobilize", "20Immobilize description", 20, 1, 20f, new EffectMod(0f, -1.0f), AttributeType.MovementSpeed);
-        AddEffect(tempEffect, "148");
+        ((AttributeBuff)tempEffect).SetUpEffect(102, "MovementDebuff100%", "", 15, 1, 3f, new EffectMod(0f, -1.0f), AttributeType.MovementSpeed);
+        AddEffect(tempEffect, "102");
+        #endregion
+
+        #region Over time  (id - title - description - mana - req - dur - overtime dur - freq - modifier - Type)
+        tempEffect = NewVitalOverTimeBuff(effectsHolder);
+        ((VitalOverTimeBuff)tempEffect).SetUpEffect(151, "HealthBuffoT10%", "", 15, 1, 10f, 10f, 2f, new EffectMod(0f, 0.1f), VitalType.Health);
+        AddEffect(tempEffect, "151");
+
+        tempEffect = NewAttributeOverTimeBuff(effectsHolder);
+        ((AttributeOverTimeBuff)tempEffect).SetUpEffect(152, "MovementDebuffoT20%", "", 15, 1, 10f, 10f, 2f, new EffectMod(0f, -0.2f), AttributeType.MovementSpeed);
+        AddEffect(tempEffect, "152");
+        #endregion
+        #endregion
+
+        #region Special
+        //(id - title - description - mana - req - duration)
+        tempEffect = NewStunEffect(effectsHolder);
+        ((StunEffect)tempEffect).SetUpEffect(201, "Stun4", "", 15, 1, 4f);
+        AddEffect(tempEffect, "201");
+
+        tempEffect = NewSilenceEffect(effectsHolder);
+        ((SilenceEffect)tempEffect).SetUpEffect(202, "Silence4", "", 15, 1, 4f);
+        AddEffect(tempEffect, "202");
+
+        //(id - title - description - mana - req - type)
+        tempEffect = NewCleanseEffect(effectsHolder);
+        ((CleanseEffect)tempEffect).SetUpEffect(203, "Cleanse", "", 15, 1, EffectType.Negative);
+        AddEffect(tempEffect, "203");
         #endregion
 
         GameObject.DestroyImmediate(effectsHolder);
@@ -121,15 +152,13 @@ public class EffectBook {
     }
     #endregion
 
+    private void AddEffect(BaseEffect _effect, string _icon) {
+        allEffects.Add(_effect.Id, new EffectBookEffect(_effect, _icon));
+    }
+
     #region Accesors
     public ICollection<int> AllEffectsKeys {
         get { return allEffects.Keys; }
-    }
-    public void AddEffect(BaseEffect _effect, string _icon) {
-        allEffects.Add(_effect.Id, new EffectBookEffect(_effect, _icon));
-    }
-    public void RemoveEffect(BaseEffect _effect) {
-        allEffects.Remove(_effect.Id);
     }
     public BaseEffect GetEffect(int _id) {
         return allEffects[_id].Effect;

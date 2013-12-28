@@ -45,51 +45,47 @@ public class SkillBook{
         tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description",
                                       2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect((int)Effect.Damage));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(051));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(151));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(152));
         AddSkill(tempSkill, "137");
         //2
         tempSkill = new TargetedSkill((int)Skill.WaterGun, "Water gun", "skill 2 description",
-                                      4f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("WaterBall"), string.Empty,
+                                      3f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("WaterBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect((int)Effect.Slow));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(7));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(002));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(052));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(202));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(053));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(054));
         AddSkill(tempSkill, "140");
         //3
         tempSkill = new TargetedSkill((int)Skill.MudShot, "Mud shot", "skill 3 description",
-                                      5f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
+                                      4f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect((int)Effect.Damage));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect((int)Effect.Immobilize));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(201));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(051));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(052));
         AddSkill(tempSkill, "136");
 
         #region Testing skill helpers
-        tempSkill = new TargetedSkill((int)Skill.Test1, "Fuck up Ball", "skill 3 description",
-                                      1f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(99));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(98));
-        AddSkill(tempSkill, "133");
-
-        tempSkill = new BaseSkill((int)Skill.Test2, "KillMe", "KillMe description",
-                                   1f, string.Empty, null, string.Empty);
-        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(99));
-        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(98));
-        AddSkill(tempSkill, "134");
-
         tempSkill = new BaseSkill((int)Skill.Test3, "DamageMe", "DamageMe description",
                                    1f, string.Empty, null, string.Empty);
-        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect((int)Effect.Damage));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(051));
         AddSkill(tempSkill, "135");
 
-        tempSkill = new BaseSkill((int)Skill.Test4, "StunMe", "DamageMe description",
+        tempSkill = new BaseSkill((int)Skill.Test4, "StunMe", "StunMe description",
                            1f, string.Empty, null, string.Empty);
-        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect((int)Effect.Stun));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(201));
         AddSkill(tempSkill, "136");
 
         tempSkill = new BaseSkill((int)Skill.Test5, "Heal", "Heal description",
                           5f, string.Empty, null, string.Empty);
-        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(5));
-        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(6));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(053));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(004));
         AddSkill(tempSkill, "153");
         #endregion
     }

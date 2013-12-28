@@ -21,6 +21,7 @@ public class HealingOverTimeEffect: VitalOverTimeEffect {
                                                                                 +
                                             (Modifier.PercentageValue * Receiver.GetVital((int)vitalType).FinalValue)
                                           );
+        base.Activate();
     }
 
     public VitalType VitalType {

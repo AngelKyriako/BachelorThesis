@@ -13,7 +13,6 @@ public class GUIShowWindow: MonoBehaviour {
 
     void OnEnable() {
         Utilities.Instance.PreCondition(!windowName.Equals(string.Empty), "GUIShowWindow", "OnEnable", "window is not defined");
-        Utilities.Instance.PreCondition(key != null, "GUIShowWindow", "OnEnable", "window is not defined");
 
         window = GameObject.Find(windowName).GetComponent<dfControl>();
         window.IsVisible = false;

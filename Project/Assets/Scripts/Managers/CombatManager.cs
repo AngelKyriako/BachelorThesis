@@ -23,7 +23,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
 
     #region Instantiation of network objects methods
     public void InstantiateNetworkObject(string _obj, Vector3 _position, Quaternion _rotation) {
-        GameObject obj = PhotonNetwork.Instantiate(_obj, _position, _rotation, 0, null);
+        PhotonNetwork.Instantiate(_obj, _position, _rotation, 0, null);
     }
 
     public void InstantiateNetworkSkill(string _obj, Vector3 _position, Quaternion _rotation,

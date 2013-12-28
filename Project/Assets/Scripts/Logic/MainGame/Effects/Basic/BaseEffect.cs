@@ -2,6 +2,12 @@
 using System;
 using System.Collections.Generic;
 
+public enum EffectType {
+    None,
+    Negative,
+    Positive
+}
+
 public struct EffectMod {
     public float RawValue;
     public float PercentageValue;
@@ -17,6 +23,7 @@ public abstract class BaseEffect: MonoBehaviour {
     #region attributes
     private BaseCharacterModel caster;
     private int id;
+    private EffectType type;
     private string title, description;
     private uint manaCost, levelRequirement;
     #endregion
@@ -26,6 +33,7 @@ public abstract class BaseEffect: MonoBehaviour {
         title = string.Empty;
         description = string.Empty;
         id = 0;
+        type = EffectType.None;
         enabled = false;
         manaCost = 0;
         levelRequirement = 0;
@@ -65,15 +73,22 @@ public abstract class BaseEffect: MonoBehaviour {
     public BaseCharacterModel Receiver {
         get { return gameObject.GetComponent<BaseCharacterModel>(); }
     }
+    public GameObject ReceiverGameObject {
+        get { return gameObject; }
+    }
 
+    public int Id {
+        get { return id; }
+    }
+    public EffectType Type {
+        get { return type; }
+        set { type = value; }
+    }
     public string Title {
         get { return title; }
     }
     public string Description {
         get { return description; }
-    }
-    public int Id {
-        get { return id; }
     }
     public uint ManaCost {
         get { return manaCost; }

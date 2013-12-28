@@ -19,5 +19,6 @@ public class DamageOverTimeEffect: VitalOverTimeEffect {
 
             TeleportManager.Instance.StandardTeleportation(false);
         }
+        base.Activate();
     }
 }
