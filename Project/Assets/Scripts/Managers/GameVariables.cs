@@ -58,11 +58,11 @@ public class GameVariables {
         availableMaxPlayers = new Dictionary<string, int>(){ {"2", 2}, {"3", 3}, {"4", 4}, {"5", 5}, {"6", 6},
                                                              {"7", 7}, {"8", 8}, {"9", 9}, {"10", 10}
                                                            };
-        targetKills = new KeyValuePair<string, int>("50", 50);
+        targetKills = new KeyValuePair<string, int>("5", 1);
         availableTargetKills = new Dictionary<string, int>(){ {"5", 5}, {"10", 10}, {"25", 25}, {"50", 50}, {"75", 75}, {"100", 100},
                                                               {"200", 200}, {"500", 500}, {"750", 750}, {"1000", 1000}
 	                                                        };
-        timer = new KeyValuePair<string, float>("None", -1);
+        timer = new KeyValuePair<string, float>("None", 0);
         //availableTimers = new Dictionary<string, float>(){ {"None", -1}, {"10'", 600}, {"15'", 900}, {"20'", 1200}, {"30'", 1800},
         //                                                    {"60'", 3600}, {"90'", 5400}, {"120'", 7200}, {"180'", 10800}
         //                                                  };

@@ -178,12 +178,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     }
 #endregion
 
-    #region debug
-    public void LogMessageToMasterClient(string _str) {
-        photonView.RPC("PrintShit", PhotonNetwork.masterClient, _str);
-    }
-    #endregion
-
     #region Accessors
     public GameObject Gui {
         get { return gui; }
@@ -197,7 +191,10 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         get { return me.Player; }
     }
     public Color MyColor {
-        get { return ColorHolder.Instance.GetPlayerColor(GetPlayerColor(me.Character.name)); }
+        get { return ColorHolder.Instance.GetPlayerColor(MyPlayerColor); }
+    }
+    public PlayerColor MyPlayerColor {
+        get { return (PlayerColor)me.Player.customProperties["Color"]; }
     }
     public PlayerTeam MyTeam {
         get { return (PlayerTeam)me.Player.customProperties["Team"]; }

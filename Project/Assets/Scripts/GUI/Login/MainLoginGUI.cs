@@ -37,12 +37,16 @@ public class MainLoginGUI: MonoBehaviour {
         }
         GUILayout.EndHorizontal();
 
-        if(playerName.Length == 0)
-            GUILayout.Label("Please enter a valid name.", errorMessageStyle);
+        if (!IsNameValid)
+            GUILayout.Label("Please enter a valid name. (3-18 characters)", errorMessageStyle);
         GUILayout.Space(2 * space);
-        if(GUILayout.Button("Login", bigButtonStyle) && playerName.Length > 0)
+        if (GUILayout.Button("Login", bigButtonStyle) && IsNameValid)
             Application.LoadLevel("Lobby");
 
         GUILayout.EndArea();
+    }
+
+    public bool IsNameValid{
+        get { return playerName.Length > 3 && playerName.Length <= 18; }
     }
 }

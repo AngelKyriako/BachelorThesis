@@ -303,7 +303,8 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
     }
     #endregion
 
-    // Match Info Accessors
+    // Statistics Accessors
+    #region Player
     public Color PlayerInfoColor(string _id) {
         return GameManager.Instance.GetPlayerRGBColor(_id);
     }
@@ -312,14 +313,36 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
         return GameManager.Instance.GetPlayerName(_id);
     }
 
-    public string PlayerInfoCounters(string _id) {
-        return   "[color #00ff00]" + GameManager.Instance.GetPlayerModel(_id).Kills + "[/color]"
-               + "/ [color #ff0000]" + GameManager.Instance.GetPlayerModel(_id).Deaths + "[/color]"
-               //+ "/ [color #0000ff]" + GameManager.Instance.GetPlayerModel(_id).Assists + "[/color]"
-               ;
+    public string PlayerKills(string _id) {
+        return "[color #00ff00]" + GameManager.Instance.GetPlayerModel(_id).Kills + "[/color]";
+        ;
     }
 
-    public string PlayerInfoTeam(string _id) {
+    public string PlayerDeaths(string _id) {
+        return "/ [color #ff0000]" + GameManager.Instance.GetPlayerModel(_id).Deaths + "[/color]";
+    }
+
+    public string PlayerAssists(string _id) {
+        return "";//"/ [color #0000ff]" + GameManager.Instance.GetPlayerModel(_id).Assists + "[/color]";
+    }
+
+    public string PlayerTeam(string _id) {
         return GameManager.Instance.GetPlayerTeam(_id).ToString();
-    }   
+    }
+    #endregion
+
+    #region Team
+    public string TeamName(PlayerTeam _team) {
+        return _team.ToString();
+    }
+    public string TeamKills(PlayerTeam _team) {
+        return "[color #00ff00]" + GameManager.Instance.TeamKills((int)_team).ToString() + "[/color]";;
+    }
+    public string TeamDeaths(PlayerTeam _team) {
+        return "[color #ff0000]" + "" + "[/color]";
+    }
+    public string TeamAssists(PlayerTeam _team) {
+        return "[color #ff0000]" + "" + "[/color]";
+    }
+    #endregion
 }
