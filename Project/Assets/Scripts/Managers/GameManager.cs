@@ -133,14 +133,12 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         }
     }
 
-    //returns false if players with different teams exist
+    //returns false if players with different teams are alive
     private bool OneTeamStandingAlone() {
         PlayerTeam _team = GetFirstAlivePlayersTeam;
         foreach (string _name in AllPlayerKeys) {
-            Utilities.Instance.LogMessageToChat(_name + " is alive: "  + GetPlayerModel(_name).IsAlive);
             if (GetPlayerModel(_name).IsAlive && !_team.Equals(GetPlayerTeam(_name)))
                 return false;
-            _team = GetPlayerTeam(_name);
         }
         return true;
     }

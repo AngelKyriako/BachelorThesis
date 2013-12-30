@@ -10,7 +10,7 @@ public class GUIPreferenceSlot: MonoBehaviour {
         Mode,
         Map,
         Difficulty,
-        TargetKills,
+        TargetKillsOrStartingLifes,
     }
 
 	void Start () {
@@ -36,9 +36,15 @@ public class GUIPreferenceSlot: MonoBehaviour {
                 nameLabel.Text = "Difficulty:";
                 valueLabel.Text = GameVariables.Instance.Difficulty.Key;
                 break;
-            case PreferenceType.TargetKills:
-                nameLabel.Text = "Target Kills:";
-                valueLabel.Text = GameVariables.Instance.TargetKills.Key;
+            case PreferenceType.TargetKillsOrStartingLifes:
+                if (GameVariables.Instance.Mode.Value.Equals(GameMode.Conquerors)) {
+                    nameLabel.Text = "Target Kills:";
+                    valueLabel.Text = GameVariables.Instance.TargetKills.Key;
+                }
+                else {
+                    nameLabel.Text = "Starting Lifes:";
+                    valueLabel.Text = GameVariables.Instance.StartingLifes.Key;
+                }
                 break;
         }
 	}

@@ -43,7 +43,6 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
 
         if (!_killerName.Equals(_deadName))
             GameManager.Instance.MyPhotonView.RPC("PlayerKill", GameManager.Instance.GetPlayer(_killerName), _killerName, _deadName, _position);
-
         GameManager.Instance.MyNetworkController.PlayerDeath(_deadName);
         GameManager.Instance.MyPhotonView.RPC("PlayerDeath", PhotonTargets.Others, _deadName);       
     }
