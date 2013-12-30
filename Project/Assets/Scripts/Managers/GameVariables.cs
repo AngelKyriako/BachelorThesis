@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 
 public enum GameMode {
-    BattleRoyal,
     Conquerors,
+    BattleRoyal,    
     CaptureTheFlag,
     Survival
 };
 
 public enum GameMap {
     MeetingPoint,
+    MeetingPoint2
 }
 
 public enum GameDifficulty {
@@ -25,13 +26,13 @@ public class GameVariables {
     private KeyValuePair<string, GameMode> mode;
     private KeyValuePair<string, GameMap> map;
     private KeyValuePair<string, GameDifficulty> difficulty;
-    private KeyValuePair<string, int> maxPlayers, targetKills;
+    private KeyValuePair<string, int> maxPlayers, targetKills, startingLifes;
     private KeyValuePair<string, float> timer;
 
     private Dictionary<string, GameMode> availableModes;
     private Dictionary<string, GameMap> availableMaps;
     private Dictionary<string, GameDifficulty> availableDifficulties;
-    private Dictionary<string, int> availableMaxPlayers, availableTargetKills;
+    private Dictionary<string, int> availableMaxPlayers, availableTargetKills, availableStartingLifes;
     private Dictionary<string, float> availableTimers;
     #endregion
 
@@ -42,13 +43,14 @@ public class GameVariables {
 
     private GameVariables() {
         title = string.Empty;
-        mode = new KeyValuePair<string, GameMode>(Enum.GetName(typeof(GameMode), GameMode.BattleRoyal), GameMode.BattleRoyal);        
-        availableModes = new Dictionary<string, GameMode>(){ {Enum.GetName(typeof(GameMode), GameMode.BattleRoyal), GameMode.BattleRoyal},
-                                                             {Enum.GetName(typeof(GameMode), GameMode.Conquerors), GameMode.Conquerors}
+        mode = new KeyValuePair<string, GameMode>(Enum.GetName(typeof(GameMode), GameMode.Conquerors), GameMode.Conquerors);        
+        availableModes = new Dictionary<string, GameMode>(){ {Enum.GetName(typeof(GameMode), GameMode.Conquerors), GameMode.Conquerors},
+                                                             {"Battle Royal", GameMode.BattleRoyal}                                                             
                                                            };
         map = new KeyValuePair<string, GameMap>(Enum.GetName(typeof(GameMap), GameMap.MeetingPoint), GameMap.MeetingPoint);
-        availableMaps = new Dictionary<string, GameMap>(){ {Enum.GetName(typeof(GameMap), GameMap.MeetingPoint), GameMap.MeetingPoint}
-                                                           };
+        availableMaps = new Dictionary<string, GameMap>(){ {"MeetingPoint", GameMap.MeetingPoint},
+                                                           {"MeetingPoint2", GameMap.MeetingPoint2}
+                                                         };
         difficulty = new KeyValuePair<string, GameDifficulty>(Enum.GetName(typeof(GameDifficulty), GameDifficulty.Medium), GameDifficulty.Medium);
         availableDifficulties = new Dictionary<string, GameDifficulty>(){ {Enum.GetName(typeof(GameDifficulty), GameDifficulty.Easy), GameDifficulty.Easy},
                                                                           {Enum.GetName(typeof(GameDifficulty), GameDifficulty.Medium), GameDifficulty.Medium},
@@ -58,10 +60,16 @@ public class GameVariables {
         availableMaxPlayers = new Dictionary<string, int>(){ {"2", 2}, {"3", 3}, {"4", 4}, {"5", 5}, {"6", 6},
                                                              {"7", 7}, {"8", 8}, {"9", 9}, {"10", 10}
                                                            };
-        targetKills = new KeyValuePair<string, int>("5", 1);
+        targetKills = new KeyValuePair<string, int>("50", 1);
         availableTargetKills = new Dictionary<string, int>(){ {"5", 5}, {"10", 10}, {"25", 25}, {"50", 50}, {"75", 75}, {"100", 100},
                                                               {"200", 200}, {"500", 500}, {"750", 750}, {"1000", 1000}
 	                                                        };
+
+        startingLifes = new KeyValuePair<string, int>("10", 1);
+        availableStartingLifes = new Dictionary<string, int>(){ {"5", 5}, {"10", 10}, {"25", 25}, {"50", 50},
+                                                                {"75", 75}, {"100", 100}, {"200", 200}
+	                                                          };
+
         timer = new KeyValuePair<string, float>("None", 0);
         //availableTimers = new Dictionary<string, float>(){ {"None", -1}, {"10'", 600}, {"15'", 900}, {"20'", 1200}, {"30'", 1800},
         //                                                    {"60'", 3600}, {"90'", 5400}, {"120'", 7200}, {"180'", 10800}
@@ -100,6 +108,10 @@ public class GameVariables {
         get { return targetKills; }
         set { targetKills = value; }
     }
+    public KeyValuePair<string, int> StartingLifes {
+        get { return startingLifes; }
+        set { startingLifes = value; }
+    }
     public KeyValuePair<string, float> Timer {
         get { return timer; }
         set { timer = value; }
@@ -120,6 +132,9 @@ public class GameVariables {
     public Dictionary<string, int> AvailableTargetKills {
         get { return availableTargetKills; }
     }
+    public Dictionary<string, int> AvailableStartingLifes {
+        get { return availableStartingLifes; }
+    }    
     public Dictionary<string, float> AvailableTimers {
         get { return availableTimers; }
     }

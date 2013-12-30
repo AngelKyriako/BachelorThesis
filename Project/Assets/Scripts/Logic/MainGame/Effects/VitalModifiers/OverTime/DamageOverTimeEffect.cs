@@ -11,13 +11,8 @@ public class DamageOverTimeEffect: VitalOverTimeEffect {
                                                                   Receiver.GetAttribute((int)AttributeType.Defence).FinalValue))
                                                                                 +
                                             (Modifier.PercentageValue * Receiver.GetVital((int)VitalType.Health).FinalValue))) <= 0) {
-            
-            GameManager.Instance.MyDeathController.Enable();
-            CombatManager.Instance.DeadPlayerBroadCastDeath(Receiver.name);
-            if (!Caster.name.Equals(Receiver.name))
-                CombatManager.Instance.DeadPlayerBroadCastKill(Caster.name, Receiver.name, Receiver.transform.position);
 
-            TeleportManager.Instance.StandardTeleportation(false);
+            GameManager.Instance.MyDeathController.Enable(Caster.name, Receiver.name, Receiver.transform.position);
         }
         base.Activate();
     }

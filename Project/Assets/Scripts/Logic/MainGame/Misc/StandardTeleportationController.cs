@@ -16,7 +16,7 @@ public class StandardTeleportationController : MonoBehaviour {
     private void Trigger(Collider other){
         if (!other.gameObject.layer.Equals(LayerMask.NameToLayer("Void"))) {
             PlayerCharacterModel playerModel = Utilities.Instance.GetPlayerCharacterModel(other.transform);
-            if (GameManager.Instance.MyCharacter.name.Equals(playerModel.name) && !playerModel.IsDead)
+            if (GameManager.Instance.MyCharacter.name.Equals(playerModel.name) && !playerModel.IsRespawning)
                 TeleportManager.Instance.StandardTeleportation(isHeavenPortal);
         }
     }

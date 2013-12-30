@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class VisionController: MonoBehaviour {
 
-    private const float DISTANCE_FROM_GROUND = 3.0f, UPDATE_FREQUENCY = 1.5f;
+    private const float UPDATE_FREQUENCY = 1.5f;
     private const int EASY_RADIUS = 30, MEDIUM_RADIUS = 15, HARD_RADIUS = 10;
     private readonly Dictionary<GameDifficulty, int> DIFFICULTY_TO_RADIUS = new Dictionary<GameDifficulty, int> (){ { GameDifficulty.Easy, EASY_RADIUS },
                                                                                                                     { GameDifficulty.Medium, MEDIUM_RADIUS },

@@ -9,7 +9,8 @@ public enum VariableType {
     Map,
     Difficulty,
     MaxPlayers,
-    targetKills,
+    TargetKills,
+    StartingLifes,
     Timer
 };
 
@@ -182,14 +183,21 @@ public class MainLobbyGUI: MonoBehaviour {
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
 
-        if (GameVariables.Instance.Mode.Value == GameMode.BattleRoyal) {
-            GUILayout.BeginHorizontal();
+        GUILayout.BeginHorizontal();
+        if (GameVariables.Instance.Mode.Value == GameMode.Conquerors) {            
             GUILayout.Label("Target kills:", propertyLabel);
-            GameVariables.Instance.TargetKills = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingField, VariableType.targetKills,
+            GameVariables.Instance.TargetKills = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingField, VariableType.TargetKills,
                                                               GameVariables.Instance.TargetKills,
                                                               GameVariables.Instance.AvailableTargetKills, 40);
-            GUILayout.EndHorizontal();
         }
+        else if (GameVariables.Instance.Mode.Value == GameMode.BattleRoyal) {
+            GUILayout.Label("Starting Lifes:", propertyLabel);
+            GameVariables.Instance.StartingLifes = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingField, VariableType.StartingLifes,
+                                                              GameVariables.Instance.StartingLifes,
+                                                              GameVariables.Instance.AvailableStartingLifes, 40);           
+        }
+        GUILayout.EndHorizontal();
+
         GUILayout.BeginHorizontal();
         GUILayout.Label("Max players:", propertyLabel);
         GameVariables.Instance.MaxPlayers = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingField, VariableType.MaxPlayers,
@@ -205,12 +213,10 @@ public class MainLobbyGUI: MonoBehaviour {
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Timer:", propertyLabel);
-        GUILayout.BeginVertical();
+        GUILayout.Label("Start Timer:", propertyLabel);
         GameVariables.Instance.Timer = GUIUtilities.Instance.ButtonOptions<float, VariableType>(ref editingField, VariableType.Timer,
                                                              GameVariables.Instance.Timer,
                                                              GameVariables.Instance.AvailableTimers, 39);
-        GUILayout.EndVertical();
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Go", goButtonStyle)) {

@@ -15,10 +15,18 @@ public class PlayerCharacterDeathController: MonoBehaviour {
         }
     }
 
-    public void Enable() {
+    public void Enable(string _killer, string _dead, Vector3 _deathPoint) {
         ClearEffects();
-        GameManager.Instance.MyCharacterModel.Died();
+        CombatManager.Instance.BroadCastPlayerKill(_killer, _dead, _deathPoint);
+        TeleportManager.Instance.StandardTeleportation(false);
+
         enabled = true;
+    }
+
+    public void MakeAllPlayersVisible() {
+        foreach (string _name in GameManager.Instance.AllPlayerKeys)
+            if (!CombatManager.Instance.IsAlly(_name))
+                Utilities.Instance.SetGameObjectLayer(GameManager.Instance.GetCharacter(_name), 8);
     }
 
     private void ClearEffects() {

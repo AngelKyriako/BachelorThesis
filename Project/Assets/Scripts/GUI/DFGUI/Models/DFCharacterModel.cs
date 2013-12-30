@@ -189,96 +189,98 @@ public class DFCharacterModel: SingletonMono<DFCharacterModel> {
     #endregion
 
     #region Attributes
-
     public string AttributeName0 {
         get { return GetAttributeName(0); }
     }
     public string AttributeValue0 {
-        get { return GetAttributeValue(0); }
+        get { return GetAttributeDisplay(0); }
     }
 
     public string AttributeName1 {
         get { return GetAttributeName(1); }
     }
     public string AttributeValue1 {
-        get { return GetAttributeValue(1); }
+        get { return GetAttributeDisplay(1); }
     }
 
     public string AttributeName2 {
         get { return GetAttributeName(2); }
     }
     public string AttributeValue2 {
-        get { return GetAttributeValue(2); }
+        get { return GetAttributeDisplay(2); }
     }
 
     public string AttributeName3 {
         get { return GetAttributeName(3); }
     }
     public string AttributeValue3 {
-        get { return GetAttributeValue(3); }
+        get { return GetAttributeDisplay(3); }
     }
 
     public string AttributeName4 {
         get { return GetAttributeName(4); }
     }
     public string AttributeValue4 {
-        get { return GetAttributeValue(4); }
+        get { return GetAttributeDisplay(4)+"/ sec"; }
     }
 
     public string AttributeName5 {
         get { return GetAttributeName(5); }
     }
     public string AttributeValue5 {
-        get { return GetAttributeValue(5); }
+        get { return GetAttributeDisplay(5)+"/ sec"; }
     }
 
     public string AttributeName6 {
         get { return GetAttributeName(6); }
     }
     public string AttributeValue6 {
-        get { return GetAttributeValue(6); }
+        get { return GetAttributeDisplayPercent(6); }
     }
 
     public string AttributeName7 {
         get { return GetAttributeName(7); }
     }
     public string AttributeValue7 {
-        get { return GetAttributeValue(7); }
+        get { return GetAttributeDisplayPercent(7); }
     }
 
     public string AttributeName8 {
         get { return GetAttributeName(8); }
     }
     public string AttributeValue8 {
-        get { return GetAttributeValue(8); }
+        get { return GetAttributeDisplayPercent(8); }
     }
 
     public string AttributeName9 {
         get { return GetAttributeName(9); }
     }
     public string AttributeValue9 {
-        get { return GetAttributeValue(9); }
+        get { return GetAttributeDisplayPercent(9); }
     }
 
     public string AttributeName10 {
         get { return GetAttributeName(10); }
     }
     public string AttributeValue10 {
-        get { return GetAttributeValue(10); }
+        get { return GetAttributeDisplayPercent(10); }
     }
 
     public string AttributeName11 {
         get { return GetAttributeName(11); }
     }
     public string AttributeValue11 {
-        get { return GetAttributeValue(11); }
+        get { return GetAttributeDisplay(11); }
     }
 
     private string GetAttributeName(int _index) {
         return myModel != null ? myModel.GetAttribute(_index).Name : DEFAULT_STRING;
     }
-    private string GetAttributeValue(int _index) {
+    private string GetAttributeDisplay(int _index) {
         return myModel != null ? myModel.GetAttribute(_index).DisplayFinalValue : DEFAULT_STRING;
+    }
+    private string GetAttributeDisplayPercent(int _index) {
+        return myModel != null ? Utilities.Instance.StatPercentageDisplay(myModel.GetAttribute(_index).FinalValue) : DEFAULT_STRING;
     }
     #endregion
 

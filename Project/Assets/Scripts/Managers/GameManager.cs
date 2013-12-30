@@ -103,18 +103,57 @@ public class GameManager: SingletonPhotonMono<GameManager> {
             all.Remove(_name);
     }
 
-    public void CheckWinningConditions(string _killerName) {
-        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "CheckWinningConditions", "This method is only available for the master client.");
-        if (PlayersTeamKills(_killerName) >= GameVariables.Instance.TargetKills.Value) {
+    void OnLeaveRoom() {
+        Destroy(gui);
+        Destroy(gameObject);
+    }
+
+    #region Conquerors winning conditions
+    public void CheckConquerorsWinningConditions(string _killerName) {
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "CheckWinningConditionsOnKill", "This method is only available for the master client.");
+        
+        if (GameVariables.Instance.Mode.Value.Equals(GameMode.Conquerors) && KillersTeamReachedTargetKills(_killerName)){
             GameOver((int)GetPlayerTeam(_killerName));
             photonView.RPC("GameOver", PhotonTargets.Others, (int)GetPlayerTeam(_killerName));
         }
     }
 
-    void OnLeaveRoom() {
-        Destroy(gui);
-        Destroy(gameObject);
+    private bool KillersTeamReachedTargetKills(string _killer) {
+        return PlayersTeamKills(_killer) >= GameVariables.Instance.TargetKills.Value;
     }
+    #endregion
+
+    #region BattleRoyal winning conditions
+    public void CheckBattleRoyalWinningConditions() {
+        Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "CheckWinningConditionsOnKill", "This method is only available for the master client.");
+
+        if ((GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal) && OneTeamStandingAlone())) {
+            GameOver((int)GetFirstAlivePlayersTeam);
+            photonView.RPC("GameOver", PhotonTargets.Others, (int)GetFirstAlivePlayersTeam);
+        }
+    }
+
+    //returns false if players with different teams exist
+    private bool OneTeamStandingAlone() {
+        PlayerTeam _team = GetFirstAlivePlayersTeam;
+        foreach (string _name in AllPlayerKeys) {
+            Utilities.Instance.LogMessageToChat(_name + " is alive: "  + GetPlayerModel(_name).IsAlive);
+            if (GetPlayerModel(_name).IsAlive && !_team.Equals(GetPlayerTeam(_name)))
+                return false;
+            _team = GetPlayerTeam(_name);
+        }
+        return true;
+    }
+
+    private PlayerTeam GetFirstAlivePlayersTeam {
+        get {
+            foreach (string _name in AllPlayerKeys)
+                if (GetPlayerModel(_name).IsAlive)
+                    return GetPlayerTeam(_name);
+            return PlayerTeam.Team1;
+        }
+    }
+    #endregion
 
     #region Player properties updates
     public void UpdatePlayerTeamProperty() {
@@ -146,6 +185,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     #endregion
 
     #region RPCs
+
     [RPC]
     public void LoadMainStage(string _stage) {
         PhotonNetwork.LoadLevel(_stage);
@@ -176,7 +216,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         gameObject.AddComponent<GameOverManager>();
         GameOverManager.Instance.SetUp((PlayerTeam)winnerTeam);        
     }
-#endregion
+    #endregion
 
     #region Accessors
     public GameObject Gui {

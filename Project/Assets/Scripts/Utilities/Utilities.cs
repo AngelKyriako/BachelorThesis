@@ -51,6 +51,14 @@ public class Utilities {
         return (intVal != _value) ? (intVal + 1).ToString() : intVal.ToString();
     }
 
+    //public string StatPercentageDisplay(float _statValue) {
+    //    string val = System.Math.Round(_statValue, 2).ToString();
+    //    return val.Contains(".") ? val.Split('.')[1] + "%" : val + "%";
+    //}
+    public string StatPercentageDisplay(float _statValue) {
+        return  System.Math.Round((_statValue - (int)_statValue) * 100, 2).ToString() + "%";
+    }
+
     public string TimeCounterDisplay(float _time) {
         return (_time > 5) ? System.Math.Round(_time, 0).ToString() : System.Math.Round(_time, 1).ToString();
     }

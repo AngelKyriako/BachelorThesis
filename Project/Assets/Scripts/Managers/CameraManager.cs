@@ -26,11 +26,12 @@ public class CameraManager: SingletonMono<CameraManager> {
     #region attributes
     private float lastMainStageY;
     private Vector3 originPosition, destination;
-    
+
+    private int currentTargetIndex;
     private GameObject target;
     private bool lockedOnTarget;
 
-    private CameraMode mode;
+    private CameraMode mode;    
 
     private DispatchTable<CameraMode, Vector3, Vector3> HeightValidationDispatcher;
     #endregion
@@ -73,11 +74,35 @@ public class CameraManager: SingletonMono<CameraManager> {
         lastMainStageY = maxStageCameraY;
         mode = default(CameraMode);
         lockedOnTarget = true;
+        currentTargetIndex = 1;
     }
 
     void Update() {
+        ChangeTarget();
         ToggleCameraLock();
-        Move();
+        Move();        
+    }
+    ///////////////////////////////  Change Target  ///////////////////////////////
+    private void ChangeTarget() {
+        if (!GameManager.Instance.MyCharacterModel.IsAlive && Input.GetKeyUp(KeyCode.T)) {
+            int i = 0;
+            foreach (string _name in GameManager.Instance.AllPlayerKeys){
+                if (i++ == currentTargetIndex) {
+                    target = GameManager.Instance.GetCharacter(_name);
+                    lockedOnTarget = true;
+
+                    if (GameManager.Instance.GetCharacter(_name).transform.position.y > 30)
+                        EnterHeavenMode();
+                    else
+                        EnterMainStageMode();
+
+                    if (++currentTargetIndex == GameManager.Instance.AllPlayerKeys.Count)
+                        currentTargetIndex = 0;
+
+                    break;
+                }
+            }
+        }
     }
 
     //////////////////////////////////  Locking  //////////////////////////////////

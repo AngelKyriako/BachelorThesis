@@ -50,7 +50,7 @@ public class Attribute: BaseStat {
         get { return base.FinalValue + statBonusValue; }
     }
 
-    public override string DisplayFinalValue {//@TODO: Call Map or dispatcher table that contains the string based on the Attribute type
-        get { return FinalValue.ToString(); }
+    public override string DisplayFinalValue {
+        get { return System.Math.Round(FinalValue, 1).ToString(); }
     }
 }

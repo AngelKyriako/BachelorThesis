@@ -13,7 +13,7 @@ public class TeleportationToPoint: BaseSkillController {
     }
 
     private void Teleport(PlayerCharacterModel _playerModel) {
-        if (CombatManager.Instance.AreAllies(_playerModel.name, CasterModel.name) && !_playerModel.IsDead)
+        if (CombatManager.Instance.AreAllies(_playerModel.name, CasterModel.name) && !_playerModel.IsRespawning)
             TeleportManager.Instance.TeleportToPoint(spawnPointToTeleport);
     }
 

@@ -16,6 +16,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
     #endregion
 
     #region attributes
+    private bool isAlive;
     private uint currentExp, expToLevel;
     private float expModifier;
     private int trainingPoints;
@@ -26,6 +27,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void Awake() {
         base.Awake();
+        isAlive = true;
         expModifier = STARTING_EXP_MODIFIER;
         expToLevel = STARTING_EXP_TO_LEVEL;
         currentExp = 0;
@@ -42,12 +44,12 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void AddListeners() {
         PlayerInputManager.Instance.SkillQWERorLeftClick += delegate(CharacterSkillSlot _slotPressed) {
-            if (SkillExists(_slotPressed))
+            if (IsAbleToCast() && SkillExists(_slotPressed))
                 GetSkill(_slotPressed).Pressed();
         };
 
         PlayerInputManager.Instance.SkillQWERorLeftClick += delegate(CharacterSkillSlot _slotPressed) {
-            if (SkillExists(PlayerInputManager.Instance.CurrentTargetedSlot))
+            if (IsAbleToCast() && SkillExists(PlayerInputManager.Instance.CurrentTargetedSlot))
                 GetSkill(PlayerInputManager.Instance.CurrentTargetedSlot).Unpressed();
 
 
@@ -108,6 +110,11 @@ public class PlayerCharacterModel: BaseCharacterModel {
     }
 
     #region Accessors
+    public bool IsAlive {
+        get { return isAlive; }
+        set { isAlive = value; }
+    }
+
     public uint CurrentExp {
         get { return currentExp; }
         set { currentExp = value; }
@@ -136,8 +143,12 @@ public class PlayerCharacterModel: BaseCharacterModel {
         get { return respawnTimer; }
         set { respawnTimer = (value < 0) ? 0 : value; }
     }
-    public bool IsDead {
+    public bool IsRespawning {
         get { return RespawnTimer != 0; }
+    }
+
+    public override bool IsAbleToCast() {
+        return base.IsAbleToCast() && IsAlive;
     }
 
     public override Vector3 ProjectileOriginPosition {

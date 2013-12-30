@@ -29,15 +29,15 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
 
     private static readonly int[] STAT_BASE_VALUES = new int[5] { 0, 0, 0, 0, 0 };
     private static readonly string[] STAT_DESCRIPTIONS = new string[5]{ "The power of your attack and defence",
-                                                                        "How quick you can move and operate",
                                                                         "Your survivability",
+                                                                        "How quick you can move and operate",
                                                                         "Your ability of finding ways to use skills more often",
                                                                         "Capability of playing on a leading role" };
 
     private static readonly float[] ATTRIBUTE_BASE_VALUES = new float[12] { 10, 10, 10, 10, 0.5f, 0.5f, 1, 0, 0, 0, 1, 1 };
 
-    private static readonly string[] ATTRIBUTE_NAMES = new string[12]{  "Physical Attack",
-                                                                        "Special Attack",
+    private static readonly string[] ATTRIBUTE_NAMES = new string[12]{  "Physical Power",
+                                                                        "Special Power",
                                                                         "Physical Defence",
                                                                         "Special Defence",
                                                                         "Health Regeneration",
@@ -66,22 +66,22 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     private static readonly string[] VITAL_DESCRIPTIONS = new string[2]{ "Your life",
                                                                          "Spent when casting skills" };
 
-                                                                        //  str     agi     sta     int     cha                               
+                                                                        //  str     sta     agi     int     cha                               
     private static readonly float[,] ATTRIBUTE_RATIOS = new float[12, 5]{ { 11.0f,  0.0f,   0.0f,   0.0f,   0.0f  },//damage (boosts hp loss on atk)
                                                                           { 0.0f,   0.0f,   0.0f,   0.0f,   7.0f  },//magic damage (hp boost on heal)
-                                                                          { 3.0f,   0.0f,   8.0f,   0.0f,   0.0f  },//defence (reduces hp loss on atk)
+                                                                          { 3.0f,   8.0f,   0.0f,   0.0f,   0.0f  },//defence (reduces hp loss on atk)
                                                                           { 0.0f,   0.0f,   6.0f,   5.0f,   0.0f  },//MagicDefence (reduces mana loss on atk)
-                                                                          { 0.01f,  0.0f,   0.04f,  0.0f,   0.005f},//HeathRegen (hp gained per second)
-                                                                          { 0.0f,   0.0f,   0.08f,  0.05f,  0.02f },//ManaRegen (mana gained per second)                                                                            
-                                                                          { 0.0f,   0.025f, 0.0f,   0.0f,   0.0f  },//moveSpeed (movement speed percent added to basic movement)
-                                                                          { 0.0f,   0.02f,  0.0f,   0.0f,   0.01f },//attackSpeed (skill cooldowns percent subtracted for cooldown time)
+                                                                          { 0.01f,  0.04f,  0.0f,   0.0f,   0.005f},//HeathRegen (hp gained per second)
+                                                                          { 0.0f,   0.08f,  0.0f,   0.05f,  0.02f },//ManaRegen (mana gained per second)                                                                            
+                                                                          { 0.0f,   0.0f,   0.025f, 0.0f,   0.0f  },//moveSpeed (movement speed percent added to basic movement)
+                                                                          { 0.0f,   0.0f,   0.02f,  0.0f,   0.01f },//attackSpeed (skill cooldowns percent subtracted for cooldown time)
                                                                           { 0.0f,   0.0f,   0.0f,   0.012f, 0.0f  },//critical (percent chance of dealing double damage)
-                                                                          { 0.0f,   0.012f, 0.0f,   0.0f,   0.003f},//evasion (percent chance evading an attack)
+                                                                          { 0.0f,   0.0f,   0.012f, 0.0f,   0.003f},//evasion (percent chance evading an attack)
                                                                           { 0.0f,   0.0f,   0.0f,   0.01f,  0.06f },//radius (percent of radius added to base radius)
                                                                           { 0.0f,   0.0f,   0.0f,   0.0f,   1.0f }  //leadership (boosts supportive spells)
                                                                         },
-                                     VITAL_RATIOS = new float[2, 5]     { { 5.0f,   0.0f,   20.0f,  0.0f,   0.0f  },//health (hit points)
-                                                                          { 0.0f,   0.0f,   5.0f,   15.0f,  0.0f  } //mana (mana points)
+                                     VITAL_RATIOS = new float[2, 5]     { { 5.0f,   20.0f,  0.0f,   0.0f,   0.0f  },//health (hit points)
+                                                                          { 0.0f,   5.0f,   0.0f,   15.0f,  0.0f  } //mana (mana points)
                                                                         };
 
 #endregion
@@ -263,6 +263,10 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     public bool IsSilenced {
         get { return isSilenced; }
         set { isSilenced = value; }
+    }
+
+    public virtual bool IsAbleToCast() {
+        return !IsSilenced && !IsStunned;
     }
 
     public virtual Vector3 ProjectileOriginPosition {

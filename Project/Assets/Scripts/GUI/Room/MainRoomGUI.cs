@@ -91,18 +91,26 @@ public class MainRoomGUI: MonoBehaviour {
 
         GUILayout.Space(SPACE);
 
-        if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)) {
-            GUILayout.BeginHorizontal();
+        GUILayout.BeginHorizontal();
+        if (GameVariables.Instance.Mode.Value == GameMode.Conquerors) {
             GUILayout.Label("Target kills:", style);
             GUILayout.BeginVertical();
-            GameVariables.Instance.TargetKills = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingPreferencesField, VariableType.targetKills,
+            GameVariables.Instance.TargetKills = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingPreferencesField, VariableType.TargetKills,
                                                               GameVariables.Instance.TargetKills,
                                                               GameVariables.Instance.AvailableTargetKills, 40);
             GUILayout.EndVertical();
-            GUILayout.EndHorizontal();
+        }
+        else if (GameVariables.Instance.Mode.Value == GameMode.BattleRoyal) {
+            GUILayout.Label("Starting Lifes:", style);
+            GUILayout.BeginVertical();
+            GameVariables.Instance.StartingLifes = GUIUtilities.Instance.ButtonOptions<int, VariableType>(ref editingPreferencesField, VariableType.StartingLifes,
+                                                              GameVariables.Instance.StartingLifes,
+                                                              GameVariables.Instance.AvailableStartingLifes, 40);
+            GUILayout.EndVertical();
+        }
+        GUILayout.EndHorizontal();
 
-            GUILayout.Space(SPACE);
-        }        
+        GUILayout.Space(SPACE);
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Max players:", style);
@@ -145,10 +153,11 @@ public class MainRoomGUI: MonoBehaviour {
         GUILayout.Space(SPACE);
         GUILayout.Label("Map: " + GameVariables.Instance.Map.Key, style);
         GUILayout.Space(SPACE);
-        if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal)) {
-            GUILayout.Label("Target kills: " + GameVariables.Instance.TargetKills.Key, style);
-            GUILayout.Space(SPACE);
-        }
+        if (GameVariables.Instance.Mode.Value.Equals(GameMode.Conquerors))
+            GUILayout.Label("Target kills: " + GameVariables.Instance.TargetKills.Key, style);            
+        else if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal))
+            GUILayout.Label("Starting Lifes: " + GameVariables.Instance.StartingLifes.Key, style);
+        GUILayout.Space(SPACE);
         GUILayout.Label("Max players: " + GameVariables.Instance.MaxPlayers.Key, style);
         GUILayout.Space(SPACE);
         GUILayout.Label("Difficulty: " + GameVariables.Instance.Difficulty.Key, style);

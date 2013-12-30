@@ -162,7 +162,23 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     #region RPCs Combat Manager
     [RPC]
     public void PlayerDeath(string _deadName) {
-        ++GameManager.Instance.GetPlayerModel(_deadName).Deaths;
+        if (!GameManager.Instance.ItsMe(_deadName))
+            ++GameManager.Instance.GetPlayerModel(_deadName).Deaths;
+        else
+            GameManager.Instance.MyCharacterModel.Died();
+
+        if (GameVariables.Instance.Mode.Value.Equals(GameMode.BattleRoyal) &&
+            GameManager.Instance.GetPlayerModel(_deadName).Deaths >= GameVariables.Instance.StartingLifes.Value) {
+            
+            GameManager.Instance.GetPlayerModel(_deadName).IsAlive = false;
+            if (GameManager.Instance.ItsMe(_deadName)) {
+                GameManager.Instance.MyCharacter.GetComponent<VisionController>().enabled = false;
+                GameManager.Instance.MyDeathController.MakeAllPlayersVisible();
+            }
+
+            if (PhotonNetwork.isMasterClient)
+                GameManager.Instance.CheckBattleRoyalWinningConditions();
+        }
     }
 
     [RPC]
@@ -188,7 +204,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
             GameManager.Instance.RaiseKillsOfPlayersTeam(_killerName);
 
             if (PhotonNetwork.isMasterClient)
-                GameManager.Instance.CheckWinningConditions(_killerName);
+                GameManager.Instance.CheckConquerorsWinningConditions(_killerName);
         }
     }
 

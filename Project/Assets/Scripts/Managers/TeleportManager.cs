@@ -27,8 +27,8 @@ public class TeleportManager {
         GameManager.Instance.MyMovementController.Destination = _spawnPoint;
     }
 
-    public void StandardTeleportation(bool teleportToStage) {
-        if (teleportToStage)
+    public void StandardTeleportation(bool _isHeavenPortal) {
+        if (_isHeavenPortal && GameManager.Instance.MyCharacterModel.IsAlive)
             TeleportMeToMainStage();
         else
             TeleportMeToHeaven();
