@@ -45,14 +45,6 @@
     public string ProjectilePath(string _projectile) {
         return MergeToPath("Prefabs", "Skills", "MainObjects", "Projectiles", _projectile);
     }
-    //icons
-    public string SkillIcon48x48(string _iconName) {
-        return MergeToPath("Textures", "SkillIcons", "48x48", _iconName);
-    }
-
-    public string SkillIcon512x512(string _iconName) {
-        return MergeToPath("Textures", "SkillIcons", "512x512", _iconName);
-    }
 
     private string MergeToPath (params string[] nodes){
         string path = string.Empty;

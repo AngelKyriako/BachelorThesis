@@ -7,7 +7,8 @@ public class BaseSkillController: MonoBehaviour {
     private BaseCharacterModel casterModel;
 
     private Vector3 origin, destination;
-
+    private bool isTriggered;
+    
     void Awake() {
         enabled = false;
     }
@@ -17,6 +18,7 @@ public class BaseSkillController: MonoBehaviour {
         casterModel = _model;
         destination = _destination;
         origin = CasterModel.transform.position;
+        isTriggered = false;
 
         enabled = true;
     }
@@ -29,6 +31,13 @@ public class BaseSkillController: MonoBehaviour {
 
     public virtual void OnTriggerEnter(Collider other) {
         Utilities.Instance.LogMessageToChat("(BaseSkillController) OnTriggedEnter with: " + other.name);
+        Trigger();
+    }
+
+    public void Trigger() {
+        isTriggered = true;
+        Skill.Trigger(transform.position, Quaternion.identity);
+        CombatManager.Instance.DestroyNetworkObject(gameObject);
     }
 
     #region Accessors
@@ -51,6 +60,10 @@ public class BaseSkillController: MonoBehaviour {
 
     public bool IsMySkill {
         get { return casterModel && GameManager.Instance.ItsMe(casterModel.name); }
+    }
+
+    public bool IsTriggered {
+        get { return isTriggered; }
     }
     #endregion
 }

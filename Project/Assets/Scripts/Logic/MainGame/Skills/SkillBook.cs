@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 public class SkillBook{
 
+    private const string DESTINATION_CURSOR = "DestinationTargetCursor",
+                         DIRECTION_CURSOR = "DirectionTargetCursor";
+
     public enum Skill {
         None,
         FireBall,
@@ -44,7 +47,7 @@ public class SkillBook{
         //1
         tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description",
                                       2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireFlame"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(051));
         //tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(151));
@@ -53,7 +56,7 @@ public class SkillBook{
         //2
         tempSkill = new TargetedSkill((int)Skill.WaterGun, "Water gun", "skill 2 description",
                                       3f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("WaterBall"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(002));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(052));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(202));
@@ -63,7 +66,7 @@ public class SkillBook{
         //3
         tempSkill = new TargetedSkill((int)Skill.MudShot, "Mud shot", "skill 3 description",
                                       4f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudShot"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath("TestTargetCursor")));
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(201));
         //tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(051));

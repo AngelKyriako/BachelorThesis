@@ -3,15 +3,14 @@ using System.Collections;
 
 public class BaseTargetCursor: MonoBehaviour {
 
-    private BaseSkill skill;
     public LayerMask ignoredLayers;
 
     void Awake() {
         enabled = false;
     }
 
-    public void SetUpTargetCursor(BaseSkill _skill) {
-        skill = _skill;
+    //@TODO: Add color, range, intensity, angle for light !!!
+    public void SetUpTargetCursor() {
         enabled = true;
     }
 
@@ -34,16 +33,16 @@ public class BaseTargetCursor: MonoBehaviour {
 
         Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
-        if (mousePos.y < Screen.height / 2)//@TODO: Modify this mpakalia !!!(Need to restrict the target cursor to a minimum distance from the player object)
+        if (mousePos.y < Screen.height / 2)//@TODO: Modify this mpakalia !!!
             worldMousePos.z -= (Screen.height / 2 - mousePos.y)/100;
-        transform.position = new Vector3(worldMousePos.x, skill.OwnerModel.ProjectileOriginPosition.y, worldMousePos.z);
+        transform.position = new Vector3(worldMousePos.x, GameManager.Instance.MyCharacterModel.ProjectileOriginPosition.y, worldMousePos.z);
 	}
 
     public void DestroyTargetCursor() {
         Destroy(gameObject);
     }
 
-    public virtual Vector3 Direction {
-        get { return transform.position - skill.OwnerModel.transform.position; }
+    public virtual Vector3 Destination {
+        get { return transform.position; }
     }
 }

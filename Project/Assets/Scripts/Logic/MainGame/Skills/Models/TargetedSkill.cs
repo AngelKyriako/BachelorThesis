@@ -5,21 +5,19 @@ public class TargetedSkill: BaseSkill {
 
     private GameObject targetCursor;
     private BaseTargetCursor currentCursor;
-    private bool isSelected;
 
     public TargetedSkill(int _id, string _title, string _desc, float _cd, string _castEff, string _mainObject, string _triggerEff, GameObject _targetCursor)
         : base(_id, _title, _desc, _cd, _castEff, _mainObject, _triggerEff) {
         targetCursor = _targetCursor;
         currentCursor = null;
-        isSelected = false;
     }
 
     public override void Pressed() {
-        if (!isSelected && IsUsable)
+        if (!IsSelected && IsUsable)
             Select();
-        else if (isSelected && IsUsable) {
-            OwnerModel.transform.LookAt(currentCursor.Direction * 1000);
-            Cast(currentCursor.Direction);
+        else if (IsSelected && IsUsable) {
+            LookAtTargetLocation();
+            Cast(currentCursor.Destination);
             DFSkillModel.Instance.CastSkill(Slot);
         }
         else if (!SufficientMana)
@@ -31,7 +29,7 @@ public class TargetedSkill: BaseSkill {
     }
 
     public override void Unpressed() {
-        if (isSelected)
+        if (IsSelected)
             Unselect();
     }
 
@@ -40,21 +38,21 @@ public class TargetedSkill: BaseSkill {
             GameObject obj;
             obj = (GameObject)GameObject.Instantiate(targetCursor);
             currentCursor = obj.GetComponent<BaseTargetCursor>();
-            currentCursor.SetUpTargetCursor(this);
-
-            isSelected = true;
+            currentCursor.SetUpTargetCursor();
         }
     }
 
     public override void Unselect() {
         currentCursor.DestroyTargetCursor();
         currentCursor = null;
+    }
 
-        isSelected = false;
+    public void LookAtTargetLocation() {
+        OwnerModel.transform.LookAt(currentCursor.Destination);
     }
 
     public override bool IsSelected {
-        get { return isSelected; }
-        set { isSelected = value; }
+        get { return currentCursor != null; }
+        set {  }
     }
 }
