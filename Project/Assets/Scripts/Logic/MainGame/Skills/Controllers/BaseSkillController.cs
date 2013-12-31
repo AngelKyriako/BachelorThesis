@@ -42,7 +42,6 @@ public class BaseSkillController: MonoBehaviour {
 
     public virtual void ActivateAoE() {        
         gameObject.GetComponent<BaseAoEController>().SetUp(skill);
-        enabled = false;
     }
     #region Accessors
     public BaseSkill Skill {

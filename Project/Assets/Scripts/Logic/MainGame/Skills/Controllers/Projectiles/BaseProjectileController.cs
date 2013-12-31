@@ -45,24 +45,6 @@ public class BaseProjectileController: BaseSkillController {
     // This controller is activated for the first player character it hits.
     // If an enemy it activates the offensive effects. If an ally(not caster himself) it activates the support effects.
     // It is destroyed afterwards.
-    //public override void Trigger(BaseCharacterModel _characterHit) {
-    //    if (!IsAoE) {
-    //        if (_characterHit && triggersOnEnemy && !CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name))
-    //            Skill.ActivateOffensiveEffects(CasterModel, _characterHit);
-    //        else if (_characterHit && triggersOnAlly && CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name) && !GameManager.Instance.ItsMe(_characterHit.name))
-    //            Skill.ActivateSupportEffects(CasterModel, _characterHit);
-
-    //        if (_characterHit == null || !GameManager.Instance.ItsMe(_characterHit.name)) {
-    //            isTriggered = true;
-    //            CombatManager.Instance.DestroyNetworkObject(gameObject);
-    //        }
-    //    }
-    //    else if (_characterHit != null && !GameManager.Instance.ItsMe(_characterHit.name))
-    //        ActivateAoE();
-
-    //    Skill.Trigger(transform.position, Quaternion.identity);        
-    //}
-
     public override void Trigger(BaseCharacterModel _characterHit) {
         if (_characterHit == null || !GameManager.Instance.ItsMe(_characterHit.name)) {
             
@@ -73,13 +55,14 @@ public class BaseProjectileController: BaseSkillController {
                 if (triggersOnEnemy && !CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name))
                     Skill.ActivateOffensiveEffects(CasterModel, _characterHit);
                 else if (triggersOnAlly && CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name) && !GameManager.Instance.ItsMe(_characterHit.name))
-                    Skill.ActivateSupportEffects(CasterModel, _characterHit);                                   
+                    Skill.ActivateSupportEffects(CasterModel, _characterHit);
+                CombatManager.Instance.DestroyNetworkObject(gameObject);
             }
             else if (IsAoE) {
                 ActivateAoE();
-                return;
-            }            
-            CombatManager.Instance.DestroyNetworkObject(gameObject);
+            }
+            else
+                CombatManager.Instance.DestroyNetworkObject(gameObject);
         }
     }
 

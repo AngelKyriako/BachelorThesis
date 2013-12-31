@@ -26,17 +26,19 @@ public class BaseAoEController: MonoBehaviour {
 
         gameObject.GetComponent<SphereCollider>().radius = radius;
         enabled = true;
-        Utilities.Instance.LogColoredMessageToChat("Set Up AoE controller", Color.red);
     }    
 
-    void Update() {
+    void Update() {//@TODO: figure out auto destroy bug
         if (IsMySkill) {
-            if (Time.time - startTime > timeToLive)
-                CombatManager.Instance.DestroyNetworkObject(gameObject);
-
             if (Time.time - lastActivationTime >= activationFrequency) {
+                Utilities.Instance.LogColoredMessageToChat("Attaching Effects dude, lastActivationTime: " + lastActivationTime, Color.red);
                 AttachEffects();
                 lastActivationTime = Time.time;
+            }
+
+            if (Time.time - startTime > timeToLive) {
+                Utilities.Instance.LogColoredMessageToChat("Time's up", Color.red);
+                CombatManager.Instance.DestroyNetworkObject(gameObject);
             }
         }
     }
