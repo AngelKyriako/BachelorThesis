@@ -8,10 +8,13 @@ public class BaseProjectileController: BaseSkillController {
     public bool triggersOnAlly = false, triggersOnEnemy = true;
     public int movementSpeed=20, range=20;
 
+    private bool isTriggered;
+
     public override void SetUp(BaseSkill _skill, BaseCharacterModel _model, Vector3 _destination) {
         base.SetUp(_skill, _model, new Vector3(_destination.normalized.x * directionMultiplier,
                                                _destination.normalized.y,
-                                               _destination.normalized.z * directionMultiplier));   
+                                               _destination.normalized.z * directionMultiplier));
+        isTriggered = false;
     }
 
     public override void Start() {
@@ -22,7 +25,7 @@ public class BaseProjectileController: BaseSkillController {
     }
 
 	public override void Update () {        
-        if (IsMySkill && !IsTriggered) {
+        if (IsMySkill && !isTriggered) {
             transform.position = Vector3.MoveTowards(transform.position, Destination, movementSpeed * Time.deltaTime);
             if (Vector3.Distance(Origin, transform.position) > range)
                 Trigger(null);
@@ -30,7 +33,7 @@ public class BaseProjectileController: BaseSkillController {
 	}
 
     public override void OnTriggerEnter(Collider other) {
-        if (IsMySkill && !IsTriggered && !other.gameObject.layer.Equals(LayerMask.NameToLayer("Void")))            
+        if (IsMySkill && !isTriggered && !other.gameObject.layer.Equals(LayerMask.NameToLayer("Void")))            
             Trigger(Utilities.Instance.GetPlayerCharacterModel(other.transform));
     }
 
@@ -42,27 +45,47 @@ public class BaseProjectileController: BaseSkillController {
     // This controller is activated for the first player character it hits.
     // If an enemy it activates the offensive effects. If an ally(not caster himself) it activates the support effects.
     // It is destroyed afterwards.
+    //public override void Trigger(BaseCharacterModel _characterHit) {
+    //    if (!IsAoE) {
+    //        if (_characterHit && triggersOnEnemy && !CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name))
+    //            Skill.ActivateOffensiveEffects(CasterModel, _characterHit);
+    //        else if (_characterHit && triggersOnAlly && CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name) && !GameManager.Instance.ItsMe(_characterHit.name))
+    //            Skill.ActivateSupportEffects(CasterModel, _characterHit);
+
+    //        if (_characterHit == null || !GameManager.Instance.ItsMe(_characterHit.name)) {
+    //            isTriggered = true;
+    //            CombatManager.Instance.DestroyNetworkObject(gameObject);
+    //        }
+    //    }
+    //    else if (_characterHit != null && !GameManager.Instance.ItsMe(_characterHit.name))
+    //        ActivateAoE();
+
+    //    Skill.Trigger(transform.position, Quaternion.identity);        
+    //}
+
     public override void Trigger(BaseCharacterModel _characterHit) {
-        if (!IsAoE) {
-            if (_characterHit && triggersOnEnemy && !CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name)) {
-                Utilities.Instance.LogColoredMessageToChat("lalaaaaaaaaaaaal", Color.red);
-                Skill.ActivateOffensiveEffects(CasterModel, _characterHit);
-            }
-            else if (_characterHit && triggersOnAlly && CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name) && !GameManager.Instance.ItsMe(_characterHit.name)) {
-                Utilities.Instance.LogColoredMessageToChat("lalaaaaaaaaaaaal", Color.blue);
-                Skill.ActivateSupportEffects(CasterModel, _characterHit);
-            }                
+        if (_characterHit == null || !GameManager.Instance.ItsMe(_characterHit.name)) {
+            
+            isTriggered = true;
+            Skill.Trigger(transform.position, Quaternion.identity);
 
-            if (_characterHit == null || !GameManager.Instance.ItsMe(_characterHit.name)) {
-                IsTriggered = true;
-                CombatManager.Instance.DestroyNetworkObject(gameObject);
+            if (_characterHit && !IsAoE) {
+                if (triggersOnEnemy && !CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name))
+                    Skill.ActivateOffensiveEffects(CasterModel, _characterHit);
+                else if (triggersOnAlly && CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name) && !GameManager.Instance.ItsMe(_characterHit.name))
+                    Skill.ActivateSupportEffects(CasterModel, _characterHit);                                   
             }
+            else if (IsAoE) {
+                ActivateAoE();
+                return;
+            }            
+            CombatManager.Instance.DestroyNetworkObject(gameObject);
         }
-        else {
-            IsTriggered = true;
-            gameObject.GetComponent<BaseAoEController>().SetUp(Skill);
-        }
+    }
 
-        Skill.Trigger(transform.position, Quaternion.identity);        
+    public override void ActivateAoE() {
+        isTriggered = true;
+        gameObject.renderer.enabled = false;
+        base.ActivateAoE();
     }
 }

@@ -13,7 +13,6 @@ public class BaseAoEController: MonoBehaviour {
     private Dictionary<string, bool> alliesAffected, enemiesAffected;
 
     void Awake() {
-        //Utilities.Instance.Assert(activationFrequency <=);
         alliesAffected = new Dictionary<string, bool>();
         enemiesAffected = new Dictionary<string, bool>();
         enabled = false;
@@ -23,44 +22,60 @@ public class BaseAoEController: MonoBehaviour {
         skill = _skill;
 
         startTime = Time.time;
-        lastActivationTime = Time.time;
+        lastActivationTime = 0;
 
         gameObject.GetComponent<SphereCollider>().radius = radius;
         enabled = true;
+        Utilities.Instance.LogColoredMessageToChat("Set Up AoE controller", Color.red);
     }    
 
     void Update() {
         if (IsMySkill) {
             if (Time.time - startTime > timeToLive)
                 CombatManager.Instance.DestroyNetworkObject(gameObject);
+
             if (Time.time - lastActivationTime >= activationFrequency) {
+                AttachEffects();
                 lastActivationTime = Time.time;
-                //free affected players
             }
         }
     }
 
-    public virtual void OnTriggerStay(Collider other) {
-        if (IsMySkill && !other.gameObject.layer.Equals(LayerMask.NameToLayer("Void"))) {
-            BaseCharacterModel model = Utilities.Instance.GetPlayerCharacterModel(other.transform);
-            if (!CombatManager.Instance.AreAllies(skill.OwnerModel.name, model.name))
-                TriggerOnEnemy(model);
-            else if (activeOnSelf || !GameManager.Instance.ItsMe(model.name))
-                TriggerOnAlly(model);
+    private void AttachEffects() {
+        BaseCharacterModel model;
+        foreach (string _name in GameManager.Instance.AllPlayerKeys) {
+            model = GameManager.Instance.GetPlayerModel(_name);
+            if (Vector3.Distance(transform.position, model.transform.position) <= radius)
+                if (!CombatManager.Instance.AreAllies(skill.OwnerModel.name, model.name))
+                    TriggerOnEnemy(model);
+                else if (activeOnSelf || !GameManager.Instance.ItsMe(model.name))
+                    TriggerOnAlly(model);
+        }
+        ClearAffectedAllies();
+        ClearAffectedEnemies();
+    }
+
+    //public virtual void OnTriggerStay(Collider other) {
+    //    if (IsMySkill && !other.gameObject.layer.Equals(LayerMask.NameToLayer("Void"))) {
+    //        BaseCharacterModel model = Utilities.Instance.GetPlayerCharacterModel(other.transform);
+    //        if (!CombatManager.Instance.AreAllies(skill.OwnerModel.name, model.name))
+    //            TriggerOnEnemy(model);
+    //        else if (activeOnSelf || !GameManager.Instance.ItsMe(model.name))
+    //            TriggerOnAlly(model);
+    //    }
+    //}
+
+    public void TriggerOnEnemy(BaseCharacterModel _model) {
+        if (!IsEnemyAffected(_model.name) && !ReachedMaxEnemies) {
+            Skill.ActivateOffensiveEffects(skill.OwnerModel, _model);
+            AffectEnemy(_model.name);
         }
     }
 
     public void TriggerOnAlly(BaseCharacterModel _model) {
-        if (IsAllyAffected(_model.name) && !ReachedMaxAllies) {
-            Skill.ActivateOffensiveEffects(skill.OwnerModel, _model);
-            AffectAlly(_model.name);
-        }
-    }
-
-    public void TriggerOnEnemy(BaseCharacterModel _model) {
-        if (IsEnemyAffected(_model.name) && !ReachedMaxEnemies) {
+        if (!IsAllyAffected(_model.name) && !ReachedMaxAllies) {
             Skill.ActivateSupportEffects(skill.OwnerModel, _model);
-            AffectEnemy(_model.name);
+            AffectAlly(_model.name);
         }
     }
 
@@ -68,8 +83,8 @@ public class BaseAoEController: MonoBehaviour {
     public void AffectAlly(string _charName) {
         alliesAffected.Add(_charName, true);
     }
-    public void FreeAlly(string _charName) {
-        alliesAffected.Remove(_charName);
+    public void ClearAffectedAllies() {
+        alliesAffected.Clear();
     }
     public bool IsAllyAffected(string _charName) {
         return alliesAffected.ContainsKey(_charName);
@@ -78,11 +93,12 @@ public class BaseAoEController: MonoBehaviour {
         get { return alliesAffected.Count == maxAlliesAffected; }
     }
 
+
     public void AffectEnemy(string _charName) {
         enemiesAffected.Add(_charName, true);
     }
-    public void FreeEnemy(string _charName) {
-        enemiesAffected.Remove(_charName);
+    public void ClearAffectedEnemies() {
+        enemiesAffected.Clear();
     }
     public bool IsEnemyAffected(string _charName) {
         return enemiesAffected.ContainsKey(_charName);

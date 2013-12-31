@@ -6,8 +6,7 @@ public class BaseSkillController: MonoBehaviour {
     private BaseSkill skill;
     private BaseCharacterModel casterModel;
 
-    private Vector3 origin, destination;
-    private bool isTriggered;
+    private Vector3 origin, destination;    
     
     void Awake() {
         enabled = false;
@@ -19,7 +18,6 @@ public class BaseSkillController: MonoBehaviour {
         casterModel = _model;
         destination = _destination;
         origin = CasterModel.transform.position;
-        isTriggered = false;
         
         enabled = true;
     }
@@ -35,15 +33,17 @@ public class BaseSkillController: MonoBehaviour {
     public virtual void OnTriggerEnter(Collider other) { }
 
     public virtual void Trigger(BaseCharacterModel _characterHit) {
-        isTriggered = true;
         if (!IsAoE)
             CombatManager.Instance.DestroyNetworkObject(gameObject);
         else
-            gameObject.GetComponent<BaseAoEController>().SetUp(skill);
-
+            ActivateAoE();
         Skill.Trigger(transform.position, Quaternion.identity);        
     }
 
+    public virtual void ActivateAoE() {        
+        gameObject.GetComponent<BaseAoEController>().SetUp(skill);
+        enabled = false;
+    }
     #region Accessors
     public BaseSkill Skill {
         get { return skill; }
@@ -64,11 +64,6 @@ public class BaseSkillController: MonoBehaviour {
 
     public bool IsMySkill {
         get { return casterModel && GameManager.Instance.ItsMe(casterModel.name); }
-    }
-
-    public bool IsTriggered {
-        get { return isTriggered; }
-        set { isTriggered = value; }
     }
 
     public bool IsAoE {
