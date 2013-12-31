@@ -48,7 +48,7 @@ public class TargetedSkill: BaseSkill {
     }
 
     public void LookAtTargetLocation() {
-        OwnerModel.transform.LookAt(currentCursor.Destination);
+        OwnerModel.transform.LookAt(currentCursor.transform.position);
     }
 
     public override bool IsSelected {

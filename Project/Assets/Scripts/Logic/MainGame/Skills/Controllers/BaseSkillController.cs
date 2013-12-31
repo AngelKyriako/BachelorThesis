@@ -11,6 +11,7 @@ public class BaseSkillController: MonoBehaviour {
     
     void Awake() {
         enabled = false;
+        gameObject.renderer.enabled = false;
     }
 
     public virtual void SetUp(BaseSkill _skill, BaseCharacterModel _model, Vector3 _destination) {
@@ -19,25 +20,28 @@ public class BaseSkillController: MonoBehaviour {
         destination = _destination;
         origin = CasterModel.transform.position;
         isTriggered = false;
-
+        
         enabled = true;
     }
 
-    public virtual void Start() {
+    public virtual void Start() {        
         transform.position = destination;
+        gameObject.renderer.enabled = true;
+        Trigger(null);
     }    
 
     public virtual void Update() { }
 
-    public virtual void OnTriggerEnter(Collider other) {
-        Utilities.Instance.LogMessageToChat("(BaseSkillController) OnTriggedEnter with: " + other.name);
-        Trigger();
-    }
+    public virtual void OnTriggerEnter(Collider other) { }
 
-    public void Trigger() {
+    public virtual void Trigger(BaseCharacterModel _characterHit) {
         isTriggered = true;
-        Skill.Trigger(transform.position, Quaternion.identity);
-        CombatManager.Instance.DestroyNetworkObject(gameObject);
+        if (!IsAoE)
+            CombatManager.Instance.DestroyNetworkObject(gameObject);
+        else
+            gameObject.GetComponent<BaseAoEController>().SetUp(skill);
+
+        Skill.Trigger(transform.position, Quaternion.identity);        
     }
 
     #region Accessors
@@ -64,6 +68,11 @@ public class BaseSkillController: MonoBehaviour {
 
     public bool IsTriggered {
         get { return isTriggered; }
+        set { isTriggered = value; }
+    }
+
+    public bool IsAoE {
+        get { return gameObject.GetComponent<BaseAoEController>() != null; }
     }
     #endregion
 }
