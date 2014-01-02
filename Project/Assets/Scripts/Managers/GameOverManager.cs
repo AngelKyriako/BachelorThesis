@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class GameOverManager: SingletonMono<GameOverManager> {    
+public class GameOverManager: SingletonMono<GameOverManager> {
+
+    private const int GAME_OVER_LEVEL = 4;
 
     private GameOverManager() { }
 
@@ -12,7 +14,7 @@ public class GameOverManager: SingletonMono<GameOverManager> {
 	}
 
     void OnLevelWasLoaded(int level) {
-        if (level == 4) {
+        if (level == GAME_OVER_LEVEL) {
             Vector3 winSpawnPoint = GameObject.Find("LosersArea/SpawnPoints/SpawnPoint" + (int)GameManager.Instance.MyPlayerColor).transform.position;
             Vector3 loseSpawnPoint = GameObject.Find("WinnersArea/SpawnPoints/SpawnPoint" + (int)GameManager.Instance.MyPlayerColor).transform.position;
 

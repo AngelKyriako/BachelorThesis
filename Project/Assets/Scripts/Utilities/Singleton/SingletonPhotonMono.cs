@@ -69,7 +69,7 @@ public class SingletonPhotonMono<T>: Photon.MonoBehaviour where T: Photon.MonoBe
     ///   even after stopping playing the Application. Really bad!
     /// So, this was made to be sure we're not creating that buggy ghost object.
     /// </summary>
-    public void OnDestroy() {
-        applicationIsQuitting = true;
+    public void OnDestroy() {//Cause for some reason when I load back and forth scenes it gets fucked up
+        //applicationIsQuitting = true;
     }
 }

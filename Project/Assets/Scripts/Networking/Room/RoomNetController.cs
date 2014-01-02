@@ -32,9 +32,11 @@ public class RoomNetController: BaseNetController {
         }
     }
 
-    void OnLeftRoom() {
-        if(PhotonNetwork.connected)
+    void OnDestroy() {
+        if (PhotonNetwork.connected && !IsMasterClient)
             MasterClientClearSlot((int)MainRoomModel.Instance.MySlot, GameManager.Instance.MyPlayer);
+        else if (PhotonNetwork.connected && IsMasterClient)
+            photonView.RPC("LeaveRoom", PhotonTargets.Others);
     }
 
     #region Game preferences

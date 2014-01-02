@@ -40,8 +40,14 @@ public class MainLoginGUI: MonoBehaviour {
         if (!IsNameValid)
             GUILayout.Label("Please enter a valid name. (3-18 characters)", errorMessageStyle);
         GUILayout.Space(2 * space);
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Quit", bigButtonStyle))
+            Application.Quit();
         if (GUILayout.Button("Login", bigButtonStyle) && IsNameValid)
             Application.LoadLevel("Lobby");
+        GUILayout.Space(space);
+        GUILayout.EndHorizontal();
 
         GUILayout.EndArea();
     }

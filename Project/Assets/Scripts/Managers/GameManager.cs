@@ -14,6 +14,8 @@ public struct PlayerCharacterPair {
 
 public class GameManager: SingletonPhotonMono<GameManager> {
 
+    private const int LOBBY_LEVEL = 1, ROOM_LEVEL = 2;
+
     private GameObject gui;
     private PlayerCharacterPair me;
     private PlayerCharacterPair masterClient;
@@ -23,16 +25,36 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     private GameManager() { }
 
-    void Awake() {
-        gui = GameObject.Find("GUIScripts");
-        all = new Dictionary<string, PlayerCharacterPair>();
-        allies = new Dictionary<string, bool>();
-        teamKills = new int[MainRoomModel.Instance.AvailableTeamsLength];
-        for (int i = 0; i < MainRoomModel.Instance.AvailableTeamsLength; ++i)
-            teamKills[i] = 0;
+    void OnLevelWasLoaded(int level) {
+        if (level == ROOM_LEVEL) {
+            gui = GameObject.Find("GUIScripts");
+            all = new Dictionary<string, PlayerCharacterPair>();
+            allies = new Dictionary<string, bool>();
+            teamKills = new int[MainRoomModel.Instance.AvailableTeamsLength];
+            for (int i = 0; i < MainRoomModel.Instance.AvailableTeamsLength; ++i)
+                teamKills[i] = 0;
 
-        if (PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected))
-            InitGUIScripts();
+            if (PhotonNetwork.connectionState.Equals(ConnectionState.Disconnected))
+                InitGUIScripts();
+        }
+        else if (level == LOBBY_LEVEL) {            
+            if (MyCharacter)
+                PhotonNetwork.Destroy(MyCharacter);
+            
+            GameObject obj;
+            if ((obj = GameObject.Find("Characters")) != null)
+                Destroy(obj);
+
+            if(gui)
+                Destroy(gui);
+           
+            if (gameObject)
+                Destroy(gameObject);
+
+            MainRoomModel.Instance.SetToNull();
+            if (PhotonNetwork.room != null)
+                PhotonNetwork.LeaveRoom();
+        }
     }
 
     void OnJoinedRoom() {
@@ -101,24 +123,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     public void RemovePlayerCharacter(string _name) {
         if (all.ContainsKey(_name))
             all.Remove(_name);
-    }
-
-    void OnLevelWasLoaded(int level) {
-        if (level == 1) {//is lobby
-            GameObject obj;
-            if (MyCharacter)
-                PhotonNetwork.Destroy(MyCharacter);
-            if ((obj = GameObject.Find("Characters")) != null)
-                Destroy(obj);
-            if(gui)
-                Destroy(gui);
-            MainRoomModel.Instance.SetToNull();
-            if(gameObject)
-                Destroy(gameObject);
-
-            if(PhotonNetwork.room != null)
-                PhotonNetwork.LeaveRoom();
-        }
     }
 
     #region Conquerors winning conditions

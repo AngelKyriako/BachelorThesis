@@ -23,8 +23,8 @@ public enum LobbyAction {
 
 public class MainLobbyGUI: MonoBehaviour {
 
-    public int northHeight;
-    public int westWidth;
+    public int northHeight=150, southHeight = 50;
+    public int westWidth=280;
     public Texture2D background;
     public GUIStyle titleStyle, welcomeLabelStyle, roomStyle;
     public GUIStyle westButtonStyle, propertyLabel, goButtonStyle;
@@ -41,7 +41,7 @@ public class MainLobbyGUI: MonoBehaviour {
             PhotonNetwork.ConnectUsingSettings("v1.0");
 
         north = new Rect(0, 0, Screen.width, northHeight);
-        south = new Rect(Screen.width, Screen.height, 0, 0);
+        south = new Rect(0, Screen.height - southHeight, Screen.width, southHeight);
         west = new Rect(0, north.y + north.height,
                westWidth, Screen.height - (north.y + north.height));
         east = new Rect(west.x + west.width + 50, north.y + north.height + 50,
@@ -90,6 +90,8 @@ public class MainLobbyGUI: MonoBehaviour {
 
     private void SouthGUI() {
         GUILayout.BeginArea(south);
+        if (GUILayout.Button("Back", westButtonStyle, GUILayout.Width(250)))
+            Application.LoadLevel("Login");
         GUILayout.EndArea();
     }
 
