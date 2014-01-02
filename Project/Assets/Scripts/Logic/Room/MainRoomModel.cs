@@ -45,9 +45,16 @@ public class MainRoomModel {
     private RoomSlot[] playerSlots;
     private PlayerTeam[] availableTeams;
 
-    private static MainRoomModel instance = new MainRoomModel();
+    private static MainRoomModel instance = null;
     public static MainRoomModel Instance {
-        get { return MainRoomModel.instance; }
+        get {
+            if (instance != null)
+                return MainRoomModel.instance;
+            else {
+                instance = new MainRoomModel();
+                return instance;
+            }
+        }
     }
 
     private MainRoomModel() {
@@ -68,6 +75,10 @@ public class MainRoomModel {
     }
     private int TeamsCount {
         get { return Enum.GetValues(typeof(PlayerTeam)).Length; }
+    }
+
+    public void SetToNull() {
+        instance = null;
     }
 
     #region Accessors

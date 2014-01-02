@@ -3,16 +3,18 @@ using System.Collections.Generic;
 
 public class BaseAoEController: MonoBehaviour {
    
-    public int radius = 5;
-    public int maxAlliesAffected = 10, maxEnemiesAffected = 10;
-    public bool activeOnSelf = true;
-    public float timeToLive = -1, activationFrequency = -1;
+    private int radius = 5;
+    private int maxAlliesAffected = 10, maxEnemiesAffected = 10;
+    private bool activeOnSelf = true;
+    private float timeToLive = -1, activationFrequency = -1;
 
     private float startTime, lastActivationTime;
     private BaseSkill skill;
     private Dictionary<string, bool> alliesAffected, enemiesAffected;
 
     void Awake() {
+        Utilities.Instance.Assert(gameObject.GetComponent<SphereCollider>() != null, "BaseAoEController", "Awake", "GameObject needs to have a SphereCollider component");
+
         alliesAffected = new Dictionary<string, bool>();
         enemiesAffected = new Dictionary<string, bool>();
         enabled = false;
@@ -21,14 +23,29 @@ public class BaseAoEController: MonoBehaviour {
     public void SetUp(BaseSkill _skill) {
         skill = _skill;
 
-        startTime = Time.time;
-        lastActivationTime = 0;
+        gameObject.GetComponent<SphereCollider>().radius = radius;
+        enabled = true;
+    }
+
+    public void SetUp(BaseSkill _skill, int _radius, int _maxAllies, int _maxEnemies, bool _activeOnSelf, float _ttl, float _freq) {
+        skill = _skill;
+        radius = _radius;
+        maxAlliesAffected = _maxAllies;
+        maxEnemiesAffected = _maxEnemies;
+        activeOnSelf = _activeOnSelf;
+        timeToLive = _ttl;
+        activationFrequency = _freq;
 
         gameObject.GetComponent<SphereCollider>().radius = radius;
         enabled = true;
-    }    
+    }
 
-    void Update() {//@TODO: figure out auto destroy bug
+    void Start() {
+        startTime = Time.time;
+        lastActivationTime = 0;
+    }
+
+    void Update() {
         if (IsMySkill) {
             if (Time.time - lastActivationTime >= activationFrequency) {
                 Utilities.Instance.LogColoredMessageToChat("Attaching Effects dude, lastActivationTime: " + lastActivationTime, Color.red);
@@ -38,7 +55,7 @@ public class BaseAoEController: MonoBehaviour {
 
             if (Time.time - startTime > timeToLive) {
                 Utilities.Instance.LogColoredMessageToChat("Time's up", Color.red);
-                CombatManager.Instance.DestroyNetworkObject(gameObject);
+                Destroy(gameObject);
             }
         }
     }
@@ -81,7 +98,7 @@ public class BaseAoEController: MonoBehaviour {
         }
     }
 
-    #region Affected characters
+    #region Affect Characters
     public void AffectAlly(string _charName) {
         alliesAffected.Add(_charName, true);
     }

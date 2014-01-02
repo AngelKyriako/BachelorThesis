@@ -57,8 +57,8 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     public void MasterClientLoadMainStage() {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "MasterClientLoadMainStage", "This method is only available for the master client.");
-        LoadMainStage(GameVariables.Instance.Map.Key);
         photonView.RPC("LoadMainStage", PhotonTargets.Others, GameVariables.Instance.Map.Key);
+        LoadMainStage(GameVariables.Instance.Map.Key);        
     }
 
     public void InitMainStage() {
@@ -103,9 +103,22 @@ public class GameManager: SingletonPhotonMono<GameManager> {
             all.Remove(_name);
     }
 
-    void OnLeaveRoom() {
-        Destroy(gui);
-        Destroy(gameObject);
+    void OnLevelWasLoaded(int level) {
+        if (level == 1) {//is lobby
+            GameObject obj;
+            if (MyCharacter)
+                PhotonNetwork.Destroy(MyCharacter);
+            if ((obj = GameObject.Find("Characters")) != null)
+                Destroy(obj);
+            if(gui)
+                Destroy(gui);
+            MainRoomModel.Instance.SetToNull();
+            if(gameObject)
+                Destroy(gameObject);
+
+            if(PhotonNetwork.room != null)
+                PhotonNetwork.LeaveRoom();
+        }
     }
 
     #region Conquerors winning conditions

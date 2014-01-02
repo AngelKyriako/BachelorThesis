@@ -36,7 +36,7 @@ public class MainLobbyGUI: MonoBehaviour {
     private Vector2 scrollPos = Vector2.zero;
     private Rect north, south, west, east;
 
-    void Awake() {
+    void Awake() {       
         if(!PhotonNetwork.connected)
             PhotonNetwork.ConnectUsingSettings("v1.0");
 

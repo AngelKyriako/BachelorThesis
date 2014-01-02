@@ -47,28 +47,21 @@ public class BaseProjectileController: BaseSkillController {
     // It is destroyed afterwards.
     public override void Trigger(BaseCharacterModel _characterHit) {
         if (_characterHit == null || !GameManager.Instance.ItsMe(_characterHit.name)) {
-            
+
             isTriggered = true;
             Skill.Trigger(transform.position, Quaternion.identity);
 
-            if (_characterHit && !IsAoE) {
+            if (_characterHit != null && !IsAoE) {
                 if (triggersOnEnemy && !CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name))
                     Skill.ActivateOffensiveEffects(CasterModel, _characterHit);
                 else if (triggersOnAlly && CombatManager.Instance.AreAllies(CasterModel.name, _characterHit.name) && !GameManager.Instance.ItsMe(_characterHit.name))
                     Skill.ActivateSupportEffects(CasterModel, _characterHit);
-                CombatManager.Instance.DestroyNetworkObject(gameObject);
+                CombatManager.Instance.DestroyNetworkObject(gameObject);            
             }
-            else if (IsAoE) {
+            else if (IsAoE)
                 ActivateAoE();
-            }
             else
-                CombatManager.Instance.DestroyNetworkObject(gameObject);
+                CombatManager.Instance.DestroyNetworkObject(gameObject);            
         }
-    }
-
-    public override void ActivateAoE() {
-        isTriggered = true;
-        gameObject.renderer.enabled = false;
-        base.ActivateAoE();
     }
 }

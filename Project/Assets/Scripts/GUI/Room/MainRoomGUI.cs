@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class MainRoomGUI: MonoBehaviour {
 
     private const int SPACE = 12, PLAYER_SLOT_HEIGHT = 50,
-                      SOUTH_CHAT_HEIGHT = 100, SOUTH_BUTTONS_WIDTH = 150, SOUTH_BUTTONS_HEIGHT = 50,
+                      SOUTH_CHAT_HEIGHT = 100, SOUTH_BUTTONS_WIDTH = 250, SOUTH_BUTTONS_HEIGHT = 50,
                       PREFERENCES_WIDTH = 250;
 
     public GUIStyle style;
@@ -242,14 +242,19 @@ public class MainRoomGUI: MonoBehaviour {
 
     private void SouthButtons() {
         GUILayout.BeginArea(southButtonRect);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("To Lobby"))
+            PhotonNetwork.LoadLevel("Lobby");
         if (networkController.IsMasterClient)
             StartGameButton();
         else
             ReadyButton();
+        GUILayout.EndHorizontal();
         GUILayout.EndArea();
     }
 
     private void StartGameButton() {
+        GUILayout.BeginVertical();
         style.fontSize = 9;
         if (GUILayout.Button("Start Game")) {
             networkController.SyncGameVariables();
@@ -261,9 +266,11 @@ public class MainRoomGUI: MonoBehaviour {
         else if (!allPlayersReady)
             GUILayout.Label("Wait for joined players", style);
         style.fontSize = 12;
+        GUILayout.EndVertical();
     }
 
     private void ReadyButton() {
+        GUILayout.BeginVertical();
         style.fontSize = 9;
         if ((bool)GameManager.Instance.MyPlayer.customProperties["IsReady"]) {
             if (GUILayout.Button("Ready"))
@@ -281,5 +288,6 @@ public class MainRoomGUI: MonoBehaviour {
         if (!MainRoomModel.Instance.LocalClientOwnsSlot)
             GUILayout.Label("Please choose a slot", style);
         style.fontSize = 12;
+        GUILayout.EndVertical();
     }
 }

@@ -3,6 +3,13 @@ using System.Collections;
 
 public class BaseSkillController: MonoBehaviour {
 
+    public bool IsAoE = false;
+    public string aoePrefabName = string.Empty;
+    public int aoeRadius = 5;
+    public int aoeMaxAlliesAffected = 10, aoeMaxEnemiesAffected = 10;
+    public bool aoeActiveOnSelf = true;
+    public float aoeTimeToLive = -1, aoeActivationFrequency = -1;
+
     private BaseSkill skill;
     private BaseCharacterModel casterModel;
 
@@ -10,7 +17,6 @@ public class BaseSkillController: MonoBehaviour {
     
     void Awake() {
         enabled = false;
-        gameObject.renderer.enabled = false;
     }
 
     public virtual void SetUp(BaseSkill _skill, BaseCharacterModel _model, Vector3 _destination) {
@@ -25,24 +31,40 @@ public class BaseSkillController: MonoBehaviour {
     public virtual void Start() {        
         transform.position = destination;
         gameObject.renderer.enabled = true;
-        Trigger(null);
-    }    
+        if (IsMySkill)
+            Trigger(null);
+    }
 
     public virtual void Update() { }
 
     public virtual void OnTriggerEnter(Collider other) { }
 
     public virtual void Trigger(BaseCharacterModel _characterHit) {
-        if (!IsAoE)
-            CombatManager.Instance.DestroyNetworkObject(gameObject);
-        else
-            ActivateAoE();
         Skill.Trigger(transform.position, Quaternion.identity);        
+        if (IsAoE)
+            ActivateAoE();
+        else
+            CombatManager.Instance.DestroyNetworkObject(gameObject);        
     }
 
-    public virtual void ActivateAoE() {        
-        gameObject.GetComponent<BaseAoEController>().SetUp(skill);
+    public virtual void ActivateAoE() {
+        gameObject.renderer.enabled = false;
+        GameObject obj;
+        if (aoePrefabName == null || aoePrefabName.Equals(string.Empty)) {
+            obj = (GameObject)GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            obj.name = skill.Title + "AoE";
+            obj.transform.position = transform.position;
+            obj.transform.rotation = transform.rotation;
+        }
+        else
+            obj = (GameObject)GameObject.Instantiate(Resources.Load(ResourcesPathManager.Instance.AoEObjectPath(aoePrefabName)),
+                                                     transform.position, transform.rotation);
+
+        obj.AddComponent<BaseAoEController>().SetUp(skill, aoeRadius, aoeMaxAlliesAffected, aoeMaxEnemiesAffected,
+                                                    aoeActiveOnSelf, aoeTimeToLive, aoeActivationFrequency);
+        CombatManager.Instance.DestroyNetworkObject(gameObject);
     }
+
     #region Accessors
     public BaseSkill Skill {
         get { return skill; }
@@ -63,10 +85,6 @@ public class BaseSkillController: MonoBehaviour {
 
     public bool IsMySkill {
         get { return casterModel && GameManager.Instance.ItsMe(casterModel.name); }
-    }
-
-    public bool IsAoE {
-        get { return gameObject.GetComponent<BaseAoEController>() != null; }
     }
     #endregion
 }

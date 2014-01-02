@@ -45,6 +45,8 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         visionController = gameObject.GetComponent<VisionController>();
         visionController.SetUp(CombatManager.Instance.IsAlly(name), GameVariables.Instance.Difficulty.Value);
 
+        gameObject.GetComponent<DummyLifeBarController>().SetUp(CombatManager.Instance.IsAlly(name) && !GameManager.Instance.ItsMe(name));
+
         if (IsLocalClient)
             model.AddListeners();
 
@@ -58,7 +60,8 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     }
 
     public void OnDestroy() {
-        GameManager.Instance.RemovePlayerCharacter(name);
+        if(!IsLocalClient)
+            GameManager.Instance.RemovePlayerCharacter(name);
     }
 
     public override void Update() {

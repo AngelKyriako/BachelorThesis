@@ -26,7 +26,6 @@
     #endregion
 
     #region skills
-    //casting
     public string TargetCursorPath(string _targetCursor) {
         return MergeToPath("Prefabs", "Skills", "TargetCursors", _targetCursor);
     }
@@ -37,6 +36,10 @@
 
     public string TriggerEffectPath(string _triggerEffect) {
         return MergeToPath("Prefabs", "Skills", "TriggerEffects", _triggerEffect);
+    }
+
+    public string AoEObjectPath(string _aoeEffect) {
+        return MergeToPath("Prefabs", "Skills", "AoEObjects", _aoeEffect);
     }
 
     public string SkillObjectPath(string skillObject) {
