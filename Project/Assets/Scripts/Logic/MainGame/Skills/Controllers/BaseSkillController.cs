@@ -3,11 +3,12 @@ using System.Collections;
 
 public class BaseSkillController: MonoBehaviour {
 
+    //AoE vars
     public bool IsAoE = false;
     public string aoePrefabName = string.Empty;
     public int aoeRadius = 5;
     public int aoeMaxAlliesAffected = 10, aoeMaxEnemiesAffected = 10;
-    public bool aoeActiveOnSelf = true;
+    public bool aoeActiveOnSelf = true, aoeAttachedOnPlayer = false;
     public float aoeTimeToLive = -1, aoeActivationFrequency = -1;
 
     private BaseSkill skill;
@@ -52,16 +53,16 @@ public class BaseSkillController: MonoBehaviour {
         GameObject obj;
         if (aoePrefabName == null || aoePrefabName.Equals(string.Empty)) {
             obj = (GameObject)GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            obj.name = skill.Title + "AoE";
             obj.transform.position = transform.position;
             obj.transform.rotation = transform.rotation;
+            //obj.renderer.enabled = false;
         }
         else
             obj = (GameObject)GameObject.Instantiate(Resources.Load(ResourcesPathManager.Instance.AoEObjectPath(aoePrefabName)),
                                                      transform.position, transform.rotation);
 
         obj.AddComponent<BaseAoEController>().SetUp(skill, aoeRadius, aoeMaxAlliesAffected, aoeMaxEnemiesAffected,
-                                                    aoeActiveOnSelf, aoeTimeToLive, aoeActivationFrequency);
+                                                    aoeActiveOnSelf, aoeAttachedOnPlayer, aoeTimeToLive, aoeActivationFrequency);
         CombatManager.Instance.DestroyNetworkObject(gameObject);
     }
 

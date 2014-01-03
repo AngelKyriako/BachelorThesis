@@ -1,33 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseProjectileController: BaseSkillController {
-
-    private const int directionMultiplier = 1000;
+public class BaseTrapController: BaseSkillController {
 
     public bool triggersOnAlly = false, triggersOnEnemy = true;
-    public int movementSpeed = 20, range = 20;
+    public float timeToLive = 20f;
 
     private bool isTriggered;
+    private float startTime;
 
     public override void SetUp(BaseSkill _skill, BaseCharacterModel _model, Vector3 _destination) {
-        base.SetUp(_skill, _model, new Vector3(_destination.normalized.x * directionMultiplier,
-                                               _destination.normalized.y,
-                                               _destination.normalized.z * directionMultiplier));
+        base.SetUp(_skill, _model, _destination);
         isTriggered = false;
     }
 
     public override void Start() {
         transform.LookAt(Destination);
-        transform.Rotate(0, 180, 0);     
-        transform.position = Origin = CasterModel.ProjectileOriginPosition;
+        transform.Rotate(90, 0, 0);//Check what it needs
+        transform.position = Skill.OwnerModel.transform.position;//check if I need to put y=0;
         gameObject.renderer.enabled = true;
+        startTime = Time.time;
     }
 
 	public override void Update () {        
         if (IsMySkill && !isTriggered) {
-            transform.position = Vector3.MoveTowards(transform.position, Destination, movementSpeed * Time.deltaTime);
-            if (Vector3.Distance(Origin, transform.position) > range)
+            if (Time.time - startTime > timeToLive)
                 Trigger(null);
         }
 	}

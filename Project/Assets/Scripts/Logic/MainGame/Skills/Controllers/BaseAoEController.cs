@@ -20,14 +20,7 @@ public class BaseAoEController: MonoBehaviour {
         enabled = false;
     }
 
-    public void SetUp(BaseSkill _skill) {
-        skill = _skill;
-
-        gameObject.GetComponent<SphereCollider>().radius = radius;
-        enabled = true;
-    }
-
-    public void SetUp(BaseSkill _skill, int _radius, int _maxAllies, int _maxEnemies, bool _activeOnSelf, float _ttl, float _freq) {
+    public void SetUp(BaseSkill _skill, int _radius, int _maxAllies, int _maxEnemies, bool _activeOnSelf, bool _attachedOnCaster, float _ttl, float _freq) {
         skill = _skill;
         radius = _radius;
         maxAlliesAffected = _maxAllies;
@@ -37,6 +30,9 @@ public class BaseAoEController: MonoBehaviour {
         activationFrequency = _freq;
 
         gameObject.GetComponent<SphereCollider>().radius = radius;
+        if (_attachedOnCaster)
+            gameObject.transform.parent = _skill.OwnerModel.gameObject.transform;
+
         enabled = true;
     }
 
