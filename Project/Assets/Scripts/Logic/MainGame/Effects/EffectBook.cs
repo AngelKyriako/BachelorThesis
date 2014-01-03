@@ -29,7 +29,7 @@ public class EffectBook {
         #region Vital modifiers
         #region Direct  (id - title - description - mana - req - modifier)
         tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect(001, "Damage75", "", 25, 1, new EffectMod(75f, 0f));
+        ((DamageEffect)tempEffect).SetUpEffect(001, "Damage75", "", 0, 1, new EffectMod(75f, 0f));
         AddEffect(tempEffect, "001");
 
         tempEffect = NewManaBurnEffect(effectsHolder);
@@ -47,7 +47,7 @@ public class EffectBook {
 
         #region Over time  (id - title - description - mana - req - dur - overtime dur - freq - modifier)
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
-        ((DamageOverTimeEffect)tempEffect).SetUpEffect(051, "DamageoT15", "", 15, 1, 10f, 10f, 2f, new EffectMod(15f, 0f));
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(051, "DamageoT15", "", 0, 1, 10f, 10f, 2f, new EffectMod(15f, 0f));
         AddEffect(tempEffect, "051");
 
         tempEffect = NewManaBurnOverTimeEffect(effectsHolder);

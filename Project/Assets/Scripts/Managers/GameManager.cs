@@ -125,6 +125,17 @@ public class GameManager: SingletonPhotonMono<GameManager> {
             all.Remove(_name);
     }
 
+    public void BroadcastChatMessage(string _msg) {
+        AddMessageToChat(_msg);
+        photonView.RPC("AddMessageToChat", PhotonTargets.Others, _msg);
+    }
+    public void PersonalChatMessage(string _playerId, string _msg) {
+        if (ItsMe(_playerId))
+            AddMessageToChat(_msg);
+        else
+            photonView.RPC("AddMessageToChat", GetPlayer(_playerId), _msg);
+    }
+
     #region Conquerors winning conditions
     public void CheckConquerorsWinningConditions(string _killerName) {
         Utilities.Instance.PreCondition(PhotonNetwork.isMasterClient, "GameManager", "CheckWinningConditionsOnKill", "This method is only available for the master client.");
@@ -200,7 +211,6 @@ public class GameManager: SingletonPhotonMono<GameManager> {
     #endregion
 
     #region RPCs
-
     [RPC]
     public void LoadMainStage(string _stage) {
         PhotonNetwork.LoadLevel(_stage);
@@ -230,6 +240,11 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
         gameObject.AddComponent<GameOverManager>();
         GameOverManager.Instance.SetUp((PlayerTeam)winnerTeam);        
+    }
+
+    [RPC]
+    private void AddMessageToChat(string _text) {
+        ChatHolder.Instance.AddChatMessage(new ChatMessage("[Malakas Malakopoulos] " + _text, Color.black));
     }
     #endregion
 

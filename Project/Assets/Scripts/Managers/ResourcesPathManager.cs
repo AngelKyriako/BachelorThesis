@@ -23,6 +23,12 @@
     public string DeathPoint {
         get { return MergeToPath("Prefabs", "Misc", "DeathPoint"); }
     }
+    public string LevelUp {
+        get { return MergeToPath("Prefabs", "Misc", "LevelUp"); }
+    }
+    public string HitEffect {
+        get { return MergeToPath("Prefabs", "Misc", "HitEffect"); }
+    }
     #endregion
 
     #region skills

@@ -42,8 +42,14 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     public void BroadCastPlayerKill(string _killerName, string _deadName, Vector3 _position) {
         Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_deadName), "CombatManager", "DeadPlayerBroadCastKill", "This method is only available for the master client.");
 
-        if (!_killerName.Equals(_deadName))
+        if (!_killerName.Equals(_deadName)) {
             GameManager.Instance.MyPhotonView.RPC("PlayerKill", GameManager.Instance.GetPlayer(_killerName), _killerName, _deadName, _position);
+            GameManager.Instance.BroadcastChatMessage(SystemMessages.Instance.Kill(GameManager.Instance.GetPlayerName(_killerName),
+                                                                                   GameManager.Instance.GetPlayerName(_deadName)));
+        }
+        else
+            GameManager.Instance.BroadcastChatMessage(SystemMessages.Instance.Suicide(GameManager.Instance.GetPlayerName(_deadName)));
+
         GameManager.Instance.MyNetworkController.PlayerDeath(_deadName);
         GameManager.Instance.MyPhotonView.RPC("PlayerDeath", PhotonTargets.Others, _deadName);       
     }

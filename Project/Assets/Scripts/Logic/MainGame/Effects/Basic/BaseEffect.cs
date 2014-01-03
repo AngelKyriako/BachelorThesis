@@ -77,6 +77,18 @@ public abstract class BaseEffect: MonoBehaviour {
         get { return gameObject; }
     }
 
+    public bool CasterCriticalHit {
+        get { return Utilities.Instance.GotLucky(Caster.GetAttribute((int)AttributeType.Critical).FinalValue); }
+    }
+
+    public bool ReceiverEvaded {
+        get { return Utilities.Instance.GotLucky(Receiver.GetAttribute((int)AttributeType.Evasion).FinalValue); }
+    }
+
+    public bool IsEffectingSelf {
+        get { return Caster.name.Equals(Receiver.name); }
+    }
+
     public int Id {
         get { return id; }
     }

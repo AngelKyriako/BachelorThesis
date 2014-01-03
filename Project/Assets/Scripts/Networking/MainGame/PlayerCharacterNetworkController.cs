@@ -182,6 +182,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
             if (PhotonNetwork.isMasterClient)
                 GameManager.Instance.CheckBattleRoyalWinningConditions();
         }
+        //@TODO: Many Deaths Chat messages
     }
 
     [RPC]
@@ -192,7 +193,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
         photonView.RPC("InstantianteLocalExpSphere", PhotonTargets.Others, _position, GameManager.Instance.GetPlayerModel(_deadName).ExpWorth);
 
         KilledPlayer(_killerName, _deadName);
-        photonView.RPC("KilledPlayer", PhotonTargets.Others, _killerName, _deadName);
+        photonView.RPC("KilledPlayer", PhotonTargets.Others, _killerName, _deadName);        
     }
 
     [RPC]
@@ -209,6 +210,7 @@ public class PlayerCharacterNetworkController: SerializableNetController {
             if (PhotonNetwork.isMasterClient)
                 GameManager.Instance.CheckConquerorsWinningConditions(_killerName);
         }
+        //@TODO: Many KIlls Chat messages
     }
 
     [RPC]

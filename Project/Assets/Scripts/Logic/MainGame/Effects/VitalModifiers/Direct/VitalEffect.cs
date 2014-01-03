@@ -25,7 +25,7 @@ public abstract class VitalEffect: BaseEffect {
         get { return modifier; }
         set { modifier = value; }
     }
-
+    
     #region DispatchTable Example
     //private DispatchTable<VitalType, int, BaseCharacterModel, BaseCharacterModel, int> modifierDispatcher;
 

@@ -19,7 +19,7 @@ public class HealingEffect: VitalEffect {
     public override void Activate() {
         Receiver.GetVital((int)vitalType).CurrentValue += 
                                     (uint)(
-                                            (Modifier.RawValue * (Caster.GetAttribute((int)AttributeType.Leadership).FinalValue /
+                                            (Modifier.RawValue * (Caster.GetAttribute((int)AttributeType.Leadership).FinalValue/3 /
                                                                     (Receiver.GetAttribute((int)AttributeType.Leadership).FinalValue/2)))
                                                                                 +
                                             (Modifier.PercentageValue * Receiver.GetVital((int)vitalType).FinalValue)

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Utilities {
 
@@ -63,6 +62,13 @@ public class Utilities {
         return (_time > 5) ? System.Math.Round(_time, 0).ToString() : System.Math.Round(_time, 1).ToString();
     }
     #endregion
+
+    public bool GotLucky(float _chance/*o.xx*/) {
+        double range = 1d;
+        double scaled = (new System.Random().NextDouble() * range);
+
+        return (float)scaled <= _chance;
+    }
 
     public void SetGameObjectLayer(GameObject obj, int l) {
         if (obj == null)

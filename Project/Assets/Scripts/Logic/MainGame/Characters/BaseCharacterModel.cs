@@ -37,16 +37,16 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     private static readonly float[] ATTRIBUTE_BASE_VALUES = new float[12] { 10, 10, 10, 10, 0.5f, 0.5f, 1, 0, 0, 0, 1, 1 };
 
     private static readonly string[] ATTRIBUTE_NAMES = new string[12]{  "Physical Power",
-                                                                        "Special Power",
+                                                                        "Special Power",//@TODO: find better name
                                                                         "Physical Defence",
-                                                                        "Special Defence",
+                                                                        "Special Defence",//@TODO: find better name
                                                                         "Health Regeneration",
                                                                         "Mana Regeneration",
-                                                                        "Movement Speed",
-                                                                        "Attack Speed",
+                                                                        "Movement Bonus",
+                                                                        "Attack Speed Bonus",
                                                                         "Critical Chance",
                                                                         "Evasion Chance",
-                                                                        "Vision",
+                                                                        "Visibility Bonus",
                                                                         "Leadership"};
 
     private static readonly string[] ATTRIBUTE_DESCRIPTIONS = new string[12]{ "Boosts HP loss on attack attack effect",
@@ -86,9 +86,9 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
 
 #endregion
 
-    #region attributes
+    #region attributes                                                      
     private PlayerCharacterNetworkController networkController;//@TODO: this should be the super class of itself (CharacterNetworkController)
-                                                               //       and ovveridable from player character model
+                                                               //       and ovveridable from player character model  -----> DONE just bored to fix it
     private int level;
     private Stat[] stats;
     private Attribute[] attributes;
