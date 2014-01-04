@@ -6,8 +6,8 @@ public class TargetedSkill: BaseSkill {
     private GameObject targetCursor;
     private BaseTargetCursor currentCursor;
 
-    public TargetedSkill(int _id, string _title, string _desc, float _cd, string _castEff, string _mainObject, string _triggerEff, GameObject _targetCursor)
-        : base(_id, _title, _desc, _cd, _castEff, _mainObject, _triggerEff) {
+    public TargetedSkill(int _id, string _title, string _desc, float _cd, float _range, string _castEff, string _mainObject, string _triggerEff, GameObject _targetCursor)
+        : base(_id, _title, _desc, _cd, _range, _castEff, _mainObject, _triggerEff) {
         targetCursor = _targetCursor;
         currentCursor = null;
     }

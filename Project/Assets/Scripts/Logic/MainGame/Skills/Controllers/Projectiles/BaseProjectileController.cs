@@ -6,7 +6,7 @@ public class BaseProjectileController: BaseSkillController {
     private const int directionMultiplier = 1000;
 
     public bool triggersOnAlly = false, triggersOnEnemy = true;
-    public int movementSpeed = 20, range = 20;
+    public int movementSpeed = 20;
 
     private bool isTriggered;
 
@@ -27,7 +27,7 @@ public class BaseProjectileController: BaseSkillController {
 	public override void Update () {        
         if (IsMySkill && !isTriggered) {
             transform.position = Vector3.MoveTowards(transform.position, Destination, movementSpeed * Time.deltaTime);
-            if (Vector3.Distance(Origin, transform.position) > range)
+            if (Vector3.Distance(Origin, transform.position) > Skill.Range)
                 Trigger(null);
         }
 	}

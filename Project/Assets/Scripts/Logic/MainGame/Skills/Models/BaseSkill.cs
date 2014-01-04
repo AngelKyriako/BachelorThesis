@@ -7,6 +7,7 @@ public class BaseSkill {
     private int id;
     private string title, description;
     private float coolDownTimer, coolDown;
+    private float range;
     private uint manaCost;
 
     private List<BaseEffect> offensiveEffects,
@@ -19,11 +20,12 @@ public class BaseSkill {
     private string castEffect, mainObject, triggerEffect;
     #endregion
 
-    public BaseSkill( int _id, string _title, string _desc, float _cd, string _castEff, string _mainObject, string _triggerEff) {
+    public BaseSkill( int _id, string _title, string _desc, float _cd, float _range, string _castEff, string _mainObject, string _triggerEff) {
         id = _id;
         title = _title;
         description = _desc;
         coolDownTimer = coolDown = _cd;
+        range = _range;
         manaCost = 0;
         requirements = new Requirements();
         offensiveEffects = new List<BaseEffect>();
@@ -143,9 +145,14 @@ public class BaseSkill {
     public float CasterBasedCoolDown {
         get { return coolDown - coolDown * ownerModel.GetAttribute((int)AttributeType.AttackSpeed).FinalValue; ; }
     }
+    public float Range {
+        get { return range; }
+        set { range = value; }
+    }
     public uint ManaCost {
         get { return manaCost; }
     }
+
     public virtual bool IsUsable {
         get { return (coolDownTimer == 0f) &&
                      !ownerModel.IsStunned &&

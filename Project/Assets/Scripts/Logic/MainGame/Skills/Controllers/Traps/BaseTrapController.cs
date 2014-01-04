@@ -16,9 +16,11 @@ public class BaseTrapController: BaseSkillController {
 
     public override void Start() {
         transform.LookAt(Destination);
-        transform.Rotate(90, 0, 0);//Check what it needs
+        transform.Rotate(90, 0, 0);
         transform.position = Skill.OwnerModel.transform.position;//check if I need to put y=0;
         gameObject.renderer.enabled = true;
+        //Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Allies"));//for allies
+        //Utilities.Instance.SetGameObjectLayer(gameObject, LayerMask.NameToLayer("Void"));//for enemies
         startTime = Time.time;
     }
 

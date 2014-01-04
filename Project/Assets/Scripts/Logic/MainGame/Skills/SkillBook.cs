@@ -63,36 +63,52 @@ public class SkillBook{
 
         allSkills = new Dictionary<int, SkillBookSkill>();
         //0
-        AddSkill(new BaseSkill((int)Skill.None, "Unknown", "Skill does not exist",
-                               0f, string.Empty, null, string.Empty), "");
-        //1
-        tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description",
-                                      2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireFlame"), string.Empty,
+        AddSkill(new BaseSkill((int)Skill.None, "Unknown", "Skill does not exist", 0f, 0f,
+                               string.Empty, null, string.Empty), "");
+
+        //////////////////////////////////////////
+        tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireFlame"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(051));
-        //tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(151));
-        //tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(152));
         AddSkill(tempSkill, "137");
-        //2
-        tempSkill = new TargetedSkill((int)Skill.WaterBall, "Water gun", "skill 2 description",
-                                      3f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("WaterBall"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(002));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(052));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(202));
-        //tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(053));
-        //tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(054));
-        AddSkill(tempSkill, "140");
-        //3
-        tempSkill = new TargetedSkill((int)Skill.MudBall, "Mud shot", "skill 3 description",
-                                      4f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudShot"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(201));
-        //tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(051));
-        //tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(052));
-        AddSkill(tempSkill, "136");
+
+        tempSkill = new BaseSkill((int)Skill.None, "Unknown", "Skill does not exist", 0f, 10f,
+                                  string.Empty, null, string.Empty);
+        AddSkill(tempSkill, "137");
+        //////////////////////////////////////////
+
+        //tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description",
+        //                              2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireFlame"), string.Empty,
+        //                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+
+        ////1
+        //tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description",
+        //                              2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireFlame"), string.Empty,
+        //                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(051));
+        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(151));
+        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(152));
+        //AddSkill(tempSkill, "137");
+        ////2
+        //tempSkill = new TargetedSkill((int)Skill.WaterBall, "Water gun", "skill 2 description",
+        //                              3f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("WaterBall"), string.Empty,
+        //                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(002));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(052));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(202));
+        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(053));
+        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(054));
+        //AddSkill(tempSkill, "140");
+        ////3
+        //tempSkill = new TargetedSkill((int)Skill.MudBall, "Mud shot", "skill 3 description",
+        //                              4f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudShot"), string.Empty,
+        //                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(201));
+        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(051));
+        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(052));
+        //AddSkill(tempSkill, "136");
     }
     
     #region Accesors
