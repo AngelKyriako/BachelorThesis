@@ -45,6 +45,9 @@ public class EffectBook {
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(003, EffectType.Damage, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(100f, 0f));
         AddEffect(tempEffect, "");
+        tempEffect = NewDamageEffect(effectsHolder);
+        ((DamageEffect)tempEffect).SetUpEffect(013, EffectType.Damage, "KO" + DIRECT_DAMAGE, "", 20, 1, new EffectMod(0f, 100f));
+        AddEffect(tempEffect, "");
         #endregion
         #region Over Time (id - title - description - mana - req - dur - overtime dur - freq - modifier)
         //Minor
@@ -230,6 +233,23 @@ public class EffectBook {
 
         tempEffect = NewAttributeBuff(effectsHolder);
         ((AttributeBuff)tempEffect).SetUpEffect(204, EffectType.Buff, "VisionBuffPer60%", "", 20, 5, 15f, new EffectMod(0f, 0.6f), AttributeType.VisionRadius);
+        AddEffect(tempEffect, "");
+        //Movement
+        tempEffect = NewAttributeBuff(effectsHolder);
+        ((AttributeBuff)tempEffect).SetUpEffect(205, EffectType.Buff, "MovementBuff20%", "", 15, 10, 15f, new EffectMod(0.1f, 0f), AttributeType.MovementSpeed);
+        AddEffect(tempEffect, "");
+        tempEffect = NewAttributeBuff(effectsHolder);
+        ((AttributeBuff)tempEffect).SetUpEffect(206, EffectType.Buff, "MovementBuffPer20%", "", 15, 18, 15f, new EffectMod(0f, 0.2f), AttributeType.MovementSpeed);
+        AddEffect(tempEffect, "");
+        //Defence
+        tempEffect = NewAttributeBuff(effectsHolder);
+        ((AttributeBuff)tempEffect).SetUpEffect(207, EffectType.Buff, "MovementBuff20%", "", 15, 5, 15f, new EffectMod(0f, 0.2f), AttributeType.Defence);
+        AddEffect(tempEffect, "");
+        tempEffect = NewAttributeBuff(effectsHolder);
+        ((AttributeBuff)tempEffect).SetUpEffect(208, EffectType.Buff, "MovementBuffPer20%", "", 15, 12, 15f, new EffectMod(0f, 0.2f), AttributeType.Defence);
+        AddEffect(tempEffect, "");
+        tempEffect = NewAttributeBuff(effectsHolder);
+        ((AttributeBuff)tempEffect).SetUpEffect(209, EffectType.Buff, "MovementBuffPer20%", "", 15, 18, 15f, new EffectMod(0f, 0.1f), AttributeType.Defence);
         AddEffect(tempEffect, "");
         //Health
         tempEffect = NewVitalBuff(effectsHolder);

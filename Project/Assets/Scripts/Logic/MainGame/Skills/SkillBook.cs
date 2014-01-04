@@ -60,8 +60,7 @@ public class SkillBook{
     public static SkillBook Instance {
         get { return SkillBook.instance; }
     }
-    //@TODO: Check IsStunned with GetComponents instead of the bool var
-    //@TODO: Check IsSilenced with GetComponents instead of the bool var
+
     private SkillBook() {        
         BaseSkill tempSkill = null;
 
@@ -114,7 +113,6 @@ public class SkillBook{
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(10));
-
         tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect(4));
 
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(1));
@@ -255,7 +253,6 @@ public class SkillBook{
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(4));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(7));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(10));
-
         tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect(4));
         AddSkill(tempSkill, "");
 
@@ -275,73 +272,54 @@ public class SkillBook{
         AddSkill(tempSkill, "");
         #endregion
         #region directly casted ( 19 - 26)
-        tempSkill = new BaseSkill((int)Skill.BlowUp, "Big Bang", "", 0f, 0f,
+        tempSkill = new BaseSkill((int)Skill.BlowUp, "Big Bang", "", 80f, 0f,
                                   string.Empty, null, string.Empty);
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(1));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(013));
         AddSkill(tempSkill, "");
 
-        tempSkill = new BaseSkill((int)Skill.LastStand, "Last Stand", "", 0f, 0f,
+        //tempSkill = new BaseSkill((int)Skill.LastStand, "Last Stand", "", 0f, 0f,
+        //                          string.Empty, null, string.Empty);
+        //AddSkill(tempSkill, "");
+
+        //tempSkill = new BaseSkill((int)Skill.Resurrection, "Resurrection", "", 0f, 0f,
+        //                          string.Empty, null, string.Empty);
+        //AddSkill(tempSkill, "");
+
+        //tempSkill = new BaseSkill((int)Skill.HawkEyes, "Hawk Eyes", "", 0f, 0f,
+        //                          string.Empty, null, string.Empty);
+        //AddSkill(tempSkill, "");
+
+        tempSkill = new BaseSkill((int)Skill.HermesSandals, "Hermes Sandals", "", 25f, 0f,
                                   string.Empty, null, string.Empty);
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(201));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(205));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(206));
         AddSkill(tempSkill, "");
 
-        tempSkill = new BaseSkill((int)Skill.Resurrection, "Resurrection", "", 0f, 0f,
+        tempSkill = new BaseSkill((int)Skill.DragonSkin, "Dragon's Skin", "", 40f, 0f,
                                   string.Empty, null, string.Empty);
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(207));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(208));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(209));
         AddSkill(tempSkill, "");
 
-        tempSkill = new BaseSkill((int)Skill.HawkEyes, "Hawk Eyes", "", 0f, 0f,
-                                  string.Empty, null, string.Empty);
-        AddSkill(tempSkill, "");
+        //tempSkill = new TargetedSkill((int)Skill.HolyGround, "Holy Ground", "", 2f, 20f,
+        //                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
+        //                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        //AddSkill(tempSkill, "");
 
-        tempSkill = new BaseSkill((int)Skill.HermesSandals, "Hermes Sandals", "", 0f, 0f,
-                                  string.Empty, null, string.Empty);
-        AddSkill(tempSkill, "");
-
-        tempSkill = new BaseSkill((int)Skill.DragonSkin, "Dragon Skin", "", 0f, 0f,
-                                  string.Empty, null, string.Empty);
-        AddSkill(tempSkill, "");
-
-        tempSkill = new TargetedSkill((int)Skill.HolyGround, "Holy Ground", "", 2f, 20f,
-                              string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
-                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        AddSkill(tempSkill, "");
-
-        tempSkill = new TargetedSkill((int)Skill.HealingPrayer, "Healing Prayer", "", 2f, 20f,
-                              string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
-                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        AddSkill(tempSkill, "");
+        //tempSkill = new TargetedSkill((int)Skill.HealingPrayer, "Healing Prayer", "", 2f, 20f,
+        //                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
+        //                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        //AddSkill(tempSkill, "");
         #endregion        
-
-        //tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description",
-        //                              2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireFlame"), string.Empty,
-        //                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-
-        ////1
-        //tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description",
-        //                              2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireFlame"), string.Empty,
-        //                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
-        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(051));
-        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(151));
-        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(152));
-        //AddSkill(tempSkill, "137");
-        ////2
-        //tempSkill = new TargetedSkill((int)Skill.WaterBall, "Water gun", "skill 2 description",
-        //                              3f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("WaterBall"), string.Empty,
-        //                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(002));
-        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(052));
-        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(202));
-        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(053));
-        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(054));
-        //AddSkill(tempSkill, "140");
-        ////3
-        //tempSkill = new TargetedSkill((int)Skill.MudBall, "Mud shot", "skill 3 description",
-        //                              4f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudShot"), string.Empty,
-        //                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(001));
-        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(201));
-        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(051));
-        ////tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(052));
-        //AddSkill(tempSkill, "136");
     }
     
     #region Accesors

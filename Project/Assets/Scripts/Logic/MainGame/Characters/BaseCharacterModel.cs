@@ -257,11 +257,11 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     #endregion
 
     public bool IsStunned {
-        get { return isStunned; }
+        get { return isStunned || gameObject.GetComponent<StunEffect>() != null; }
         set { isStunned = value; }
     }
     public bool IsSilenced {
-        get { return isSilenced; }
+        get { return isSilenced || gameObject.GetComponent<SilenceEffect>() != null; }
         set { isSilenced = value; }
     }
 
