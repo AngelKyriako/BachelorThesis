@@ -4,8 +4,15 @@ using System.Collections.Generic;
 
 public enum EffectType {
     None,
-    Negative,
-    Positive
+    Damage,
+    HealthHeal,
+    ManaBurn,
+    ManaHeal,
+    Buff,
+    DeBuff,
+    Stun,
+    Silence,
+    Invulnerability
 }
 
 public struct EffectMod {
@@ -39,8 +46,9 @@ public abstract class BaseEffect: MonoBehaviour {
         levelRequirement = 0;
     }
 
-    public void SetUpEffect(int _id, string _title, string _descr, uint _manaCost, uint _minLevelReq) {
+    public void SetUpEffect(int _id, EffectType _type, string _title, string _descr, uint _manaCost, uint _minLevelReq) {
         id = _id;
+        type = _type;
         title = _title;
         description = _descr;
         manaCost = _manaCost;

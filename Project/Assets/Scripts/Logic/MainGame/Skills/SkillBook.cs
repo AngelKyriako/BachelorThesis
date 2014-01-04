@@ -8,7 +8,7 @@ public class SkillBook{
 
     public enum Skill {
         None,
-        //projectiles
+        #region projectiles
         FireBall,        
         WaterBall,
         MudBall,
@@ -22,21 +22,24 @@ public class SkillBook{
         SnowBall,
         RockBall,
         PoisonBall,        
-        BlueFlame,        
-        //traps
+        BlueBall,
+        #endregion
+        #region traps
         FireTrap,
         IceTrap,
         LavaTrap,
         PoisonTrap,
-        //directly casted
+        #endregion
+        #region directly casted
         BlowUp,
         LastStand,
         Resurrection,
         HawkEyes,
-        Hermeslegs,
-        HardSkin,
+        HermesSandals,
+        DragonSkin,
         HolyGround,
-        HealingPrayer   
+        HealingPrayer
+        #endregion
     }
 
     public struct SkillBookSkill {
@@ -62,20 +65,144 @@ public class SkillBook{
         BaseSkill tempSkill = null;
 
         allSkills = new Dictionary<int, SkillBookSkill>();
-        //0
-        AddSkill(new BaseSkill((int)Skill.None, "Unknown", "Skill does not exist", 0f, 0f,
+
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0));
+        //tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect(0));
+        //tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(0));
+
+        #region None ( 0 )
+        AddSkill(new BaseSkill((int)Skill.None, "Unknown", "Skill does not exist, what the fuck did you do ?", 0f, 0f,
                                string.Empty, null, string.Empty), "");
-
-        //////////////////////////////////////////
-        tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description", 2f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireFlame"), string.Empty,
+        #endregion
+        #region projectiles ( 1 - 14 )
+        tempSkill = new TargetedSkill((int)Skill.FireBall, "Flame", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        AddSkill(tempSkill, "137");
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0));
+        tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect(0));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(0));
+        AddSkill(tempSkill, "");
 
-        tempSkill = new BaseSkill((int)Skill.None, "Unknown", "Skill does not exist", 0f, 10f,
+        tempSkill = new TargetedSkill((int)Skill.WaterBall, "Water Shot", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("WaterBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0));
+        tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect(0));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(0));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.MudBall, "Mud Shot", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.IceBall, "Ice ball", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("IceBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.LeafBall, "Leaf Gun", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("LeafBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.LoveBall, "Love Shot", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("LoveBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.RevengeBall, "Revenge Ball", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("RevengeBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.SunBall, "Sun Burst", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("SunBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.DarkBall, "Dark Passenger", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("DarkBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.LavaBall, "Fire Meteorite", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("LavaBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.SnowBall, "Snow Ball", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("SnowBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.RockBall, "Rock Blast", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("RockBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.PoisonBall, "Poison Shot", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("PoisonBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.BlueBall, "Blue Flame", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("BlueBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+        #endregion
+        #region traps ( 15 - 18 )
+        tempSkill = new BaseSkill((int)Skill.FireTrap, "Fire Trap", "", 0f, 0f,
                                   string.Empty, null, string.Empty);
-        AddSkill(tempSkill, "137");
-        //////////////////////////////////////////
+        AddSkill(tempSkill, "");
+
+        tempSkill = new BaseSkill((int)Skill.IceTrap, "Icy Terrain", "", 0f, 0f,
+                                  string.Empty, null, string.Empty);
+        AddSkill(tempSkill, "");
+
+        tempSkill = new BaseSkill((int)Skill.LavaTrap, "Lava Trap", "", 0f, 0f,
+                                  string.Empty, null, string.Empty);
+        AddSkill(tempSkill, "");
+
+        tempSkill = new BaseSkill((int)Skill.PoisonTrap, "Poison Puddle", "", 0f, 0f,
+                                  string.Empty, null, string.Empty);
+        AddSkill(tempSkill, "");
+        #endregion
+        #region directly casted ( 19 - 26)
+        tempSkill = new BaseSkill((int)Skill.BlowUp, "Art is a Bang", "", 0f, 0f,
+                                  string.Empty, null, string.Empty);
+        AddSkill(tempSkill, "");
+
+        tempSkill = new BaseSkill((int)Skill.LastStand, "Last Stand", "", 0f, 0f,
+                                  string.Empty, null, string.Empty);
+        AddSkill(tempSkill, "");
+
+        tempSkill = new BaseSkill((int)Skill.Resurrection, "Resurrection", "", 0f, 0f,
+                                  string.Empty, null, string.Empty);
+        AddSkill(tempSkill, "");
+
+        tempSkill = new BaseSkill((int)Skill.HawkEyes, "Hawk Eyes", "", 0f, 0f,
+                                  string.Empty, null, string.Empty);
+        AddSkill(tempSkill, "");
+
+        tempSkill = new BaseSkill((int)Skill.HermesSandals, "Hermes Sandals", "", 0f, 0f,
+                                  string.Empty, null, string.Empty);
+        AddSkill(tempSkill, "");
+
+        tempSkill = new BaseSkill((int)Skill.DragonSkin, "Dragon Skin", "", 0f, 0f,
+                                  string.Empty, null, string.Empty);
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.HolyGround, "Holy Ground", "", 2f, 20f,
+                              string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
+                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.HealingPrayer, "Healing Prayer", "", 2f, 20f,
+                              string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
+                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+        #endregion        
 
         //tempSkill = new TargetedSkill((int)Skill.FireBall, "Fire ball", "skill 1 description",
         //                              2f, string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireFlame"), string.Empty,
