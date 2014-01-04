@@ -12,17 +12,17 @@ public class SkillBook{
         FireBall,        
         WaterBall,
         MudBall,
-        IceBall,        
+        IceBall,                
+        LavaBall,
+        SnowBall,
+        RockBall,
+        PoisonBall,                
         LeafBall,
+        BlueBall,
         LoveBall,
         RevengeBall,
         SunBall,
         DarkBall,
-        LavaBall,
-        SnowBall,
-        RockBall,
-        PoisonBall,        
-        BlueBall,
         #endregion
         #region traps
         FireTrap,
@@ -101,8 +101,33 @@ public class SkillBook{
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         AddSkill(tempSkill, "");
 
+        tempSkill = new TargetedSkill((int)Skill.LavaBall, "Fire Meteorite", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("LavaBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.SnowBall, "Snow Ball", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("SnowBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.RockBall, "Rock Blast", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("RockBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.PoisonBall, "Poison Shot", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("PoisonBall"), string.Empty,
+                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
         tempSkill = new TargetedSkill((int)Skill.LeafBall, "Leaf Gun", "", 2f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("LeafBall"), string.Empty,
+                              string.Empty, ResourcesPathManager.Instance.ProjectilePath("LeafBall"), string.Empty,
+                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        AddSkill(tempSkill, "");
+
+        tempSkill = new TargetedSkill((int)Skill.BlueBall, "Blue Flame", "", 2f, 20f,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("BlueBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         AddSkill(tempSkill, "");
 
@@ -126,30 +151,6 @@ public class SkillBook{
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         AddSkill(tempSkill, "");
 
-        tempSkill = new TargetedSkill((int)Skill.LavaBall, "Fire Meteorite", "", 2f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("LavaBall"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        AddSkill(tempSkill, "");
-
-        tempSkill = new TargetedSkill((int)Skill.SnowBall, "Snow Ball", "", 2f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("SnowBall"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        AddSkill(tempSkill, "");
-
-        tempSkill = new TargetedSkill((int)Skill.RockBall, "Rock Blast", "", 2f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("RockBall"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        AddSkill(tempSkill, "");
-
-        tempSkill = new TargetedSkill((int)Skill.PoisonBall, "Poison Shot", "", 2f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("PoisonBall"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        AddSkill(tempSkill, "");
-
-        tempSkill = new TargetedSkill((int)Skill.BlueBall, "Blue Flame", "", 2f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("BlueBall"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        AddSkill(tempSkill, "");
         #endregion
         #region traps ( 15 - 18 )
         tempSkill = new BaseSkill((int)Skill.FireTrap, "Fire Trap", "", 0f, 0f,
