@@ -33,239 +33,238 @@ public class EffectBook {
 
         GameObject effectsHolder = new GameObject("EffectHolder");
         BaseEffect tempEffect = null;
-        int effectsCount = 0;
 
-        #region Damage Effects
+        #region Damage Effects (001 - 050)
         #region Direct (id - title - description - mana - req - modifier)
         tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, MINOR + DIRECT_DAMAGE, "", 10, 1, new EffectMod(20f, 0f));
+        ((DamageEffect)tempEffect).SetUpEffect(001, EffectType.Damage, MINOR + DIRECT_DAMAGE, "", 10, 1, new EffectMod(20f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(50f, 0f));
+        ((DamageEffect)tempEffect).SetUpEffect(002, EffectType.Damage, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(50f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(100f, 0f));
+        ((DamageEffect)tempEffect).SetUpEffect(003, EffectType.Damage, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(100f, 0f));
         AddEffect(tempEffect, "");
         #endregion
         #region Over Time (id - title - description - mana - req - dur - overtime dur - freq - modifier)
         //Minor
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
-        ((DamageOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(3f, 0f));
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(004, EffectType.Damage, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(3f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
-        ((DamageOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(3f, 0f));
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(005, EffectType.Damage, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(3f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
-        ((DamageOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(3f, 0f));
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(006, EffectType.Damage, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(3f, 0f));
         AddEffect(tempEffect, "");
         //Moderate
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
-        ((DamageOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(5f, 0f));
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(007, EffectType.Damage, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(5f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
-        ((DamageOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(5f, 0f));
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(008, EffectType.Damage, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(5f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
-        ((DamageOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(5f, 0f));
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(009, EffectType.Damage, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(5f, 0f));
         //Major
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
-        ((DamageOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(8f, 0f));
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(010, EffectType.Damage, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(8f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
-        ((DamageOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(8f, 0f));
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(011, EffectType.Damage, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(8f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
-        ((DamageOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Damage, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(8f, 0f));
+        ((DamageOverTimeEffect)tempEffect).SetUpEffect(012, EffectType.Damage, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(8f, 0f));
         AddEffect(tempEffect, "");
         #endregion
         #endregion
-        #region ManaBurn Effects
+        #region ManaBurn Effects (051 - 100)
         #region Direct (id - title - description - mana - req - modifier)
         tempEffect = NewManaBurnEffect(effectsHolder);
-        ((ManaBurnEffect)tempEffect).SetUpEffect(001, EffectType.ManaBurn, MINOR + DIRECT_DAMAGE, "", 10, 1, new EffectMod(15f, 0f));
+        ((ManaBurnEffect)tempEffect).SetUpEffect(051, EffectType.ManaBurn, MINOR + DIRECT_DAMAGE, "", 10, 1, new EffectMod(15f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewManaBurnEffect(effectsHolder);
-        ((ManaBurnEffect)tempEffect).SetUpEffect(002, EffectType.ManaBurn, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(35f, 0f));
+        ((ManaBurnEffect)tempEffect).SetUpEffect(052, EffectType.ManaBurn, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(35f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewManaBurnEffect(effectsHolder);
-        ((ManaBurnEffect)tempEffect).SetUpEffect(003, EffectType.ManaBurn, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(70f, 0f));
+        ((ManaBurnEffect)tempEffect).SetUpEffect(053, EffectType.ManaBurn, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(70f, 0f));
         AddEffect(tempEffect, "");
         #endregion
         #region Over Time (id - title - description - mana - req - dur - overtime dur - freq - modifier)
         //Minor
         tempEffect = NewManaBurnOverTimeEffect(effectsHolder);
-        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(2f, 0f));
+        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(054, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(2f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewManaBurnOverTimeEffect(effectsHolder);
-        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(2f, 0f));
+        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(055, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(2f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewManaBurnOverTimeEffect(effectsHolder);
-        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(2f, 0f));
+        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(056, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(2f, 0f));
         AddEffect(tempEffect, "");
         //Moderate
         tempEffect = NewManaBurnOverTimeEffect(effectsHolder);
-        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(4f, 0f));
+        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(057, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(4f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewManaBurnOverTimeEffect(effectsHolder);
-        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(4f, 0f));
+        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(058, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(4f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewManaBurnOverTimeEffect(effectsHolder);
-        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(4f, 0f));
+        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(059, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(4f, 0f));
         //Major
         tempEffect = NewManaBurnOverTimeEffect(effectsHolder);
-        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(7f, 0f));
+        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(060, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(7f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewManaBurnOverTimeEffect(effectsHolder);
-        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(7f, 0f));
+        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(061, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(7f, 0f));
         AddEffect(tempEffect, "");
         tempEffect = NewManaBurnOverTimeEffect(effectsHolder);
-        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(7f, 0f));
+        ((ManaBurnOverTimeEffect)tempEffect).SetUpEffect(062, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(7f, 0f));
         AddEffect(tempEffect, "");
         #endregion
         #endregion
-        #region Heal Effects
-        #region Health
+        #region Heal Effects (101 - 200)
+        #region Health (101 - 150)
         #region Direct (id - title - description - mana - req - modifier - VitalType)
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect(001, EffectType.ManaBurn, MINOR + DIRECT_DAMAGE, "", 10, 1, new EffectMod(10f, 0f), VitalType.Health);
+        ((HealingEffect)tempEffect).SetUpEffect(101, EffectType.ManaBurn, MINOR + DIRECT_DAMAGE, "", 10, 1, new EffectMod(10f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect(002, EffectType.ManaBurn, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(25f, 0f), VitalType.Health);
+        ((HealingEffect)tempEffect).SetUpEffect(102, EffectType.ManaBurn, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(25f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect(003, EffectType.ManaBurn, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(60f, 0f), VitalType.Health);
+        ((HealingEffect)tempEffect).SetUpEffect(103, EffectType.ManaBurn, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(60f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         #endregion
         #region Over Time (id - title - description - mana - req - dur - overtime dur - freq - modifier - VitalType)
         //Minor
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(2f, 0f), VitalType.Health);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(104, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(2f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(2f, 0f), VitalType.Health);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(105, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(2f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(2f, 0f), VitalType.Health);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(106, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(2f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         //Moderate
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(4f, 0f), VitalType.Health);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(107, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(4f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(4f, 0f), VitalType.Health);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(108, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(4f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(4f, 0f), VitalType.Health);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(109, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(4f, 0f), VitalType.Health);
         //Major
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(7f, 0f), VitalType.Health);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(110, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(7f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(7f, 0f), VitalType.Health);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(111, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(7f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(7f, 0f), VitalType.Health);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(112, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(7f, 0f), VitalType.Health);
         AddEffect(tempEffect, "");
         #endregion
         #endregion
-        #region Mana
+        #region Mana (151 - 200)
         #region Direct (id - title - description - mana - req - modifier - VitalType)
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect(001, EffectType.ManaBurn, MINOR + DIRECT_DAMAGE, "", 10, 1, new EffectMod(12f, 0f), VitalType.Mana);
+        ((HealingEffect)tempEffect).SetUpEffect(151, EffectType.ManaBurn, MINOR + DIRECT_DAMAGE, "", 10, 1, new EffectMod(12f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect(002, EffectType.ManaBurn, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(30f, 0f), VitalType.Mana);
+        ((HealingEffect)tempEffect).SetUpEffect(152, EffectType.ManaBurn, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(30f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingEffect(effectsHolder);
-        ((HealingEffect)tempEffect).SetUpEffect(003, EffectType.ManaBurn, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(65f, 0f), VitalType.Mana);
+        ((HealingEffect)tempEffect).SetUpEffect(153, EffectType.ManaBurn, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(65f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         #endregion
         #region Over Time (id - title - description - mana - req - dur - overtime dur - freq - modifier - VitalType)
         //Minor
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(2f, 0f), VitalType.Mana);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(154, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(2f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(2f, 0f), VitalType.Mana);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(155, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(2f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(2f, 0f), VitalType.Mana);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(156, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(2f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         //Moderate
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(4f, 0f), VitalType.Mana);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(157, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(4f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(4f, 0f), VitalType.Mana);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(158, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(4f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(4f, 0f), VitalType.Mana);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(159, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(4f, 0f), VitalType.Mana);
         //Major
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(7f, 0f), VitalType.Mana);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(160, EffectType.ManaBurn, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(7f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(7f, 0f), VitalType.Mana);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(161, EffectType.ManaBurn, EXTENDED + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 10f, 10f, 1f, new EffectMod(7f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
-        ((HealingOverTimeEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(7f, 0f), VitalType.Mana);
+        ((HealingOverTimeEffect)tempEffect).SetUpEffect(162, EffectType.ManaBurn, LONG + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 18f, 18f, 1f, new EffectMod(7f, 0f), VitalType.Mana);
         AddEffect(tempEffect, "");
         #endregion
         #endregion
         #endregion
-        #region Buff & DeBuff Effects
+        #region Buff & DeBuff Effects (201 - 400)
         #region Direct (id - title - description - mana - req - dur - modifier - Type)
-        #region Buffs
+        #region Buffs (201 - 250)
         tempEffect = NewVitalBuff(effectsHolder);
-        ((VitalBuff)tempEffect).SetUpEffect(++effectsCount, EffectType.Buff, "HealthBuff50%", "", 30, 10, 15f, new EffectMod(0f, 0.5f), VitalType.Health);
+        ((VitalBuff)tempEffect).SetUpEffect(201, EffectType.Buff, "HealthBuff50%", "", 30, 10, 15f, new EffectMod(0f, 0.5f), VitalType.Health);
         AddEffect(tempEffect, "");
 
         tempEffect = NewAttributeBuff(effectsHolder);
-        ((AttributeBuff)tempEffect).SetUpEffect(++effectsCount, EffectType.Buff, "MovementBuff30%", "", 15, 1, 3f, new EffectMod(0f, 0.3f), AttributeType.MovementSpeed);
+        ((AttributeBuff)tempEffect).SetUpEffect(202, EffectType.Buff, "MovementBuff30%", "", 15, 1, 3f, new EffectMod(0f, 0.3f), AttributeType.MovementSpeed);
         AddEffect(tempEffect, "");
         #endregion
-        #region DeBuffs
+        #region DeBuffs (251 - 300)
         tempEffect = NewVitalBuff(effectsHolder);
-        ((VitalBuff)tempEffect).SetUpEffect(++effectsCount, EffectType.DeBuff, "HealthDeBuff20%", "", 30, 10, 15f, new EffectMod(0f, -0.2f), VitalType.Health);
+        ((VitalBuff)tempEffect).SetUpEffect(251, EffectType.DeBuff, "HealthDeBuff20%", "", 30, 10, 15f, new EffectMod(0f, -0.2f), VitalType.Health);
         AddEffect(tempEffect, "");
 
         tempEffect = NewAttributeBuff(effectsHolder);
-        ((AttributeBuff)tempEffect).SetUpEffect(++effectsCount, EffectType.DeBuff, "MovementDeBuff30%", "", 15, 1, 3f, new EffectMod(0f, -0.3f), AttributeType.MovementSpeed);
+        ((AttributeBuff)tempEffect).SetUpEffect(252, EffectType.DeBuff, "MovementDeBuff30%", "", 15, 1, 3f, new EffectMod(0f, -0.3f), AttributeType.MovementSpeed);
         AddEffect(tempEffect, "");
         #endregion
         #endregion
         #region Over Time (id - title - description - mana - req - dur - overtime dur - freq - modifier - Type)
-        #region Buffs
+        #region Buffs (301 - 350)
         tempEffect = NewVitalOverTimeBuff(effectsHolder);
-        ((VitalOverTimeBuff)tempEffect).SetUpEffect(++effectsCount, EffectType.Buff, "HealthBuffoT3%", "", 30, 1, 10f, 10f, 2f, new EffectMod(0f, 0.03f), VitalType.Health);
+        ((VitalOverTimeBuff)tempEffect).SetUpEffect(301, EffectType.Buff, "HealthBuffoT3%", "", 30, 1, 10f, 10f, 2f, new EffectMod(0f, 0.03f), VitalType.Health);
         AddEffect(tempEffect, "");
 
         tempEffect = NewAttributeOverTimeBuff(effectsHolder);
-        ((AttributeOverTimeBuff)tempEffect).SetUpEffect(++effectsCount, EffectType.Buff, "MovementBuffoT4%", "", 25, 1, 10f, 10f, 2f, new EffectMod(0f, 0.04f), AttributeType.MovementSpeed);
+        ((AttributeOverTimeBuff)tempEffect).SetUpEffect(302, EffectType.Buff, "MovementBuffoT4%", "", 25, 1, 10f, 10f, 2f, new EffectMod(0f, 0.04f), AttributeType.MovementSpeed);
         AddEffect(tempEffect, "");
         #endregion
-        #region DeBuffs
+        #region DeBuffs (351 - 400)
         tempEffect = NewVitalOverTimeBuff(effectsHolder);
-        ((VitalOverTimeBuff)tempEffect).SetUpEffect(++effectsCount, EffectType.DeBuff, "HealthDeBuffoT3%", "", 40, 1, 10f, 10f, 2f, new EffectMod(0f, -0.03f), VitalType.Health);
+        ((VitalOverTimeBuff)tempEffect).SetUpEffect(351, EffectType.DeBuff, "HealthDeBuffoT3%", "", 40, 1, 10f, 10f, 2f, new EffectMod(0f, -0.03f), VitalType.Health);
         AddEffect(tempEffect, "");
 
         tempEffect = NewAttributeOverTimeBuff(effectsHolder);
-        ((AttributeOverTimeBuff)tempEffect).SetUpEffect(++effectsCount, EffectType.DeBuff, "MovementDeBuffoT4%", "", 35, 1, 10f, 10f, 2f, new EffectMod(0f, -0.04f), AttributeType.MovementSpeed);
+        ((AttributeOverTimeBuff)tempEffect).SetUpEffect(352, EffectType.DeBuff, "MovementDeBuffoT4%", "", 35, 1, 10f, 10f, 2f, new EffectMod(0f, -0.04f), AttributeType.MovementSpeed);
         AddEffect(tempEffect, "");
         #endregion
         #endregion
         #endregion
-        #region Special Effects
+        #region Special Effects (401 - 500)
         tempEffect = NewStunEffect(effectsHolder);
-        ((StunEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Stun, "Stun", "", 25, 1, 4f);
+        ((StunEffect)tempEffect).SetUpEffect(401, EffectType.Stun, "Stun", "", 25, 1, 4f);
         AddEffect(tempEffect, "");
 
         tempEffect = NewSilenceEffect(effectsHolder);
-        ((SilenceEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.Silence, "Silence", "", 15, 1, 4f);
+        ((SilenceEffect)tempEffect).SetUpEffect(402, EffectType.Silence, "Silence", "", 15, 1, 4f);
         AddEffect(tempEffect, "");
 
         tempEffect = NewCleanseEffect(effectsHolder);
-        ((CleanseEffect)tempEffect).SetUpEffect(++effectsCount, EffectType.None, "Cleanse", "", 20, 1);
+        ((CleanseEffect)tempEffect).SetUpEffect(403, EffectType.None, "Cleanse", "", 20, 1);
         ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Damage);
         ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.DeBuff);
         AddEffect(tempEffect, "");

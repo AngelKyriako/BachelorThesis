@@ -190,6 +190,7 @@ public class BaseSkill {
     #region Effects
     //offensive
     public void AddOffensiveEffect(BaseEffect _effect) {
+        Utilities.Instance.PreCondition(_effect != null, "BaseSkill", "AddOffensiveEffect", "effect argument is null");
         offensiveEffects.Add(_effect);
     }
     public BaseEffect GetOffensiveEffect(int _index) {
@@ -200,6 +201,7 @@ public class BaseSkill {
     }
     //support
     public void AddSupportEffect(BaseEffect _effect) {
+        Utilities.Instance.PreCondition(_effect != null, "BaseSkill", "AddSupportEffect", "effect argument is null");
         supportEffects.Add(_effect);
     }
     public BaseEffect GetSupportEffect(int _index) {
@@ -210,6 +212,7 @@ public class BaseSkill {
     }
     //passive
     public void AddPassiveEffect(BaseEffect _effect) {
+        Utilities.Instance.PreCondition(_effect != null, "BaseSkill", "AddPassiveEffect", "effect argument is null");
         passiveEffects.Add(_effect);
     }
     public BaseEffect GetPassiveEffect(int _index) {
