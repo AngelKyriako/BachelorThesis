@@ -60,7 +60,8 @@ public class SkillBook{
     public static SkillBook Instance {
         get { return SkillBook.instance; }
     }
-
+    //@TODO: Check IsStunned with GetComponents instead of the bool var
+    //@TODO: Check IsSilenced with GetComponents instead of the bool var
     private SkillBook() {        
         BaseSkill tempSkill = null;
 
@@ -71,39 +72,42 @@ public class SkillBook{
                                string.Empty, null, string.Empty), "");
         #endregion
         #region projectiles ( 1 - 14 )
-        tempSkill = new TargetedSkill((int)Skill.FireBall, "Flame", "", 2f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.FireBall, "Flame", "", 5f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("FireBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(1));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(4));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(7));
-        AddSkill(tempSkill, "");
+        AddSkill(tempSkill, "137");
 
-        tempSkill = new TargetedSkill((int)Skill.WaterBall, "Water Shot", "", 2f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.WaterBall, "Water Shot", "", 5f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("WaterBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0));//@TODO: mana burn
-        AddSkill(tempSkill, "");
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(51));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(52));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(54));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(57));
+        AddSkill(tempSkill, "140");
 
-        tempSkill = new TargetedSkill((int)Skill.MudBall, "Mud Shot", "", 7f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.MudBall, "Mud Shot", "", 10f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("MudBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(1));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0));//@TODO: immobilize or slow
-        AddSkill(tempSkill, "");
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(253));
+        AddSkill(tempSkill, "136");
 
-        tempSkill = new TargetedSkill((int)Skill.IceBall, "Ice ball", "", 9f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.IceBall, "Ice ball", "", 12f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("IceBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(1));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0));//@TODO: stun
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(402));
         AddSkill(tempSkill, "");
 
-        tempSkill = new TargetedSkill((int)Skill.LavaBall, "Fire Meteorite", "", 8f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.LavaBall, "Fire Meteorite", "", 17f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("LavaBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(1));
@@ -116,16 +120,19 @@ public class SkillBook{
         tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(1));
         AddSkill(tempSkill, "");
 
-        tempSkill = new TargetedSkill((int)Skill.SnowBall, "Snow Ball", "", 6f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.SnowBall, "Snow Ball", "", 15f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("SnowBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(1));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0));//@TODO: manaburn ?
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0));//@TODO: immobilize or slow
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(4));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(7));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(10));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(54));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(57));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(60));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(251));
         AddSkill(tempSkill, "");
 
-        tempSkill = new TargetedSkill((int)Skill.RockBall, "Rock Blast", "", 11f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.RockBall, "Rock Blast", "", 16f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("RockBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(1));
@@ -136,7 +143,7 @@ public class SkillBook{
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));
         AddSkill(tempSkill, "");
 
-        tempSkill = new TargetedSkill((int)Skill.PoisonBall, "Poison Shot", "", 9f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.PoisonBall, "Poison Shot", "", 14f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("PoisonBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(4));
@@ -151,17 +158,27 @@ public class SkillBook{
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(12));
         AddSkill(tempSkill, "");
 
-        tempSkill = new TargetedSkill((int)Skill.LeafBall, "Leaf Gun", "", 6f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.LeafBall, "Leaf Gun", "", 9f, 20f,
                               string.Empty, ResourcesPathManager.Instance.ProjectilePath("LeafBall"), string.Empty,
                               (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0)); //@TODO: Manaburn, critical debuff
-        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(0)); //@TODO: movement buff
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(51));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(52));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(53));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(254));
+        tempSkill.AddPassiveEffect(EffectBook.Instance.GetEffect(201));
         AddSkill(tempSkill, "");
 
-        tempSkill = new TargetedSkill((int)Skill.BlueBall, "Blue Flame", "", 13f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.BlueBall, "Blue Flame", "", 39f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("BlueBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0)); //@TODO: Manaburn (Late aoe)
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(52));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(53));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(58));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(59));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(60));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(61));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(62));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(255));
         AddSkill(tempSkill, "");
 
         tempSkill = new TargetedSkill((int)Skill.LoveBall, "Love Shot", "", 8f, 20f,
@@ -170,16 +187,17 @@ public class SkillBook{
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(1));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0)); //@TODO: Silence
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(411));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(412));
         AddSkill(tempSkill, "");
 
-        tempSkill = new TargetedSkill((int)Skill.RevengeBall, "Revenge Ball", "", 10f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("RevengeBall"), string.Empty,
-                                      (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0)); //@TODO: Need to add new Effect
-        AddSkill(tempSkill, "");
+        //tempSkill = new TargetedSkill((int)Skill.RevengeBall, "Revenge Ball", "", 22f, 20f,
+        //                              string.Empty, ResourcesPathManager.Instance.ProjectilePath("RevengeBall"), string.Empty,
+        //                              (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
+        //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0)); //@TODO: Need to add new Effect
+        //AddSkill(tempSkill, "");
 
-        tempSkill = new TargetedSkill((int)Skill.SunBall, "Sun Burst", "", 50f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.SunBall, "Sun Burst", "", 48f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("SunBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(1));
@@ -187,16 +205,21 @@ public class SkillBook{
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));
-        tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect(0));//@TODO: vision buff, heal
+        tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect(101));
+        tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect(102));
+        tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect(204));
         AddSkill(tempSkill, "");
 
-        tempSkill = new TargetedSkill((int)Skill.DarkBall, "Darth Bolt", "", 38f, 20f,
+        tempSkill = new TargetedSkill((int)Skill.DarkBall, "Darth Bolt", "", 44f, 20f,
                                       string.Empty, ResourcesPathManager.Instance.ProjectilePath("DarkBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(1));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(2));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0));//@TODO: vision, speed debuff & silence
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));        
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(412));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(413));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(252));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(257));
         AddSkill(tempSkill, "");
 
         #endregion
@@ -214,9 +237,13 @@ public class SkillBook{
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(7));
         AddSkill(tempSkill, "");
 
-        tempSkill = new BaseSkill((int)Skill.IceTrap, "Icy Terrain", "", 40f, 0f,
+        tempSkill = new BaseSkill((int)Skill.IceTrap, "Icy Terrain", "", 38f, 0f,
                                   string.Empty, null, string.Empty);
-        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0));//TODO: Stun
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(51));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(52));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(401));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(402));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(403));
         AddSkill(tempSkill, "");
 
         tempSkill = new BaseSkill((int)Skill.LavaTrap, "Lava Trap", "", 35f, 0f,
@@ -227,11 +254,12 @@ public class SkillBook{
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(3));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(4));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(7));
+        tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(10));
 
         tempSkill.AddSupportEffect(EffectBook.Instance.GetEffect(4));
         AddSkill(tempSkill, "");
 
-        tempSkill = new BaseSkill((int)Skill.PoisonTrap, "Poison Sludge", "", 45f, 0f,
+        tempSkill = new BaseSkill((int)Skill.PoisonTrap, "Poison Sludge", "", 41f, 0f,
                                   string.Empty, null, string.Empty);
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(4));
         tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(5));
@@ -247,7 +275,7 @@ public class SkillBook{
         AddSkill(tempSkill, "");
         #endregion
         #region directly casted ( 19 - 26)
-        tempSkill = new BaseSkill((int)Skill.BlowUp, "Art is a Bang", "", 0f, 0f,
+        tempSkill = new BaseSkill((int)Skill.BlowUp, "Big Bang", "", 0f, 0f,
                                   string.Empty, null, string.Empty);
         AddSkill(tempSkill, "");
 
