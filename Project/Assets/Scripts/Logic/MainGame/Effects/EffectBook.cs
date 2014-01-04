@@ -252,9 +252,9 @@ public class EffectBook {
         ((AttributeBuff)tempEffect).SetUpEffect(209, EffectType.Buff, "MovementBuffPer20%", "", 15, 18, 15f, new EffectMod(0f, 0.1f), AttributeType.Defence);
         AddEffect(tempEffect, "");
         //Health
-        tempEffect = NewVitalBuff(effectsHolder);
-        ((VitalBuff)tempEffect).SetUpEffect(999, EffectType.Buff, "HealthBuff50%", "", 30, 10, 15f, new EffectMod(0f, 0.5f), VitalType.Health);
-        AddEffect(tempEffect, "");
+        //tempEffect = NewVitalBuff(effectsHolder);
+        //((VitalBuff)tempEffect).SetUpEffect(999, EffectType.Buff, "HealthBuff50%", "", 30, 10, 15f, new EffectMod(0f, 0.5f), VitalType.Health);
+        //AddEffect(tempEffect, "");
 
         #endregion
         #region DeBuffs (251 - 300)
@@ -287,9 +287,9 @@ public class EffectBook {
         ((AttributeBuff)tempEffect).SetUpEffect(257, EffectType.DeBuff, "VisionDebuffPer70%", "", 40, 10, 15f, new EffectMod(0f, -0.7f), AttributeType.VisionRadius);
         AddEffect(tempEffect, "");
         //Health
-        tempEffect = NewVitalBuff(effectsHolder);
-        ((VitalBuff)tempEffect).SetUpEffect(999, EffectType.DeBuff, "HealthDeBuff20%", "", 30, 10, 15f, new EffectMod(0f, -0.2f), VitalType.Health);
-        AddEffect(tempEffect, "");
+        //tempEffect = NewVitalBuff(effectsHolder);
+        //((VitalBuff)tempEffect).SetUpEffect(999, EffectType.DeBuff, "HealthDeBuff20%", "", 30, 10, 15f, new EffectMod(0f, -0.2f), VitalType.Health);
+        //AddEffect(tempEffect, "");
         #endregion
         #endregion
         #region Over Time (id - title - description - mana - req - dur - overtime dur - freq - modifier - Type)
@@ -335,47 +335,47 @@ public class EffectBook {
         ((SilenceEffect)tempEffect).SetUpEffect(413, EffectType.Silence, MAJOR + "Silence", "", 45, 20, 18f);
         AddEffect(tempEffect, "");
         //Clease effects
-        tempEffect = NewCleanseEffect(effectsHolder);
-        ((CleanseEffect)tempEffect).SetUpEffect(420, EffectType.None, "Damage Cleanse", "", 25, 1);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Damage);
-        AddEffect(tempEffect, "");
+        //tempEffect = NewCleanseEffect(effectsHolder);
+        //((CleanseEffect)tempEffect).SetUpEffect(420, EffectType.None, "Damage Cleanse", "", 25, 1);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Damage);
+        //AddEffect(tempEffect, "");
 
-        tempEffect = NewCleanseEffect(effectsHolder);
-        ((CleanseEffect)tempEffect).SetUpEffect(421, EffectType.None, "Mana Burn Cleanse", "", 20, 1);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.ManaBurn);
-        AddEffect(tempEffect, "");
+        //tempEffect = NewCleanseEffect(effectsHolder);
+        //((CleanseEffect)tempEffect).SetUpEffect(421, EffectType.None, "Mana Burn Cleanse", "", 20, 1);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.ManaBurn);
+        //AddEffect(tempEffect, "");
 
-        tempEffect = NewCleanseEffect(effectsHolder);
-        ((CleanseEffect)tempEffect).SetUpEffect(422, EffectType.None, "DeBuff Cleanse", "", 15, 1);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.DeBuff);
-        AddEffect(tempEffect, "");
+        //tempEffect = NewCleanseEffect(effectsHolder);
+        //((CleanseEffect)tempEffect).SetUpEffect(422, EffectType.None, "DeBuff Cleanse", "", 15, 1);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.DeBuff);
+        //AddEffect(tempEffect, "");
 
-        tempEffect = NewCleanseEffect(effectsHolder);
-        ((CleanseEffect)tempEffect).SetUpEffect(423, EffectType.None, "Absolute Cleanse", "", 45, 1);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Damage);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.ManaBurn);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.DeBuff);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Stun);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Silence);
-        AddEffect(tempEffect, "");
+        //tempEffect = NewCleanseEffect(effectsHolder);
+        //((CleanseEffect)tempEffect).SetUpEffect(423, EffectType.None, "Absolute Cleanse", "", 45, 1);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Damage);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.ManaBurn);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.DeBuff);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Stun);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Silence);
+        //AddEffect(tempEffect, "");
 
-        tempEffect = NewCleanseEffect(effectsHolder);
-        ((CleanseEffect)tempEffect).SetUpEffect(435, EffectType.None, "Heal Dispel", "", 25, 1);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.HealthHeal);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.ManaHeal);
-        AddEffect(tempEffect, "");
+        //tempEffect = NewCleanseEffect(effectsHolder);
+        //((CleanseEffect)tempEffect).SetUpEffect(435, EffectType.None, "Heal Dispel", "", 25, 1);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.HealthHeal);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.ManaHeal);
+        //AddEffect(tempEffect, "");
 
-        tempEffect = NewCleanseEffect(effectsHolder);
-        ((CleanseEffect)tempEffect).SetUpEffect(436, EffectType.None, "Buff Dispel", "", 20, 1);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Buff);
-        AddEffect(tempEffect, "");
+        //tempEffect = NewCleanseEffect(effectsHolder);
+        //((CleanseEffect)tempEffect).SetUpEffect(436, EffectType.None, "Buff Dispel", "", 20, 1);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Buff);
+        //AddEffect(tempEffect, "");
 
-        tempEffect = NewCleanseEffect(effectsHolder);
-        ((CleanseEffect)tempEffect).SetUpEffect(437, EffectType.None, "Absolute Dispel", "", 40, 1);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.HealthHeal);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.ManaHeal);
-        ((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Buff);
-        AddEffect(tempEffect, "");
+        //tempEffect = NewCleanseEffect(effectsHolder);
+        //((CleanseEffect)tempEffect).SetUpEffect(437, EffectType.None, "Absolute Dispel", "", 40, 20);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.HealthHeal);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.ManaHeal);
+        //((CleanseEffect)tempEffect).AddEffectTypeToBeCleansed(EffectType.Buff);
+        //AddEffect(tempEffect, "");
         #endregion
 
         GameObject.DestroyImmediate(effectsHolder);
