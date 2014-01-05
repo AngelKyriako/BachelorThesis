@@ -149,7 +149,7 @@ public class GUISkill: MonoBehaviour {
 
     private bool AllowDrag(dfDragEventArgs args) {
         // Do not allow the user to drag and drop empty GUISkill instances
-        return !IsEmpty && !isSpellActive;
+        return !IsEmpty && !isSpellActive && gameObject.GetComponent<dfControl>().IsVisible;
     }
 
     private bool AllowDrop(dfDragEventArgs args) {

@@ -521,6 +521,7 @@ public class SkillBook{
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
         ((DamageOverTimeEffect)tempEffect).SetUpEffect(012, EffectType.Damage, LONG + MAJOR + DAMAGE_OVER_TIME, "", 10, 20, 18f, 18f, 1f, new EffectMod(8f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
+        tempSkill.AddMinimumRequirement(StatType.INT, 5);
         AddSkill(tempSkill, "135");
         #endregion
         #region directly casted ( 19 - 26)
@@ -602,8 +603,16 @@ public class SkillBook{
         #endregion
 
         GameObject.DestroyImmediate(effectsHolder);
+        UpdateAllSkills();
     }
-    
+
+    public void UpdateAllSkills() {
+        foreach (int _id in AllSkillsKeys) {
+            GetSkill(_id).UpdateManaCost(GameManager.Instance.MyCharacterModel);
+        }
+        
+    }
+
     #region Accesors
     public ICollection<int> AllSkillsKeys {
         get { return allSkills.Keys; }

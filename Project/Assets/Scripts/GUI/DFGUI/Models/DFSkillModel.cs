@@ -17,7 +17,6 @@ public class DFSkillModel: SingletonMono<DFSkillModel> {
         SkillBook.Instance.SetSkillAvailable(_id, b);
     }
 
-
     public string Title(int _id) {
         return SkillBook.Instance.GetSkill(_id).Title;
     }
@@ -27,9 +26,9 @@ public class DFSkillModel: SingletonMono<DFSkillModel> {
     public string Description(int _id) {
         return SkillBook.Instance.GetSkill(_id).Description;
     }
-    public float ManaCost(CharacterSkillSlot _key) {
+    public float ManaCost(int _skillId, CharacterSkillSlot _key) {
         return IsOnActionSlot(_key) ?
-               GameManager.Instance.MyCharacterModel.GetSkill(_key).ManaCost : 0;
+               GameManager.Instance.MyCharacterModel.GetSkill(_key).ManaCost : SkillBook.Instance.GetSkill(_skillId).ManaCost;
     }
     public float Cooldown(int _id, CharacterSkillSlot _key) {
         return IsOnActionSlot(_key) ?

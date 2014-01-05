@@ -84,6 +84,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
         trainingPoints += TRAINING_POINTS_PER_LEVEL[Level-1];
         VitalsToFull();
         CombatManager.Instance.InstantiateNetworkObject(ResourcesPathManager.Instance.LevelUp, ProjectileOriginPosition, transform.rotation);
+        GUISkillBook.RefreshAll();
     }
 
     public override void KilledEnemy(BaseCharacterModel _enemy) {

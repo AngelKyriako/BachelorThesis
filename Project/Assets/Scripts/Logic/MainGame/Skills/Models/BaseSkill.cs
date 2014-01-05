@@ -171,10 +171,10 @@ public class BaseSkill {
     }
     public bool RequirementsFulfilled() {
         for (int i = 0; i < requirements.Minimum.Count; ++i)
-            if (ownerModel.GetStat(requirements.Minimum[i].First).FinalValue < requirements.Minimum[i].Second)
+            if (GameManager.Instance.MyCharacterModel.GetStat(requirements.Minimum[i].First).FinalValue < requirements.Minimum[i].Second)
                 return false;
         for (int i = 0; i < requirements.Maximum.Count; ++i)
-            if (ownerModel.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
+            if (GameManager.Instance.MyCharacterModel.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
                 return false;
         return true;
     }

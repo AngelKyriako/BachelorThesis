@@ -28,7 +28,6 @@ public class GUISkillInventory: MonoBehaviour {
             Refresh();
         }
     }
-
     #endregion
 
     #region Unity Events
@@ -49,21 +48,22 @@ public class GUISkillInventory: MonoBehaviour {
     void LateUpdate() {
         if (needRefresh) {
             needRefresh = false;
-            Refresh();
+            var control = gameObject.GetComponent<dfControl>();
+            var container = control.Parent as dfScrollPanel;
+
+            if (container != null) {
+                control.Width = container.Width - container.ScrollPadding.horizontal - 70;
+            }
         }
     }
 
     #endregion
 
-    #region Private utility methods @TODO: WHAT TO ASSIGN HERE !!!!!!! (WhAT SHOULD I HAVE HERE DISPLAYED AT GUY);
+    //@TODO: WHAT TO ASSIGN HERE !!!!!!! (WhAT SHOULD I HAVE HERE DISPLAYED AT THE PLAYER
     //@TODO: Refresh when level up or when adding stats
-    private void Refresh() {
+    #region Private utility methods    
+    public void Refresh() {
         var control = gameObject.GetComponent<dfControl>();
-        var container = control.Parent as dfScrollPanel;
-
-        if (container != null) {
-            control.Width = container.Width - container.ScrollPadding.horizontal;
-        }
 
         var guiSkill = control.GetComponentInChildren<GUISkill>();
         var lblCosts = control.Find<dfLabel>("lblCosts");
@@ -79,8 +79,8 @@ public class GUISkillInventory: MonoBehaviour {
 
         guiSkill.Id = Id;
         lblName.Text = DFSkillModel.Instance.Title(Id);
-        lblCosts.Text = string.Format("{0}/{1}/{2}", DFSkillModel.Instance.ManaCost(CharacterSkillSlot.None),//@TODO: find a way to pass slot here
-                                                     DFSkillModel.Instance.Cooldown(Id, CharacterSkillSlot.None),//@TODO: find a way to pass slot here
+        lblCosts.Text = string.Format("{0}/{1}/{2}", DFSkillModel.Instance.ManaCost(Id, CharacterSkillSlot.None),
+                                                     DFSkillModel.Instance.Cooldown(Id, CharacterSkillSlot.None),
                                                      DFSkillModel.Instance.IsSkillAvailable(Id));
         lblDescription.Text = DFSkillModel.Instance.Description(Id);
         //@TODO: Add an effects Text section here (maybe an on hover)
