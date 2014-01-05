@@ -33,7 +33,6 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     }
 
     public void DestroyNetworkObject(GameObject _obj) {
-        Utilities.Instance.LogColoredMessageToChat("Dafuck bro !!!", Color.red);
         PhotonNetwork.Destroy(_obj);
     }
     #endregion

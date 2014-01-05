@@ -54,6 +54,9 @@
     public string ProjectilePath(string _projectile) {
         return MergeToPath("Prefabs", "Skills", "MainObjects", "Projectiles", _projectile);
     }
+    public string TrapPath(string _projectile) {
+        return MergeToPath("Prefabs", "Skills", "MainObjects", "Traps", _projectile);
+    }
 
     private string MergeToPath (params string[] nodes){
         string path = string.Empty;
