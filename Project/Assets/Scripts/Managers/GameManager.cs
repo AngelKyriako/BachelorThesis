@@ -244,7 +244,7 @@ public class GameManager: SingletonPhotonMono<GameManager> {
 
     [RPC]
     private void AddMessageToChat(string _text) {
-        ChatHolder.Instance.AddChatMessage(new ChatMessage("[Malakas Malakopoulos] " + _text, Color.black));
+        GUIMessageDisplay.Instance.AddMessage("[System] " + _text);
     }
     #endregion
 

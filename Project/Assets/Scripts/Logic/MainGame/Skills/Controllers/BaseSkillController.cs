@@ -31,7 +31,8 @@ public class BaseSkillController: MonoBehaviour {
 
     public virtual void Start() {        
         transform.position = destination;
-        gameObject.renderer.enabled = true;
+        if (gameObject.renderer)
+            gameObject.renderer.enabled = true;
         if (IsMySkill)
             Trigger(null);
     }
@@ -41,7 +42,7 @@ public class BaseSkillController: MonoBehaviour {
     public virtual void OnTriggerEnter(Collider other) { }
 
     public virtual void Trigger(BaseCharacterModel _characterHit) {
-        Skill.Trigger(transform.position, Quaternion.identity);        
+        Skill.Trigger(skill.OwnerModel.transform.position, Quaternion.identity);        
         if (IsAoE)
             ActivateAoE();
         else
@@ -49,13 +50,15 @@ public class BaseSkillController: MonoBehaviour {
     }
 
     public virtual void ActivateAoE() {
-        gameObject.renderer.enabled = false;
+        if (gameObject.renderer)
+            gameObject.renderer.enabled = false;
         GameObject obj;
         if (aoePrefabName == null || aoePrefabName.Equals(string.Empty)) {
             obj = (GameObject)GameObject.CreatePrimitive(PrimitiveType.Sphere);
             obj.transform.position = transform.position;
             obj.transform.rotation = transform.rotation;
-            //obj.renderer.enabled = false;
+            if (obj.renderer)
+                obj.renderer.enabled = false;
         }
         else
             obj = (GameObject)GameObject.Instantiate(Resources.Load(ResourcesPathManager.Instance.AoEObjectPath(aoePrefabName)),

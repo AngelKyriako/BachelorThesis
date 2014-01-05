@@ -19,7 +19,7 @@ public class SystemMessages {
         Kinky
     }
 
-    private const SystemMode DEFAULT_MODE = SystemMode.Kinky;
+    private const SystemMode DEFAULT_MODE = SystemMode.Normal;
 
     private Dictionary<int, Dictionary<MessageType, string>> messagesHolder;
 
@@ -41,7 +41,7 @@ public class SystemMessages {
         messagesHolder.Add(0, new Dictionary<MessageType, string>(){
                                     {MessageType.Kill, " killed "},
                                     {MessageType.Suicide, " killed himself"},
-                                    {MessageType.CriticalHit, " achived a critical hit on "},
+                                    {MessageType.CriticalHit, " achieved a critical hit on "},
                                     {MessageType.Evasion, " evaded the attack of "},
                                     {MessageType.ManyKills1, ""},
                                     {MessageType.ManyKills2, ""},

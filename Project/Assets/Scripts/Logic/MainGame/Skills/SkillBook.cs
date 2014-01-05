@@ -151,7 +151,7 @@ public class SkillBook{
         ((DamageEffect)tempEffect).SetUpEffect(002, EffectType.Damage, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(50f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
         tempEffect = NewStunEffect(effectsHolder);
-        ((StunEffect)tempEffect).SetUpEffect(402, EffectType.Stun, MODERATE + "Stun", "", 20, 3, 5f);
+        ((StunEffect)tempEffect).SetUpEffect(402, EffectType.Stun, MODERATE + "Stun", "", 20, 5, 5f);
         tempSkill.AddOffensiveEffect(tempEffect);            
         AddSkill(tempSkill, "134");
 
@@ -327,7 +327,7 @@ public class SkillBook{
         AddSkill(tempSkill, "141");
 
         tempSkill = new TargetedSkill((int)Skill.LoveBall, "Love Shot", "Physical Damage and Silence", 8f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("PinkBall"), ResourcesPathManager.Instance.TriggerEffectPath("BlueFlameExplosion"),
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("PinkBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(001, EffectType.Damage, MINOR + DIRECT_DAMAGE, "", 5, 1, new EffectMod(20f, 0f));
@@ -407,7 +407,7 @@ public class SkillBook{
         tempSkill.AddOffensiveEffect(tempEffect);
         AddSkill(tempSkill, "132");
         #endregion
-        #region traps ( 15 - 18 )
+        #region Traps ( 15 - 18 )
         tempSkill = new BaseSkill((int)Skill.FireTrap, "Fire Trap", "Physical Damage and DoT", 25f, 0f,
                                   string.Empty, ResourcesPathManager.Instance.TrapPath("FireTrap"), ResourcesPathManager.Instance.TriggerEffectPath("FireExplosion"));
         tempEffect = NewDamageEffect(effectsHolder);
@@ -440,7 +440,7 @@ public class SkillBook{
         AddSkill(tempSkill, "135");
 
         tempSkill = new BaseSkill((int)Skill.IceTrap, "Icy Terrain", "Special Damage and Stun (AoE)", 38f, 0f,
-                                  string.Empty, ResourcesPathManager.Instance.TrapPath("IceTrap"), string.Empty);
+                                  string.Empty, ResourcesPathManager.Instance.TrapPath("IceTrap"), ResourcesPathManager.Instance.TriggerEffectPath("FireExplosion"));//@TODO: Icy plein
         tempEffect = NewManaBurnEffect(effectsHolder);
         ((ManaBurnEffect)tempEffect).SetUpEffect(051, EffectType.ManaBurn, MINOR + DIRECT_MANA_BURN, "", 10, 1, new EffectMod(15f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
@@ -487,7 +487,7 @@ public class SkillBook{
         AddSkill(tempSkill, "135");
 
         tempSkill = new BaseSkill((int)Skill.PoisonTrap, "Poison Sludge", "Physical DoT (AoE)", 41f, 0f,
-                                  string.Empty, ResourcesPathManager.Instance.TrapPath("PurpleTrap"), string.Empty);
+                                  string.Empty, ResourcesPathManager.Instance.TrapPath("PurpleTrap"), ResourcesPathManager.Instance.TriggerEffectPath("FireExplosion"));//@TODO: Poison particle
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
         ((DamageOverTimeEffect)tempEffect).SetUpEffect(004, EffectType.Damage, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(3f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
@@ -524,28 +524,28 @@ public class SkillBook{
         AddSkill(tempSkill, "135");
         #endregion
         #region directly casted ( 19 - 26)
-        tempSkill = new BaseSkill((int)Skill.BlowUp, "Big Bang", "Physical Damage and suicide (AoE)", 80f, 0f,
+        tempSkill = new BaseSkill((int)Skill.BlowUp, "Big Bang", "Physical Damage and suicide (AoE)", 5f, 0f,
                                   string.Empty, ResourcesPathManager.Instance.VoidMainObject("BigBang"), ResourcesPathManager.Instance.TriggerEffectPath("FireExplosion"));
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(001, EffectType.Damage, MINOR + DIRECT_DAMAGE, "", 5, 1, new EffectMod(20f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
         tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect(002, EffectType.Damage, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(50f, 0f));
+        ((DamageEffect)tempEffect).SetUpEffect(002, EffectType.Damage, MODERATE + DIRECT_DAMAGE, "", 20, 1, new EffectMod(50f, 0f));
+        tempSkill.AddOffensiveEffect(tempEffect);
+        tempEffect = NewDamageEffect(effectsHolder);
+        ((DamageEffect)tempEffect).SetUpEffect(002, EffectType.Damage, MODERATE + DIRECT_DAMAGE, "", 20, 5, new EffectMod(50f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(002, EffectType.Damage, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(50f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
         tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect(002, EffectType.Damage, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(50f, 0f));
+        ((DamageEffect)tempEffect).SetUpEffect(003, EffectType.Damage, MAJOR + DIRECT_DAMAGE, "", 30, 15, new EffectMod(100f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(003, EffectType.Damage, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(100f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
         tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect(003, EffectType.Damage, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(100f, 0f));
-        tempSkill.AddOffensiveEffect(tempEffect);
-        tempEffect = NewDamageEffect(effectsHolder);
-        ((DamageEffect)tempEffect).SetUpEffect(003, EffectType.Damage, MAJOR + DIRECT_DAMAGE, "", 30, 20, new EffectMod(100f, 0f));
+        ((DamageEffect)tempEffect).SetUpEffect(003, EffectType.Damage, MAJOR + DIRECT_DAMAGE, "", 30, 23, new EffectMod(100f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(013, EffectType.Damage, "KO" + DIRECT_DAMAGE, "", 20, 1, new EffectMod(0f, 100f));
@@ -631,7 +631,6 @@ public class SkillBook{
         return allSkills[_id].IsAvailable;
     }
     #endregion
-
 
     #region Utility constructors
     //direct vital effects
