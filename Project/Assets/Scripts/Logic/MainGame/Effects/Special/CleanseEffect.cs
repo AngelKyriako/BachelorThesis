@@ -5,8 +5,8 @@ public class CleanseEffect : BaseEffect {
 
     private Dictionary<EffectType, bool> cleansedTypes;
 
-    public override void Awake() {
-        base.Awake();
+    public override void SetUpEffect(int _id, EffectType _type, string _title, string _descr, uint _manaCost, uint _minLevelReq) {
+        base.SetUpEffect(_id, _type, _title, _descr, _manaCost, _minLevelReq);
         cleansedTypes = new Dictionary<EffectType, bool>();
     }
 

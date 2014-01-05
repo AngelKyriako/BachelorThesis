@@ -55,7 +55,7 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
     }
     #endregion
 
-    #region Local Accessors
+    #region Local Methods
     public bool IsAlly(string _name) {
         return GameManager.Instance.IsAlly(_name);
     }
@@ -67,6 +67,11 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
 
     public float ExpRadius {
         get { return expRadius; }
+    }
+
+    public void AttachEffectToSelf(string _casterName, BaseEffect _effectToAttach) {
+        BaseEffect tempEffect = (BaseEffect)GameManager.Instance.MyCharacter.AddComponent(_effectToAttach.GetType());
+        tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), _effectToAttach);
     }
     #endregion
 }

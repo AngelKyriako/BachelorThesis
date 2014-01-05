@@ -46,7 +46,7 @@ public abstract class BaseEffect: MonoBehaviour {
         levelRequirement = 0;
     }
 
-    public void SetUpEffect(int _id, EffectType _type, string _title, string _descr, uint _manaCost, uint _minLevelReq) {
+    public virtual void SetUpEffect(int _id, EffectType _type, string _title, string _descr, uint _manaCost, uint _minLevelReq) {
         id = _id;
         type = _type;
         title = _title;

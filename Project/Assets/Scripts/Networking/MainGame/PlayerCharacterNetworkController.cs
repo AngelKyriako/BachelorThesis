@@ -113,18 +113,27 @@ public class PlayerCharacterNetworkController: SerializableNetController {
                            i, model.GetVital(i).BaseValue, model.GetVital(i).BuffValue, model.GetVital(i).CurrentValue);
     }
 
-    public void AttachEffectToPlayer(PlayerCharacterNetworkController _caster, PlayerCharacterNetworkController _receiver, int _effectId) {
-        Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_caster.name), "PlayerCharacterNetworkController", "AttachEffectToPlayer", "This method is only available for the skill caster.");
+    public void AttachOffensiveEffectsToPlayer(PlayerCharacterNetworkController _caster, PlayerCharacterNetworkController _receiver, int _skillId) {
+        Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_caster.name), "PlayerCharacterNetworkController", "AttachOffensiveEffectsToPlayer", "This method is only available for the skill caster.");
         //Utilities.Instance.LogMessageToChat("local client is: " + photonView.name);
         //Utilities.Instance.LogMessageToChat("local client owner is: " + photonView.owner.name);
         if (GameManager.Instance.ItsMe(_receiver.name))
-            AttachEffect(_caster.name, _receiver.name, _effectId);
+            AttachOffensiveEffects(_caster.name, _receiver.name, _skillId);
         else {
             //Utilities.Instance.LogMessageToChat("Send RPC TO !!!");
             //Utilities.Instance.LogMessageToChat("remote client is: " + _receiver.photonView.name);
             //Utilities.Instance.LogMessageToChat("remote client owner is: " + _receiver.photonView.owner.name);
-            photonView.RPC("AttachEffect", _receiver.photonView.owner, _caster.name, _receiver.name, _effectId);
+            photonView.RPC("AttachOffensiveEffects", _receiver.photonView.owner, _caster.name, _receiver.name, _skillId);
         }
+    }
+
+    public void AttachSupportEffectsToPlayer(PlayerCharacterNetworkController _caster, PlayerCharacterNetworkController _receiver, int _skillId) {
+        Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_caster.name), "PlayerCharacterNetworkController", "AttachSupportEffectsToPlayer", "This method is only available for the skill caster.");
+        
+        if (GameManager.Instance.ItsMe(_receiver.name))
+            AttachSupportEffects(_caster.name, _receiver.name, _skillId);
+        else
+            photonView.RPC("AttachSupportEffects", _receiver.photonView.owner, _caster.name, _receiver.name, _skillId);
     }
 
     #region Stats RPCs
@@ -151,14 +160,25 @@ public class PlayerCharacterNetworkController: SerializableNetController {
     }
     #endregion
 
-    #region Effects RPCs
+    #region Effect Attaching RPCs
     [RPC]
-    public void AttachEffect(string _casterName, string _receiverName, int _effectId) {
-        Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_receiverName), "PlayerCharacterNetworkController", "[RPC]AttachEffect", "One can only attach effect to themselves.");
+    private void AttachOffensiveEffects(string _casterName, string _receiverName, int _skillId) {
+        Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_receiverName), "PlayerCharacterNetworkController", "[RPC]AttachOffensiveEffects", "One can only attach effect to themselves from their own client.");
 
-        BaseEffect effectToAttach = EffectBook.Instance.GetEffect(_effectId);
-        BaseEffect tempEffect = (BaseEffect)GameManager.Instance.MyCharacter.AddComponent(effectToAttach.GetType());
-        tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), effectToAttach);
+        BaseSkill skill = SkillBook.Instance.GetSkill(_skillId);
+        for (int i = 0; i < skill.OffensiveEffectCount; ++i)
+            if (skill.GetOffensiveEffect(i).RequirementsFulfilled(GameManager.Instance.GetPlayerModel(_casterName)))
+                CombatManager.Instance.AttachEffectToSelf(_casterName, skill.GetOffensiveEffect(i));
+    }
+
+    [RPC]
+    private void AttachSupportEffects(string _casterName, string _receiverName, int _skillId) {
+        Utilities.Instance.PreCondition(GameManager.Instance.ItsMe(_receiverName), "PlayerCharacterNetworkController", "[RPC]AttachSupportEffects", "One can only attach effect to themselves from their own client.");
+
+        BaseSkill skill = SkillBook.Instance.GetSkill(_skillId);
+        for (int i = 0; i < skill.SupportEffectCount; ++i)
+            if (skill.GetSupportEffect(i).RequirementsFulfilled(GameManager.Instance.GetPlayerModel(_casterName)))
+                CombatManager.Instance.AttachEffectToSelf(_casterName, skill.GetSupportEffect(i));
     }
     #endregion
 

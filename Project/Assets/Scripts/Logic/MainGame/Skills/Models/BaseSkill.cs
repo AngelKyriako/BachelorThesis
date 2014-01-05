@@ -94,28 +94,21 @@ public class BaseSkill {
     }
 
     public void ActivateOffensiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
-        if (_receiver)
-            for (int i = 0; i < OffensiveEffectCount; ++i )
-                if (GetOffensiveEffect(i).RequirementsFulfilled(_caster))
-                    GameManager.Instance.MyNetworkController.AttachEffectToPlayer(_caster.NetworkController,
-                                                                                  _receiver.NetworkController,
-                                                                                  GetOffensiveEffect(i).Id);
+        GameManager.Instance.MyNetworkController.AttachOffensiveEffectsToPlayer(_caster.NetworkController,
+                                                                                _receiver.NetworkController,
+                                                                                Id);
     }
 
     public void ActivateSupportEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
-        for (int i = 0; i < SupportEffectCount; ++i)
-            if (GetSupportEffect(i).RequirementsFulfilled(_caster))
-                GameManager.Instance.MyNetworkController.AttachEffectToPlayer(_caster.NetworkController,
+        GameManager.Instance.MyNetworkController.AttachSupportEffectsToPlayer(_caster.NetworkController,
                                                                               _receiver.NetworkController,
-                                                                              GetSupportEffect(i).Id);
+                                                                              Id);
     }
 
     public void ActivatePassiveEffects(BaseCharacterModel _caster, BaseCharacterModel _receiver) {
         for (int i = 0; i < PassiveEffectCount; ++i)
             if (GetPassiveEffect(i).RequirementsFulfilled(_caster))
-                GameManager.Instance.MyNetworkController.AttachEffectToPlayer(_caster.NetworkController,
-                                                                              _receiver.NetworkController,
-                                                                              GetPassiveEffect(i).Id);
+                CombatManager.Instance.AttachEffectToSelf(_caster.name, GetPassiveEffect(i));
     }
 
     private void RefreshCooldown() {
