@@ -525,7 +525,7 @@ public class SkillBook{
         #endregion
         #region directly casted ( 19 - 26)
         tempSkill = new BaseSkill((int)Skill.BlowUp, "Big Bang", "Physical Damage and suicide (AoE)", 80f, 0f,
-                                  string.Empty, null, ResourcesPathManager.Instance.TriggerEffectPath("FireExplosion"));
+                                  string.Empty, ResourcesPathManager.Instance.VoidMainObject("BigBang"), ResourcesPathManager.Instance.TriggerEffectPath("FireExplosion"));
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(001, EffectType.Damage, MINOR + DIRECT_DAMAGE, "", 5, 1, new EffectMod(20f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);

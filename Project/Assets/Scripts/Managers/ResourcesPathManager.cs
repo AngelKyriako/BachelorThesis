@@ -51,6 +51,9 @@
     public string SkillObjectPath(string skillObject) {
         return MergeToPath("Prefabs", "Skills", "MainObjects", skillObject);
     }
+    public string VoidMainObject(string skillObject) {
+        return MergeToPath("Prefabs", "Skills", "MainObjects", "Void", skillObject);
+    }
     public string ProjectilePath(string _projectile) {
         return MergeToPath("Prefabs", "Skills", "MainObjects", "Projectiles", _projectile);
     }
