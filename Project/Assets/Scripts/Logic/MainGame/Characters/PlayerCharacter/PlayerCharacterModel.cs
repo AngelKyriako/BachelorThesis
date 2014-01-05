@@ -70,10 +70,11 @@ public class PlayerCharacterModel: BaseCharacterModel {
     }
 
     public override void Update() {
-        base.Update();
-        if (Input.GetKeyUp(KeyCode.U))
-            if (Input.GetKeyUp(KeyCode.P))
+        if (GameManager.Instance.ItsMe(name)) {
+            base.Update();
+            if (Input.GetKeyUp(KeyCode.U))
                 GainExp(ExpToLevel);
+        }
     }
 
     public override void LevelUp() {
@@ -82,7 +83,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
         expToLevel = (uint)(expToLevel * expModifier);
         trainingPoints += TRAINING_POINTS_PER_LEVEL[Level-1];
         VitalsToFull();
-        GameObject.Instantiate(Resources.Load(ResourcesPathManager.Instance.LevelUp), ProjectileOriginPosition, transform.rotation);
+        CombatManager.Instance.InstantiateNetworkObject(ResourcesPathManager.Instance.LevelUp, ProjectileOriginPosition, transform.rotation);
     }
 
     public override void KilledEnemy(BaseCharacterModel _enemy) {

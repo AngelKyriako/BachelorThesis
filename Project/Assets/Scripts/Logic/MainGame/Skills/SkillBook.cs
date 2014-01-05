@@ -151,7 +151,7 @@ public class SkillBook{
         ((DamageEffect)tempEffect).SetUpEffect(002, EffectType.Damage, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(50f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
         tempEffect = NewStunEffect(effectsHolder);
-        ((StunEffect)tempEffect).SetUpEffect(402, EffectType.Stun, MODERATE + "Stun", "", 35, 10, 5f);
+        ((StunEffect)tempEffect).SetUpEffect(402, EffectType.Stun, MODERATE + "Stun", "", 20, 3, 5f);
         tempSkill.AddOffensiveEffect(tempEffect);            
         AddSkill(tempSkill, "134");
 
@@ -228,7 +228,7 @@ public class SkillBook{
         AddSkill(tempSkill, "136");
 
         tempSkill = new TargetedSkill((int)Skill.PoisonBall, "Poison Shot", "Physical DoT", 14f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("PoisonBall"), string.Empty,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("PurpleBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
         ((DamageOverTimeEffect)tempEffect).SetUpEffect(004, EffectType.Damage, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(3f, 0f));
@@ -327,7 +327,7 @@ public class SkillBook{
         AddSkill(tempSkill, "141");
 
         tempSkill = new TargetedSkill((int)Skill.LoveBall, "Love Shot", "Physical Damage and Silence", 8f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("LoveBall"), ResourcesPathManager.Instance.TriggerEffectPath("BlueFlameExplosion"),
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("PinkBall"), ResourcesPathManager.Instance.TriggerEffectPath("BlueFlameExplosion"),
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(001, EffectType.Damage, MINOR + DIRECT_DAMAGE, "", 5, 1, new EffectMod(20f, 0f));
@@ -347,13 +347,13 @@ public class SkillBook{
         AddSkill(tempSkill, "135");
 
         tempSkill = new TargetedSkill((int)Skill.RevengeBall, "Revenge Ball", "Physical Damage based on lost health", 22f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("RevengeBall"), string.Empty,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("DarkBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         //tempSkill.AddOffensiveEffect(EffectBook.Instance.GetEffect(0)); //@TODO: Need to add new Effect
         AddSkill(tempSkill, "135");
 
         tempSkill = new TargetedSkill((int)Skill.SunBall, "Sun Burst", "Physical Damage & Healing, vision buff to Allies(AoE)", 48f, 20f,
-                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("SunBall"), string.Empty,
+                                      string.Empty, ResourcesPathManager.Instance.ProjectilePath("YellowBall"), string.Empty,
                                       (GameObject)Resources.Load(ResourcesPathManager.Instance.TargetCursorPath(DIRECTION_CURSOR)));
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(001, EffectType.Damage, MINOR + DIRECT_DAMAGE, "", 5, 1, new EffectMod(20f, 0f));
@@ -487,7 +487,7 @@ public class SkillBook{
         AddSkill(tempSkill, "135");
 
         tempSkill = new BaseSkill((int)Skill.PoisonTrap, "Poison Sludge", "Physical DoT (AoE)", 41f, 0f,
-                                  string.Empty, ResourcesPathManager.Instance.TrapPath("PoisonTrap"), string.Empty);
+                                  string.Empty, ResourcesPathManager.Instance.TrapPath("PurpleTrap"), string.Empty);
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
         ((DamageOverTimeEffect)tempEffect).SetUpEffect(004, EffectType.Damage, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(3f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
