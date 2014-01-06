@@ -538,7 +538,7 @@ public class SkillBook{
         ((DamageOverTimeEffect)tempEffect).SetUpEffect(012, EffectType.Damage, LONG + MAJOR + DAMAGE_OVER_TIME, "", 10, 20, 18f, 18f, 1f, new EffectMod(8f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
         tempSkill.AddMinimumRequirement(StatType.INT, 7);
-        tempSkill.AddMinimumRequirement(StatType.AGI, 5);
+        tempSkill.AddMinimumRequirement(StatType.AGI, 8);
         AddSkill(tempSkill, "135");
         #endregion
         #region directly casted ( 19 - 26)
