@@ -3,14 +3,12 @@ using System.Collections.Generic;
 
 public enum GameMode {
     Conquerors,
-    BattleRoyal,    
-    CaptureTheFlag,
-    Survival
+    BattleRoyal
 };
 
 public enum GameMap {
     MeetingPoint,
-    AwesomeTerrainThatIsGonnaBlowYourMind
+    AnotherTerrain
 }
 
 public enum GameDifficulty {
@@ -49,7 +47,7 @@ public class GameVariables {
                                                            };
         map = new KeyValuePair<string, GameMap>(Enum.GetName(typeof(GameMap), GameMap.MeetingPoint), GameMap.MeetingPoint);
         availableMaps = new Dictionary<string, GameMap>(){ {"MeetingPoint", GameMap.MeetingPoint},
-                                                           {"AwesomeTerrainThatIsGonnaBlowYourMind", GameMap.AwesomeTerrainThatIsGonnaBlowYourMind}
+                                                           {"AnotherTerrain", GameMap.AnotherTerrain}
                                                          };
         difficulty = new KeyValuePair<string, GameDifficulty>(Enum.GetName(typeof(GameDifficulty), GameDifficulty.Medium), GameDifficulty.Medium);
         availableDifficulties = new Dictionary<string, GameDifficulty>(){ {Enum.GetName(typeof(GameDifficulty), GameDifficulty.Easy), GameDifficulty.Easy},
