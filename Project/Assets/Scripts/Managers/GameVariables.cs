@@ -10,7 +10,7 @@ public enum GameMode {
 
 public enum GameMap {
     MeetingPoint,
-    MeetingPoint2
+    AwesomeTerrainThatIsGonnaBlowYourMind
 }
 
 public enum GameDifficulty {
@@ -49,24 +49,24 @@ public class GameVariables {
                                                            };
         map = new KeyValuePair<string, GameMap>(Enum.GetName(typeof(GameMap), GameMap.MeetingPoint), GameMap.MeetingPoint);
         availableMaps = new Dictionary<string, GameMap>(){ {"MeetingPoint", GameMap.MeetingPoint},
-                                                           {"MeetingPoint2", GameMap.MeetingPoint2}
+                                                           {"AwesomeTerrainThatIsGonnaBlowYourMind", GameMap.AwesomeTerrainThatIsGonnaBlowYourMind}
                                                          };
         difficulty = new KeyValuePair<string, GameDifficulty>(Enum.GetName(typeof(GameDifficulty), GameDifficulty.Medium), GameDifficulty.Medium);
         availableDifficulties = new Dictionary<string, GameDifficulty>(){ {Enum.GetName(typeof(GameDifficulty), GameDifficulty.Easy), GameDifficulty.Easy},
                                                                           {Enum.GetName(typeof(GameDifficulty), GameDifficulty.Medium), GameDifficulty.Medium},
                                                                           {Enum.GetName(typeof(GameDifficulty), GameDifficulty.Hard), GameDifficulty.Hard}
                                                                         };
-        maxPlayers = new KeyValuePair<string, int>("4", 4);
+        maxPlayers = new KeyValuePair<string, int>("6", 6);
         availableMaxPlayers = new Dictionary<string, int>(){ {"2", 2}, {"3", 3}, {"4", 4}, {"5", 5}, {"6", 6},
                                                              {"7", 7}, {"8", 8}, {"9", 9}, {"10", 10}
                                                            };
-        targetKills = new KeyValuePair<string, int>("50", 1);
-        availableTargetKills = new Dictionary<string, int>(){ {"5", 5}, {"10", 10}, {"25", 25}, {"50", 50}, {"75", 75}, {"100", 100},
+        targetKills = new KeyValuePair<string, int>("10", 10);
+        availableTargetKills = new Dictionary<string, int>(){ {"1", 1}, {"5", 5}, {"10", 10}, {"25", 25}, {"50", 50}, {"75", 75}, {"100", 100},
                                                               {"200", 200}, {"500", 500}, {"750", 750}, {"1000", 1000}
 	                                                        };
 
-        startingLifes = new KeyValuePair<string, int>("10", 1);
-        availableStartingLifes = new Dictionary<string, int>(){ {"5", 5}, {"10", 10}, {"25", 25}, {"50", 50},
+        startingLifes = new KeyValuePair<string, int>("10", 10);
+        availableStartingLifes = new Dictionary<string, int>(){ {"1", 1}, {"5", 5}, {"10", 10}, {"25", 25}, {"50", 50},
                                                                 {"75", 75}, {"100", 100}, {"200", 200}
 	                                                          };
 
