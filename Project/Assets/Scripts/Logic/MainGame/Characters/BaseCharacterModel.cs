@@ -37,16 +37,16 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
     private static readonly float[] ATTRIBUTE_BASE_VALUES = new float[12] { 10, 10, 10, 10, 0.5f, 0.5f, 1, 0, 0, 0, 1, 1 };
 
     private static readonly string[] ATTRIBUTE_NAMES = new string[12]{  "Physical Power",
-                                                                        "Special Power",//@TODO: find better name
+                                                                        "Special Power",
                                                                         "Physical Defence",
-                                                                        "Special Defence",//@TODO: find better name
+                                                                        "Special Defence",
                                                                         "Health Regeneration",
                                                                         "Mana Regeneration",
                                                                         "Movement Bonus",
                                                                         "Attack Speed Bonus",
                                                                         "Critical Chance",
                                                                         "Evasion Chance",
-                                                                        "Visibility Bonus",
+                                                                        "Vision Bonus",
                                                                         "Leadership"};
 
     private static readonly string[] ATTRIBUTE_DESCRIPTIONS = new string[12]{ "Boosts HP loss on attack attack effect",
@@ -67,21 +67,21 @@ public abstract class BaseCharacterModel: MonoBehaviour  {
                                                                          "Spent when casting skills" };
 
                                                                         //  str     sta     agi     int     cha                               
-    private static readonly float[,] ATTRIBUTE_RATIOS = new float[12, 5]{ { 11.0f,  0.0f,   0.0f,   0.0f,   0.0f  },//damage (boosts hp loss on atk)
-                                                                          { 0.0f,   0.0f,   0.0f,   0.0f,   7.0f  },//magic damage (hp boost on heal)
-                                                                          { 3.0f,   8.0f,   0.0f,   0.0f,   0.0f  },//defence (reduces hp loss on atk)
-                                                                          { 0.0f,   0.0f,   6.0f,   5.0f,   0.0f  },//MagicDefence (reduces mana loss on atk)
-                                                                          { 0.01f,  0.04f,  0.0f,   0.0f,   0.005f},//HeathRegen (hp gained per second)
-                                                                          { 0.0f,   0.08f,  0.0f,   0.05f,  0.02f },//ManaRegen (mana gained per second)                                                                            
-                                                                          { 0.0f,   0.0f,   0.025f, 0.0f,   0.0f  },//moveSpeed (movement speed percent added to basic movement)
-                                                                          { 0.0f,   0.0f,   0.02f,  0.0f,   0.01f },//attackSpeed (skill cooldowns percent subtracted for cooldown time)
-                                                                          { 0.0f,   0.0f,   0.0f,   0.012f, 0.0f  },//critical (percent chance of dealing double damage)
-                                                                          { 0.0f,   0.0f,   0.012f, 0.0f,   0.003f},//evasion (percent chance evading an attack)
-                                                                          { 0.0f,   0.0f,   0.0f,   0.01f,  0.06f },//radius (percent of radius added to base radius)
-                                                                          { 0.0f,   0.0f,   0.0f,   0.0f,   1.0f }  //leadership (boosts supportive spells)
+    private static readonly float[,] ATTRIBUTE_RATIOS = new float[12, 5]{ { 10.0f,  0.0f,   0.0f,   0.0f,   0.0f  },//PhysicalDamage (boosts hp loss on atk)
+                                                                          { 0.0f,   0.0f,   0.0f,   6.0f,   0.0f  },//SpecialDamage (hp boost on heal)
+                                                                          { 4.0f,   8.0f,   0.0f,   0.0f,   0.0f  },//PhysicalDefence (reduces hp loss on atk)
+                                                                          { 0.0f,   6.0f,   0.0f,   3.0f,   0.0f  },//SpecialDefence (reduces mana loss on atk)
+                                                                          { 0.03f,  0.08f,  0.0f,   0.0f,   0.0f  },//HeathRegen (hp gained per second)
+                                                                          { 0.0f,   0.12f,  0.0f,   0.05f,  0.04f },//ManaRegen (mana gained per second)                                                                            
+                                                                          { 0.0f,   0.0f,   0.021f, 0.0f,   0.0f  },//moveSpeed (movement speed percent added to basic movement)
+                                                                          { 0.0f,   0.0f,   0.016f, 0.0f,   0.0f  },//attackSpeed (skill cooldowns percent subtracted for cooldown time)
+                                                                          { 0.0f,   0.0f,   0.005f, 0.01f,  0.0f  },//critical (percent chance of dealing double damage)
+                                                                          { 0.0f,   0.0f,   0.013f, 0.0f,   0.0f  },//evasion (percent chance evading an attack)
+                                                                          { 0.0f,   0.0f,   0.0f,   0.015f, 0.06f },//radius (percent of radius added to base radius)
+                                                                          { 0.0f,   0.0f,   0.0f,   0.0f,   0.7f  } //leadership (boosts supportive spells)
                                                                         },
-                                     VITAL_RATIOS = new float[2, 5]     { { 5.0f,   20.0f,  0.0f,   0.0f,   0.0f  },//health (hit points)
-                                                                          { 0.0f,   5.0f,   0.0f,   15.0f,  0.0f  } //mana (mana points)
+                                     VITAL_RATIOS = new float[2, 5]     { { 8.0f,   30.0f,  0.0f,   0.0f,   5.0f  },//health (hit points)
+                                                                          { 0.0f,   35.0f,  0.0f,   12.0f,  8.0f  } //mana (mana points)
                                                                         };
 
 #endregion

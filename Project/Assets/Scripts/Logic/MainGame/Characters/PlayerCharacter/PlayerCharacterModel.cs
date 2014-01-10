@@ -92,8 +92,20 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void Died() {
         ++deathCount;
-        RespawnTimer = Level * ((killsCount / 2) /
-                                (deathCount * 2)) + 2;
+        switch (GameVariables.Instance.Difficulty.Value) {
+            case GameDifficulty.Easy:
+                RespawnTimer = Level/2 + Level * ((killsCount / 2) /
+                                                  (deathCount * 2));
+                break;
+            case GameDifficulty.Medium:
+                RespawnTimer = Level + Level * (deathCount /
+                                               (killsCount + 1));
+                break;
+            case GameDifficulty.Hard:
+                RespawnTimer = 2 * Level + Level * ((deathCount * 2) /
+                                                   ((killsCount / 2) + 1));
+                break;
+        }
 
         uint ExpLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE);
         LoseExp(ExpLoss > CurrentExp ? CurrentExp : ExpLoss);
