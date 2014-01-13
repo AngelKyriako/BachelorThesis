@@ -76,7 +76,7 @@ public class GUISkill: MonoBehaviour {
 
         if (AllowDrag(args)) {
 
-            if (IsEmpty) {
+            if (IsEmpty || !DFSkillModel.Instance.IsSkillAvailable(Id)) {
                 // Indicates that the drag-and-drop operation cannot be performed
                 args.State = dfDragDropState.Denied;
             }
@@ -123,6 +123,7 @@ public class GUISkill: MonoBehaviour {
                 Id = 0;
             }
             Refresh();
+            GUISkillBook.RefreshAll();
         }
     }
 
@@ -140,6 +141,7 @@ public class GUISkill: MonoBehaviour {
             }
             DFCharacterModel.SetActionSkill(Slot, Id);
             StartCoroutine(ShowCooldown());
+            GUISkillBook.RefreshAll();
         }
         else
             args.State = dfDragDropState.Denied;

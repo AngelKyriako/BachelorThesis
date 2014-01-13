@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class CombatManager: SingletonPhotonMono<CombatManager> {
 
     private float expRadius;
 
-    private CombatManager() { }
+    private CombatManager() {
+        InitSkillCounters();
+    }
 
     void Start(){
         switch (GameVariables.Instance.Difficulty.Value){
@@ -73,4 +75,26 @@ public class CombatManager: SingletonPhotonMono<CombatManager> {
         tempEffect.SetUpEffect(GameManager.Instance.GetPlayerModel(_casterName), _effectToAttach);
     }
     #endregion
+
+    #region Statistics shit
+    private int[] SkillCastingCounters;
+
+    private void InitSkillCounters() {
+        SkillCastingCounters = new int[SkillBook.Instance.AllSkillsKeys.Count];
+        for (int i = 0; i < SkillCastingCounters.Length; ++i)
+            SkillCastingCounters[i] = 0;
+    }
+
+    public void RaiseSkillUsageCount(int skillId) {
+        ++SkillCastingCounters[skillId];
+    }
+
+    public string SkillCastingCountersToString() {
+        string txt = "Skill usage count:\n";
+        for (int i = 0; i < SkillCastingCounters.Length; ++i)
+            txt += SkillBook.Instance.GetSkill(i).Title +":\t"+SkillCastingCounters[i].ToString()+"\n";
+        return txt;
+    }
+    #endregion
+    
 }

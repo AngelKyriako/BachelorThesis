@@ -348,6 +348,9 @@ public class GameManager: SingletonPhotonMono<GameManager> {
         return all[_name];
     }
     //Teams
+    public ICollection<string> AllAlliesKeys {
+        get { return allies.Keys; }
+    }
     public bool IsAlly(string _name) {
         return allies.ContainsKey(_name);
     }

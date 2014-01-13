@@ -63,15 +63,12 @@ public class GameVariables {
                                                               {"200", 200}, {"500", 500}, {"750", 750}, {"1000", 1000}
 	                                                        };
 
-        startingLifes = new KeyValuePair<string, int>("10", 10);
+        startingLifes = new KeyValuePair<string, int>("1", 1);
         availableStartingLifes = new Dictionary<string, int>(){ {"1", 1}, {"5", 5}, {"10", 10}, {"25", 25}, {"50", 50},
                                                                 {"75", 75}, {"100", 100}, {"200", 200}
 	                                                          };
 
         timer = new KeyValuePair<string, float>("None", 0);
-        //availableTimers = new Dictionary<string, float>(){ {"None", -1}, {"10'", 600}, {"15'", 900}, {"20'", 1200}, {"30'", 1800},
-        //                                                    {"60'", 3600}, {"90'", 5400}, {"120'", 7200}, {"180'", 10800}
-        //                                                  };
         availableTimers = new Dictionary<string, float>(){ {"None", 0}, {"10''", 10}, {"20''", 20}, {"30''", 30},
                                                             {"1'", 60}, {"2'", 120}, {"3'", 180}, {"5'", 300}
                                                           };

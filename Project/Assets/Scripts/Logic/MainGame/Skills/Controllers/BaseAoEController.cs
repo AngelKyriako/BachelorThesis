@@ -44,13 +44,13 @@ public class BaseAoEController: MonoBehaviour {
     void Update() {
         if (IsMySkill) {
             if (Time.time - lastActivationTime >= activationFrequency) {
-                Utilities.Instance.LogColoredMessageToChat("Attaching Effects dude, lastActivationTime: " + lastActivationTime, Color.red);
+                //Utilities.Instance.LogColoredMessageToChat("Attaching Effects dude, lastActivationTime: " + lastActivationTime, Color.red);
                 AttachEffects();
                 lastActivationTime = Time.time;
             }
 
             if (Time.time - startTime > timeToLive) {
-                Utilities.Instance.LogColoredMessageToChat("Time's up", Color.red);
+                //Utilities.Instance.LogColoredMessageToChat("Time's up", Color.red);
                 Destroy(gameObject);
             }
         }

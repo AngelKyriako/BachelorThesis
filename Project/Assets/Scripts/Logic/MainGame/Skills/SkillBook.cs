@@ -176,8 +176,8 @@ public class SkillBook{
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(001, EffectType.Damage, MINOR + DIRECT_DAMAGE, "", 5, 1, new EffectMod(20f, 0f));
         tempSkill.AddPassiveEffect(tempEffect);
-        //tempSkill.AddMinimumRequirement(StatType.STA, 5);
-        //tempSkill.AddMinimumRequirement(StatType.STR, 5);
+        tempSkill.AddMinimumRequirement(StatType.STA, 3);
+        tempSkill.AddMinimumRequirement(StatType.STR, 7);
         AddSkill(tempSkill, "148");
 
         tempSkill = new TargetedSkill((int)Skill.SnowBall, "Snow Ball", "Physical & Special Damage and Slow", 15f, 20f,
@@ -227,8 +227,8 @@ public class SkillBook{
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(003, EffectType.Damage, MAJOR + DIRECT_DAMAGE, "", 30, 25, new EffectMod(100f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
-        //tempSkill.AddMinimumRequirement(StatType.STA, 5);
-        //tempSkill.AddMaximumRequirement(StatType.STR, 12);
+        tempSkill.AddMinimumRequirement(StatType.STA, 5);
+        tempSkill.AddMaximumRequirement(StatType.STR, 12);
         AddSkill(tempSkill, "136");
 
         tempSkill = new TargetedSkill((int)Skill.PoisonBall, "Poison Shot", "Physical DoT", 14f, 20f,
@@ -296,8 +296,8 @@ public class SkillBook{
         tempEffect = NewHealingOverTimeEffect(effectsHolder);
         ((HealingOverTimeEffect)tempEffect).SetUpEffect(161, EffectType.ManaHeal, EXTENDED + MAJOR + MANA_HEAL_OVER_TIME, "", 10, 15, 10f, 10f, 1f, new EffectMod(7f, 0f), VitalType.Mana);
         tempSkill.AddPassiveEffect(tempEffect);
-        //tempSkill.AddMinimumRequirement(StatType.INT, 6);
-        //tempSkill.AddMaximumRequirement(StatType.AGI, 12);
+        tempSkill.AddMinimumRequirement(StatType.INT, 10);
+        tempSkill.AddMaximumRequirement(StatType.AGI, 12);
         AddSkill(tempSkill, "145");
 
         tempSkill = new TargetedSkill((int)Skill.BlueBall, "Blue Flame", "Special Damage & DoT and Defence debuff (AoE)", 39f, 20f,
@@ -327,8 +327,7 @@ public class SkillBook{
         tempEffect = NewAttributeBuff(effectsHolder);
         ((AttributeBuff)tempEffect).SetUpEffect(255, EffectType.DeBuff, "DefenceDebuffPer30%", "", 40, 10, 15f, new EffectMod(0f, -0.3f), AttributeType.Defence);
         tempSkill.AddOffensiveEffect(tempEffect);
-        //tempSkill.AddMinimumRequirement(StatType.INT, 6);
-        //tempSkill.AddMinimumRequirement(StatType.CHA, 3);
+        tempSkill.AddMinimumRequirement(StatType.INT, 10);
         AddSkill(tempSkill, "141");
 
         tempSkill = new TargetedSkill((int)Skill.LoveBall, "Love Shot", "Physical Damage and Silence", 8f, 20f,
@@ -384,8 +383,9 @@ public class SkillBook{
         tempEffect = NewAttributeBuff(effectsHolder);
         ((AttributeBuff)tempEffect).SetUpEffect(204, EffectType.Buff, "VisionBuffPer60%", "", 20, 5, 15f, new EffectMod(0f, 0.6f), AttributeType.VisionRadius);
         tempSkill.AddSupportEffect(tempEffect);
-        //tempSkill.AddMinimumRequirement(StatType.INT, 6);
-        //tempSkill.AddMinimumRequirement(StatType.CHA, 7);
+        tempSkill.AddMinimumRequirement(StatType.INT, 6);
+        tempSkill.AddMinimumRequirement(StatType.CHA, 8);
+        tempSkill.AddMaximumRequirement(StatType.STR, 13);
         AddSkill(tempSkill, "150");
 
         tempSkill = new TargetedSkill((int)Skill.DarkBall, "Darth Bolt", "Physical Damage, Silence, Slow and vision debuff (AoE)", 44f, 20f,
@@ -412,8 +412,9 @@ public class SkillBook{
         tempEffect = NewAttributeBuff(effectsHolder);
         ((AttributeBuff)tempEffect).SetUpEffect(257, EffectType.DeBuff, "VisionDebuffPer70%", "", 40, 10, 15f, new EffectMod(0f, -0.7f), AttributeType.VisionRadius);
         tempSkill.AddOffensiveEffect(tempEffect);
-        //tempSkill.AddMaximumRequirement(StatType.STR, 15);
-        //tempSkill.AddMinimumRequirement(StatType.CHA, 3);
+        tempSkill.AddMinimumRequirement(StatType.CHA, 5);
+        tempSkill.AddMinimumRequirement(StatType.INT, 5);
+        tempSkill.AddMaximumRequirement(StatType.STR, 15);
         AddSkill(tempSkill, "132");
         #endregion
         #region Traps ( 15 - 18 )
@@ -446,8 +447,7 @@ public class SkillBook{
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
         ((DamageOverTimeEffect)tempEffect).SetUpEffect(007, EffectType.Damage, SWIFT + MODERATE + DAMAGE_OVER_TIME, "", 10, 5, 6f, 6f, 1f, new EffectMod(5f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
-        //tempSkill.AddMinimumRequirement(StatType.INT, 2);
-        //tempSkill.AddMinimumRequirement(StatType.AGI, 4);
+        tempSkill.AddMinimumRequirement(StatType.AGI, 5);
         AddSkill(tempSkill, "137");
 
         tempSkill = new BaseSkill((int)Skill.IceTrap, "Icy Terrain", "Special Damage and Stun (AoE)", 38f, 0f,
@@ -467,8 +467,8 @@ public class SkillBook{
         tempEffect = NewStunEffect(effectsHolder);
         ((StunEffect)tempEffect).SetUpEffect(403, EffectType.Stun, MAJOR + "Stun", "", 60, 20, 8f);
         tempSkill.AddOffensiveEffect(tempEffect);
-        //tempSkill.AddMinimumRequirement(StatType.INT, 3);
-        //tempSkill.AddMinimumRequirement(StatType.AGI, 6);
+        tempSkill.AddMinimumRequirement(StatType.INT, 5);
+        tempSkill.AddMinimumRequirement(StatType.AGI, 5);
         AddSkill(tempSkill, "141");
 
         tempSkill = new BaseSkill((int)Skill.LavaTrap, "Lava Trap", "Physical Damage and DoT (AoE)", 35f, 0f,
@@ -497,9 +497,8 @@ public class SkillBook{
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
         ((DamageOverTimeEffect)tempEffect).SetUpEffect(004, EffectType.Damage, SWIFT + MINOR + DAMAGE_OVER_TIME, "", 10, 1, 6f, 6f, 1f, new EffectMod(3f, 0f));
         tempSkill.AddSupportEffect(tempEffect);
-        //tempSkill.AddMinimumRequirement(StatType.STR, 6);
-        //tempSkill.AddMinimumRequirement(StatType.INT, 4);
-        //tempSkill.AddMinimumRequirement(StatType.AGI, 4);
+        tempSkill.AddMinimumRequirement(StatType.STR, 5);
+        tempSkill.AddMinimumRequirement(StatType.AGI, 5);
         AddSkill(tempSkill, "143");
 
         tempSkill = new BaseSkill((int)Skill.PoisonTrap, "Poison Sludge", "Physical DoT (AoE)", 41f, 0f,
@@ -537,8 +536,8 @@ public class SkillBook{
         tempEffect = NewDamageOverTimeEffect(effectsHolder);
         ((DamageOverTimeEffect)tempEffect).SetUpEffect(012, EffectType.Damage, LONG + MAJOR + DAMAGE_OVER_TIME, "", 10, 20, 18f, 18f, 1f, new EffectMod(8f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
-        //tempSkill.AddMinimumRequirement(StatType.INT, 7);
-        //tempSkill.AddMinimumRequirement(StatType.AGI, 8);
+        tempSkill.AddMinimumRequirement(StatType.INT, 3);
+        tempSkill.AddMinimumRequirement(StatType.AGI, 5);
         AddSkill(tempSkill, "146");
         #endregion
         #region directly casted ( 19 - 26)
@@ -568,8 +567,8 @@ public class SkillBook{
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(013, EffectType.Damage, "KO" + DIRECT_DAMAGE, "", 20, 1, new EffectMod(0f, 100f));
         tempSkill.AddPassiveEffect(tempEffect);
-        //tempSkill.AddMinimumRequirement(StatType.STA, 10);
-        //tempSkill.AddMinimumRequirement(StatType.STR, 7);
+        tempSkill.AddMinimumRequirement(StatType.STA, 5);
+        tempSkill.AddMinimumRequirement(StatType.STR, 5);
         AddSkill(tempSkill, "138");
 
         tempSkill = new BaseSkill((int)Skill.LastStand, "Last Stand", "", 0f, 0f,
@@ -630,6 +629,11 @@ public class SkillBook{
             GetSkill(_id).UpdateManaCost(GameManager.Instance.MyCharacterModel);
         }
         
+    }
+
+    public void RefreshAllSkills() {
+        foreach (int _id in AllSkillsKeys)
+            SetSkillAvailable(_id, true);
     }
 
     #region Accesors

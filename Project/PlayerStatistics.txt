@@ -1,0 +1,51 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+IsWinner	True
+Players count	1
+Team members count	1
+Kills	0
+Deaths	1
+Final stat build:
+ Level	1
+STR	0
+STA	0
+AGI	0
+INT	0
+CHA	0
+Skill usage count:
+Unknown:	0
+Flame:	0
+Water Shot:	0
+Mud Shot:	0
+Ice ball:	0
+Fire Meteorite:	0
+Snow Ball:	0
+Rock Blast:	0
+Poison Shot:	0
+Leaf Gun:	0
+Blue Flame:	0
+Love Shot:	0
+Revenge Ball:	0
+Sun Burst:	0
+Darth Bolt:	0
+Fire Trap:	0
+Icy Terrain:	0
+Lava Trap:	0
+Poison Sludge:	0
+Big Bang:	1
+Last Stand:	0
+Resurrection:	0
+Hawk Eyes:	0
+Hermes Sandals:	0
+Dragon's Skin:	0
+Holy Ground:	0
+Healing Prayer:	0
+
+Game preferences
+
+Mode:	Battle Royal
+Starting lifes	1
+Map	MeetingPoint
+Difficulty	Medium
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

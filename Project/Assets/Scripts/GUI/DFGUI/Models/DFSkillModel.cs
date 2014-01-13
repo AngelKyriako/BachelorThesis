@@ -44,9 +44,13 @@ public class DFSkillModel: SingletonMono<DFSkillModel> {
                GameManager.Instance.MyCharacterModel.GetSkill(_key) : SkillBook.Instance.GetSkill(_id);
     }
 
-    public string IsSkillAvailable(int _id) {
+    public string SkillAvailability(int _id) {
         return SkillBook.Instance.GetSkill(_id).RequirementsFulfilled() && SkillBook.Instance.IsSkillAvailable(_id)
                ? "[color #00FF00]O[/color]" : "[color #ff0000]X[/color]";
+    }
+
+    public bool IsSkillAvailable(int _id) {
+        return SkillBook.Instance.GetSkill(_id).RequirementsFulfilled() && SkillBook.Instance.IsSkillAvailable(_id);
     }
 
     private bool IsOnActionSlot(CharacterSkillSlot _key){

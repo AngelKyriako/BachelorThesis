@@ -68,7 +68,7 @@ public class BaseSkill {
         else if (!SufficientMana)
             GUIMessageDisplay.Instance.AddMessage("No juice");
         else if (coolDownTimer != 0f)
-            GUIMessageDisplay.Instance.AddMessage("Chill for a sec there");
+            GUIMessageDisplay.Instance.AddMessage("Chill for a sec dude");
     }
 
     public virtual void Unpressed() { }
@@ -86,6 +86,8 @@ public class BaseSkill {
         if (mainObject != null && !mainObject.Equals(string.Empty))
             CombatManager.Instance.InstantiateNetworkSkill(mainObject, ownerModel.ProjectileOriginPosition, Quaternion.identity, id, ownerModel.name, _direction);
         ActivatePassiveEffects(ownerModel, ownerModel);
+
+        CombatManager.Instance.RaiseSkillUsageCount(Id);
     }
 
     public virtual void Trigger(Vector3 _position, Quaternion _rotation) {
@@ -125,7 +127,7 @@ public class BaseSkill {
         set { title = value; }
     }
     public string Description {
-        get { return description; }
+        get { return description + "\n" + MinRequirementsToString + "\n" + MaxRequirementsToString; }
         set { description = value; }
     }
     public float CoolDownTimer {
@@ -177,6 +179,32 @@ public class BaseSkill {
             if (GameManager.Instance.MyCharacterModel.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
                 return false;
         return true;
+    }
+
+    private string MinRequirementsToString {
+        get {
+            string temp = "Min: ";
+            for (int i = 0; i < requirements.Minimum.Count; ++i)
+                if (GameManager.Instance.MyCharacterModel.GetStat(requirements.Minimum[i].First).FinalValue < requirements.Minimum[i].Second)
+                    temp += ((StatType)requirements.Minimum[i].First).ToString() + ": " + requirements.Minimum[i].Second + " ";
+            if (!temp.Equals("Min: "))
+                return temp;
+            else
+                return string.Empty;
+            
+        }
+    }
+    private string MaxRequirementsToString {
+        get {
+            string temp = "Max: ";
+            for (int i = 0; i < requirements.Maximum.Count; ++i)
+                if (GameManager.Instance.MyCharacterModel.GetStat(requirements.Maximum[i].First).FinalValue > requirements.Maximum[i].Second)
+                    temp += ((StatType)requirements.Maximum[i].First).ToString() + ": " + requirements.Maximum[i].Second + " ";
+            if (!temp.Equals("Max: "))
+                return temp;
+            else
+                return string.Empty;
+        }
     }
     #endregion
 
