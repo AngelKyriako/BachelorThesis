@@ -12,7 +12,7 @@ public class DummyLifeBarController: MonoBehaviour {
     public void SetUp(bool allyAndNotMe) {
         dummyLifeBarRenderer = GameObject.Find("Characters/PlayerCharacters/" + name + "/DummyLifeBar").renderer;
         dummyLifeBarRenderer.enabled = false;
-        if (allyAndNotMe) {
+        if (allyAndNotMe || GameDifficulty.Easy.Equals(GameVariables.Instance.Difficulty.Value)) {
             model = GameManager.Instance.GetPlayerModel(name);
             enabled = true;
         }
