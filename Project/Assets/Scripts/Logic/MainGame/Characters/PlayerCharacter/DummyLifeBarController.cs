@@ -21,9 +21,9 @@ public class DummyLifeBarController: MonoBehaviour {
     }
     
     void Update() {
-        if (model.GetVital(1).CurrentValue > model.GetVital(1).FinalValue / 2)
+        if (model.GetVital(0).CurrentValue > model.GetVital(0).FinalValue / 2)
             dummyLifeBarRenderer.enabled = false;
-        else if (model.GetVital(1).CurrentValue > model.GetVital(1).FinalValue / 4)
+        else if (model.GetVital(0).CurrentValue > model.GetVital(0).FinalValue / 4)
             SetColor(Color.yellow);
         else
             SetColor(Color.red);

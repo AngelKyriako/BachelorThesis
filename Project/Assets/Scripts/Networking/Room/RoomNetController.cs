@@ -44,7 +44,7 @@ public class RoomNetController: BaseNetController {
         Utilities.Instance.PreCondition(IsMasterClient, "RoomNetController", "SyncGameVariables", "This function is only available for the master client.");
         photonView.RPC("SetGameVariables", PhotonTargets.Others, GameVariables.Instance.Title, GameVariables.Instance.Mode.Key,
                         GameVariables.Instance.Map.Key, GameVariables.Instance.Difficulty.Key, GameVariables.Instance.MaxPlayers.Key,
-                        GameVariables.Instance.TargetKills.Key, GameVariables.Instance.Timer.Key);
+                        GameVariables.Instance.TargetKills.Key, GameVariables.Instance.StartingLifes.Key, GameVariables.Instance.Timer.Key);
 
         PhotonNetwork.room.name = GameVariables.Instance.Title;
         PhotonNetwork.room.maxPlayers = GameVariables.Instance.MaxPlayers.Value;
@@ -52,19 +52,21 @@ public class RoomNetController: BaseNetController {
         PhotonNetwork.room.customProperties["Map"] = GameVariables.Instance.Map.Value;
         PhotonNetwork.room.customProperties["Difficulty"] = GameVariables.Instance.Difficulty.Value;
         PhotonNetwork.room.customProperties["Target kills"] = GameVariables.Instance.TargetKills.Value;
+        PhotonNetwork.room.customProperties["Starting Lifes"] = GameVariables.Instance.StartingLifes.Value;
         PhotonNetwork.room.customProperties["Timer"] = GameVariables.Instance.Timer.Value;
         GameManager.Instance.UpdateRoomProperties();
     }
 
     #region RPCs
     [RPC]
-    private void SetGameVariables(string _title, string _mode, string _map, string _difficulty, string _maxPlayers, string _targetKills, string _timer) {
+    private void SetGameVariables(string _title, string _mode, string _map, string _difficulty, string _maxPlayers, string _targetKills, string _startingLifes, string _timer) {
         GameVariables.Instance.Title = _title;
         GameVariables.Instance.Mode = new KeyValuePair<string, GameMode>(_mode, GameVariables.Instance.AvailableModes[_mode]);
         GameVariables.Instance.Map = new KeyValuePair<string, GameMap>(_map, GameVariables.Instance.AvailableMaps[_map]);
         GameVariables.Instance.Difficulty = new KeyValuePair<string, GameDifficulty>(_difficulty, GameVariables.Instance.AvailableDifficulties[_difficulty]);
         GameVariables.Instance.MaxPlayers = new KeyValuePair<string, int>(_maxPlayers, GameVariables.Instance.AvailableMaxPlayers[_maxPlayers]);
         GameVariables.Instance.TargetKills = new KeyValuePair<string, int>(_targetKills, GameVariables.Instance.AvailableTargetKills[_targetKills]);
+        GameVariables.Instance.StartingLifes = new KeyValuePair<string, int>(_startingLifes, GameVariables.Instance.AvailableStartingLifes[_startingLifes]);
         GameVariables.Instance.Timer = new KeyValuePair<string, float>(_timer, GameVariables.Instance.AvailableTimers[_timer]);
     }
     #endregion

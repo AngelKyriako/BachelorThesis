@@ -4,7 +4,7 @@ using System.Collections;
 public class MovementController: MonoBehaviour {
 
     public Animator animator;
-    public float baseMovementSpeed = 10;
+    public float baseMovementSpeed = 4;
 
     private PlayerCharacterModel model;
     private PlayerCharacterNetworkController networkController;
@@ -37,6 +37,7 @@ public class MovementController: MonoBehaviour {
             if (Vector3.Distance(destination, transform.position) > 0.5f && animator.enabled) {
                 UpdateCurrentSpeed();
                 charController.Move((destination - transform.position).normalized * currentSpeed * Time.deltaTime);
+                transform.position.Set(transform.position.x, 0, transform.position.z);
             }
             else
                 currentSpeed = 0f;

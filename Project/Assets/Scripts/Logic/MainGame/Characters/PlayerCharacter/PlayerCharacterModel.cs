@@ -5,7 +5,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     #region constants
     public const uint STARTING_EXP_TO_LEVEL = 50;
-    public const float STARTING_EXP_MODIFIER = 1.1f, EXP_LOSS_PERCENTAGE = 0.2f;
+    public const float STARTING_EXP_MODIFIER = 1.1f, EXP_LOSS_PERCENTAGE = 0.1f;
 
     private static readonly int[] TRAINING_POINTS_PER_LEVEL = new int[MAX_LEVEL] {  5, 4, 3, 2, 1,
                                                                                     1, 1, 2, 2, 2,
@@ -87,7 +87,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     public override void KilledEnemy(BaseCharacterModel _enemy) {
         ++killsCount;
-        GainExp((uint)_enemy.ExpWorth / 2);
+        GainExp((uint)_enemy.ExpWorth);
     }
 
     public override void Died() {
@@ -140,7 +140,7 @@ public class PlayerCharacterModel: BaseCharacterModel {
         set { expToLevel = value; }
     }
     public override int ExpWorth {
-        get { return (int)(expToLevel * 0.33); }
+        get { return (int)(expToLevel * 0.5); }
     }
 
     public int TrainingPoints {

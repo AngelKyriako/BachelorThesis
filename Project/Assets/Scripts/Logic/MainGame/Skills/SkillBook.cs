@@ -151,7 +151,7 @@ public class SkillBook{
         ((DamageEffect)tempEffect).SetUpEffect(002, EffectType.Damage, MODERATE + DIRECT_DAMAGE, "", 20, 10, new EffectMod(50f, 0f));
         tempSkill.AddOffensiveEffect(tempEffect);
         tempEffect = NewStunEffect(effectsHolder);
-        ((StunEffect)tempEffect).SetUpEffect(402, EffectType.Stun, MODERATE + "Stun", "", 20, 5, 5f);
+        ((StunEffect)tempEffect).SetUpEffect(402, EffectType.Stun, MODERATE + "Stun", "", 20, 2, 5f);
         tempSkill.AddOffensiveEffect(tempEffect);            
         AddSkill(tempSkill, "134");
 
@@ -567,8 +567,8 @@ public class SkillBook{
         tempEffect = NewDamageEffect(effectsHolder);
         ((DamageEffect)tempEffect).SetUpEffect(013, EffectType.Damage, "KO" + DIRECT_DAMAGE, "", 20, 1, new EffectMod(0f, 100f));
         tempSkill.AddPassiveEffect(tempEffect);
-        tempSkill.AddMinimumRequirement(StatType.STA, 5);
-        tempSkill.AddMinimumRequirement(StatType.STR, 5);
+        tempSkill.AddMinimumRequirement(StatType.STA, 1);
+        tempSkill.AddMinimumRequirement(StatType.STR, 1);
         AddSkill(tempSkill, "138");
 
         tempSkill = new BaseSkill((int)Skill.LastStand, "Last Stand", "", 0f, 0f,
