@@ -33,7 +33,7 @@ public class GameOverManager: SingletonMono<GameOverManager> {
         GameManager.Instance.MyCharacterModel.IsSilenced = true;
         GameManager.Instance.MyCharacterModel.IsStunned = true;        
 
-        AppendInfoToPlayerStatisticsFile();        
+        //AppendInfoToPlayerStatisticsFile();        
         enabled = true;
     }
 

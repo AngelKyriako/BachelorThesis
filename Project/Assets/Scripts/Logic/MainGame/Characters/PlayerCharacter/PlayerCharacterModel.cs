@@ -5,7 +5,9 @@ public class PlayerCharacterModel: BaseCharacterModel {
 
     #region constants
     public const uint STARTING_EXP_TO_LEVEL = 50;
-    public const float STARTING_EXP_MODIFIER = 1.1f, EXP_LOSS_PERCENTAGE = 0.1f;
+    public const float STARTING_EXP_MODIFIER = 1.1f, EXP_LOSS_PERCENTAGE_EASY = 0.05f,
+                                                     EXP_LOSS_PERCENTAGE_MEDIUM = 0.1f,
+                                                     EXP_LOSS_PERCENTAGE_HARD = 0.2f;
 
     private static readonly int[] TRAINING_POINTS_PER_LEVEL = new int[MAX_LEVEL] {  5, 4, 3, 2, 1,
                                                                                     1, 1, 2, 2, 2,
@@ -91,24 +93,27 @@ public class PlayerCharacterModel: BaseCharacterModel {
     }
 
     public override void Died() {
+        uint expLoss = 0;
         ++deathCount;
         switch (GameVariables.Instance.Difficulty.Value) {
             case GameDifficulty.Easy:
                 RespawnTimer = Level/2 + Level * ((killsCount / 2) /
                                                   (deathCount * 2));
+                expLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE_EASY);
                 break;
             case GameDifficulty.Medium:
                 RespawnTimer = Level + Level * (deathCount /
                                                (killsCount + 1));
+                expLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE_MEDIUM);
                 break;
             case GameDifficulty.Hard:
                 RespawnTimer = 2 * Level + Level * ((deathCount * 2) /
                                                    ((killsCount / 2) + 1));
+                expLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE_HARD);
                 break;
         }
 
-        uint ExpLoss = (uint)(expToLevel * EXP_LOSS_PERCENTAGE);
-        LoseExp(ExpLoss > CurrentExp ? CurrentExp : ExpLoss);
+        LoseExp(expLoss > CurrentExp ? CurrentExp : expLoss);
         VitalsToZero();
         IsSilenced = true;
     }
