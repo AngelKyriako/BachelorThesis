@@ -15,15 +15,18 @@ Runs on windows, tested on ten PCs.
 The game is playable only with human players.
 
 ## Controls
-Right click to move
-Left click to cast a selected skill
-Q-W-E-R : skill select/cast
-C	: character window
-K	: skill window
-L	: camera lock/unlock
-G	: game preferences (works also at the winning screen)
 
-Drag & drop icons (with the green circle) from the skill window
+| Button        | Action        |
+| ------------- |:-------------:|
+| Right click   | Movement |
+| Q-W-E-R       | Select / Cast corresponding skill |
+| Left click    | Cast selected skill  |
+| C             | Character panel*  |
+| K             | Skills panel  |
+| L             | Camera lock/unlock  |
+| G             | Options  |
+
+*Drag & drop icons (with the green circle) from the Skills panel
 to the four skill slots.
 
 ## Full around on your own
