@@ -11,7 +11,6 @@ More about the design and development process [here](./Documentation/AngelosKyri
 
 ## Download
 Download the DragonBorn demo [here](https://drive.google.com/open?id=0B98e8YqfO7GRMXZ1YkZWZVFpY28)  
-**Have in mind that it may run at 200 FPS or more, so take care.*
 
 Runs on windows and has been tested with around 8 concurrent PC clients.
 
