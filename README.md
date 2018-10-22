@@ -9,7 +9,7 @@ DragonBorn is a 3D single hero multiplayer online battle arena (MOBA) game with 
 
 ## Download
 Download the DragonBorn demo [here](https://drive.google.com/open?id=0B98e8YqfO7GRMXZ1YkZWZVFpY28)  
-** *Have in mind that it runs at around 200 FPS so take care.**
+**Have in mind that it runs at around 200 FPS so take care.*
 
 Runs on windows, tested on ten PCs.
 
