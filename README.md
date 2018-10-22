@@ -8,7 +8,8 @@ Includes the scripts & config files of the unity project DragonBorn.
 DragonBorn is a 3D single hero multiplayer online battle arena (MOBA) game with elements of real time strategy and role playing games. More about the design and development process [here](./Documentation/AngelosKyriakopoulosBachelorThesis.pdf)
 
 ## Download
-Download the DragonBorn demo [here](https://drive.google.com/open?id=0B98e8YqfO7GRMXZ1YkZWZVFpY28)
+Download the DragonBorn demo [here](https://drive.google.com/open?id=0B98e8YqfO7GRMXZ1YkZWZVFpY28)  
+*Have in mind that it runs at around 200 FPS so take care.
 
 Runs on windows, tested on ten PCs.
 
