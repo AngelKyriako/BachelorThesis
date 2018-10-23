@@ -19,11 +19,11 @@ More about the design and development process [here](./Documentation/AngelosKyri
 
 ![Room Setup](./Screenshots/Room.JPG)
 
-![Gameplay Spawn](./Screenshots/Gameplay.JPG)
+![Gameplay Spawn](./Screenshots/GameplaySpawn.JPG)
 
-![Gameplay](./Screenshots/Gameplay2.JPG)
+![Gameplay](./Screenshots/Gameplay.JPG)
 
-![Gameplay Attack](./Screenshots/Gameplay3.JPG)
+![Gameplay Attack](./Screenshots/GameplayAttack.JPG)
 
 ![Gameplay Win](./Screenshots/GameplayWin.JPG)
 
