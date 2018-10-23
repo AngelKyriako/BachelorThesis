@@ -9,8 +9,26 @@ DragonBorn is a 3D single hero multiplayer online battle arena (MOBA) game with 
 
 More about the design and development process [here](./Documentation/AngelosKyriakopoulosBachelorThesis.pdf)
 
+## Gameplay Video
+
+[![Gameplay Video](https://img.youtube.com//vi/TyT4UJBHoXo/0.jpg)](https://www.youtube.com/watch?v=TyT4UJBHoXo)
+
+## Gameplay Screenshots
+
+![Lobby](./Screenshots/Lobby.JPG)
+
+![Room Setup](./Screenshots/Room.JPG)
+
+![Gameplay Spawn](./Screenshots/Gameplay.JPG)
+
+![Gameplay](./Screenshots/Gameplay2.JPG)
+
+![Gameplay Attack](./Screenshots/Gameplay3.JPG)
+
+![Gameplay Win](./Screenshots/GameplayWin.JPG)
+
 ## Download
-Download the DragonBorn demo [here](https://drive.google.com/open?id=0B98e8YqfO7GRMXZ1YkZWZVFpY28)  
+Download the demo [here](https://drive.google.com/open?id=0B98e8YqfO7GRMXZ1YkZWZVFpY28)  
 
 Runs on windows and has been tested with around 8 concurrent PC clients.
 
