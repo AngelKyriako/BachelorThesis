@@ -49,7 +49,7 @@ The game is playable only with human players.
 *Drag & drop icons (with the green circle) from the Skills panel
 to the four skill slots.
 
-## Full around on your own
+## Single player dummy flow
 - Create a game with battle royal mode and with only one starting life.
 - When you spawn to the heaven area head to the north and teleport to the field by entering into the pink teleportation sphere.
 - Open the character window, hit "+" to each stat and save.
