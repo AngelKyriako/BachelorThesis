@@ -12,6 +12,7 @@ More about the design and development process [here](./Documentation/AngelosKyri
 ## Gameplay Video
 
 [![Gameplay Video](https://img.youtube.com//vi/TyT4UJBHoXo/0.jpg)](https://www.youtube.com/watch?v=TyT4UJBHoXo)
+**Bareable at 2x speed.*
 
 ## Gameplay Screenshots
 
